@@ -1,0 +1,31 @@
+{
+    "name": "Agent Travel",
+    "short_name": "Arcturus",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#f0f0f0",
+    "theme_color": "#3367D6",
+    "icons": [
+      {
+        "src": "/images/pms-sistem-1.png",
+        "sizes": "72x72",
+        "type": "image/png"
+      },
+      {
+        "src": "/images/pms-sistem-1.png",
+        "sizes": "96x96",
+        "type": "image/png"
+      },
+      {
+        "src": "/images/pms-sistem-1.png",
+        "sizes": "144x144",
+        "type": "image/png"
+      },
+      {
+        "src": "/images/pms-sistem-1.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      }
+    ]
+  }
+  
