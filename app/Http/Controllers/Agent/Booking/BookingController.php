@@ -61,6 +61,7 @@ class BookingController extends Controller
     
             $data =  new Booking();
             $data->user_id = $userid;
+            $data->booking_code = '#BO_'. time().$this->generateRandomString(5).uniqid();
             $data->vendor_id = $request->vendorid;
             $data->booking_date = date("Y-m-d");
             $data->checkin_date = $request->checkin;
@@ -297,8 +298,8 @@ class BookingController extends Controller
                 'booking' => $book, // $book merupakan instance dari model Booking yang sudah Anda dapatkan
             ];
 
-            Mail::to($book->vendor->email)->send(new BookingConfirmation($data));
-            Mail::to(auth()->user()->email)->send(new BookingConfirmation($data));
+            // Mail::to($book->vendor->email)->send(new BookingConfirmation($data));
+            // Mail::to(auth()->user()->email)->send(new BookingConfirmation($data));
 
             return redirect()
             ->route('agent.booking.history')
@@ -330,6 +331,18 @@ class BookingController extends Controller
             return abort(404);
         }
 
+    }
+
+    function generateRandomString($length) {
+        $characters = '0123456789QWERTYUIOPASDFGHJKLZXCVBNM';
+        $randomString = '';
+    
+        for ($i = 0; $i < $length; $i++) {
+            $index = rand(0, strlen($characters) - 1);
+            $randomString .= $characters[$index];
+        }
+    
+        return $randomString;
     }
 
 }

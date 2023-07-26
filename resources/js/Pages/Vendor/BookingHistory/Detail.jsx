@@ -36,76 +36,105 @@ export default function Detail({ session, data, agent }) {
     return (
         <>
             <Layout page={url}>
-                <div className="container">
-                    <h1>Booking Detail #{data.id}</h1>
-                    <hr />
+            <div className="container">
                     <div className="row">
                         <div className="col-lg-12">
-                            <div className="card mb-3" id="print-card">
-                                <div className="card-body">
-                                    <div className="row">
-                                        <div className="col-lg-6">
-                                        <img className="img-fluid" src={data.vendor.logo_img} alt="Logo hotel" width="100px" height="auto" />
-                                            <h2>BOOKING STATUS</h2>
-                                            {data.booking_status === 'paid' ? (
-                                                <>
-                                                 <div className='btn btn-outline-success mb-3'>
-                                                <p style={{fontSize:'16px'}}>{data.booking_status}</p>
-                                            </div>
-                                                </>
-                                            ):(
-                                                <>
-                                                <div className='btn btn-outline-danger mb-3'>
-                                                    <p style={{fontSize:'16px'}}>{data.booking_status}</p>
+                            <div className="container">
+                                <h1>Booking Detail #{data.id}</h1>
+                                <hr />
+                                <div className="row">
+                                    <div className="col-lg-12">
+                                        <div className="card mb-3" id="print-card">
+                                            <div className="container">
+                                                <div className="card-header bg-white" >
+                                                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                        <img className="img-fluid" src={data.vendor.logo_img} alt="Logo" style={{width:'100px',height:'70px'}} height="auto" />
+                                                        {/* Kolom kanan */}
+                                                        <div>
+                                                            <div><h1>BOOKING</h1></div>
+                                                            <div>BOOKING# : {data.booking_code}</div>
+                                                            <div>Created : {data.booking_date}</div>
+                                                            <h2>BOOKING STATUS</h2>
+                                                                {data.booking_status === 'paid' ? (
+                                                                    <>
+                                                                        <div className='btn btn-outline-success mb-3'>
+                                                                            <p style={{ fontSize: '16px' }}>{data.booking_status}</p>
+                                                                        </div>
+                                                                    </>
+                                                                ) : (
+                                                                    <>
+                                                                        <div className='btn btn-outline-danger mb-3'>
+                                                                            <p style={{ fontSize: '16px' }}>unpaid</p>
+                                                                        </div>
+                                                                    </>
+                                                                )}
+                                                        </div>
+                                                    </div>
+                                                    <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: "15px" }}>
+                                                        <div>
+                                                            {data.vendor.vendor_name}
+                                                            <br />
+                                                            {data.vendor.city}, {data.vendor.state}, {data.vendor.country}
+                                                            <br />
+                                                            Phone: {data.vendor.telephone} Email: {data.vendor.email}
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                </>
-                                            )}
-                                            <h4>HOTEL NAME</h4>
-                                           <p className='mb-3'>{data.vendor.vendor_name}</p>
+                                                
+                                            <div className="card-body">
+                                                <div className="row">
+                                                    <div className="col">
+                                                        <h4>HOTEL NAME</h4>
+                                                        <p className='mb-3'>{data.vendor.vendor_name}</p>
 
-                                           <h4>BOOKING DATE</h4>
-                                           <p className='mb-3'>{data.booking_date}</p>
+                                                        <h4>BOOKING DATE</h4>
+                                                        <p className='mb-3'>{data.booking_date}</p>
 
-                                           <h4>NIGHT</h4>
-                                           <p className='mb-3'>{data.night} / Night</p>
-                                           
-                                           <h4>TOTAL GUEST</h4>
-                                           <p className='mb-3'>{data.total_guests} / Person</p>
+                                                        <h4>NIGHT</h4>
+                                                        <p className='mb-3'>{data.night} / Night</p>
 
-                                           <h4>CHECKIN and CHECKOUT</h4>
-                                            <p className='mb-3'> {data.checkin_date} - {data.checkout_date}</p>
-                                        </div>
-                                        <div className="col-lg-6">
-                                           
-                                            <h4>GUEST NAME</h4>
-                                           <p className='mb-3'>{data.first_name} {data.last_name}</p>
-                                           <div className='mb-3'>
-                                                <h4 for="email" className="form-h4">Email</h4>
-                                                <p>{data.email}</p>
+                                                        <h4>CHECKIN and CHECKOUT</h4>
+                                                            <p className='mb-3'> {data.checkin_date} - {data.checkout_date}</p>
+                                                        
+                                                        </div>
+                                                        <div className="col">
+                                                        
+                                                            <h4>GUEST NAME</h4>
+                                                        <p className='mb-3'>{data.first_name} {data.last_name}</p>
+                                                        <div className='mb-3'>
+                                                                <h4 for="email" className="form-h4">Email</h4>
+                                                                <p>{data.email}</p>
+                                                            </div>
+                                                            <div className='mb-3'>
+                                                                <h4 for="phone" className="form-h4">Phone</h4>
+                                                                <p>{data.phone}</p>
+                                                            </div>
+                                                            
+                                                            <div className='mb-3'>
+                                                                <h4 for="country" className="form-h4">Country</h4>
+                                                                <p>{data.country}</p>
+                                                            </div>
+                                                            <div className='mb-3'>
+                                                                <h4 for="request" className="form-h4">Special Request</h4>
+                                                                <p>{data.special_request}</p>
+                                                            </div>
+
+                                                            <h4 className='text-dark'>TOTAL PAYMENT</h4>
+                                                        <p className='mb-3 text-success'>{formatRupiah(data.price)}</p>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div className='mb-3'>
-                                                <h4 for="phone" className="form-h4">Phone</h4>
-                                                <p>{data.phone}</p>
                                             </div>
-                                            
-                                            <div className='mb-3'>
-                                                <h4 for="country" className="form-h4">Country</h4>
-                                                <p>{data.country}</p>
-                                            </div>
-                                            <div className='mb-3'>
-                                                <h4 for="request" className="form-h4">Special Request</h4>
-                                                <p>{data.special_request}</p>
-                                            </div>
-                                            <h4 className='text-dark'>TOTAL PAYMENT</h4>
-                                           <p className='mb-3 text-success'>{formatRupiah(data.price)}</p>
                                         </div>
                                     </div>
-                                </div>
+                    
+                                    <button className="btn btn-primary" onClick={handlePrintPDF}><i className='fa fa-file-pdf'></i> Print as PDF</button>
+                                    <button onClick={() => history.back()} className="btn btn-danger ml-2">
+                                        Cancel
+                                    </button>
                             </div>
-                            <button className="btn btn-primary" onClick={handlePrintPDF}><i className='fa fa-file-pdf'></i> Print as PDF</button>
-                            <button onClick={() => history.back()} className="btn btn-danger ml-2">
-                                Cancel
-                            </button>
                         </div>
                     </div>
                 </div>

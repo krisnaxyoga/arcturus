@@ -131,9 +131,13 @@ class HomeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function about()
     {
-        //
+        return view('landingpage.about');
+    }
+    public function contact()
+    {
+        return view('landingpage.contact');
     }
 
     /**

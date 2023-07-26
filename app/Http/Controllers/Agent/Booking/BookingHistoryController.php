@@ -60,7 +60,7 @@ class BookingHistoryController extends Controller
     public function detail(string $id)
     {
         $iduser = auth()->user()->id;
-        $agent = Vendor::with('users')->where('user_id',$iduser)->first();
+        $agent = User::where('id',$iduser)->with('vendors')->first();
         $data = Booking::where('id',$id)->with('vendor')->with('users')->first();
         //dd($room);
 

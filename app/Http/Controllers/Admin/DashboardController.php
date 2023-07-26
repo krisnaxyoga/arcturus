@@ -28,13 +28,15 @@ class DashboardController extends Controller
         $hotel = Vendor::where('type_vendor','hotel')->count();
         $agent = Vendor::where('type_vendor','agent')->count();
 
+        $vendor = Vendor::select('*')->orderBy('created_at', 'desc')->get();
+
         $paid = Booking::where('booking_status','paid')->count();
         $unpaid = Booking::where('booking_status','unpaid')->count();
         $unknow = Booking::whereNotIn('booking_status', ['paid', 'unpaid'])->count();
 
         $booking = Booking::whereNotIn('booking_status', ['-', ''])->with('users','vendor')->get();
 
-        return view('admin.index',compact('setting','totalbooking','totaltransaction','hotel','agent','paid','unpaid','unknow','booking'));
+        return view('admin.index',compact('setting','totalbooking','totaltransaction','hotel','agent','paid','unpaid','unknow','booking','vendor'));
     }
 
     /**

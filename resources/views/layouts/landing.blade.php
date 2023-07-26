@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Pacific - Free Bootstrap 4 Template by Colorlib</title>
+	<title>Arcturus</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -47,15 +47,15 @@
 			<div class="collapse navbar-collapse" id="ftco-nav">
 				<ul class="navbar-nav ml-auto">
 					<li class="nav-item {{ request()->is('/') ? 'active' : '' }}"><a href="/" class="nav-link">Home</a></li>
-                    <li class="nav-item {{ request()->is('about') ? 'active' : '' }}"><a href="about.html" class="nav-link">About</a></li>
+                    <li class="nav-item {{ request()->routeIs('about.homepage') ? 'active' : '' }}"><a href="{{route('about.homepage')}}" class="nav-link">About</a></li>
                     {{-- <li class="nav-item {{ request()->is('destination') ? 'active' : '' }}"><a href="destination.html" class="nav-link">Destination</a></li> --}}
                     @if(isset(Auth::user()->id))
                     <li class="nav-item {{ request()->routeIs('hotel.homepage') ? 'active' : '' }}"><a href="{{ route('hotel.homepage') }}" class="nav-link">Hotel</a></li>
                     {{-- <li class="nav-item {{ request()->is('blog') ? 'active' : '' }}"><a href="blog.html" class="nav-link">Blog</a></li> --}}
                     @endif 
-                    <li class="nav-item {{ request()->is('contact') ? 'active' : '' }}"><a href="contact.html" class="nav-link">Contact</a></li>
+                    <li class="nav-item {{ request()->routeIs('contact.homepage') ? 'active' : '' }}"><a href="{{ route('contact.homepage') }}" class="nav-link">Contact</a></li>
                     @if(isset(Auth::user()->id))
-                    <li class="nav-item"><a href="{{route('login')}}" class="nav-link">dashboard</a></li>
+                        <li class="nav-item"><a href="{{route('login')}}" class="nav-link">dashboard</a></li>
                     @else
                     <li class="nav-item"><a href="{{route('login.agent')}}" class="nav-link">Login</a></li>
                     @endif

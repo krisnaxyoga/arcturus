@@ -13,7 +13,7 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 
 export default function Index({ session, data, contacts, country }) {
-    console.log(data.country, ">>>>>>>data country >>>>>>>>");
+    console.log(data, ">>>>>>>data country >>>>>>>>");
 
     const { url } = usePage();
 
@@ -50,26 +50,26 @@ export default function Index({ session, data, contacts, country }) {
         e.preventDefault();
 
         const formData = new FormData();
-        formData.append('country', selectcountry ? selectcountry : data.country);
-        formData.append('busisnessname', busisnessname ? busisnessname : data.vendor_name);
-        formData.append('legalname', legalname ? legalname : data.vendor_legal_name);
+        formData.append('country', selectcountry ? selectcountry : data.vendors.country);
+        formData.append('busisnessname', busisnessname ? busisnessname : data.vendors.vendor_name);
+        formData.append('legalname', legalname ? legalname : data.vendors.vendor_legal_name);
         formData.append('email', email ? email : data.email);
         formData.append('phone', phone ? phone : data.phone);
-        formData.append('logo', logo ? logo : data.logo_img);
-        formData.append('address', address ? address : data.address_line1);
-        formData.append('address2', address2 ? address2 : data.address_line2);
-        formData.append('city', city ? city : data.city);
-        formData.append('state', state ? state : data.state);
-        formData.append('area', area ? area : data.area);
-        formData.append('location', location ? location : data.location);
-        formData.append('latitude', latitude ? latitude : data.map_latitude);
-        formData.append('longitude', longitude ? longitude : data.map_longitude);
-        formData.append('bank', bankname ? bankname : '');
-        formData.append('bankaccount', bankaccount ? bankaccount : data.bank_account);
-        formData.append('swifcode', swifcode ? swifcode : '');
-        formData.append('limit', limit ? limit : data.credit_limit);
-        formData.append('used', used ? used : data.credit_used);
-        formData.append('saldo', saldo ? saldo : data.credit_saldo);
+        formData.append('logo', logo ? logo : data.vendors.logo_img);
+        formData.append('address', address ? address : data.vendors.address_line1);
+        formData.append('address2', address2 ? address2 : data.vendors.address_line2);
+        formData.append('city', city ? city : data.vendors.city);
+        formData.append('state', state ? state : data.vendors.state);
+        formData.append('area', area ? area : data.vendors.area);
+        formData.append('location', location ? location : data.vendors.location);
+        formData.append('latitude', latitude ? latitude : data.vendors.map_latitude);
+        formData.append('longitude', longitude ? longitude : data.vendors.map_longitude);
+        formData.append('bank', bankname ? bankname : data.vendors.bank_name);
+        formData.append('bankaccount', bankaccount ? bankaccount : data.vendors.bank_account);
+        formData.append('swifcode', swifcode ? swifcode : data.vendors.swif_code);
+        formData.append('limit', limit ? limit : data.vendors.credit_limit);
+        formData.append('used', used ? used : data.vendors.credit_used);
+        formData.append('saldo', saldo ? saldo : data.vendors.credit_saldo);
 
         Inertia.post('/agent-profile/update', formData, {
             onSuccess: () => {
@@ -107,14 +107,14 @@ export default function Index({ session, data, contacts, country }) {
                                                             <label for="busisnessname" className="form-label">Business name</label>
                                                             <div className="input-group mb-3">
                                                                 <span className="input-group-text rounded-0" id="basic-addon1"><i className='fa fa-building'></i></span>
-                                                                <input defaultValue={data.vendor_name} onChange={(e) => setBusisness(e.target.value)} type="text" className="form-control" placeholder="Business name" aria-label="busisnessname" aria-describedby="basic-addon1" />
+                                                                <input defaultValue={data.vendors.vendor_name} onChange={(e) => setBusisness(e.target.value)} type="text" className="form-control" placeholder="Business name" aria-label="busisnessname" aria-describedby="basic-addon1" />
                                                             </div>
                                                         </div>
                                                         <div>
                                                             <label for="legalname" className="form-label">Legal name</label>
                                                             <div className="input-group mb-3">
                                                                 <span className="input-group-text rounded-0" id="basic-addon1"><i className="fa fa-building"></i></span>
-                                                                <input defaultValue={data.vendor_legal_name} onChange={(e) => setLegalitas(e.target.value)} type="text" className="form-control" placeholder="Legal name" aria-label="legalname" aria-describedby="basic-addon1" />
+                                                                <input defaultValue={data.vendors.vendor_legal_name} onChange={(e) => setLegalitas(e.target.value)} type="text" className="form-control" placeholder="Legal name" aria-label="legalname" aria-describedby="basic-addon1" />
                                                             </div>
                                                         </div>
 
@@ -122,14 +122,14 @@ export default function Index({ session, data, contacts, country }) {
                                                             <label for="Lastname" className="form-label">Address Line 1</label>
                                                             <div className="input-group mb-3">
                                                                 <span className="input-group-text rounded-0" id="basic-addon1"><i className="fa fa-location-arrow" aria-hidden="true"></i></span>
-                                                                <input onChange={(e) => setAddress(e.target.value)} defaultValue={data.address_line1} type="text" className="form-control" placeholder="Address Line 1" aria-label="busisnessname" aria-describedby="basic-addon1" />
+                                                                <input onChange={(e) => setAddress(e.target.value)} defaultValue={data.vendors.address_line1} type="text" className="form-control" placeholder="Address Line 1" aria-label="busisnessname" aria-describedby="basic-addon1" />
                                                             </div>
                                                         </div>
                                                         <div>
                                                             <label for="Lastname" className="form-label">Address Line 2</label>
                                                             <div className="input-group mb-3">
                                                                 <span className="input-group-text rounded-0" id="basic-addon1"><i className="fa fa-location-arrow" aria-hidden="true"></i></span>
-                                                                <input onChange={(e) => setAddress2(e.target.value)} defaultValue={data.address_line2} type="text" className="form-control" placeholder="Address Line 2" aria-label="busisnessname" aria-describedby="basic-addon1" />
+                                                                <input onChange={(e) => setAddress2(e.target.value)} defaultValue={data.vendors.address_line2} type="text" className="form-control" placeholder="Address Line 2" aria-label="busisnessname" aria-describedby="basic-addon1" />
                                                             </div>
                                                         </div>
                                                         <div>
@@ -148,7 +148,7 @@ export default function Index({ session, data, contacts, country }) {
                                                         </div>
 
                                                         <div className="mb-3">
-                                                            <img style={{ width: "100px" }} src={data.logo_img} alt="" />
+                                                            <img style={{ width: "100px" }} src={data.vendors.logo_img} alt="" />
                                                         </div>
                                                         <div className="mb-3">
                                                             <label for="formFile" className="form-label">Logo</label>
@@ -160,8 +160,8 @@ export default function Index({ session, data, contacts, country }) {
                                                         <div className='mb-3'>
                                                             <label for="country" className="form-label">Country <span className='text-danger'>*</span></label>
                                                             <select onChange={(e) => setCountry(e.target.value)} className="form-control" aria-label="Default select example">
-                                                                {Object.keys(country).map(key => (
-                                                                    <option key={key} selected={key === data.country} value={key}>{country[key]}</option>
+                                                                 {Object.keys(country).map(key => (
+                                                                        <option key={key} selected={country[key]===data.vendors.country} value={country[key]}>{country[key]}</option>
                                                                 ))}
                                                             </select>
                                                         </div>
@@ -169,42 +169,14 @@ export default function Index({ session, data, contacts, country }) {
                                                             <label for="state" className="form-label">State <span className='text-danger'>*</span></label>
                                                             <div className="input-group mb-3">
                                                                 <span className="input-group-text rounded-0" id="basic-addon1"><i className='fa fa-map-signs'></i></span>
-                                                                <input onChange={(e) => setState(e.target.value)} defaultValue={data.state} type="text" className="form-control" placeholder="State" aria-label="state" aria-describedby="basic-addon1" />
+                                                                <input onChange={(e) => setState(e.target.value)} defaultValue={data.vendors.state} type="text" className="form-control" placeholder="State" aria-label="state" aria-describedby="basic-addon1" />
                                                             </div>
                                                         </div>
                                                         <div>
                                                             <label for="city" className="form-label">City <span className='text-danger'>*</span></label>
                                                             <div className="input-group mb-3">
                                                                 <span className="input-group-text rounded-0" id="basic-addon1"><i className='fa fa-street-view'></i></span>
-                                                                <input onChange={(e) => setCity(e.target.value)} defaultValue={data.city} type="text" className="form-control" placeholder="City" aria-label="city" aria-describedby="basic-addon1" />
-                                                            </div>
-                                                        </div>
-                                                        <div>
-                                                            <label for="area" className="form-label">Area <span className='text-danger'>*</span></label>
-                                                            <div className="input-group mb-3">
-                                                                <span className="input-group-text rounded-0" id="basic-addon1"><i className='fa fa-street-view'></i></span>
-                                                                <input onChange={(e) => setArea(e.target.value)} defaultValue={data.area} type="text" className="form-control" placeholder="Area" aria-label="area" aria-describedby="basic-addon1" />
-                                                            </div>
-                                                        </div>
-                                                        <div>
-                                                            <label for="location" className="form-label">Location <span className='text-danger'>*</span></label>
-                                                            <div className="input-group mb-3">
-                                                                <span className="input-group-text rounded-0" id="basic-addon1"><i className='fa fa-street-view'></i></span>
-                                                                <input onChange={(e) => setLocation(e.target.value)} defaultValue={data.location} type="text" className="form-control" placeholder="Location" aria-label="location" aria-describedby="basic-addon1" />
-                                                            </div>
-                                                        </div>
-                                                        <div>
-                                                            <label for="latitude" className="form-label">Latitude <span className='text-danger'>*</span></label>
-                                                            <div className="input-group mb-3">
-                                                                <span className="input-group-text rounded-0" id="basic-addon1"><i className='fa fas fa-map'></i></span>
-                                                                <input onChange={(e) => setLatitude(e.target.value)} defaultValue={data.map_latitude} type="text" className="form-control" placeholder="Latitude" aria-label="latitude" aria-describedby="basic-addon1" />
-                                                            </div>
-                                                        </div>
-                                                        <div>
-                                                            <label for="longitude" className="form-label">Latitude <span className='text-danger'>*</span></label>
-                                                            <div className="input-group mb-3">
-                                                                <span className="input-group-text rounded-0" id="basic-addon1"><i className='fa fas fa-map'></i></span>
-                                                                <input onChange={(e) => setLongitude(e.target.value)} defaultValue={data.map_longitude} type="text" className="form-control" placeholder="Longitude" aria-label="longitude" aria-describedby="basic-addon1" />
+                                                                <input onChange={(e) => setCity(e.target.value)} defaultValue={data.vendors.city} type="text" className="form-control" placeholder="City" aria-label="city" aria-describedby="basic-addon1" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -280,49 +252,58 @@ export default function Index({ session, data, contacts, country }) {
                                         </div>
                                     </div>
                                 </Tab>
-                                <Tab eventKey="credit" title="Credit Limit">
+                                <Tab eventKey="credit" title="Bank account">
                                     <div className="row">
                                         <div className="col-lg-12">
                                             <div className="card">
                                                 <div className="card-header">
                                                     <div className="d-flex justify-content-between">
-                                                        <h2>Credit Limit Setting</h2>
+                                                        <h2>Bank account</h2>
                                                     </div>
                                                 </div>
+                                                
+                                                <form onSubmit={storePost}>
                                                 <div className="card-body">
                                                     <div className="row">
                                                         <div className="col-lg-4">
                                                             <div className="mb-3">
                                                                 <label htmlFor="bank">Bank Name</label>
-                                                                <input defaultValue="" onChange={(e) => setBankName(e.target.value)} type="text" className='form-control' name='bankname' />
+                                                                <input defaultValue={data.vendors.bank_name} onChange={(e) => setBankName(e.target.value)} type="text" className='form-control' name='bankname' />
                                                             </div>
-                                                            <div className="mb-3">
+                                                            {/* <div className="mb-3">
                                                                 <label htmlFor="limit">Credit Limit</label>
-                                                                <input defaultValue={data.credit_limit} onChange={(e) => setCreditLimit(e.target.value)} type="text" className='form-control' name='limit' />
-                                                            </div>
+                                                                <input defaultValue={data.vendors.credit_limit} onChange={(e) => setCreditLimit(e.target.value)} type="text" className='form-control' name='limit' />
+                                                            </div> */}
                                                         </div>
                                                         <div className="col-lg-4">
                                                             <div className="mb-3">
                                                                 <label htmlFor="bank">Bank Account</label>
-                                                                <input defaultValue={data.bank_account} onChange={(e) => setBankAccount(e.target.value)} type="text" className='form-control' name='bankaccount' />
+                                                                <input defaultValue={data.vendors.bank_account} onChange={(e) => setBankAccount(e.target.value)} type="text" className='form-control' name='bankaccount' />
                                                             </div>
-                                                            <div className="mb-3">
+                                                            {/* <div className="mb-3">
                                                                 <label htmlFor="used">Credit Used</label>
-                                                                <input defaultValue={data.credit_used} onChange={(e) => setCreditUsed(e.target.value)} type="text" className='form-control' name='used' readOnly />
-                                                            </div>
+                                                                <input defaultValue={data.vendors.credit_used} onChange={(e) => setCreditUsed(e.target.value)} type="text" className='form-control' name='used' readOnly />
+                                                            </div> */}
                                                         </div>
                                                         <div className="col-lg-4">
                                                             <div className="mb-3">
                                                                 <label htmlFor="bank">Swif Code</label>
-                                                                <input defaultValue="" onChange={(e) => setSwifCode(e.target.value)} type="text" className='form-control' name='swifcode' />
+                                                                <input defaultValue={data.vendors.swif_code} onChange={(e) => setSwifCode(e.target.value)} type="text" className='form-control' name='swifcode' />
                                                             </div>
-                                                            <div className="mb-3">
+                                                            {/* <div className="mb-3">
                                                                 <label htmlFor="saldo">Credit Saldo</label>
-                                                                <input defaultValue={data.credit_saldo} onChange={(e) => setCreditSaldo(e.target.value)} type="text" className='form-control' name='saldo' readOnly />
-                                                            </div>
+                                                                <input defaultValue={data.vendors.credit_saldo} onChange={(e) => setCreditSaldo(e.target.value)} type="text" className='form-control' name='saldo' readOnly />
+                                                            </div> */}
                                                         </div>
+                                                        <button type='submit' className='btn btn-primary'>
+                                                            <i className='fa fa-save'></i>
+                                                            save
+                                                        </button>
+                                                    
                                                     </div>
-                                                </div>
+                                                   
+                                                </div> 
+                                                </form>
                                             </div>
                                         </div>
                                     </div>

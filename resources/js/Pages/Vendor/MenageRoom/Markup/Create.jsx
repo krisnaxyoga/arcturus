@@ -20,25 +20,6 @@ export default function PriceAgentRoom({ props,session,data }) {
     const [serviceValue, setServiceValue] = useState('');
 
 
-    const handleTaxChange = (e) => {
-    setTaxChecked(e.target.checked);
-    if (e.target.checked) {
-        setTaxValue(e.target.value);
-    } else {
-        setTaxValue('');
-    }
-    };
-    const handleServiceChange = (e) => {
-        setServiceChecked(e.target.checked);
-        if (e.target.checked) {
-            setServiceValue(e.target.value);
-        } else {
-            setServiceValue('');
-        }
-        };
-    console.log(taxValue,"value");
-    console.log(serviceValue,"service");
-
     // const handleChangestart = (e, index) => {
     //     const updatedAdult = [...startdate];
     //     updatedAdult[index].value = e.target.value;
@@ -149,21 +130,19 @@ export default function PriceAgentRoom({ props,session,data }) {
                                                     <div className="mb-3">
                                                             <div className='ml-5 mt-4'>
                                                                 <label htmlFor="" className='fw-bold'>
-                                                                <input type="checkbox"
-                                                                className='form-check-input'
-                                                                checked={taxChecked}
-                                                                onChange={handleTaxChange}
-                                                                value={11}/> tax 11%
+                                                                <input type="text"
+                                                                className='form-control'
+                                                                onChange={(e)=>setTaxValue(e.target.value)}
+                                                                defaultValue={data.tax}/>% tax
                                                                 </label>
                                                             </div>
 
                                                             <div className='ml-5'>
                                                                 <label htmlFor="" className='fw-bold'>
-                                                                <input type="checkbox"
-                                                                className='form-check-input'
-                                                                checked={serviceChecked}
-                                                                onChange={handleServiceChange}
-                                                                value={10}/> service 10%
+                                                                <input type="text"
+                                                                className='form-control'
+                                                                onChange={(e)=>setServiceValue(e.target.value)}
+                                                                defaultValue={data.service}/>% service
                                                                 </label>
                                                             </div>
                                                     </div>

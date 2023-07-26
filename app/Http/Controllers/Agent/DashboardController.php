@@ -24,13 +24,19 @@ class DashboardController extends Controller
         $pendingpayment = Booking::where('user_id',$data->vendors->user_id)->where('booking_status','unpaid')->count();
 
         $bookingdata = Booking::where('user_id',$data->vendors->user_id)->with('users','vendor')->whereNotIn('booking_status', ['-', ''])->get();
-        return inertia('Agent/Index',[
-            'data' => $data,
-            'booking' => $totalbooking,
-            'success' => $bookingsuccess,
-            'pending' => $pendingpayment,
-            'getbooking' => $bookingdata
-        ]);
+        $acyive = auth()->user()->is_active;
+        if($acyive == 1){
+            return inertia('Agent/Index',[
+                'data' => $data,
+                'booking' => $totalbooking,
+                'success' => $bookingsuccess,
+                'pending' => $pendingpayment,
+                'getbooking' => $bookingdata
+            ]);
+        }else{
+            return view('landingpage.pagenotfound.isactiveaccount');
+        }
+        
     }
 
     /**

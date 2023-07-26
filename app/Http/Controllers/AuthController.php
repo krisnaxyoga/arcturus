@@ -80,18 +80,21 @@ class AuthController extends Controller
             $data->email = $request->email;
             $data->password = Hash::make($request->password);
             $data->role_id = 3;
+            $data->departement = '-';
+            $data->position = '-';
             $data->save();
 
             // add new agents
             $member = new Vendor();
             $member->user_id = $data->id;
             $member->vendor_name = $request->busisnes_name;
+            $member->vendor_legal_name = $request->company_name;
             $member->address_line1 = $request->address;
             $member->city = $request->city;
             $member->state = $request->state;
             $member->country = $request->country;
             $member->type_vendor = 'agent';
-            $member->is_active = 1;
+            $member->is_active = 0;
             $member->save();
 
             // update vendor_id in tabel users where id = $data->id
@@ -122,7 +125,7 @@ class AuthController extends Controller
             $data->first_name = $request->first_name;
             $data->last_name = $request->last_name;
             $data->email = $request->email;
-            $data->mobile_phone = $request->mobile_phone;
+            $data->mobile_phone = $request->phone;
             $data->password = Hash::make($request->password);
             $data->departement = '-';
             $data->position = '-';
@@ -132,6 +135,7 @@ class AuthController extends Controller
             $member = new Vendor();
             $member->user_id = $data->id;
             $member->vendor_name = $request->busisnes_name;
+            $member->vendor_legal_name = $request->company_name;
             $member->address_line1 = $request->address;
             $member->city = $request->city;
             $member->state = $request->state;
@@ -139,7 +143,7 @@ class AuthController extends Controller
             $member->email = $request->email;
             $member->phone = $request->phone;
             $member->type_vendor = $request->type_vendor;
-            $member->is_active = 1;
+            $member->is_active = 0;
             $member->save();
 
             // dd($member->id);

@@ -168,7 +168,7 @@ export default function Index({ session,data,country }) {
                                     <label for="Lastname" className="form-label">Country <span className='text-danger'>*</span></label>
                                     <select onChange={(e)=>setCountry(e.target.value)} className="form-control" aria-label="Default select example">
                                         {Object.keys(country).map(key => (
-                                              <option key={key} selected={country[key]===data[0].country} value={key}>{country[key]}</option>
+                                              <option key={key} selected={country[key]===data[0].country} value={country[key]}>{country[key]}</option>
                                         ))}
                                     </select>
                                 </div>

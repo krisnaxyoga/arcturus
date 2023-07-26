@@ -18,10 +18,13 @@ use App\Http\Controllers\RedircetController;
 
 
 Route::get('/homepage/hotel', [\App\Http\Controllers\LandingPage\HomeController::class, 'hotel'])->name('hotel.homepage');
+Route::get('/homepage/about', [\App\Http\Controllers\LandingPage\HomeController::class, 'about'])->name('about.homepage');
+Route::get('/homepage/contact', [\App\Http\Controllers\LandingPage\HomeController::class, 'contact'])->name('contact.homepage');
 Route::get('/homepage/hotel/{id}', [\App\Http\Controllers\LandingPage\HomeController::class, 'hoteldetail'])->name('hoteldetail.homepage');
 Route::get('/agenthomepage', [\App\Http\Controllers\LandingPage\HomeController::class, 'index'])->name('agent.homepage.home');
 Route::get('/', [\App\Http\Controllers\LandingPage\HomeController::class, 'index'])->name('auth.homepage.home');
 Route::get('/auth/google/callback',[\App\Http\Controllers\Auth\GoogleController::class, 'handleCallback']);
+// Route::get('/account/nonactive', [\App\Http\Controllers\LandingPage\HomeController::class, 'accountnonactive'])->name('accountnonactive.homepage');
 
 //  jika user belum login
 Route::group(['middleware' => 'guest'], function() {
@@ -130,7 +133,8 @@ Route::group(['middleware' => ['auth', 'checkrole:2']], function() {
     Route::get('/verifications',[\App\Http\Controllers\Vendor\Verification\VerificationController::class, 'index']);
 
     //payouts
-    Route::get('/payouts',[\App\Http\Controllers\Vendor\Payout\PayoutController::class, 'index']);
+    Route::get('/payouts',[\App\Http\Controllers\Vendor\Payout\PayoutController::class, 'index'])->name('vendors.payouts.index');
+    Route::post('/payouts/store',[\App\Http\Controllers\Vendor\Payout\PayoutController::class, 'store'])->name('vendors.payouts.store');
 
     //my profile
     Route::get('/myprofile',[\App\Http\Controllers\Vendor\MyProfile\MyProfileController::class, 'index'])->name('vendor.myprofile');

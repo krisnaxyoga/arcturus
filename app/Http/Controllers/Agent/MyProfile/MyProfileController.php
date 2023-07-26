@@ -38,10 +38,9 @@ class MyProfileController extends Controller
     {
         // dd($request->all());
         $id = auth()->user()->id;
-        $vendor = Vendor::where('user_id',$id)->get();
+        $vendor = Vendor::where('user_id',$id)->first();
         $validator = Validator::make($request->all(),[
             'email' => 'nullable',
-            'logo' => 'nullable',
         ]);
 
         if ($validator->fails()) {
@@ -58,7 +57,7 @@ class MyProfileController extends Controller
                 // Lakukan hal lain yang diperlukan, seperti menyimpan nama file dalam database
                 $logo = "/agent/logo/".$filename;
             }else{
-                $logo = $vendor[0]->logo_img;
+                $logo = $vendor->logo_img;
             }
             
 
@@ -69,7 +68,7 @@ class MyProfileController extends Controller
             // $data->profile_image = $logo;
             // $data->save();
 
-            $member = Vendor::find($vendor[0]->id);
+            $member = Vendor::find($vendor->id);
             $member->city = $request->city;
             $member->state = $request->state;
             $member->country = $request->country;
@@ -84,7 +83,12 @@ class MyProfileController extends Controller
             $member->email = $request->email;
             $member->map_latitude = $request->latitude;
             $member->map_longitude	= $request->longitude;
-            
+            $member->bank_name = $request->bank;
+            $member->bank_account = $request->bankaccount;
+            $member->swif_code = $request->swifcode;
+            // $member->credit_limit = $request->limit;
+            // $member->credit_used = $request->used;
+            // $member->credit_saldo = $request->saldo;
             $member->save();
             
 

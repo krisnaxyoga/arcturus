@@ -4,6 +4,7 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <section class="hero-wrap hero-wrap-2" style="background-image: url('/landing/travel/images/bg_1.jpg'); height:300px">
+        <div class="overlay" style="height: 300px"></div>
         <div class="container">
             <div class="row no-gutters slider-text align-items-end justify-content-center" style="height:300px">
                 <div class="col-md-9 ftco-animate pb-5 text-center">

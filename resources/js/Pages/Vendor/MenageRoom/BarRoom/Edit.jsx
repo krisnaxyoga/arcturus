@@ -102,7 +102,7 @@ export default function PriceAgentRoom({ props, session, data }) {
     }
     return (
         <>
-            <Layout>
+            <Layout page={`/room/barcode/create`}>
                 <div className="container">
                     <div className="row">
                         <h1>Bar Information</h1>

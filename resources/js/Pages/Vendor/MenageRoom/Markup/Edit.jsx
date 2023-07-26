@@ -102,7 +102,7 @@ export default function PriceAgentRoom({ props,session,data }) {
                                                                 <input type="text"
                                                                 className='form-control'
                                                                 onChange={(e)=>setTaxValue(e.target.value)}
-                                                                value={data.tax}/>% tax
+                                                                defaultValue={data.tax}/>% tax
                                                                 </label>
                                                             </div>
 
@@ -111,7 +111,7 @@ export default function PriceAgentRoom({ props,session,data }) {
                                                                 <input type="text"
                                                                 className='form-control'
                                                                 onChange={(e)=>setServiceValue(e.target.value)}
-                                                                value={data.service}/>% service
+                                                                defaultValue={data.service}/>% service
                                                                 </label>
                                                             </div>
                                                     </div>
