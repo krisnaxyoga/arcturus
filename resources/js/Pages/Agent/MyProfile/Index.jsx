@@ -104,7 +104,7 @@ export default function Index({ session, data, contacts, country }) {
                                                     <div className="col-lg-6">
                                                         {/* <p style={{ fontWeight: "bold" }}>Personal Information</p> */}
                                                         <div>
-                                                            <label for="busisnessname" className="form-label">Business name</label>
+                                                            <label for="busisnessname" className="form-label">Agent name</label>
                                                             <div className="input-group mb-3">
                                                                 <span className="input-group-text rounded-0" id="basic-addon1"><i className='fa fa-building'></i></span>
                                                                 <input defaultValue={data.vendors.vendor_name} onChange={(e) => setBusisness(e.target.value)} type="text" className="form-control" placeholder="Business name" aria-label="busisnessname" aria-describedby="basic-addon1" />
@@ -148,7 +148,7 @@ export default function Index({ session, data, contacts, country }) {
                                                         </div>
 
                                                         <div className="mb-3">
-                                                            <img style={{ width: "100px" }} src={data.vendors.logo_img} alt="" />
+                                                            <img style={{ width: "100px" }} src={data.vendors.logo_img || 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Image_not_available.png/640px-Image_not_available.png'} alt="" />
                                                         </div>
                                                         <div className="mb-3">
                                                             <label for="formFile" className="form-label">Logo</label>
@@ -261,7 +261,7 @@ export default function Index({ session, data, contacts, country }) {
                                                         <h2>Bank account</h2>
                                                     </div>
                                                 </div>
-                                                
+
                                                 <form onSubmit={storePost}>
                                                 <div className="card-body">
                                                     <div className="row">
@@ -299,10 +299,10 @@ export default function Index({ session, data, contacts, country }) {
                                                             <i className='fa fa-save'></i>
                                                             save
                                                         </button>
-                                                    
+
                                                     </div>
-                                                   
-                                                </div> 
+
+                                                </div>
                                                 </form>
                                             </div>
                                         </div>

@@ -63,30 +63,33 @@ class MarkupController extends Controller
         }
     }
 
-    public function update(Request $request,$id){
-        // dd($request->all());
-        $validator = Validator::make($request->all(), [
-            'markup' => 'required'
-        ]);
+    public function update(Request $request,$price){
 
-        // dd($request->hasFile('image'));
-        if ($validator->fails()) {
-            return redirect()
-                ->back()
-                ->withErrors($validator->errors())
-                ->withInput($request->all());
-        } else {
-                $data = AgentMarkupSetup::find($id);
-                $data->tax = $request->tax;
-                $data->service = $request->service;
-                $data->markup_price = $request->markup;
-                $data->save();
+            $id = auth()->user()->id;
+            $vendorid = Vendor::where('user_id',$id)->first();
+            $markup = AgentMarkupSetup::where('user_id',$id)->get();
 
-            return redirect()
-                ->route('roomagent.price')
-                ->with('seccess', 'Data berhasil disimpan.');
-        }
+            if($markup->isEmpty()){
+
+                $newmarkup = new AgentMarkupSetup();
+                $newmarkup->user_id = $id;
+                $newmarkup->vendor_id = $vendorid->id;
+                $newmarkup->markup_price = $price;
+                $newmarkup->tax = 0;
+                $newmarkup->service = 0;
+                $newmarkup->save();
+
+            }else{
+
+                $markupupdate = AgentMarkupSetup::find($markup[0]->id);
+                $markupupdate->markup_price = $price;
+                $markupupdate->save();
+
+            }
+
+            return redirect()->back()->with('message', 'Markup update!');
     }
+
 
     public function index(Request $request){
         $url = $request->url();
@@ -141,14 +144,14 @@ class MarkupController extends Controller
             $black =  new AgentMarkupDetail();
             $black->start_date = $request->start;
             $black->end_date = $request->end;
-            $black->surcharge_black_price = 0;
+            $black->surcharge_block_price = 0;
             $black->user_id = $id;
             $black->vendor_id = $vendor[0]->id;
             $black->markup_cat_id = 'blackout';
             $black->save();
-            
+
             return redirect()
-            ->route('roomagent.price')
+            ->route('contract.index')
             ->with('success', 'Data saved!');
         }
     }
@@ -169,9 +172,9 @@ class MarkupController extends Controller
             $black->start_date = $request->start;
             $black->end_date = $request->end;
             $black->save();
-            
+
             return redirect()
-            ->route('roomagent.price')
+            ->route('contract.index')
             ->with('success', 'Data saved!');
         }
     }
@@ -210,14 +213,14 @@ class MarkupController extends Controller
             $surcharge = new AgentMarkupDetail();
             $surcharge->start_date = $request->start;
             $surcharge->end_date = $request->end;
-            $surcharge->surcharge_black_price = $request->price;
+            $surcharge->surcharge_block_price = $request->price;
             $surcharge->user_id = $id;
             $surcharge->vendor_id = $vendor[0]->id;
             $surcharge->markup_cat_id = 'surcharges';
             $surcharge->save();
-            
+
             return redirect()
-            ->route('roomagent.price')
+            ->route('contract.index')
             ->with('success', 'Data saved!');
         }
     }
@@ -236,11 +239,11 @@ class MarkupController extends Controller
             $surcharge = AgentMarkupDetail::find($id);
             $surcharge->start_date = $request->start;
             $surcharge->end_date = $request->end;
-            $surcharge->surcharge_black_price = $request->price;
+            $surcharge->surcharge_block_price = $request->price;
             $surcharge->save();
-            
+
             return redirect()
-            ->route('roomagent.price')
+            ->route('contract.index')
             ->with('success', 'Data saved!');
         }
     }

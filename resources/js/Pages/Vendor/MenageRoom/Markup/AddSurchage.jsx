@@ -32,10 +32,13 @@ export default function AddSurchage({ props, session, data }) {
             <Layout>
                 <div className="container">
                     <div className="row">
-                        <h1>Surchage Date</h1>
+
                         <div className="col-lg-6">
                             <form onSubmit={storePost}>
                                 <div className="card">
+                                    <div className="card-header">
+                                        <h1>Surchage Date</h1>
+                                    </div>
                                     <div className="card-body">
                                         {session.success && (
                                             <div className="alert alert-success border-0 shadow-sm rounded-3">
@@ -46,15 +49,15 @@ export default function AddSurchage({ props, session, data }) {
                                             <div className="col-lg-12">
                                                 <div className="mb-3">
                                                     <label htmlFor="">Price</label>
-                                                    <input onChange={(e) => setPrice(e.target.value)} type="number" className='form-control' />
+                                                    <input required onChange={(e) => setPrice(e.target.value)} type="number" className='form-control' />
                                                 </div>
                                                 <div className="mb-3">
                                                     <label htmlFor="">start date</label>
-                                                    <input onChange={(e) => setStart(e.target.value)} type="date" className='form-control' />
+                                                    <input required onChange={(e) => setStart(e.target.value)} type="date" className='form-control' />
                                                 </div>
                                                 <div className="mb-3">
                                                     <label htmlFor="">end date</label>
-                                                    <input onChange={(e) => setEnd(e.target.value)} type="date" className='form-control' />
+                                                    <input required onChange={(e) => setEnd(e.target.value)} type="date" className='form-control' />
                                                 </div>
                                             </div>
                                         </div>

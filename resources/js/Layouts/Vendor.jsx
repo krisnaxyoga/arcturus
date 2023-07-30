@@ -13,6 +13,7 @@ function Layout({ children, page, username }) {
 
     const [show, setShow] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
+    const [isOpen2, setIsOpen2] = useState(false);
 
     const logOut = (e) => {
         Inertia.post('/logout', {
@@ -27,26 +28,25 @@ function Layout({ children, page, username }) {
         setShow(!show);
     };
 
-
-
-    const toggleAccordion = () => {
-        setIsOpen(!isOpen);
+    const toggleAccordion2 = () => {
+        setIsOpen2(!isOpen2);
     };
 
     useEffect(() => {
-        if (page === '/room/attribute') {
-            setIsOpen(true);
-        } else if(page === '/room/index')  {
-            setIsOpen(true);
-        } else if(page === '/room/markup') {
-            setIsOpen(true);
-        } else if(page === '/room/barcode/create') {
-            setIsOpen(true);
-        } else if(page === '/room/contract/index') { 
-            setIsOpen(true);
-        } else {
-            setIsOpen(false);
+
+        if(page === '/myprofile'){
+            setIsOpen2(true);
+        }else if(page === '/room/attribute'){
+            setIsOpen2(true);
+        }else if(page === '/room/index'){
+            setIsOpen2(true);
+        }else if(page === '/room/contract/index') {
+            setIsOpen2(true);
         }
+        else{
+            setIsOpen2(false);
+        }
+
     }, [page]);
 
     return (
@@ -82,32 +82,31 @@ function Layout({ children, page, username }) {
                         <div className="sidenav-menu">
                             <div className="nav accordion" id="accordionSidenav">
                                 <div className="sidenav-menu-heading">Main</div>
-                                <Link className={`nav-link ${page === '/vendordashboard' ? 'active' : ''}`} href="/vendordashboard">
+                                <a href="/" className='nav-link'>
                                     <div className="nav-link-icon"><i className="fa fa-home" aria-hidden="true"></i></div>
+                                    Home
+                                </a>
+                                <Link className={`nav-link ${page === '/vendordashboard' ? 'active' : ''}`} href="/vendordashboard">
+                                    <div className="nav-link-icon"><i className="fa fa-adjust" aria-hidden="true"></i></div>
                                     Dashboard
                                 </Link>
                                 <Link className={`nav-link ${page === '/bookinghistory' ? 'active' : ''}`} href="/bookinghistory">
                                     <div className="nav-link-icon"><i className="fa fa-clock" aria-hidden="true"></i></div>
                                     Booking History
                                 </Link>
-                                <Link className={`nav-link ${page === '/myprofile' ? 'active' : ''}`} href="/myprofile">
-                                    <div className="nav-link-icon"><i className="fa fa-cogs" aria-hidden="true"></i></div>
-                                    My Hotel
-                                </Link>
                                 <div className="nav-item">
-                                    <a className="nav-link" onClick={toggleAccordion} href="#">
-                                        <div className="nav-link-icon"><i className="fa fa-building" aria-hidden="true"></i></div>
-                                        Manage Room
+                                    <a href="#" className='nav-link' onClick={toggleAccordion2}>
+                                        <div className="nav-link-icon"><i className="fa fa-cogs" aria-hidden="true"></i></div>
+                                        My Hotel
                                     </a>
-                                    {isOpen && <div className="bg-white py-2 px-4 collapse-inner rounded">
-                                        <Link className={`nav-link ${page === '/room/attribute' ? 'active' : ''}`} href="/room/attribute">Facilities Room</Link>
-                                        <Link className={`nav-link ${page === '/room/index' ? 'active' : ''}`} href="/room/index">All Room</Link>
-                                        {/* <Link className="nav-link" href="/room/create">Add Room</Link> */}
-                                        <Link className={`nav-link ${page === '/room/markup' ? 'active' : ''}`} href="/room/markup">Selling Configuration</Link>
-                                        <Link className={`nav-link ${page === '/room/barcode/create' ? 'active' : ''}`} href="/room/barcode/create">Bar Information</Link>
-                                        <Link className={`nav-link ${page === '/room/contract/index' ? 'active' : ''}`} href="/room/contract/index">Contract Rate</Link>
+                                    {isOpen2 && <div className="bg-white py-2 px-4 colapse-inner rounded">
+                                        <Link className={`nav-link ${page === '/myprofile' ? 'active' : ''}`} href="/myprofile">Hotel Info</Link>
+                                        <Link className={`nav-link ${page === '/room/attribute' ? 'active' : ''}`} href="/room/attribute">Amenities</Link>
+                                        <Link className={`nav-link ${page === '/room/index' ? 'active' : ''}`} href="/room/index">Room Types</Link>
+                                        <Link className={`nav-link ${page === '/room/contract/index' ? 'active' : ''}`} href="/room/contract/index">Rates</Link>
                                     </div>}
                                 </div>
+
                                 {/* <Link className={`nav-link ${page === '/managenews' ? 'active' : ''}`} href="/managenews">
                                     <div className="nav-link-icon"><i className="fa fa-bookmark" aria-hidden="true"></i></div>
                                     Manage News

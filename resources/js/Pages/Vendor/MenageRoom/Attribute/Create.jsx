@@ -28,12 +28,12 @@ export default function PriceAgentRoom({ props, session, data }) {
     // if (data.length > 0) {
     //     const dprice = data[0].price;
     //     setPrice(dprice);
-    //   } 
+    //   }
     return (
         <>
             <Layout>
                 <div className="container">
-                    <h1>Facilities </h1>
+                    <h1>Amenities</h1>
                     <div className="row">
 
                         <div className="col-lg-6">
@@ -49,7 +49,7 @@ export default function PriceAgentRoom({ props, session, data }) {
                                             <div className="col-lg-12">
                                                 <div className="mb-3">
                                                     <label htmlFor="">name</label>
-                                                    <input onChange={(e) => setName(e.target.value)} type="text" className='form-control' />
+                                                    <input required onChange={(e) => setName(e.target.value)} type="text" className='form-control' />
                                                 </div>
                                                 <div className="mb-3">
                                                     <label htmlFor="">Description</label>

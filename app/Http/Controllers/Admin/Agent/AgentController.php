@@ -147,18 +147,9 @@ class AgentController extends Controller
     {
 
        $model = Vendor::find($id);
-       $vendorid = User::where('vendor_id',$model->id)->first();
+       $vendorid = User::where('vendor_id',$model->id)->exists();
 
-       if($vendorid){
-            $user = User::find($vendorid->id);
-            $user->vendor_id = $model->id;
-            $user->is_active = 1;
-            $user->save();
-
-            $model->is_active = 1;
-            $model->save();
-
-       }else{
+       if(!$vendorid){
             $user = new User();
             $user->first_name = $model->vendor_name;
             $user->email = $model->email;
@@ -169,8 +160,19 @@ class AgentController extends Controller
             $user->role_id = 3;
             $user->save();
 
-        $model->user_id = $user->id;
-        $model->save();
+            
+            $model->user_id = $user->id;
+            $model->save();
+       }else{
+        
+            $user = User::find($model->user_id);
+            $user->vendor_id = $model->id;
+            $user->is_active = 1;
+            $user->save();
+
+            $model->is_active = 1;
+            $model->save();
+
        }
 
        return redirect()->back()->with('success', 'agent active successfully.');

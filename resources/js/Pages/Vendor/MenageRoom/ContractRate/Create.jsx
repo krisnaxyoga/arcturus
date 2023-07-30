@@ -39,6 +39,8 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
     const [showModal, setShowModal] = useState(false);
 
     const [showModalTable, setShowModalTable] = useState(false);
+    
+    const [minMarkup, setMinMarkup] = useState('');
 
 
     const [selectedDistribute, setSelectedDistribute] = useState([]);
@@ -108,7 +110,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
     const buttonSendValue = (item) => {
         setModalData(item);
 
-        const sellprice = Number(item?.price * 0.75) + Number(markup[0]?.markup_price)
+        const sellprice = Number(item?.price * 0.75) + Number(markup?.markup_price)
 
         setSellingPrice(sellprice)
 
@@ -125,7 +127,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
     const handleCloseModalTable = () => {
         setShowModalTable(false);
     };
-
+    
     const handleCancelPolicyChange = (event, editor) => {
         setCancellationPolicy(editor.getData());
     };
@@ -164,7 +166,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
     const handleRateMinChange = (e) => {
         const value = e.target.value;
 
-        const selling = Number(value) + Number(markup[0].price)
+        const selling = Number(value) + Number(markup.price)
 
         setMinPrice(value)
         setSellingPrice(selling);
@@ -206,6 +208,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
 
         formData.append('distribute',selectedDistribute);
         formData.append('except',selectedExclude);
+        formData.append('minmarkup',minMarkup ? minMarkup:markup.markup_price);
 
         //console.log(adp, ">>>>>>>>>>>>> ISI PICK DAYS >>>>>>>>>>>>>>>>")
 
@@ -251,12 +254,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                             fill
                                                         >
                                                             <Tab eventKey="home" title="Rate Code">
-                                                                <div className="row">
-                                                                    <div className="col-lg-6">
-                                                                        <p htmlFor="" className='fs-6 fst-italic'> this contract only can be changed once a month and every 1st day of the month</p>
-
-                                                                    </div>
-                                                                </div>
+                                                                
                                                                 <div className="row">
                                                                     <div className="col-lg-4">
                                                                         <div className="mb-3">
@@ -272,7 +270,6 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                         </div>
                                                                     </div>
                                                                     <div className="col-lg-4">
-
                                                                         <div className="mb-3">
                                                                             <label htmlFor="" className='fw-bold'>Minimum stay</label>
                                                                             <input onChange={(e) => setMinStay(e.target.value)} type="number" className='form-control' />
@@ -288,7 +285,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                             <div className="col-lg-6">
                                                                                 <div className="mb-3">
                                                                                     <label htmlFor="" className='fw-bold'>Begin Sell date</label>
-                                                                                    <input readOnly defaultValue={bardata[0].begindate} onChange={(e) => setBeginSell(e.target.value)} type="date" className='form-control' />
+                                                                                    <input readOnly defaultValue={bardata[0] .begindate} onChange={(e) => setBeginSell(e.target.value)} type="date" className='form-control' />
                                                                                 </div>
                                                                             </div>
                                                                             <div className="col-lg-6">
@@ -298,8 +295,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-                                                                    </div>
-                                                                    <div className="col-lg-6">
+
                                                                         <label htmlFor="" className='fw-bold'>BOOKING PERIODS</label>
                                                                         <hr />
                                                                         <div className="row">
@@ -317,10 +313,43 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                             </div>
                                                                         </div>
                                                                     </div>
+                                                                    <div className="col-lg-6">
+                                                                        <div className="mb-3">
+                                                                            <label htmlFor="">Market</label>
+                                                                            <select name="" id="" className='form-control' onChange={handleSelectDistribute} multiple>
+                                                                                <option value="all">all</option>
+                                                                                    {Object.keys(country).map(key => (
+                                                                                        <option key={key} value={country[key]}>{country[key]}</option>
+                                                                                    ))}
+                                                                            </select>
+                                                                            <p className='mt-2'>Selected: <span className='text-secondary'>{selectedDistribute.join(', ')}</span></p>
+                                                                        </div>
+                                                                        <div className="mb-3">
+                                                                            <label htmlFor="">Exclude</label>
+                                                                            <select name="" id="" className='form-control' onChange={handleSelectExclude} multiple>
+                                                                                
+                                                                                {Object.keys(country).map(key => (
+                                                                                        <option key={key} value={country[key]}>{country[key]}</option>
+                                                                                    ))}
+                                                                            </select>
+                                                                            <p className='mt-2'>Selected: <span className='text-secondary'>{selectedExclude.join(', ')}</span></p>
+
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                                 <div className="row">
                                                                     <div className="col-lg-6">
-                                                                        <label htmlFor="pickdays" className='fw-bold'>Pick valid day</label>
+                                                                        <label htmlFor="pickdays" className='fw-bold'>valid day</label>
+                                                                        <label className="form-label mx-5">
+                                                                                <input
+                                                                                    type="checkbox"
+                                                                                    className='form-check-input'
+                                                                                    name="all"
+                                                                                    checked={Object.values(checkboxes).every(val => val)}
+                                                                                    onChange={handleCheckboxChangeAll}
+                                                                                />
+                                                                                All
+                                                                            </label>
                                                                         <div className="mb-3">
                                                                             <label className="form-label mx-3">
                                                                                 <input
@@ -392,46 +421,13 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                                 />
                                                                                 Sat
                                                                             </label>
-                                                                            <label className="form-label mx-3">
-                                                                                <input
-                                                                                    type="checkbox"
-                                                                                    className='form-check-input'
-                                                                                    name="all"
-                                                                                    checked={Object.values(checkboxes).every(val => val)}
-                                                                                    onChange={handleCheckboxChangeAll}
-                                                                                />
-                                                                                All
-                                                                            </label>
+                                                                           
                                                                         </div>
                                                                     </div>
-
                                                                     <div className="col-lg-6">
-                                                                    <div className="row">
-                                                                            <div className="col-lg-6">
-                                                                                <div className="mb-3">
-                                                                                    <label htmlFor="">distribute</label>
-                                                                                    <select name="" id="" className='form-control' onChange={handleSelectDistribute} multiple>
-                                                                                        <option value="all">all</option>
-                                                                                         {Object.keys(country).map(key => (
-                                                                                               <option key={key} value={country[key]}>{country[key]}</option>
-                                                                                            ))}
-                                                                                    </select>
-                                                                                    <p className='mt-2'>Selected Values: <span className='text-secondary'>{selectedDistribute.join(', ')}</span></p>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div className="col-lg-6">
-                                                                                <div className="mb-3">
-                                                                                    <label htmlFor="">exclude</label>
-                                                                                    <select name="" id="" className='form-control' onChange={handleSelectExclude} multiple>
-                                                                                        
-                                                                                        {Object.keys(country).map(key => (
-                                                                                               <option key={key} value={country[key]}>{country[key]}</option>
-                                                                                            ))}
-                                                                                    </select>
-                                                                                    <p className='mt-2'>Selected Values: <span className='text-secondary'>{selectedExclude.join(', ')}</span></p>
-
-                                                                                </div>
-                                                                            </div>
+                                                                        <div className="mb-3">
+                                                                            <label htmlFor="">Min Markup</label>
+                                                                            <input  onChange={(e) => setMinMarkup(e.target.value)} type="text" defaultValue={markup.markup_price} className='form-control'/>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -631,7 +627,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                     <Form.Control
                                                                         type="text"
                                                                         name="markup"
-                                                                        defaultValue={markup[0]?.markup_price}
+                                                                        defaultValue={markup?.markup_price}
                                                                         disabled
                                                                     />
                                                                 </Form.Group>
@@ -640,7 +636,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                     <Form.Control
                                                                         type="text"
                                                                         name="selling"
-                                                                        placeholder={modalData?.price * 0.75 + markup[0]?.markup_price}
+                                                                        placeholder={modalData?.price * 0.75 + markup?.markup_price}
                                                                         //defaultValue={modalData?.price * 0.75 + markup[0]?.markup_price}
                                                                         value={sellingPrice}
                                                                         disabled

@@ -97,6 +97,7 @@ class AuthController extends Controller
             $member->is_active = 0;
             $member->save();
 
+
             // update vendor_id in tabel users where id = $data->id
             $user = User::find($data->id);
             $user->vendor_id = $member->id;
@@ -146,6 +147,9 @@ class AuthController extends Controller
             $member->is_active = 0;
             $member->save();
 
+            $user = User::find($data->id);
+            $user->vendor_id = $member->id;
+            $user->save();
             // dd($member->id);
             return redirect()
                 ->route('login')

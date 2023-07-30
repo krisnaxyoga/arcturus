@@ -9,6 +9,7 @@ use App\Models\ContractRate;
 use App\Models\ContractPrice;
 use App\Models\RoomHotel;
 use App\Models\User;
+use App\Models\Slider;
 use App\Models\AgentMarkupDetail;
 use App\Models\AgentMarkupSetup;
 use Carbon\Carbon;
@@ -21,7 +22,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('landingpage.index');
+        $slider = Slider::all();
+        return view('landingpage.index',compact('slider'));
     }
 
     public function hotel(Request $request)

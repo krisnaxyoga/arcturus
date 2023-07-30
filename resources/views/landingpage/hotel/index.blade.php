@@ -115,7 +115,7 @@
                     <div class="col-md-4 ftco-animate">
                         <div class="project-wrap hotel">
                             <a href="{{route('hoteldetail.homepage',$item->contract_id)}}" class="img"
-                                style="background-image: url(/landing/travel/images/hotel-resto-1.jpg);">
+                                style="background-image: url({{$item->room->feature_image}});">
                                 <span class="price">Rp. {{ number_format($item->price, 0, ',', '.')}}</span>
                             </a>
                             <div class="text p-4">

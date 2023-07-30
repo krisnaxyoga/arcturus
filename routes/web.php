@@ -109,6 +109,9 @@ Route::group(['middleware' => ['auth', 'checkrole:1']], function() {
     Route::get('/admin/setting', [\App\Http\Controllers\Admin\Setting\SettingController::class, 'index'])->name('dashboard.setting');
     Route::post('/admin/setting/store', [\App\Http\Controllers\Admin\Setting\SettingController::class, 'store'])->name('dashboard.setting.store');
     Route::put('/admin/setting/update/{id}', [\App\Http\Controllers\Admin\Setting\SettingController::class, 'update'])->name('dashboard.setting.update');
+
+    Route::post('/admin/storeslider/',[\App\Http\Controllers\Admin\Setting\SettingController::class,'storeslider'])->name('dashboard.setting.storeslider');
+    Route::delete('/admin/destroyslider/{id}',[\App\Http\Controllers\Admin\Setting\SettingController::class,'destroyslider'])->name('dashboard.setting.destroyslider');
    
 });
 
@@ -151,7 +154,8 @@ Route::group(['middleware' => ['auth', 'checkrole:2']], function() {
     Route::get('/room/markup',[\App\Http\Controllers\Vendor\Hotel\Agent\MarkupController::class, 'index'])->name('roomagent.price');
     Route::get('/room/markup/create',[\App\Http\Controllers\Vendor\Hotel\Agent\MarkupController::class, 'create'])->name('roomagent.create');
     Route::get('/room/markup/edit/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\MarkupController::class, 'edit'])->name('roomagent.edit');
-    Route::post('/room/markup/update/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\MarkupController::class, 'update'])->name('roomagent.update');
+    Route::get('/room/markup/updateprice/{price}',[\App\Http\Controllers\Vendor\Hotel\Agent\MarkupController::class, 'update'])->name('roomagent.updateprice');
+
 
     Route::post('/room/agent/price',[\App\Http\Controllers\Vendor\Hotel\Agent\MarkupController::class, 'store']);
     Route::get('/room/markup/addblack',[\App\Http\Controllers\Vendor\Hotel\Agent\MarkupController::class, 'addblack'])->name('roomagent.addblack');

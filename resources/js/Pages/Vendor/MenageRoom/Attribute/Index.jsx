@@ -39,7 +39,7 @@ export default function Index({ props, session, data }) {
                         <div className="col-lg-12">
                             <div className="card">
                                 <div className="card-header">
-                                    <h2>Room Facilities</h2>
+                                    <h2>Amenities</h2>
                                 </div>
                                 <div className="card-body">
                                     <Link href="/room/attribute/create" className="btn btn-primary mb-2">add</Link>

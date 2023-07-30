@@ -30,9 +30,12 @@ export default function AddBlackout({ props, session, data }) {
             <Layout>
                 <div className="container">
                     <div className="row">
-                        <h1>Blackout Date</h1>
+
                         <div className="col-lg-6">
                             <form onSubmit={storePost}>
+                                <div className="card-header">
+                                     <h1>Blackout Date</h1>
+                                </div>
                                 <div className="card">
                                     <div className="card-body">
                                         {session.success && (
@@ -44,11 +47,11 @@ export default function AddBlackout({ props, session, data }) {
                                             <div className="col-lg-12">
                                                 <div className="mb-3">
                                                     <label htmlFor="">start date</label>
-                                                    <input onChange={(e) => setStart(e.target.value)} type="date" className='form-control' />
+                                                    <input required onChange={(e) => setStart(e.target.value)} type="date" className='form-control' />
                                                 </div>
                                                 <div className="mb-3">
                                                     <label htmlFor="">end date</label>
-                                                    <input onChange={(e) => setEnd(e.target.value)} type="date" className='form-control' />
+                                                    <input  required onChange={(e) => setEnd(e.target.value)} type="date" className='form-control' />
                                                 </div>
                                             </div>
                                         </div>

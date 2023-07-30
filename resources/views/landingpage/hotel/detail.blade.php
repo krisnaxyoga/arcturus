@@ -55,7 +55,7 @@
                                     <div class="form-group p-4">
                                         <label for="#">Check-in</label>
                                         <div class="form-field">
-                                            <input type="date" name="checkin" class="form-control checkindate" placeholder="Check In Date" required>
+                                            <input type="date" id="checkin" name="checkin" class="form-control checkindate" placeholder="Check In Date" required>
                                         </div>
                                     </div>
                                 </div>
@@ -63,7 +63,7 @@
                                     <div class="form-group p-4">
                                         <label for="#">Check-out</label>
                                         <div class="form-field">
-                                            <input type="date" name="checkout" class="form-control checkoutdate" placeholder="Check Out Date" required>
+                                            <input onchange="night()" id="checkout" type="date" name="checkout" class="form-control checkoutdate" placeholder="Check Out Date" required>
                                         </div>
                                     </div>
                                 </div>
@@ -100,7 +100,7 @@
                                     <div class="row g-0">
                                         <div class="col-md-4">
                                             <img src="{{$item->room->feature_image}}" class="img img-fluid rounded-start" alt="{{$item->room->feature_image}}">
-                                           
+
                                         </div>
                                         <div class="col-md-8">
                                             <div class="card-body">
@@ -134,6 +134,13 @@
                                                         <p>Total Room: <span id="totalRoom">0</span></p>
                                                         <input type="text" name="totalroom" value="" hidden>
                                                         <input type="text" name="vendorid" value="{{$data[0]->contractrate->vendor_id}}" hidden>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex justify-content-between">
+                                                    <div>
+                                                        <p>Total Night: <span id="totalNight">0</span></p>
+                                                        <input type="text" name="totalnight" value="" hidden>
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -201,12 +208,39 @@
             return decryptedData;
         }
 
+        function night(){
+            var checkinDate = new Date(document.getElementById('checkin').value);
+            var checkoutDate = new Date(document.getElementById('checkout').value);
+
+            var totalPriceElements = document.getElementById('totalPrice');
+
+            var timeDiff = Math.abs(checkoutDate.getTime() - checkinDate.getTime());
+            var permalam = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+
+            var totalNightElement = document.getElementById('totalNight');
+            totalNightElement.textContent = permalam;
+
+            var totalNightInput = document.querySelector('input[name="totalnight"]');
+            totalNightInput.value = permalam.toLocaleString();
+
+
+            var totalPrice = document.querySelector('input[name="totalprice"]');
+            console.log(totalPrice.value,">>>>total price value");
+            var cleanedPrice = totalPrice.value.replace(/,/g, '');
+
+            var priceintext = parseInt(cleanedPrice) * parseInt(permalam);
+            console.log(parseInt(cleanedPrice),">>>>total price inte");
+            totalPriceElements.textContent = priceintext.toLocaleString();
+
+        }
         function calculateTotal() {
             var roomQuantities = document.getElementsByClassName('room-quantity');
             var totalRoomElement = document.getElementById('totalRoom');
             var totalPriceElement = document.getElementById('totalPrice');
             var totalRoom = 0;
             var totalPrice = 0;
+            var totalNight = document.querySelector('input[name="totalnight"]');
 
             // Mengambil data yang dipilih dan menyimpannya ke dalam array
             var selectedItems = [];
@@ -243,14 +277,15 @@
             console.log(decryptedData);
 
             totalRoomElement.textContent = totalRoom;
-            totalPriceElement.textContent = totalPrice.toLocaleString();
+            var priceintext = parseInt(totalPrice * totalNight.value);
+            totalPriceElement.textContent = priceintext.toLocaleString();
             var totalRoomInput = document.querySelector('input[name="totalroom"]');
             totalRoomInput.value = totalRoom;
             var totalPriceInput = document.querySelector('input[name="totalprice"]');
             totalPriceInput.value = totalPrice.toLocaleString();
         }
-        
-        
+
+
         //function untuk tanggal checkin
 
         function setCheckInDateRestriction() {
@@ -327,20 +362,20 @@
 
             $(document).ready(function() {
                 // Cek apakah ada data di local storage
-               
+
                 // Ambil data terenkripsi dari local storage
                 var encryptionKey = 'KunciEnkripsiRahasia';
                 var decryptedData = getDecryptedDataFromLocalStorage(encryptionKey);
                 console.log(decryptedData,">>>>>>>>decriptdata");
                 // Tampilkan data ke dalam input elemen
-                $("#checkin").val(decryptedData.checkin);
-                $("#checkout").val(decryptedData.checkout);
-                $('input[name="totalroom"]').val(decryptedData.totalroom);
-                $("#totalprice").val(decryptedData.totalprice);
-                $('#totalroom').val(decryptedData.totalroom);
-                $('input[name="totalprice"]').val(decryptedData.totalprice);
-                $("#person").val(decryptedData.person);
-                
+                // $("#checkin").val(decryptedData.checkin);
+                // $("#checkout").val(decryptedData.checkout);
+                // $('input[name="totalroom"]').val(decryptedData.totalroom);
+                // $("#totalprice").val(decryptedData.totalprice);
+                // $('#totalroom').val(decryptedData.totalroom);
+                // $('input[name="totalprice"]').val(decryptedData.totalprice);
+                // $("#person").val(decryptedData.person);
+
             });
 
             $('.category').change(function() {
@@ -436,13 +471,13 @@
           -webkit-animation: spin 2s linear infinite; /* Safari */
           animation: spin 2s linear infinite;
         }
-        
+
         /* Safari */
         @-webkit-keyframes spin {
           0% { -webkit-transform: rotate(0deg); }
           100% { -webkit-transform: rotate(360deg); }
         }
-        
+
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }

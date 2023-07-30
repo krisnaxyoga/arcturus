@@ -32,10 +32,12 @@ export default function EditSurchage({ props, session, data }) {
             <Layout>
                 <div className="container">
                     <div className="row">
-                        <h1>Surchage Date</h1>
                         <div className="col-lg-6">
                             <form onSubmit={storePost}>
                                 <div className="card">
+                                    <div className="card-header">
+                                        <h1>Surchage Date</h1>
+                                    </div>
                                     <div className="card-body">
                                         {session.success && (
                                             <div className="alert alert-success border-0 shadow-sm rounded-3">
@@ -46,7 +48,7 @@ export default function EditSurchage({ props, session, data }) {
                                             <div className="col-lg-12">
                                                 <div className="mb-3">
                                                     <label htmlFor="">price</label>
-                                                    <input defaultValue={data.surcharge_black_price} onChange={(e) => setPrice(e.target.value)} type="number" className='form-control' />
+                                                    <input defaultValue={data.surcharge_block_price} onChange={(e) => setPrice(e.target.value)} type="number" className='form-control' />
                                                 </div>
                                                 <div className="mb-3">
                                                     <label htmlFor="">start date</label>

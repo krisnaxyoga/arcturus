@@ -7,7 +7,7 @@ export default function Attributes({ rooms }) {
             {rooms.map((item, index) => (
                 <>
                     <tr key={index}>
-                        <td>{item.id}</td>
+                        <td>{index+1}</td>
                         <td>{item.ratecode}</td>
                         <td>{item.ratedesc}</td>
                         <td>{item.room_allow}</td>
@@ -23,12 +23,12 @@ export default function Attributes({ rooms }) {
                             </ul>
                         </td>
                         <td>{item.adults}</td>
-    
+
                         <td>
-                            <Link className='btn btn-warning' href={`/room/edit/${item.id}`}>
+                            <Link className='btn btn-datatable btn-icon btn-transparent-dark mr-2' href={`/room/edit/${item.id}`}>
                                 <i className='fa fa-edit'></i>
                             </Link>
-                            <Link className='btn btn-danger mx-2' href={`/room/destroy/${item.id}`}>
+                            <Link className='btn btn-datatable btn-icon btn-transparent-dark mr-2' href={`/room/destroy/${item.id}`}>
                                 <i className='fa fa-trash'></i>
                             </Link>
                         </td>

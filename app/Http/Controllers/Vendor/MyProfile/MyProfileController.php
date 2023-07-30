@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Vendor;
 use App\Models\User;
+use App\Models\AgentMarkupSetup;
 use Illuminate\Support\Facades\Validator;
 
 class MyProfileController extends Controller
@@ -19,9 +20,12 @@ class MyProfileController extends Controller
         $iduser = auth()->user()->id;
         $data = Vendor::with('users')->where('user_id',$iduser)->get();
         // dd($data, $iduser);
+        $markup = AgentMarkupSetup::where('user_id',$iduser)->first();
+
         return inertia('Vendor/MyProfile/Index',[
             'data'=>$data,
-            'country'=>$country
+            'country'=>$country,
+            'markup' =>$markup
         ]);
     }
 
@@ -73,9 +77,29 @@ class MyProfileController extends Controller
             $member->address_line1 = $request->address;
             $member->address_line2 = $request->address2;
             $member->phone = $request->phone;
+            $member->bank_name = $request->bank;
+            $member->bank_account = $request->bankaccount;
+            $member->swif_code = $request->swifcode;
             // $member->email = $request->email;
             $member->save();
             
+            $markup = AgentMarkupSetup::where('user_id',$id)->exists();
+
+            if(!$markup){
+                $mark = new AgentMarkupSetup;
+                $mark->user_id = $id;
+                $mark->vendor_id = $vendor[0]->id;
+                $mark->service = $request->service;
+                $mark->tax = $request->tax;
+                $mark->save();
+            }else{
+                $mark2 = AgentMarkupSetup::where('user_id',$id)->first();
+                $mark2->user_id = $id;
+                $mark2->vendor_id = $vendor[0]->id;
+                $mark2->service = $request->service;
+                $mark2->tax = $request->tax;
+                $mark2->save();
+            }
 
             // dd($member->id);
             return redirect()

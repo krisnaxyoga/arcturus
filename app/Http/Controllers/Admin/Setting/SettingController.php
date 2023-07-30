@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Setting;
+use App\Models\Slider;
+use Illuminate\Support\Facades\File;
 
 class SettingController extends Controller
 {
@@ -25,7 +27,8 @@ class SettingController extends Controller
             $setting = new Setting;
         }
 
-        return view('admin.setting.form',compact('setting', 'countries'));
+        $slide = Slider::all();
+        return view('admin.setting.form',compact('setting', 'countries','slide'));
     }
 
     /**
@@ -43,8 +46,8 @@ class SettingController extends Controller
     {
 
         $validator =  Validator::make($request->all(), [
-            'photo' => 'required|mimes:png,jpg,jpeg|max:2048',
-            'email' => 'required|email',
+            'photo' => 'nullable|mimes:png,jpg,jpeg|max:2048',
+            'email' => 'nullable|email',
             'name' => 'required'
         ]);
 
@@ -55,7 +58,18 @@ class SettingController extends Controller
                 ->withErrors($validator->errors())
                 ->withInput($request->all());
         } else {
-            $photo = $request->file('photo');
+            if ($request->hasFile('photo')) {
+                $photo = $request->file('photo');
+                $filename = time() . '.' . $photo->getClientOriginalExtension();
+                $photo->move(public_path('logo/system'), $filename);
+
+                // Lakukan hal lain yang diperlukan, seperti menyimpan nama file dalam database
+            }else{
+                $filename= "";
+            }
+
+            $feature = "/logo/system/".$filename;
+
             $userid = auth()->user()->id;
             $data = new Setting();
             $data->user_id =$userid;
@@ -72,17 +86,7 @@ class SettingController extends Controller
             $data->fax = $request->fax;
             $data->email = $request->email;
             $data->zipcode = $request->zipcode;
-
-            if($photo) {
-                $filename = date('Y-m-d').$photo->getClientOriginalName();
-                $path = 'logo/'.$filename;
-        
-                Storage::disk('public')->put($path,file_get_contents($photo));
-
-                $data->logo_image = $filename;
-                $data->url_logo_image = $path;
-                $data->url_website = $request->url_website;
-            }
+            $data->logo_image = $feature;
             $data->save();
 
             return redirect()
@@ -113,10 +117,10 @@ class SettingController extends Controller
     public function update(Request $request, string $id)
     {
         $validator =  Validator::make($request->all(), [
-            'email' => 'required|email',
+            'email' => 'nullable|email',
             'name' => 'required'
         ]);
-
+// dd($request->all());
         if ($validator->fails()) {
             return redirect()
                 ->back()
@@ -124,6 +128,24 @@ class SettingController extends Controller
                 ->withInput($request->all());
         } else {
             $data = Setting::find($id);
+
+            if ($request->hasFile('photo')) {
+                $photo = $request->file('photo');
+                if (File::exists(public_path($data->logo_image))) 
+                    {
+                        File::delete(public_path($data->logo_image));
+                    }
+
+                $filename = time() . '.' . $photo->getClientOriginalExtension();
+                $photo->move(public_path('logo/system'), $filename);
+
+                // Lakukan hal lain yang diperlukan, seperti menyimpan nama file dalam database
+            }else{
+                $filename = $data->logo_image;
+            }
+            
+            $feature = "/logo/system/".$filename;
+            // dd($feature);
             $userid = auth()->user()->id;
             $data->user_id = $userid;
             $data->company_name = $request->name;
@@ -140,19 +162,10 @@ class SettingController extends Controller
             $data->email = $request->email;
             $data->zipcode = $request->zipcode;
 
-            $photo = $request->file('photo');
-            if($photo) {
-                $filename = date('Y-m-d').$photo->getClientOriginalName();
-                $path = 'logo/'.$filename;
-        
-                Storage::disk('public')->put($path,file_get_contents($photo));
+            $data->logo_image = $feature;
+            $data->url_logo_image = $feature;
 
-                $data->logo_image = $filename;
-                $data->url_logo_image = $path;
-                $data->url_website = $request->url_website;
-            }
-            
-            $data->update();
+            $data->save();
 
             return redirect()
                 ->route('dashboard.setting')
@@ -164,8 +177,52 @@ class SettingController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroyslider(string $id)
     {
-        //
+        $data = Slider::find($id);
+        $data->delete();
+        return redirect()
+        ->route('dashboard.setting')
+        ->with('message', 'Data deleted.');
+    }
+
+    public function storeslider(Request $request){
+        $validator =  Validator::make($request->all(), [
+            'image' => 'nullable|mimes:png,jpg,jpeg|max:2048',
+            'description' => 'nullable',
+            'title' => 'required'
+        ]);
+
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator->errors())
+                ->withInput($request->all());
+        } else {
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $filename = time() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('slider'), $filename);
+
+                // Lakukan hal lain yang diperlukan, seperti menyimpan nama file dalam database
+            }else{
+                $filename= "";
+            }
+
+            $feature = "/slider/".$filename;
+
+            $userid = auth()->user()->id;
+            $data = new Slider();
+            $data->user_id =$userid;
+            $data->title = $request->title;
+            $data->description = $request->description;
+            $data->image = $feature;
+            $data->save();
+
+            return redirect()
+                ->route('dashboard.setting')
+                ->with('message', 'Data berhasil disimpan.');
+        }
     }
 }

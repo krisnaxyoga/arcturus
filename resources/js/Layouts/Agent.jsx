@@ -69,8 +69,12 @@ function Layout({ children, page, agent }) {
                                 <div className="sidenav-menu">
                                     <div className="nav accordion" id="accordionSidenav">
                                         <div className="sidenav-menu-heading">Main</div>
-                                        <Link className={`nav-link ${page === '/agentdashboard' ? 'active' : ''}`} href="/agentdashboard">
+                                        <a href="/" className='nav-link'>
                                             <div className="nav-link-icon"><i className="fa fa-home" aria-hidden="true"></i></div>
+                                            Home
+                                        </a>
+                                        <Link className={`nav-link ${page === '/agentdashboard' ? 'active' : ''}`} href="/agentdashboard">
+                                            <div className="nav-link-icon"><i className="fa fa-adjust" aria-hidden="true"></i></div>
                                             Dashboard
                                         </Link>
                                         <Link className={`nav-link ${page === '/agent/bookinghistory' ? 'active' : ''}`} href="/agent/bookinghistory">
@@ -115,9 +119,9 @@ function Layout({ children, page, agent }) {
                                 <div className="container-fluid">
                                     <div className="row">
                                         <div className="col-md-12 small">Copyright &#xA9; {currentYear} &nbsp;
-                                        
+
                                         {agent.vendors.vendor_name}
-                                        
+
                                         </div>
                                     </div>
                                 </div>

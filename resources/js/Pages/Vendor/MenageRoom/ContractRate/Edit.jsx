@@ -37,8 +37,14 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
 
     const [showModal, setShowModal] = useState(false);
 
+    const [showModalMarkup, setShowModalMarkup] = useState(false);
+
     const [showModalTable, setShowModalTable] = useState(false);
 
+    const [minMarkup, setMinMarkup] = useState('');
+
+    
+    const [minMarkupModal, setMinMarkupModal] = useState();
 
     const [checkboxes, setCheckboxes] = useState({
         sunday: false,
@@ -115,8 +121,16 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
         setShowModal(true);
     };
 
+    const buttonSendValuemarkup = () => {
+        setShowModalMarkup(true);
+    };
+
     const handleCloseModal = () => {
         setShowModal(false);
+    };
+
+    const handleCloseModalMarkup = () => {
+        setShowModalMarkup(false);
     };
 
 
@@ -222,6 +236,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
         formData.append('cencellation_policy', cancelPolicy ? cancelPolicy : contract.cencellation_policy);
         formData.append('deposit_policy', depositPolicy ? depositPolicy : contract.deposit_policy);
 
+        formData.append('minmarkup',minMarkup ? minMarkup:markup[0].markup_price);
         //console.log(adp, ">>>>>>>>>>>>> ISI PICK DAYS >>>>>>>>>>>>>>>>")
 
         // selectedDistribute.forEach((adp, index) => {
@@ -313,8 +328,6 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-                                                                    </div>
-                                                                    <div className="col-lg-6">
                                                                         <label htmlFor="" className='fw-bold'>BOOKING PERIODS</label>
                                                                         <hr />
                                                                         <div className="row">
@@ -331,6 +344,30 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                                 </div>
                                                                             </div>
                                                                         </div>
+                                                                    </div>
+                                                                    <div className="col-lg-6">
+                                                                        <div className="mb-3">
+                                                                            <label htmlFor="">distribute</label>
+                                                                            <select name="" id="" className='form-control' onChange={handleSelectDistribute} multiple>
+                                                                                <option value="all">all</option>
+                                                                                {Object.keys(country).map(key => (
+                                                                                    <option key={key} value={country[key]}>{country[key]}</option>
+                                                                                ))}
+                                                                            </select>
+                                                                            <p className='mt-2'>Selected Values: <span className='text-secondary'>{selectedDistribute.join(', ')}</span></p>
+                                                                        </div>
+                                                                        <div className="mb-3">
+                                                                            <label htmlFor="">exclude</label>
+                                                                            <select name="" id="" className='form-control' onChange={handleSelectExclude} multiple>
+
+                                                                                {Object.keys(country).map(key => (
+                                                                                    <option key={key} value={country[key]}>{country[key]}</option>
+                                                                                ))}
+                                                                            </select>
+                                                                            <p className='mt-2'>Selected Values: <span className='text-secondary'>{selectedExclude.join(', ')}</span></p>
+
+                                                                        </div>
+
                                                                     </div>
                                                                 </div>
                                                                 <div className="row">
@@ -420,34 +457,14 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                         </div>
                                                                     </div>
                                                                     <div className="col-lg-6">
-                                                                        <div className="row">
-                                                                            <div className="col-lg-6">
-                                                                                <div className="mb-3">
-                                                                                    <label htmlFor="">distribute</label>
-                                                                                    <select name="" id="" className='form-control' onChange={handleSelectDistribute} multiple>
-                                                                                        <option value="all">all</option>
-                                                                                        {Object.keys(country).map(key => (
-                                                                                            <option key={key} value={country[key]}>{country[key]}</option>
-                                                                                        ))}
-                                                                                    </select>
-                                                                                    <p className='mt-2'>Selected Values: <span className='text-secondary'>{selectedDistribute.join(', ')}</span></p>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div className="col-lg-6">
-                                                                                <div className="mb-3">
-                                                                                    <label htmlFor="">exclude</label>
-                                                                                    <select name="" id="" className='form-control' onChange={handleSelectExclude} multiple>
-
-                                                                                        {Object.keys(country).map(key => (
-                                                                                            <option key={key} value={country[key]}>{country[key]}</option>
-                                                                                        ))}
-                                                                                    </select>
-                                                                                    <p className='mt-2'>Selected Values: <span className='text-secondary'>{selectedExclude.join(', ')}</span></p>
-
-                                                                                </div>
-                                                                            </div>
+                                                                        <div className="mb-3">
+                                                                            <label className='text-warning' htmlFor="">Min Markup : {markup[0].markup_price}
+                                                                            <a href='#' className='btn btn-datatable btn-icon btn-transparent-dark mr-2' onClick={() => buttonSendValuemarkup()}>
+                                                                                                        <i className='fa fa-edit'></i>
+                                                                                                    </a>
+                                                                            </label>
+                                                                            {/* <input  onChange={(e) => setMinMarkup(e.target.value)} type="text" defaultValue={markup[0].markup_price} className='form-control'/> */}
                                                                         </div>
-
                                                                     </div>
                                                                 </div>
                                                             </Tab>
@@ -506,12 +523,11 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                             <table id="dataTable" width="100%" cellSpacing="0">
                                                                                 <thead>
                                                                                     <tr>
-                                                                                        <th>room type code</th>
-                                                                                        <th>room type description</th>
-                                                                                        <th>rate price</th>
-                                                                                        <th>rate recomendation</th>
+                                                                                        <th>room type</th>
+                                                                                        <th>bar</th>
+                                                                                        <th>contract recomended</th>
                                                                                         <th>min mark-up</th>
-                                                                                        <th>agent selling rate</th>
+                                                                                        <th>offline selling rate</th>
                                                                                         <th>Actions</th>
                                                                                     </tr>
                                                                                 </thead>
@@ -520,7 +536,6 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                                         <>
                                                                                             <tr key={index}>
 
-                                                                                                <td>{item.room.ratecode}</td>
                                                                                                 <td>{item.room.ratedesc}</td>
                                                                                                 <td>
                                                                                                     {item.barprice.price}
@@ -533,7 +548,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                                                 </td>
                                                                                                 <td>
                                                                                                     {markup[0].markup_price === 0 ? (
-                                                                                                        item.barprice.price - (item.recom_price + 15000)
+                                                                                                        parseInt(item.barprice.price) - parseInt(item.recom_price + 15000)
                                                                                                     ) : (
                                                                                                         markup[0].markup_price
                                                                                                     )}
@@ -541,9 +556,9 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
 
                                                                                                 <td >
                                                                                                     {markup[0].markup_price === 0 ? (
-                                                                                                        item.recom_price + (item.barprice.price - (item.recom_price + 15000))
+                                                                                                        parseInt(item.recom_price) + (parseInt(item.barprice.price) - parseInt(item.recom_price + 15000))
                                                                                                     ) : (
-                                                                                                        item.recom_price + markup[0].markup_price
+                                                                                                        parseInt(item.recom_price) + parseInt(markup[0].markup_price)
                                                                                                     )
                                                                                                     }
                                                                                                 </td>
@@ -700,6 +715,26 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                             </Button>
                                                         </Modal.Footer>
                                                     </Modal>
+
+                                                    <Modal show={showModalMarkup} onHide={handleCloseModalMarkup}>
+                                                        <Modal.Header>
+                                                            <Modal.Title>Edit Select RoomType</Modal.Title>
+                                                        </Modal.Header>
+                                                        <Modal.Body>
+                                                           <form action="">
+                                                            <label htmlFor="">Min Markup</label>
+                                                            <input type="text" className='form-control' defaultValue={markup[0].markup_price} onChange={(e) =>setMinMarkup(e.target.value)}/>
+                                                           </form>
+                                                        </Modal.Body>
+                                                        <Modal.Footer>
+                                                            <a href={`/room/markup/updateprice/${minMarkup}`} className='btn btn-primary'>
+                                                                <i className='fa fa-plus'></i> save
+                                                            </a>
+                                                            <Button variant="secondary" onClick={handleCloseModalMarkup}>
+                                                                Close
+                                                            </Button>
+                                                        </Modal.Footer>
+                                                    </Modal>
                                                 </div>
                                                 <hr />
                                                 <div className="row justify-content-between"> {/* Use justify-content-between to move the buttons to both ends */}
@@ -716,9 +751,9 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                         {/* <Link href={`/room/promo/index/${contract.id}`} className='btn btn-warning'>Promo Price</Link> */}
                                                     </div>
                                                     <div className="col-lg-auto">
-                                                        <button onClick={() => history.back()} className="btn btn-danger">
+                                                        <Link href={'/room/contract/index'} className="btn btn-danger">
                                                             Cancel
-                                                        </button>
+                                                        </Link>
                                                     </div>
                                                 </div>
 

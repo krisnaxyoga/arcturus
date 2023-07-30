@@ -68,7 +68,7 @@ class IndexController extends Controller
                 if($request->hasFile('gallery')){
                     foreach ($request->file('gallery') as $gallery) {
                         $filename = uniqid().'.'.$gallery->getClientOriginalExtension();
-                        $gallery->move(public_path('hotel'), $filename);
+                        $gallery->move(public_path('room'), $filename);
 
                         $galleryPaths[] = "/room/".$filename;
                     }
@@ -188,17 +188,19 @@ class IndexController extends Controller
                 ->withErrors($validator->errors())
                 ->withInput($request->all());
         } else {
+                $room = RoomHotel::find($id);
+
                 $galleryPaths = [];
 
                 if($request->hasFile('gallery')){
                     foreach ($request->file('gallery') as $gallery) {
                         $filename = uniqid().'.'.$gallery->getClientOriginalExtension();
-                        $gallery->move(public_path('hotel'), $filename);
+                        $gallery->move(public_path('room'), $filename);
 
                         $galleryPaths[] = "/room/".$filename;
                     }
                 }else{
-                    $galleryPaths = [];
+                    $galleryPaths = $room->gallery;
                 }
 
                 if ($request->hasFile('feature_image')) {
@@ -206,18 +208,12 @@ class IndexController extends Controller
                     $filename = time() . '.' . $feature_image->getClientOriginalExtension();
                     $feature_image->move(public_path('feature/room'), $filename);
 
-                    // Lakukan hal lain yang diperlukan, seperti menyimpan nama file dalam database
+                    $feature = "/feature/room/".$filename;
                 }else{
-                    $filename= "";
+                    $feature = $room->feature_image;
                 }
                 $iduser = auth()->user()->id;
-                // dd($request->description);
-                //create post
-                $feature = "/feature/room/".$filename;
-                // dd($feature);
-
-                // dd($vendor[0]->id);
-                $room = RoomHotel::find($id);
+                
                 $room->roomtype_id = $request->roomtypeid;
                 $room->title = $request->roomname;
                 // $room->video = $request->video;

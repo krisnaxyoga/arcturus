@@ -36,7 +36,7 @@ class BarController extends Controller
             ->with('room')
             ->get();
         $barroom = BarRoom::where('user_id',$userid)->get();
-        
+
         if($barroom->isEmpty()){
             $data = RoomHotel::where('user_id',$userid)->get();
             return inertia('Vendor/MenageRoom/BarRoom/Create',[
@@ -46,7 +46,7 @@ class BarController extends Controller
             return inertia('Vendor/MenageRoom/BarRoom/Edit',[
                 'data' => $barprice,
             ]);
-            
+
         }
     }
 
@@ -85,9 +85,9 @@ class BarController extends Controller
                     $bar->price = $item['price'];
                     $bar->save();
                 }
-            
+
             return redirect()
-            ->route('barroom.create')
+            ->route('contract.index')
             ->with('success', 'Data saved!');
         }
     }
@@ -135,7 +135,7 @@ class BarController extends Controller
                 $data->save();
 
             return redirect()
-            ->route('barroom.create')
+            ->route('contract.index')
             ->with('success', 'Data saved!');
         }
     }
@@ -154,11 +154,10 @@ class BarController extends Controller
             $bar = BarPrice::find($id);
             $bar->price = $request->price;
             $bar->save();
-        
+
         }
         return redirect()
-        ->route('barroom.create')
-        ->with('success', 'Data saved!');
+        ->route('contract.index');
     }
 
     /**
@@ -189,8 +188,8 @@ class BarController extends Controller
             }
         }
         return redirect()
-        ->route('barroom.create')
+        ->route('contract.index')
         ->with('success', 'Room Add Success!');
     }
-    
+
 }

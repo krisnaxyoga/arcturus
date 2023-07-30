@@ -170,6 +170,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         UniSharp\LaravelFilemanager\LaravelFilemanagerServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
+        App\Providers\ViewComposerServiceProvider::class,
     ])->toArray(),
 
     /*

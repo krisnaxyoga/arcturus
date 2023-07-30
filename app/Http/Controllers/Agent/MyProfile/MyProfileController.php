@@ -18,7 +18,7 @@ class MyProfileController extends Controller
     {
         $country = get_country_lists();
         $iduser = auth()->user()->id;
-        
+
         $data = User::where('id',$iduser)->with('vendors')->first();
         //dd($data);
         $contacts = User::where('vendor_id',$data->vendors->id)->get();
@@ -30,7 +30,7 @@ class MyProfileController extends Controller
         ]);
     }
 
-   
+
     /**
      * Update the specified resource in storage.
      */
@@ -53,13 +53,13 @@ class MyProfileController extends Controller
                 $logo = $request->file('logo');
                 $filename = time() . '.' . $logo->getClientOriginalExtension();
                 $logo->move(public_path('agent/logo'), $filename);
-    
+
                 // Lakukan hal lain yang diperlukan, seperti menyimpan nama file dalam database
                 $logo = "/agent/logo/".$filename;
             }else{
                 $logo = $vendor->logo_img;
             }
-            
+
 
             // $data = User::find($id);
             // $data->first_name = $request->firstname;
@@ -90,7 +90,7 @@ class MyProfileController extends Controller
             // $member->credit_used = $request->used;
             // $member->credit_saldo = $request->saldo;
             $member->save();
-            
+
 
             // dd($member->id);
             return redirect()
@@ -100,21 +100,21 @@ class MyProfileController extends Controller
     }
 
 
-    
+
     /**
      * Show the form for creating a new resource.
      */
     public function contactcreate()
     {
         $iduser = auth()->user()->id;
-        $data = Vendor::where('user_id',$iduser)->with('users')->first();
-        
+        $data = User::where('id',$iduser)->with('vendors')->first();
+
         return inertia('Agent/MyProfile/Contact/Create',[
             'data' => $data
         ]);
     }
 
-    
+
     /**
      * Store a newly created resource in storage.
      */
@@ -143,7 +143,7 @@ class MyProfileController extends Controller
                 $data->role_id = 3; // agent
                 $data->password = Hash::make('password123');
                 $data->save();
-            
+
             return redirect()
             ->route('agent.myprofile')
             ->with('success', 'Data contact saved!');
@@ -157,7 +157,7 @@ class MyProfileController extends Controller
     {
         $iduser = auth()->user()->id;
         $data = User::where('id',$iduser)->with('vendors')->first();
-        
+
         $contact = User::find($id);
         return inertia('Agent/MyProfile/Contact/Edit',[
             'data' => $data,
@@ -189,7 +189,7 @@ class MyProfileController extends Controller
                 $data = User::find($iduser);
                 $data->password = Hash::make($request->password);
                 $data->update();
-            
+
         return redirect()->back()->with('success', 'Password Change');
         }
 
@@ -217,7 +217,7 @@ class MyProfileController extends Controller
                 $data->mobile_phone = $request->phone;
                 $data->email = $request->email;
                 $data->update();
-            
+
             return redirect()
             ->route('agent.myprofile')
             ->with('success', 'Data contact updated!');

@@ -30,10 +30,12 @@ export default function EditBlackout({ props, session, data }) {
             <Layout>
                 <div className="container">
                     <div className="row">
-                        <h1>Blackout Date</h1>
                         <div className="col-lg-6">
                             <form onSubmit={storePost}>
                                 <div className="card">
+                                    <div className="card-header">
+                                        <h1>Blackout Date</h1>
+                                    </div>
                                     <div className="card-body">
                                         {session.success && (
                                             <div className="alert alert-success border-0 shadow-sm rounded-3">

@@ -9,6 +9,7 @@ use App\Models\BarRoom;
 use App\Models\BarPrice;
 use App\Models\Vendor;
 use App\Models\AgentMarkupSetup;
+use App\Models\AgentMarkupDetail;
 use App\Models\ContractRate;
 use App\Models\ContractPrice;
 
@@ -23,8 +24,35 @@ class ContractController extends Controller
     {
         $iduser = auth()->user()->id;
         $data = ContractRate::where('user_id',$iduser)->get();
+        $userid = auth()->user()->id;
+        $barprice = BarPrice::where('user_id',$userid)->with('barroom')->with('room')->get();
+        $black = AgentMarkupDetail::where('user_id',$userid)->where('markup_cat_id','blackout')->get();
+        $surc = AgentMarkupDetail::where('user_id',$userid)->where('markup_cat_id','surcharges')->get();
+        $userid = auth()->user()->id;
+        $barprice = BarPrice::where('user_id',$userid)
+            ->with('barroom')
+            ->with('room')
+            ->get();
+        $barroom = BarRoom::where('user_id',$userid)->get();
+
+        if($barroom->isEmpty()){
+            $room = RoomHotel::where('user_id',$userid)->get();
+            $is_form = 'add';
+            $roomcategory = '';
+        }else{
+            $room = $barprice;
+            $roomcategory = RoomHotel::where('user_id',$userid)->get();
+            $is_form = 'edit';
+        }
+
         return inertia('Vendor/MenageRoom/ContractRate/Index',[
             'data'=>$data,
+            'roomtype'=>$room,
+            'roomcategory' => $roomcategory,
+            'form'=>$is_form,
+            'barroom' =>$barroom->first(),
+            'surcharge'=>$surc,
+            'black'=>$black
         ]);
     }
 
@@ -34,7 +62,7 @@ class ContractController extends Controller
     public function create()
     {
         $userid = auth()->user()->id;
-        $price = AgentMarkupSetup::where('user_id',$userid)->get();
+        $price = AgentMarkupSetup::where('user_id',$userid)->first();
         $barprice = BarPrice::where('user_id',$userid)->with('barroom')->with('room')->get();
         $bardata = BarRoom::where('user_id',$userid)->get();
         $country =  get_country_lists();
@@ -84,6 +112,23 @@ class ContractController extends Controller
                 $data->distribute = explode(",",$request->distribute);
                 $data->save();
 
+                $markup = AgentMarkupSetup::where('user_id',$id)->get();
+
+                if($markup->isEmpty()){
+                    $newmarkup = new AgentMarkupSetup();
+                    $newmarkup->user_id = $id;
+                    $newmarkup->vendor_id = $vendorid->id;
+                    $newmarkup->markup_price = $request->minmarkup;
+                    $newmarkup->tax = 0;
+                    $newmarkup->service = 0;
+                    $newmarkup->save();
+
+                }else{
+                    $markupupdate = AgentMarkupSetup::find($markup[0]->id);
+                    $markupupdate->markup_price = $request->minmarkup;
+                    $markupupdate->save();
+                }
+               
 
             return redirect()
             ->route('contract.edit',$data->id)

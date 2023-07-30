@@ -23,8 +23,12 @@ export default function Index({ session, props, attr, room,roomtype }) {
     const [ratedesc, setRateDesc] = useState('');
     const [roomname, setRoomName] = useState('');
     const [image, setImage] = useState(null);
+    const [selectedImage, setSelectedImage] = useState(null);
+
     const [allowed, setAllowed] = useState('');
     const [images, setImages] = useState([]);
+    const [selectedImages, setSelectedImages] = useState([]);
+
     const [adult, setMaxAdult] = useState('');
     const [child, setMaxChild] = useState('');
     const [service, setService] = useState('');
@@ -37,42 +41,14 @@ export default function Index({ session, props, attr, room,roomtype }) {
     const [bedroom, setBedroom] = useState('');
     const [size, setSize] = useState('');
 
-    console.log(allowed, ">>>>ALLOWED");
+    const [selectAll, setSelectAll] = useState(false);
+
+    console.log(images, ">>>>ALLOWED");
 
     const [selectedValues, setSelectedValues] = useState([]);
 
     console.log(maxchild, "hasill")
     //adult function add max
-    const handleChangeadult = (e, index) => {
-        const updatedAdult = [...maxadult];
-        updatedAdult[index].value = e.target.value;
-        setAdult(updatedAdult);
-    };
-    const handleAddInputAdult = () => {
-        setAdult([...maxadult, { value: '', id: maxadult.length + 1 }]);
-    };
-
-    const handleRemoveInputAdult = (index) => {
-        const updatedAdult = [...maxadult];
-        updatedAdult.splice(index, 1);
-        setAdult(updatedAdult);
-    };
-
-    //input child
-    const handleChangechild = (e, index) => {
-        const updatedchild = [...maxchild];
-        updatedchild[index].value = e.target.value;
-        setChild(updatedchild);
-    };
-    const handleAddInputchild = () => {
-        setChild([...maxchild, { value: '', id: maxchild.length + 1 }]);
-    };
-
-    const handleRemoveInputchild = (index) => {
-        const updatedchild = [...maxchild];
-        updatedchild.splice(index, 1);
-        setChild(updatedchild);
-    };
 
     const [checkboxItems, setCheckboxItems] = useState(attr.map((item) => ({ label: item.name, checked: false })));
     console.log(checkboxItems, "facil;itess>>>>>>>>>>>>");
@@ -111,9 +87,27 @@ export default function Index({ session, props, attr, room,roomtype }) {
         setDescription(editor.getData());
     };
 
-    const handleFacitiChange = (event, editor) => {
-        setFacilities(editor.getData());
-    };
+    const handleSelectAllChange = () => {
+        setCheckboxItems(prevItems => {
+          const updatedCheckboxItems = prevItems.map(item => ({
+            ...item,
+            checked: !selectAll,
+          }));
+
+          setSelectedValues(updatedCheckboxItems.reduce((selected, item) => {
+            if (!selectAll) {
+              return [...selected, item.label];
+            } else {
+              return selected.filter(value => value !== item.label);
+            }
+          }, []));
+
+          setSelectAll(!selectAll);
+          return updatedCheckboxItems;
+        });
+      };
+
+
 
     const handleServiceChange = (event, editor) => {
         setService(editor.getData());
@@ -124,13 +118,32 @@ export default function Index({ session, props, attr, room,roomtype }) {
     };
 
     const handleFileChange = (e) => {
-        setImage(e.target.files[0]);
-        console.log(image, ">>>>>>>>>>>image");
+        const file = e.target.files[0];
+        setImage(file);
+        if (file) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setSelectedImage(reader.result);
+        };
+        reader.readAsDataURL(file);
+        }
     };
     const handleImageUpload = (e) => {
         const selectedImages = Array.from(e.target.files);
         setImages(selectedImages);
+
+        const files = e.target.files;
+        if (files && files.length > 0) {
+          const imagesArray = Array.from(files).map(file => URL.createObjectURL(file));
+          setSelectedImages(imagesArray);
+        }
     };
+
+    const handleImageDelete = (index) => {
+        setSelectedImages(prevImages => prevImages.filter((_, i) => i !== index));
+        setImages(prevImages => prevImages.filter((_, i) => i !== index));
+    };
+
 
     const storePost = async (e) => {
         e.preventDefault();
@@ -151,15 +164,6 @@ export default function Index({ session, props, attr, room,roomtype }) {
         formData.append('near', near ? near : room[0].nearby_info);
         formData.append('service', service ? service : room[0].service_info);
         // formData.append('extrabed',extrabed);
-        maxadult.forEach((adp, index) => {
-            formData.append(`maxadult[${index}][value]`, adp.value);
-            formData.append(`maxadult[${index}][id]`, adp.id);
-        });
-
-        maxchild.forEach((adp, index) => {
-            formData.append(`maxchild[${index}][value]`, adp.value);
-            formData.append(`maxchild[${index}][id]`, adp.id);
-        });
         formData.append('size', size ? size : room[0].size);
         formData.append('roomtypeid', roomtypeid ? roomtypeid : room[0].roomtype_id);
         formData.append('adult', adult ? adult : room[0].adults);
@@ -212,125 +216,173 @@ export default function Index({ session, props, attr, room,roomtype }) {
                                             <div className="card">
                                                 <div className="card-body">
                                                     <div className="row">
-                                                        <div className="col-lg-6">
-                                                            <div className="mb-3">
-                                                                <label htmlFor="exampleFormControlInput1" className="form-label">Room Name</label>
-                                                                <input defaultValue={room[0].title} onChange={(e) => setRoomName(e.target.value)} type="text" className="form-control" id="exampleFormControlInput1" placeholder="room name" />
+                                                        <div className="col-lg-3">
+                                                            <div className="mb-3 ">
+                                                                <label htmlFor="">Category</label>
+                                                                <select required className='form-control' name="" id="" onChange={(e) => setRoomType(e.target.value)}>
+                                                                    <option value="">-select category-</option>
+                                                                    {roomtype.map((item) => (
+                                                                    <>
+                                                                    <option key={item.id} value={item.id} selected={item.id == room[0].roomtype_id}>{item.name}</option>
+                                                                    </>
+                                                                    ))}
+                                                                </select>
                                                             </div>
-                                                            <div className="d-flex">
-                                                                <div className="mb-3 ">
-                                                                    <label htmlFor="">Room Type</label>
-                                                                    <select className='form-control' name="" id="" onChange={(e) => setRoomType(e.target.value)}>
-                                                                        <option value="">-select room type-</option>
-                                                                        {roomtype.map((item) => (
-                                                                        <>
-                                                                        <option key={item.id} value={item.id} selected={item.id == room[0].roomtype_id}>{item.name}</option>
-                                                                        </>
-                                                                        ))}
-                                                                    </select>
-                                                                </div>
-                                                                <div className="mb-3 mx-2">
-                                                                    <label htmlFor="exampleFormControlInput1" className="form-label">Room Type Code</label>
-                                                                    <input defaultValue={room[0].ratecode} onChange={(e) => setRagecode(e.target.value)} type="text" className="form-control" id="exampleFormControlInput1" placeholder="Rate Code" />
-                                                                </div>
+                                                        </div>
+                                                        <div className="col-lg-2">
+                                                            <div className="mb-3 mx-2">
+                                                                <label htmlFor="exampleFormControlInput1" className="form-label">Code</label>
+                                                                <input defaultValue={room[0].ratecode} onChange={(e) => setRagecode(e.target.value)} type="text" className="form-control" id="exampleFormControlInput1" placeholder="Rate Code" />
                                                             </div>
-                                                           
+                                                        </div>
+                                                        <div className="col-lg-4">
                                                             <div className="mb-3">
                                                                 <label htmlFor="exampleFormControlInput1" className="form-label">Room Type Description</label>
                                                                 <input defaultValue={room[0].ratedesc} onChange={(e) => setRateDesc(e.target.value)} type="text" className="form-control" id="exampleFormControlInput1" placeholder="Rate Description" />
                                                             </div>
-
-                                                            <div className="mb-3">
-                                                                <label htmlFor="exampleFormControlInput1" className="form-label">Feature Image</label>
-                                                                <input onChange={handleFileChange} type="file" className="form-control" id="exampleFormControlInput1" placeholder="Feature Image" />
-                                                            </div>
-                                                            <div className="row">
-                                                                {/* <div className="col-lg-4">
-                                                                    <div className="mb-3">
-                                                                        <label htmlFor="exampleFormControlInput1" className="form-label">Max Infant</label>
-                                                                        <input defaultValue={room[0].infant} onChange={(e) => setInfant(e.target.value)} type="number" className="form-control" id="exampleFormControlInput1" placeholder="Max Infant" />
-                                                                    </div>
-                                                                </div> */}
-                                                                {/* <div className="col-lg-4">
-                                                                    <div className="mb-3">
-                                                                        <label htmlFor="exampleFormControlInput1" className="form-label">Total Bedroom</label>
-                                                                        <input defaultValue={room[0].bedroom} onChange={(e) => setBedroom(e.target.value)} type="number" className="form-control" id="exampleFormControlInput1" placeholder="Total Bedroom" />
-                                                                    </div>
-                                                                </div> */}
-                                                                {/* <div className="col-lg-4">
-                                                                    <div className="mb-3">
-                                                                        <label htmlFor="exampleFormControlInput1" className="form-label">Size</label>
-                                                                        <input defaultValue={room[0].size} onChange={(e) => setSize(e.target.value)} type="number" className="form-control" id="exampleFormControlInput1" placeholder="Total Bedroom" />
-                                                                    </div>
-                                                                </div> */}
-                                                            </div>
-
                                                         </div>
-                                                        <div className="col-lg-6">
+                                                        <div className="col-lg-3">
                                                             <div className="mb-3">
                                                                 <label htmlFor="exampleFormControlInput1" className="form-label">Room allotment</label>
                                                                 <input defaultValue={room[0].room_allow} onChange={(e) => setAllowed(e.target.value)} type="number" className="form-control" id="exampleFormControlInput1" placeholder="Room allotment" />
                                                             </div>
-                                                            <div className="mb-3">
-                                                                <label htmlFor="exampleFormControlInput1" className="form-label">Gallery</label>
-                                                                <input onChange={handleImageUpload} type="file" multiple className="form-control" id="exampleFormControlInput1" placeholder="Feature Image" />
-                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="row">
+                                                        <div className="col-lg-3">
 
+                                                                <div className="mb-3">
+
+                                                                    <label htmlFor="exampleFormControlInput1" className="form-label">Feature Image</label>
+                                                                    <input onChange={handleFileChange} type="file" className="form-control" id="exampleFormControlInput1" placeholder="Feature Image" />
+                                                                </div>
+                                                                <div className="mb-3">
+                                                                {selectedImage ? (
+                                                                    <div className="mb-3">
+                                                                        <img
+                                                                        src={selectedImage}
+                                                                        alt="Selected"
+                                                                        style={{ maxWidth: '200px', maxHeight: '200px' }}
+                                                                        />
+                                                                    </div>
+                                                                    ) : (
+                                                                    <div className="mb-3">
+                                                                        <img
+                                                                        src={room[0].feature_image}
+                                                                        alt=""
+                                                                        style={{ maxWidth: '200px', maxHeight: '200px' }}
+                                                                        />
+                                                                    </div>
+                                                                    )}
+                                                                </div>
+                                                        </div>
+                                                        <div className="col-lg-3">
                                                             <div className="mb-3">
                                                                 <label htmlFor="exampleFormControlInput1" className="form-label">max Extra bed</label>
                                                                 <input defaultValue={room[0].extra_bed} onChange={(e) => setExtrabed(e.target.value)} type="number" className="form-control" id="exampleFormControlInput1" placeholder="Max Extra Bed" />
                                                             </div>
-                                                            <div className="row">
-                                                                <div className="col-lg-4">
-                                                                    <div className="mb-3 ">
-                                                                        <label htmlFor="exampleFormControlInput1" className="form-label">Max Person</label>
-                                                                        <input defaultValue={room[0].adults} onChange={(e) => setMaxAdult(e.target.value)} type="number" className="form-control" id="exampleFormControlInput1" placeholder="max adult" />
-
-                                                                    </div>
-                                                                </div>
-                                                                <div className="col-lg-4">
-                                                                    <div className="mb-3">
-                                                                        <label htmlFor="exampleFormControlInput1" className="form-label">Size</label>
-                                                                        <input defaultValue={room[0].size} onChange={(e) => setSize(e.target.value)} type="number" className="form-control" id="exampleFormControlInput1" placeholder="Total Bedroom" />
-                                                                    </div>
-                                                                </div>
-                                                                {/* <div className="col-lg-4">
-                                                                    <div className="mb-3">
-                                                                        <label htmlFor="exampleFormControlInput1" className="form-label">Max Child</label>
-                                                                        <input defaultValue={room[0].children} onChange={(e) => setMaxChild(e.target.value)} type="number" className="form-control" id="exampleFormControlInput1" placeholder="Max Child" />
-
-                                                                    </div>
-                                                                </div> */}
-                                                                {/* <div className="col-lg-4">
-                                                                    <div className="mb-3">
-                                                                        <label htmlFor="exampleFormControlInput1" className="form-label">max Beby Cot</label>
-                                                                        <input defaultValue={room[0].baby_cot} onChange={(e) => setBebyCot(e.target.value)} type="number" className="form-control" id="exampleFormControlInput1" placeholder="Max Bebt Cot" />
-                                                                    </div>
-                                                                </div> */}
-                                                            </div>
-                                                            {/* <div className="mb-3">
-                                                                <label htmlFor="exampleFormControlInput1" className="form-label">max Benefit(3rd person)</label>
-                                                                <input defaultValue={room[0].max_benefit} onChange={(e) => setBenefit(e.target.value)} type="number" className="form-control" id="exampleFormControlInput1" placeholder="Max Benefit (3rd person)" />
-                                                            </div> */}
                                                         </div>
-                                                        <div className="row">
-                                                            <div className="col-lg-12 mx-3">
-                                                                <label htmlFor="">Facilities</label>
-                                                                <div className="d-flex flex-wrap">
-                                                                    {checkboxItems.map((item, index) => (
-                                                                        <div key={index} className="mb-3">
-                                                                            <label className="form-label mx-3">
-                                                                                <input
-                                                                                    className='form-check-input'
-                                                                                    type="checkbox"
-                                                                                    checked={item.checked}
-                                                                                    onChange={() => handleCheckboxChange(index)}
-                                                                                />
-                                                                                {item.label}</label>
-                                                                        </div>
-                                                                    ))}
-                                                                </div>
+                                                        <div className="col-lg-3">
+                                                            <div className="mb-3 ">
+                                                                <label htmlFor="exampleFormControlInput1" className="form-label">Max Person</label>
+                                                                <input defaultValue={room[0].adults} onChange={(e) => setMaxAdult(e.target.value)} type="number" className="form-control" id="exampleFormControlInput1" placeholder="max adult" />
                                                             </div>
+                                                        </div>
+                                                        <div className="col-lg-3">
+                                                            <div className="mb-3">
+                                                                <label htmlFor="exampleFormControlInput1" className="form-label">Size</label>
+                                                                <input defaultValue={room[0].size} onChange={(e) => setSize(e.target.value)} type="number" className="form-control" id="exampleFormControlInput1" placeholder="Total Bedroom" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="row">
+                                                        <div className="col-lg-6">
+                                                            <label htmlFor="">Facilities</label>
+                                                            <label className="form-label mx-5">
+                                                                    <input
+                                                                        className='form-check-input'
+                                                                        type="checkbox"
+                                                                        checked={selectAll}
+                                                                        onChange={handleSelectAllChange}
+                                                                    />
+                                                                    All
+                                                                </label>
+                                                            <div className="row">
+                                                                {checkboxItems.map((item, index) => (
+                                                                    <div key={index} className="col-3 mb-3">
+                                                                        <label className="form-label mx-3">
+                                                                            <input
+                                                                                className='form-check-input'
+                                                                                type="checkbox"
+                                                                                checked={item.checked}
+                                                                                onChange={() => handleCheckboxChange(index)}
+                                                                            />
+                                                                            {item.label}</label>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-lg-6">
+                                                            <div className="mb-3">
+                                                                <label htmlFor="exampleFormControlInput1" className="form-label">Gallery</label>
+                                                                <input onChange={handleImageUpload} type="file" multiple className="form-control" id="exampleFormControlInput1" placeholder="Feature Image" />
+                                                            </div>
+                                                            {selectedImages && selectedImages.length > 0 ? (
+                                                                        <>
+                                                                        <div className="row">
+                                                                            {selectedImages.map((imageUrl, index) => (
+                                                                                <div key={index} className="col-4 mb-3">
+                                                                                    <img
+                                                                                    src={imageUrl}
+                                                                                    alt={`Selected ${index}`}
+                                                                                    style={{ maxWidth: '200px', maxHeight: '200px' }}
+                                                                                    />
+                                                                                    <button type="button"
+                                                                                    className="btn btn-danger btn-sm"
+                                                                                    style={{
+                                                                                        position: 'absolute',
+                                                                                        top: '5px',
+                                                                                        right: '5px',
+                                                                                        padding: '0',
+                                                                                        width: '20px',
+                                                                                        height: '20px',
+                                                                                        borderRadius: '50%',
+                                                                                        display: 'flex',
+                                                                                        alignItems: 'center',
+                                                                                        justifyContent: 'center',
+                                                                                        cursor: 'pointer',
+                                                                                    }}
+                                                                                    onClick={() => handleImageDelete(index)}
+                                                                                    >
+                                                                                    X
+                                                                                    </button>
+                                                                                </div>
+                                                                                ))}
+                                                                        </div>
+
+                                                                        </>
+                                                                        ) : (
+                                                                        <>
+                                                                            {room[0].gallery.length > 0 && (
+                                                                            <>
+                                                                                <label className="form-label">Gallery Images from Room:</label>
+                                                                                <div className="row">
+                                                                                {room[0].gallery.map((imageUrl, index) => (
+                                                                                    <div key={index} className="col-4 mb-3">
+                                                                                    <img
+                                                                                        src={imageUrl}
+                                                                                        alt={`Room Image ${index}`}
+                                                                                        style={{ maxWidth: '200px', maxHeight: '200px' }}
+                                                                                    />
+
+                                                                                    </div>
+                                                                                ))}
+                                                                                </div>
+                                                                            </>
+                                                                            )}
+                                                                        </>
+                                                                        )}
+
                                                         </div>
                                                     </div>
 
