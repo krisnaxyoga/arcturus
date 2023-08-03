@@ -25,7 +25,7 @@
                             <div class="w-100">
                                 <p style="font-size:16px" class="text-center">Account is not active</p>
                                 <h2 class="mb-4 text-center">your account is not active, Please contact the admin to verify your account</h2>
-                                <a href="mailto:info@arcturus.my.id" class="text-center">info@arcturus.my.id</a>
+                                <a href="mailto:admin@arcturus.my.id" class="text-center">admin@arcturus.my.id</a>
                             </div>
                         </div>
                     </div>

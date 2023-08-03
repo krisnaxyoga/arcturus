@@ -110,13 +110,13 @@ export default function Index({ session, data, contacts, country }) {
                                                                 <input defaultValue={data.vendors.vendor_name} onChange={(e) => setBusisness(e.target.value)} type="text" className="form-control" placeholder="Business name" aria-label="busisnessname" aria-describedby="basic-addon1" />
                                                             </div>
                                                         </div>
-                                                        <div>
+                                                        {/* <div>
                                                             <label for="legalname" className="form-label">Legal name</label>
                                                             <div className="input-group mb-3">
                                                                 <span className="input-group-text rounded-0" id="basic-addon1"><i className="fa fa-building"></i></span>
                                                                 <input defaultValue={data.vendors.vendor_legal_name} onChange={(e) => setLegalitas(e.target.value)} type="text" className="form-control" placeholder="Legal name" aria-label="legalname" aria-describedby="basic-addon1" />
                                                             </div>
-                                                        </div>
+                                                        </div> */}
 
                                                         <div>
                                                             <label for="Lastname" className="form-label">Address Line 1</label>
@@ -143,40 +143,47 @@ export default function Index({ session, data, contacts, country }) {
                                                             <label for="Email" className="form-label">Email</label>
                                                             <div className="input-group mb-3">
                                                                 <span className="input-group-text rounded-0" id="basic-addon1"><i className="fa fa-envelope" aria-hidden="true"></i></span>
-                                                                <input defaultValue={data.email} onChange={(e) => setEmail(e.target.value)} type="email" className="form-control" placeholder="E-mail" aria-label="email" aria-describedby="basic-addon1" />
+                                                                <input defaultValue={data.email} inputMode="email" onChange={(e) => setEmail(e.target.value)} type="email" className="form-control" placeholder="E-mail" aria-label="email" aria-describedby="basic-addon1" />
                                                             </div>
                                                         </div>
 
-                                                        <div className="mb-3">
-                                                            <img style={{ width: "100px" }} src={data.vendors.logo_img || 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Image_not_available.png/640px-Image_not_available.png'} alt="" />
-                                                        </div>
+
                                                         <div className="mb-3">
                                                             <label for="formFile" className="form-label">Logo</label>
                                                             <input className="form-control" onChange={handleFileChange} type="file" id="formFile" />
+                                                        </div>
+                                                        <div className="mb-3">
+                                                            <img style={{ width: "100px" }} src={data.vendors.logo_img || 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Image_not_available.png/640px-Image_not_available.png'} alt="" />
                                                         </div>
                                                     </div>
                                                     <div className="col-lg-6">
                                                         {/* <p style={{ fontWeight: "bold" }}>Location Information</p> */}
                                                         <div className='mb-3'>
-                                                            <label for="country" className="form-label">Country <span className='text-danger'>*</span></label>
-                                                            <select onChange={(e) => setCountry(e.target.value)} className="form-control" aria-label="Default select example">
+                                                            <label for="country" className="form-label">Country</label>
+                                                            {/* <select onChange={(e) => setCountry(e.target.value)} className="form-control" aria-label="Default select example">
                                                                  {Object.keys(country).map(key => (
                                                                         <option key={key} selected={country[key]===data.vendors.country} value={country[key]}>{country[key]}</option>
                                                                 ))}
-                                                            </select>
+                                                            </select> */}
+                                                            <input type="text" readOnly value={data.vendors.country} className='form-control'/>
+                                                            <p style={{ fontSize:'11px' }} className='text-danger'>if you want to change country, you must send an email to admin@arcturus.my.id</p>
                                                         </div>
                                                         <div>
-                                                            <label for="state" className="form-label">State <span className='text-danger'>*</span></label>
+                                                            <label for="state" className="form-label">State</label>
                                                             <div className="input-group mb-3">
                                                                 <span className="input-group-text rounded-0" id="basic-addon1"><i className='fa fa-map-signs'></i></span>
-                                                                <input onChange={(e) => setState(e.target.value)} defaultValue={data.vendors.state} type="text" className="form-control" placeholder="State" aria-label="state" aria-describedby="basic-addon1" />
+                                                                <input readOnly onChange={(e) => setState(e.target.value)} defaultValue={data.vendors.state} type="text" className="form-control" placeholder="State" aria-label="state" aria-describedby="basic-addon1" />
+                                                                <p style={{ fontSize:'11px' }} className='text-danger'>if you want to change country, you must send an email to admin@arcturus.my.id</p>
+
                                                             </div>
                                                         </div>
                                                         <div>
-                                                            <label for="city" className="form-label">City <span className='text-danger'>*</span></label>
+                                                            <label for="city" className="form-label">City</label>
                                                             <div className="input-group mb-3">
                                                                 <span className="input-group-text rounded-0" id="basic-addon1"><i className='fa fa-street-view'></i></span>
-                                                                <input onChange={(e) => setCity(e.target.value)} defaultValue={data.vendors.city} type="text" className="form-control" placeholder="City" aria-label="city" aria-describedby="basic-addon1" />
+                                                                <input readOnly onChange={(e) => setCity(e.target.value)} defaultValue={data.vendors.city} type="text" className="form-control" placeholder="City" aria-label="city" aria-describedby="basic-addon1" />
+                                                                <p style={{ fontSize:'11px' }} className='text-danger'>if you want to change country, you must send an email to admin@arcturus.my.id</p>
+
                                                             </div>
                                                         </div>
                                                     </div>

@@ -22,8 +22,21 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $slider = Slider::all();
-        return view('landingpage.index',compact('slider'));
+
+        if(auth()->check()){
+
+            $iduser= auth()->user()->id;
+            $user = User::where('id',$iduser)->where('role_id',2)->first();
+            $slider = Slider::where('user_id',$iduser)->get();
+
+        }else{
+            $slider = Slider::where('user_id',1)->get();
+        }
+
+        $hotel = Vendor::where('type_vendor','hotel')->count();
+        $agent = Vendor::where('type_vendor','agent')->count();
+
+        return view('landingpage.index',compact('slider','hotel','agent'));
     }
 
     public function hotel(Request $request)
@@ -31,19 +44,19 @@ class HomeController extends Controller
         $vendor = ContractPrice::whereHas('contractrate.vendors', function ($query) use ($request) {
             $query->where('type_vendor', 'hotel')
                 ->where('is_active', 1);
-        
+
             $query->when($request->country, function ($q, $country) {
                 return $q->where('country', $country);
             });
-        
+
             $query->when($request->state, function ($q, $state) {
                 return $q->where('state', $state);
             });
-        
+
             $query->when($request->city, function ($q, $city) {
                 return $q->where('city', $city);
             });
-        
+
             $query->when($request->country && $request->state && $request->city, function ($q) use ($request) {
                 return $q->tap(function ($subquery) use ($request) {
                     $subquery->where('country', $request->country)
@@ -89,7 +102,7 @@ class HomeController extends Controller
         }
 
         $data = $vendor;
-       
+
         return view('landingpage.hotel.index',compact('data'));
     }
 
@@ -98,7 +111,7 @@ class HomeController extends Controller
      */
     public function hoteldetail(Request $request,$id)
     {
-        
+
         $category = $request->input('data.category');
 
         if ($category) {
@@ -117,7 +130,7 @@ class HomeController extends Controller
                 ->with('room')
                 ->get();
         }
-        
+
 
         $data = $vendor;
 

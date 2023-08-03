@@ -16,7 +16,7 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                         @endif
-            
+
                         @if (session()->has('error'))
                             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                 {{ session('error') }}
@@ -53,7 +53,7 @@
                                     </div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="name" class="form-label">Busisnes Name</label>
+                                    <label for="name" class="form-label">Agent Name</label>
                                     <input type="text" name="busisnes_name"
                                         class="form-control @error('busisnes_name') is-invalid @enderror" id="name">
                                     @error('busisnes_name')
@@ -62,7 +62,7 @@
                                         </div>
                                     @enderror
                                 </div>
-                                <div class="mb-3">
+                                {{-- <div class="mb-3">
                                     <label for="name" class="form-label">Company Name</label>
                                     <input type="text" name="company_name"
                                         class="form-control @error('company_name') is-invalid @enderror" id="name">
@@ -71,7 +71,7 @@
                                                 {{ $message }}
                                             </div>
                                         @enderror
-                                </div>
+                                </div> --}}
                                 <div class="mb-3">
                                     <label for="name" class="form-label">Address</label>
                                     <input type="text" name="address"
@@ -85,6 +85,7 @@
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Email</label>
                                     <input type="email" name="email"
+                                    inputmode="email"
                                         class="form-control @error('email') is-invalid @enderror" id="email">
                                     @error('email')
                                         <div class="invalid-feedback">
@@ -104,7 +105,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="name" class="form-label">Country</label>
-                                    <select name="country" class="form-control">
+                                    <select name="country" class="form-control" required>
                                         <option value="">{{ __('-- Select --') }}</option>
                                         @foreach (get_country_lists() as $id => $name)
                                             <option @if (($user->country ?? '') == $id) selected @endif
@@ -142,7 +143,12 @@
                                         </div>
                                     @enderror
                                 </div>
-                                <button type="submit" class="btn btn-primary">Sign Up</button>
+                                <div class="d-flex justify-content-between">
+                                      <button type="submit" class="btn btn-primary">Sign Up</button>
+                                      <a href="/" class="btn btn-danger">back</a>
+
+                                </div>
+
                         </div>
                         </form>
                     </div>

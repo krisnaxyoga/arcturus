@@ -52,7 +52,7 @@ export default function Index({ props,session,data }) {
                                             <th>Room Type Code</th>
                                             <th>Room Type Description</th>
                                             <th>Room Allotment</th>
-                                            <th>Facilities</th>
+                                            <th>Amenities</th>
                                             <th>Person</th>
                                             {/* <th>children</th> */}
                                             <th>Action</th>

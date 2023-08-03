@@ -8,7 +8,7 @@ use App\Models\Vendor;
 use App\Models\User;
 use App\Models\AgentMarkupSetup;
 use Illuminate\Support\Facades\Validator;
-
+use App\Models\Slider;
 class MyProfileController extends Controller
 {
     /**
@@ -21,15 +21,17 @@ class MyProfileController extends Controller
         $data = Vendor::with('users')->where('user_id',$iduser)->get();
         // dd($data, $iduser);
         $markup = AgentMarkupSetup::where('user_id',$iduser)->first();
+        $slider = Slider::where('user_id',$iduser)->get();
 
         return inertia('Vendor/MyProfile/Index',[
-            'data'=>$data,
-            'country'=>$country,
-            'markup' =>$markup
+            'data' => $data,
+            'country'=> $country,
+            'markup' => $markup,
+            'banner' => $slider
         ]);
     }
 
-   
+
     /**
      * Update the specified resource in storage.
      */
@@ -53,13 +55,13 @@ class MyProfileController extends Controller
                 $logo = $request->file('logo');
                 $filename = time() . '.' . $logo->getClientOriginalExtension();
                 $logo->move(public_path('hotel/logo'), $filename);
-    
+
                 // Lakukan hal lain yang diperlukan, seperti menyimpan nama file dalam database
                 $logo = "/hotel/logo/".$filename;
             }else{
                 $logo = $vendor[0]->logo_img;
             }
-            
+
 
             $data = User::find($id);
             $data->first_name = $request->firstname;
@@ -82,7 +84,7 @@ class MyProfileController extends Controller
             $member->swif_code = $request->swifcode;
             // $member->email = $request->email;
             $member->save();
-            
+
             $markup = AgentMarkupSetup::where('user_id',$id)->exists();
 
             if(!$markup){
@@ -108,9 +110,54 @@ class MyProfileController extends Controller
         }
     }
 
+    public function addbanner(Request $request){
+        $validator = Validator::make($request->all(), [
+            'banner' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator->errors())
+                ->withInput($request->all());
+        } else {
+
+            if ($request->hasFile('banner')) {
+                $banner = $request->file('banner');
+                $filename = time() . '.' . $banner->getClientOriginalExtension();
+                $banner->move(public_path('slider'), $filename);
+
+                // Lakukan hal lain yang diperlukan, seperti menyimpan nama file dalam database
+            }else{
+                $filename= "";
+            }
+
+            $feature = "/slider/".$filename;
+
+            $iduser = auth()->user()->id;
+
+            $data =  new Slider();
+            $data->user_id = $iduser;
+            $data->title = $request->title;
+            $data->description = $request->description;
+            $data->image = $feature;
+            $data->save();
+
+            return redirect()->back()->with('success', 'data saved!');
+
+        }
+    }
     /**
      * Remove the specified resource from storage.
      */
+
+     public function destroybanner(string $id)
+     {
+        $data =  Slider::find($id);
+        $data->delete();
+
+        return redirect()->back()->with('success', 'data deleted!');
+
+     }
     public function destroy(string $id)
     {
         //

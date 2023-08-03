@@ -38,7 +38,7 @@ export default function EditContact({ props, session, data, contact }) {
     // if (data.length > 0) {
     //     const dprice = data.price;
     //     setPrice(dprice);
-    //   } 
+    //   }
     return (
         <>
             <Layout page={url} agent={data}>
@@ -78,7 +78,7 @@ export default function EditContact({ props, session, data, contact }) {
                                                 </div>
                                                 <div className="mb-3">
                                                     <label htmlFor="email">Email</label>
-                                                    <input defaultValue={contact.email} onChange={(e) => setEmail(e.target.value)} type="text" className='form-control' name='email' />
+                                                    <input inputMode="email" defaultValue={contact.email} onChange={(e) => setEmail(e.target.value)} type="text" className='form-control' name='email' />
                                                 </div>
                                             </div>
                                         </div>

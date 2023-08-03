@@ -7562,6 +7562,8 @@ input[type=button].btn-block {
   border: 1px solid transparent;
   border-top-left-radius: 0.35rem;
   border-top-right-radius: 0.35rem;
+  background: #609df7;
+    color: #fff;
 }
 
 .nav-tabs .nav-link:hover,

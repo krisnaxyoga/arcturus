@@ -9,7 +9,7 @@ import { Link, usePage } from '@inertiajs/inertia-react';
 import { Inertia } from '@inertiajs/inertia';
 
 export default function CreateContact({ props, session, data }) {
-    
+
     const { url } = usePage();
 
     const [vendorid, setVendorId] = useState();
@@ -40,7 +40,7 @@ export default function CreateContact({ props, session, data }) {
     // if (data.length > 0) {
     //     const dprice = data[0].price;
     //     setPrice(dprice);
-    //   } 
+    //   }
     return (
         <>
             <Layout page={url} agent={data}>
@@ -82,7 +82,7 @@ export default function CreateContact({ props, session, data }) {
                                                 </div>
                                                 <div className="mb-3">
                                                     <label htmlFor="email">Email</label>
-                                                    <input onChange={(e) => setEmail(e.target.value)} type="text" className='form-control' name='email' />
+                                                    <input inputMode="email" onChange={(e) => setEmail(e.target.value)} type="text" className='form-control' name='email' />
                                                 </div>
                                             </div>
                                         </div>

@@ -123,10 +123,10 @@ function Layout({ children, page, username }) {
                                     <div className="nav-link-icon"><i className="fa fa-address-card" aria-hidden="true"></i></div>
                                     Verifications
                                 </Link> */}
-                                <Link className={`nav-link ${page === '/payouts' ? 'active' : ''}`} href="/payouts">
+                                {/* <Link className={`nav-link ${page === '/payouts' ? 'active' : ''}`} href="/payouts">
                                     <div className="nav-link-icon"><i className="fa fa-credit-card" aria-hidden="true"></i></div>
                                     Payouts
-                                </Link>
+                                </Link> */}
                             </div>
                         </div>
                         <div className="sidenav-footer">

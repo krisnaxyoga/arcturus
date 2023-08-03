@@ -30,23 +30,17 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
     const [minPrice, setMinPrice] = useState('');
     const [sellingPrice, setSellingPrice] = useState('');
 
-    const [dataValues, setDataValues] = useState([]);
-
-    const [selectedValues, setSelectedValues] = useState([]);
 
     const [modalData, setModalData] = useState()
 
     const [showModal, setShowModal] = useState(false);
 
-    const [showModalTable, setShowModalTable] = useState(false);
-    
     const [minMarkup, setMinMarkup] = useState('');
 
 
     const [selectedDistribute, setSelectedDistribute] = useState([]);
     const [selectedExclude, setSelectedExclude] = useState([]);
 
-    console.log(selectedDistribute, ">>>>>>>>>>>>> ISI distribute >>>>>>>>>>>>>>>>>>>>>>")
 
     const handleSelectDistribute = (event) => {
         const selectedDistributes = event.target.value;
@@ -107,27 +101,11 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
             });
         }
     };
-    const buttonSendValue = (item) => {
-        setModalData(item);
 
-        const sellprice = Number(item?.price * 0.75) + Number(markup?.markup_price)
-
-        setSellingPrice(sellprice)
-
-
-        setShowModal(true);
-    };
-    const buttonSendValueTable = (item) => {
-        setShowModalTable(true);
-    };
     const handleCloseModal = () => {
         setShowModal(false);
     };
 
-    const handleCloseModalTable = () => {
-        setShowModalTable(false);
-    };
-    
     const handleCancelPolicyChange = (event, editor) => {
         setCancellationPolicy(editor.getData());
     };
@@ -210,17 +188,9 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
         formData.append('except',selectedExclude);
         formData.append('minmarkup',minMarkup ? minMarkup:markup.markup_price);
 
-        //console.log(adp, ">>>>>>>>>>>>> ISI PICK DAYS >>>>>>>>>>>>>>>>")
-
-        // dataValues.forEach((adp, index) => {
-        //     formData.append(`price[${index}][price]`, adp.price);
-        //     formData.append(`price[${index}][room_id]`, adp.room_id);
-        // });
-
-
         Inertia.post('/room/contract/store', formData, {
             onSuccess: () => {
-                // Lakukan aksi setelah gambar berhasil diunggah
+
             },
         });
     }
@@ -254,7 +224,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                             fill
                                                         >
                                                             <Tab eventKey="home" title="Rate Code">
-                                                                
+
                                                                 <div className="row">
                                                                     <div className="col-lg-4">
                                                                         <div className="mb-3">
@@ -327,7 +297,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                         <div className="mb-3">
                                                                             <label htmlFor="">Exclude</label>
                                                                             <select name="" id="" className='form-control' onChange={handleSelectExclude} multiple>
-                                                                                
+
                                                                                 {Object.keys(country).map(key => (
                                                                                         <option key={key} value={country[key]}>{country[key]}</option>
                                                                                     ))}
@@ -421,7 +391,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                                 />
                                                                                 Sat
                                                                             </label>
-                                                                           
+
                                                                         </div>
                                                                     </div>
                                                                     <div className="col-lg-6">
@@ -485,87 +455,15 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                             <table id="dataTable" width="100%" cellSpacing="0">
                                                                                 <thead>
                                                                                     <tr>
-                                                                                        <th>room type code</th>
-                                                                                        <th>room type description</th>
-                                                                                        <th>rate price</th>
-                                                                                        <th>rate recom min 25% off BAR</th>
+                                                                                    <th>room type</th>
+                                                                                        <th>bar</th>
+                                                                                        <th>contract recomended</th>
                                                                                         <th>min mark-up</th>
-                                                                                        <th>agent selling rate</th>
+                                                                                        <th>selling rate</th>
                                                                                         <th>Actions</th>
                                                                                     </tr>
                                                                                 </thead>
                                                                                 <tbody>
-                                                                                    {/* {data.map((item, index) => (
-                                                                                        <>
-                                                                                            <tr key={index}>
-
-                                                                                                <td>{item.room.ratecode}</td>
-                                                                                                <td>{item.room.ratedesc}</td>
-                                                                                                <td>
-                                                                                                    <ul>
-                                                                                                        <input
-                                                                                                            type="number"
-                                                                                                            placeholder='price...'
-                                                                                                            className='form-control'
-                                                                                                            data-id={item.id}
-                                                                                                            value={item.price}
-                                                                                                            readOnly />
-
-                                                                                                    </ul>
-                                                                                                </td>
-                                                                                                <td>
-                                                                                                    <ul>
-                                                                                                        <input
-                                                                                                            type="number"
-                                                                                                            placeholder={item.price * 0.75}
-                                                                                                            className='form-control'
-                                                                                                            data-id={item.id}
-                                                                                                            data-price={item.price}
-                                                                                                            data-ratecode={item.room.ratecode}
-                                                                                                            data-ratedesc={item.room.ratedesc}
-                                                                                                            defaultValue={dataValues}
-                                                                                                            onChange={(e) =>
-                                                                                                                handlePriceRecom(e, index, 'price')} />
-
-                                                                                                    </ul>
-                                                                                                </td>
-                                                                                                <td>
-                                                                                                    <ul>
-                                                                                                        <input
-                                                                                                            type="number"
-                                                                                                            placeholder='price...'
-                                                                                                            className='form-control'
-                                                                                                            data-id={item.id}
-                                                                                                            value={markup[0].price}
-                                                                                                            readOnly
-                                                                                                            onChange={(e) =>
-                                                                                                                handleAdultValueChange(e, index, 'price')} />
-
-                                                                                                    </ul>
-                                                                                                </td>
-
-                                                                                                <td>
-                                                                                                    <ul>
-                                                                                                        <input
-                                                                                                            type="number"
-                                                                                                            placeholder={(item.price * 0.75) + markup[0].price}
-                                                                                                            className='form-control'
-                                                                                                            data-id={item.id}
-                                                                                                            readOnly
-                                                                                                            //value={total}
-                                                                                                            onChange={(e) =>
-                                                                                                                handleAdultValueChange(e, index, 'price')} />
-
-                                                                                                    </ul>
-                                                                                                </td>
-                                                                                                <td>
-                                                                                                    <a href='#' className='btn btn-datatable btn-icon btn-transparent-dark mr-2' onClick={() => buttonSendValue(item)}>
-                                                                                                        <i className='fa fa-edit'></i>
-                                                                                                    </a>
-                                                                                                </td>
-                                                                                            </tr>
-                                                                                        </>
-                                                                                    ))} */}
 
                                                                                 </tbody>
                                                                             </table>
@@ -651,9 +549,6 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                             <Button variant="secondary" onClick={handleCloseModal}>
                                                                 Close
                                                             </Button>
-                                                            {/* <Button variant="primary" onClick={handleUpdatePrice}>
-                                                                Save Changes
-                                                            </Button> */}
                                                         </Modal.Footer>
                                                     </Modal>
 

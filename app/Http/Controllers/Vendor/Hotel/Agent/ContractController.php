@@ -128,7 +128,7 @@ class ContractController extends Controller
                     $markupupdate->markup_price = $request->minmarkup;
                     $markupupdate->save();
                 }
-               
+
 
             return redirect()
             ->route('contract.edit',$data->id)

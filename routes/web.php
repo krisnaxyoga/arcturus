@@ -36,7 +36,7 @@ Route::group(['middleware' => 'guest'], function() {
     Route::post('/regiteragent/store', [AuthController::class, 'agentstore'])->name('agentregist.store');
     Route::post('/regitervendor/store', [AuthController::class, 'vendorstore'])->name('vendorregist.store');
     Route::post('/login', [AuthController::class, 'dologin']);
-    
+
 });
 
 Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {
@@ -60,10 +60,10 @@ Route::group(['middleware' => ['auth', 'checkrole:1']], function() {
     Route::post('/admin/agent/store', [\App\Http\Controllers\Admin\Agent\AgentController::class, 'store'])->name('dashboard.agent.store');
     Route::put('/admin/agent/update/{id}', [\App\Http\Controllers\Admin\Agent\AgentController::class, 'update'])->name('dashboard.agent.update');
     Route::delete('/admin/agent/delete/{id}', [\App\Http\Controllers\Admin\Agent\AgentController::class, 'destroy'])->name('dashboard.agent.delete');
-    
+
     Route::get('/admin/agent/active/{id}', [\App\Http\Controllers\Admin\Agent\AgentController::class, 'active'])->name('dashboard.agent.active');
     Route::get('/admin/agent/unactive/{id}', [\App\Http\Controllers\Admin\Agent\AgentController::class, 'unactive'])->name('dashboard.agent.unactive');
-    
+
     // Route::resource('/admin/agent', \App\Http\Controllers\Admin\Agent\AgentController::class);
 
     //agent excel
@@ -112,7 +112,7 @@ Route::group(['middleware' => ['auth', 'checkrole:1']], function() {
 
     Route::post('/admin/storeslider/',[\App\Http\Controllers\Admin\Setting\SettingController::class,'storeslider'])->name('dashboard.setting.storeslider');
     Route::delete('/admin/destroyslider/{id}',[\App\Http\Controllers\Admin\Setting\SettingController::class,'destroyslider'])->name('dashboard.setting.destroyslider');
-   
+
 });
 
 // untuk vendor
@@ -142,6 +142,9 @@ Route::group(['middleware' => ['auth', 'checkrole:2']], function() {
     //my profile
     Route::get('/myprofile',[\App\Http\Controllers\Vendor\MyProfile\MyProfileController::class, 'index'])->name('vendor.myprofile');
     Route::post('/myprofile/update',[\App\Http\Controllers\Vendor\MyProfile\MyProfileController::class, 'update']);
+    Route::post('/myprofile/slider/store',[\App\Http\Controllers\Vendor\MyProfile\MyProfileController::class, 'addbanner']);
+    Route::get('/myprofile/slider/delete/{id}',[\App\Http\Controllers\Vendor\MyProfile\MyProfileController::class, 'destroybanner']);
+
     // room in hotel
     Route::get('/room/index',[\App\Http\Controllers\Vendor\Hotel\Room\IndexController::class, 'index'])->name('vendor.room');
     Route::get('/room/create',[\App\Http\Controllers\Vendor\Hotel\Room\IndexController::class, 'create']);
@@ -149,7 +152,7 @@ Route::group(['middleware' => ['auth', 'checkrole:2']], function() {
     Route::post('/room/update/{id}',[\App\Http\Controllers\Vendor\Hotel\Room\IndexController::class, 'update']);
     Route::get('/room/edit/{id}',[\App\Http\Controllers\Vendor\Hotel\Room\IndexController::class, 'edit'])->name('vendor.room.edit');
     Route::get('/room/destroy/{id}',[\App\Http\Controllers\Vendor\Hotel\Room\IndexController::class, 'destroy'])->name('vendor.room.destroy');
-   
+
     //price set up
     Route::get('/room/markup',[\App\Http\Controllers\Vendor\Hotel\Agent\MarkupController::class, 'index'])->name('roomagent.price');
     Route::get('/room/markup/create',[\App\Http\Controllers\Vendor\Hotel\Agent\MarkupController::class, 'create'])->name('roomagent.create');
@@ -179,10 +182,10 @@ Route::group(['middleware' => ['auth', 'checkrole:2']], function() {
     Route::post('/room/barcode/update/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\BarController::class, 'update'])->name('barroom.update');
     Route::post('/room/barcodeprice/update/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\BarController::class, 'barupdate'])->name('barprice.update');
     Route::get('/room/barcodeprice/cekroom/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\BarController::class, 'cekroom'])->name('barprice.cekroom');
-   
-    Route::get('/room/barcodeprice/destroy/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\BarController::class, 'bardestroy'])->name('barprice.destroy'); 
+
+    Route::get('/room/barcodeprice/destroy/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\BarController::class, 'bardestroy'])->name('barprice.destroy');
     Route::get('/room/barcode/destroy/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\BarController::class, 'destroy'])->name('barroom.destroy');
-   
+
     //contract controller
     Route::get('/room/contract/index',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'index'])->name('contract.index');
     Route::get('/room/contract/create',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'create'])->name('contract.create');
@@ -194,11 +197,11 @@ Route::group(['middleware' => ['auth', 'checkrole:2']], function() {
     Route::get('/room/contract/updatecontractprice/{id}/{price}/{recom}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'updatecontractprice'])->name('contract.updatecontractprice');
     Route::get('/room/contract/destroycontractprice/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'destroycontractprice'])->name('contract.destroycontractprice');
     Route::get('/room/contract/addallcontractprice/{cont}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'addallcontractprice'])->name('contract.addallcontractprice');
-  
+
     //promo price
     Route::get('/room/promo/index/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\PromoPriceController::class, 'index'])->name('promo.index');
     Route::get('/room/promo/store/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\PromoPriceController::class, 'store'])->name('promo.store');
-  
+
 
     //atttribute room
     Route::get('/room/attribute',[\App\Http\Controllers\Vendor\Hotel\Room\AttributeController::class, 'index'])->name('room.attribute.index');
@@ -216,7 +219,7 @@ Route::group(['middleware' => ['auth', 'checkrole:3']], function() {
 
    //my profile
    Route::get('/agent-profile',[\App\Http\Controllers\Agent\MyProfile\MyProfileController::class, 'index'])->name('agent.myprofile');
-   Route::post('/agent-profile/update',[\App\Http\Controllers\Agent\MyProfile\MyProfileController::class, 'update']); 
+   Route::post('/agent-profile/update',[\App\Http\Controllers\Agent\MyProfile\MyProfileController::class, 'update']);
    Route::get('/agent-profile/contact/create',[\App\Http\Controllers\Agent\MyProfile\MyProfileController::class, 'contactcreate'])->name('agent.contact.create');
    Route::post('/agent-profile/contact/store',[\App\Http\Controllers\Agent\MyProfile\MyProfileController::class, 'contactstore'])->name('agent.contact.store');
    Route::get('/agent-profile/contact/edit/{id}',[\App\Http\Controllers\Agent\MyProfile\MyProfileController::class, 'contactedit'])->name('agent.contact.edit');
@@ -224,7 +227,7 @@ Route::group(['middleware' => ['auth', 'checkrole:3']], function() {
    Route::post('/agent-profile/contact/destroy/{id}',[\App\Http\Controllers\Agent\MyProfile\MyProfileController::class, 'contactdestroy'])->name('agent.contact.destroy');
    Route::get('/agent-profile/password',[\App\Http\Controllers\Agent\MyProfile\MyProfileController::class, 'passwordchange'])->name('agent.password.change');
    Route::post('/agent-profile/contact/updatepassword',[\App\Http\Controllers\Agent\MyProfile\MyProfileController::class, 'updatepassword'])->name('agent.password.updatechange');
-  
+
    //booking history
    Route::get('/agent/bookinghistory',[\App\Http\Controllers\Agent\Booking\BookingHistoryController::class, 'index'])->name('agent.booking.history');
    Route::get('/agent/bookinghistory/detail/{id}',[\App\Http\Controllers\Agent\Booking\BookingHistoryController::class, 'detail'])->name('agent.booking.detail');
@@ -233,7 +236,7 @@ Route::group(['middleware' => ['auth', 'checkrole:3']], function() {
 
    //booking report
    Route::get('/agent-bookingreport',[\App\Http\Controllers\Agent\Booking\BookingReportController::class, 'index']);
- 
+
    //enquiry report
    Route::get('/agent-enquiryreport',[\App\Http\Controllers\Agent\Enquiry\EnquiryReportController::class, 'index']);
 

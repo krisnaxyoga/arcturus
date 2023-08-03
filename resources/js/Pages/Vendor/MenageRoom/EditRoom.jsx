@@ -14,14 +14,14 @@ import Tabs from 'react-bootstrap/Tabs';
 
 export default function Index({ session, props, attr, room,roomtype }) {
 
-    const [inputs, setInputs] = useState(['']); // State untuk menyimpan nilai-nilai input
-    const [maxadult, setAdult] = useState([{ value: '', id: 1 }]);
-    const [maxchild, setChild] = useState([{ value: '', id: 1 }]);
+    // const [inputs, setInputs] = useState(['']); // State untuk menyimpan nilai-nilai input
+    // const [maxadult, setAdult] = useState([{ value: '', id: 1 }]);
+    // const [maxchild, setChild] = useState([{ value: '', id: 1 }]);
     const [roomtypeid, setRoomType] = useState('');
     const [near, setNear] = useState('');
     const [ratecode, setRagecode] = useState('');
     const [ratedesc, setRateDesc] = useState('');
-    const [roomname, setRoomName] = useState('');
+    // const [roomname, setRoomName] = useState('');
     const [image, setImage] = useState(null);
     const [selectedImage, setSelectedImage] = useState(null);
 
@@ -32,13 +32,13 @@ export default function Index({ session, props, attr, room,roomtype }) {
     const [adult, setMaxAdult] = useState('');
     const [child, setMaxChild] = useState('');
     const [service, setService] = useState('');
-    const [vidio, setVidio] = useState('');
+    // const [vidio, setVidio] = useState('');
     const [content, setDescription] = useState('');
     const [extrabed, setExtrabed] = useState('');
-    const [infant, setInfant] = useState('');
-    const [baby_cot, setBebyCot] = useState('');
-    const [max_benefit, setBenefit] = useState('');
-    const [bedroom, setBedroom] = useState('');
+    // const [infant, setInfant] = useState('');
+    // const [baby_cot, setBebyCot] = useState('');
+    // const [max_benefit, setBenefit] = useState('');
+    // const [bedroom, setBedroom] = useState('');
     const [size, setSize] = useState('');
 
     const [selectAll, setSelectAll] = useState(false);
@@ -47,7 +47,7 @@ export default function Index({ session, props, attr, room,roomtype }) {
 
     const [selectedValues, setSelectedValues] = useState([]);
 
-    console.log(maxchild, "hasill")
+    // console.log(maxchild, "hasill")
     //adult function add max
 
     const [checkboxItems, setCheckboxItems] = useState(attr.map((item) => ({ label: item.name, checked: false })));
@@ -149,14 +149,9 @@ export default function Index({ session, props, attr, room,roomtype }) {
         e.preventDefault();
 
         const formData = new FormData();
-        // formData.append('price', price);
         formData.append('ratecode', ratecode ? ratecode : room[0].ratecode);
         formData.append('ratedesc', ratedesc ? ratedesc : room[0].ratedesc);
         formData.append('roomname', roomname ? roomname : room[0].title);
-        // formData.append('facilities', selectedValues);
-        // selectedValues ? selectedValues : room[0].attribute.forEach((adp, index) => {
-        //     formData.append(`facilities[${index}]`, adp);
-        // });
         const selectedValues = checkboxItems.filter((item) => item.checked).map((item) => item.label);
 
         formData.append('facilities', selectedValues.join(','));

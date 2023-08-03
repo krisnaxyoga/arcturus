@@ -9,6 +9,8 @@ use App\Models\Vendor;
 use App\Models\RoomHotel;
 
 use App\Models\BarPrice;
+
+use App\Models\ContractPrice;
 // use App\Models\AdultPriceRoom;
 use App\Models\Roomtype;
 use App\Models\BarRoom;
@@ -262,8 +264,16 @@ class IndexController extends Controller
      */
     public function destroy(string $id)
     {
+        $iduser = auth()->user()->id;
         $room = RoomHotel::find($id);
         $room->delete();
+
+        $barprice = BarPrice::where('user_id',$iduser)->where('room_id',$id)->first();
+        $barprice->delete();
+
+        $contractprice = ContractPrice::where('user_id',$iduser)->where('room_id',$id)->first();
+        $contractprice->delete();
+
         return redirect()->back()->with('message', 'data deleted!');
     }
 }

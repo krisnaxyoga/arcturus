@@ -7,10 +7,11 @@
         {{-- <div class="overlay"></div> --}}
         <div id="demo" class="carousel slide" data-ride="carousel">
             <div class="carousel-inner">
-                @foreach ($slider as $index=>$item)
-                <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
-                    <img src="{{$item->image}}" alt="{{$item->image}}" style="width:100%;height:600px; object-fit: cover;">
-                </div>
+                @foreach ($slider as $index => $item)
+                    <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
+                        <img src="{{ $item->image }}" alt="{{ $item->image }}"
+                            style="width:100%;height:600px; object-fit: cover;">
+                    </div>
                 @endforeach
                 {{-- <div class="carousel-item">
                     <img src="/landing/travel/images/bg_2.jpg" alt="Chicago" style="width:100%;height:600px; object-fit: cover;">
@@ -93,8 +94,8 @@
                                                         <div class="form-group p-4 border-0">
                                                             <label for="#">City</label>
                                                             <div class="form-field"> --}}
-                                                                {{-- <div class="icon"><span class="fa fa-search"></span></div> --}}
-                                                                {{-- <input type="text" name="city" class="form-control"
+                                                    {{-- <div class="icon"><span class="fa fa-search"></span></div> --}}
+                                                    {{-- <input type="text" name="city" class="form-control"
                                                                     placeholder="city...">
                                                             </div>
                                                         </div>
@@ -243,41 +244,70 @@
             <div class="row d-flex mb-5">
                 <div class="col-md-12 order-md-last heading-section pl-md-5 ftco-animate d-flex align-items-center">
                     <div class="w-100">
-                        <span class="subheading">Welcome to Arcturus</span>
-                        <h2 class="mb-4">It's time to start your adventure</h2>
-                        <p>A small river named Duden flows by their place and supplies it with the necessary regelialia. It
-                            is a paradisematic country, in which roasted parts of sentences fly into your mouth.</p>
-                        <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there
-                            live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics,
-                            a large language ocean.
-                            A small river named Duden flows by their place and supplies it with the necessary regelialia.
+                        {{-- <span class="subheading">Welcome to Arcturus</span> --}}
+                        <h2 class="subheading mb-4">Welcome to Arcturus</h2>
+                        <p>ARCTURUS is a growing online travel marketplace that connects retailer agents with travel service
+                            providers, especially hotels, boats, and tour operators. With one-time registration, ARCTURUS
+                            helps retailer agents get access to the hotel’s dynamic rates and other special offers provided
+                            by travel service providers. On the other hand, hotels and travel service providers can
+                            efficiently reach and target their promotions directly to hundreds of retailer agents. </p>
+                        <p>Our mission is to make it easier for retailer agents and hotels including travel services
+                            providers to collaborate and support one another. The platform is built to enable properties
+                            around the world to reach a global audience and grow their businesses by offering travellers an
+                            extensive selection of hotels and activities at competitive rates.
                         </p>
+                        <h3>Partner with ARCTURUS</h3>
+                        <p>ARCTURUS is growing and open to mutual collaboration to support your business development.
+                        </p>
+                        <p>Why You Should Collaborate with Us</p>
+                        <h4>Benefits for the hotels</h4>
+                        <ul>
+                            <li>Hotels will not rely on wholesalers only.</li>
+                            <li> Get direct connections with hundreds of retailer agents hence hotels can sell at better
+                                prices.</li>
+                            <li>Hotels can focus their promotion based on their target location. It will only be shown,
+                                distributed, and visible to your target market.</li>
+                            <li>Hotels will receive promo recommendations based on their target market and statistics.</li>
+                            <li>Full payment will be received 1x24 hours after the booking is confirmed.</li>
+                            <li>Lower commission fee than other OTAs. Only 2,5%- 5%.</li>
+                        </ul>
+                        <h4>Benefits for travel agents</h4>
+                        <ul>
+                            <li>FREE to join & FREE of charge.</li>
+                            <li>Agents will automatically receive hotel contract rates with one-time registration without
+                                even contacting the hotels.</li>
+                            <li>Better profit since you receive direct offers from the hotel.</li>
+                        </ul>
+
 
                     </div>
                 </div>
 
             </div>
             <div class="row d-flex justify-content-center mt-4">
-                <div class="col-md-4 order-md-last heading-section pl-md-5 ftco-animate d-flex justify-content-center align-items-center">
-                    <div class="card">
+                <div
+                    class="col-md-4 ftco-animate">
+                    <div class="card shadow border-0 mb-3">
                         <div class="card-body">
-                            <h3>Hotel</h3>
-                            <p class="text-center" style="font-size: 16px">0</p>
+                            <h3 class="text-center">Hotel</h3>
+                            <p class="text-center" style="font-size: 16px">{{$hotel}}</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4 order-md-last heading-section pl-md-5 ftco-animate d-flex justify-content-center align-items-center">
-                    <div class="card">
+                <div
+                    class="col-md-4 ftco-animate">
+                    <div class="card shadow border-0 mb-3">
                         <div class="card-body">
-                            <h3>Agent</h3>
-                            <p class="text-center" style="font-size: 16px">0</p>
+                            <h3 class="text-center">Agent</h3>
+                            <p class="text-center" style="font-size: 16px">{{$agent}}</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4 order-md-last heading-section pl-md-5 ftco-animate d-flex justify-content-center align-items-center">
-                    <div class="card">
+                <div
+                    class="col-md-4 ftco-animate">
+                    <div class="card shadow border-0 mb-3">
                         <div class="card-body">
-                            <h3>Others</h3>
+                            <h3 class="text-center">Others</h3>
                             <p class="text-center" style="font-size: 16px">0</p>
                         </div>
                     </div>
@@ -285,7 +315,7 @@
             </div>
         </div>
     </section>
-{{--
+    {{--
     <section class="ftco-section img ftco-select-destination"
         style="background-image: url(/landing/travel/images/bg_3.jpg);">
         <div class="container">
@@ -360,7 +390,7 @@
             </div>
         </div>
     </section> --}}
-{{--
+    {{--
     <section class="ftco-section">
         <div class="container">
             <div class="row justify-content-center pb-4">
@@ -748,6 +778,43 @@
         </div>
     </section> --}}
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Ambil elemen input tanggal check-in dan check-out
+            const checkinInput = document.querySelector('.checkindate');
+            const checkoutInput = document.querySelector('.checkoutdate');
+
+            // Buat objek tanggal untuk tanggal saat ini
+            const currentDate = new Date();
+
+            // Tambahkan 1 hari untuk mendapatkan tanggal check-in default (hari besok)
+            currentDate.setDate(currentDate.getDate() + 1);
+
+            // Konversi tanggal menjadi format ISO (yyyy-MM-dd) agar bisa diatur ke input tanggal
+            const defaultCheckinDate = currentDate.toISOString().slice(0, 10);
+
+            // Tambahkan 1 hari lagi untuk mendapatkan tanggal check-out default (1 malam setelah check-in)
+            currentDate.setDate(currentDate.getDate() + 1);
+            const defaultCheckoutDate = currentDate.toISOString().slice(0, 10);
+
+            // Setel nilai default untuk input tanggal check-in dan check-out
+            checkinInput.value = defaultCheckinDate;
+            checkoutInput.value = defaultCheckoutDate;
+
+            // Tambahkan event listener ke input tanggal check-in
+            // Jika nilai check-in berubah, perbarui nilai default check-out menjadi 1 hari setelah check-in
+            checkinInput.addEventListener('change', function() {
+                const checkinDate = new Date(checkinInput.value);
+                checkinDate.setDate(checkinDate.getDate() + 1);
+                const checkoutDate = checkinDate.toISOString().slice(0, 10);
+                checkoutInput.value = checkoutDate;
+
+
+                checkoutInput.setAttribute('min', checkinInput.value);
+            });
+
+        });
+    </script>
+    <script>
         let slideIndex = 1;
         showSlides(slideIndex);
 
@@ -780,85 +847,6 @@
             slides[slideIndex - 1].style.display = "block";
             dots[slideIndex - 1].className += " active";
         }
-
     </script>
-    <script>
 
-  //function untuk tanggal checkin
-
-  function setCheckInDateRestriction() {
-               // Ambil elemen input checkin dan checkout
-        var checkinInput = document.querySelector('.checkindate');
-        var checkoutInput = document.querySelector('.checkoutdate');
-
-        // Dapatkan tanggal sekarang
-        var currentDate = new Date();
-
-        // Format tanggal sebagai "YYYY-MM-DD"
-        var year = currentDate.getFullYear();
-        var month = String(currentDate.getMonth() + 1).padStart(2, '0');
-        var day = String(currentDate.getDate()).padStart(2, '0');
-        var formattedDate = year + '-' + month + '-' + day;
-
-        // Set nilai dan batasan min pada input checkin
-        checkinInput.value = formattedDate;
-        checkinInput.min = formattedDate;
-
-            var checkinInput = document.querySelector('.checkindate');
-            checkinInput.value = formattedDate;
-            checkinInput.min = formattedDate;
-
-            var checkoutInput = document.querySelector('.checkoutdate');
-
-            checkinInput.addEventListener('input', function() {
-                var checkinDate = new Date(this.value);
-                var checkoutDate = new Date(checkoutInput.value);
-
-                if (checkinDate > checkoutDate) {
-                    checkoutInput.value = '';
-                }
-
-                checkoutInput.min = this.value;
-                highlightDateRange();
-            });
-
-            checkoutInput.addEventListener('input', function() {
-                var checkinDate = new Date(checkinInput.value);
-                var checkoutDate = new Date(this.value);
-
-                if (checkinDate > checkoutDate) {
-                    checkoutInput.value = checkinInput.value;
-                }
-
-                highlightDateRange();
-            });
-            }
-
-            function highlightDateRange() {
-            var checkinInput = document.querySelector('.checkindate');
-            var checkoutInput = document.querySelector('.checkoutdate');
-            var checkinDate = new Date(checkinInput.value);
-            var checkoutDate = new Date(checkoutInput.value);
-
-            var inputs = document.querySelectorAll('input[type="date"]');
-            inputs.forEach(function(input) {
-                input.classList.remove('highlight');
-            });
-
-            if (checkinDate && checkoutDate && checkoutDate >= checkinDate) {
-                var currentDate = new Date(checkinDate);
-                while (currentDate <= checkoutDate) {
-                    var dateString = currentDate.toISOString().split('T')[0];
-                    var input = document.querySelector('input[value="' + dateString + '"]');
-                    if (input) {
-                        input.classList.add('highlight');
-                    }
-                    currentDate.setDate(currentDate.getDate() + 1);
-                }
-            }
-            }
-
-            // Panggil fungsi setCheckInDateRestriction saat halaman dimuat
-            window.addEventListener('DOMContentLoaded', setCheckInDateRestriction);
-    </script>
 @endsection

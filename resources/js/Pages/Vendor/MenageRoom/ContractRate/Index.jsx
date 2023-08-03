@@ -17,7 +17,7 @@ import Modal from 'react-bootstrap/Modal';
 
 export default function Index({ session,data,roomtype,form,barroom,surcharge,black }) {
     const { url } = usePage();
-    console.log(data,">>>DATA");
+    console.log(roomtype,">>romtype");
 
     const [currentPage, setCurrentPage] = useState(1)
     const [postsPerPage, setPostsPerPage] = useState(10)
@@ -92,7 +92,6 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
         // Simpan nilai yang diubah ke dalam state
         setDataValues(newDataValues);
     };
-    console.log(dataValues, ">>>NILAI VALUE ")
 
 
     const storePost = async (e) => {

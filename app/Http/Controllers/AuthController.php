@@ -23,7 +23,7 @@ class AuthController extends Controller
             'email' => 'required|email',
             'password' => 'required'
         ]);
-
+// dd($credentials);
         if (auth()->attempt($credentials)) {
 
             // buat ulang session login
@@ -87,6 +87,8 @@ class AuthController extends Controller
             // add new agents
             $member = new Vendor();
             $member->user_id = $data->id;
+            $member->email = $request->email;
+            $member->phone = $request->phone;
             $member->vendor_name = $request->busisnes_name;
             $member->vendor_legal_name = $request->company_name;
             $member->address_line1 = $request->address;

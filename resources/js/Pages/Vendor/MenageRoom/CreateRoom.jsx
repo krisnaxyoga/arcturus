@@ -35,11 +35,8 @@ export default function Index({ session, props, attr,roomtype }) {
     const [selectedValues, setSelectedValues] = useState([]);
 
 
-    console.log(images, "hasill")
-
     const [checkboxItems, setCheckboxItems] = useState(attr.map((item) => ({ label: item.name, checked: false })));
 
-    console.log(selectedValues, "<<<<xwhhwhw");
     const handleCheckboxChange = (index) => {
         const updatedCheckboxItems = [...checkboxItems];
         updatedCheckboxItems[index].checked = !updatedCheckboxItems[index].checked;
@@ -118,10 +115,8 @@ export default function Index({ session, props, attr,roomtype }) {
         e.preventDefault();
 
         const formData = new FormData();
-        // formData.append('price', price);
         formData.append('ratecode', ratecode);
         formData.append('ratedesc', ratedesc);
-        // formData.append('facilities', selectedValues);
         selectedValues.forEach((adp, index) => {
             formData.append(`facilities[${index}]`, adp);
         });
@@ -331,13 +326,10 @@ export default function Index({ session, props, attr,roomtype }) {
                                                     <div className="card-body">
                                                         <div className="mb-3">
                                                             <label className="form-label fw-bold">Description</label>
-                                                            {/* <textarea className="form-control" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Masukkan Judul Post" rows={4}></textarea> */}
-                                                            <CKEditor
+                                                              <CKEditor
                                                                 editor={ClassicEditor}
                                                                 data=""
-                                                                // value={description}
-                                                                // nChange={(e) => setDescription(e.target.value)}
-                                                                onReady={editor => {
+                                                                   onReady={editor => {
                                                                     // You can store the "editor" and use when it is needed.
                                                                     console.log('Editor is ready to use!', editor);
                                                                 }}
@@ -356,9 +348,7 @@ export default function Index({ session, props, attr,roomtype }) {
                                                             <CKEditor
                                                                 editor={ClassicEditor}
                                                                 data=""
-                                                                // value={description}
-                                                                // nChange={(e) => setDescription(e.target.value)}
-                                                                onReady={editor => {
+                                                                  onReady={editor => {
                                                                     // You can store the "editor" and use when it is needed.
                                                                     console.log('Editor is ready to use!', editor);
                                                                 }}
@@ -376,9 +366,7 @@ export default function Index({ session, props, attr,roomtype }) {
                                                             <CKEditor
                                                                 editor={ClassicEditor}
                                                                 data=""
-                                                                // value={description}
-                                                                // nChange={(e) => setDescription(e.target.value)}
-                                                                onReady={editor => {
+                                                                 onReady={editor => {
                                                                     // You can store the "editor" and use when it is needed.
                                                                     console.log('Editor is ready to use!', editor);
                                                                 }}
