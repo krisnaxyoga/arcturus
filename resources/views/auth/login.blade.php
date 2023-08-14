@@ -55,7 +55,8 @@
                                 </div> --}}
                                 <button type="submit" class="btn btn-primary">LOGIN</button>
                             </form>
-                            <p>you dont have account? <a class="text-success" href="{{ request()->routeIs('login.agent') ? route('agentregist') : route('vendorregist') }}">Sign Up</a></p>
+                            <p>forget your password? <a class="text-success" href="{{route('forgetpassword.user')}}">click here</a></p>
+                            {{-- <p>you dont have account? <a class="text-success" href="{{ request()->routeIs('login.agent') ? route('agentregist') : route('vendorregist') }}">Sign Up</a></p> --}}
                         </div>
                     </div>
                 </div>

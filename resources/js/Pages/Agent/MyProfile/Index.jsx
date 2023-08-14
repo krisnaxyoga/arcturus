@@ -37,6 +37,10 @@ export default function Index({ session, data, contacts, country }) {
     const [longitude, setLongitude] = useState('');
     const [bankname, setBankName] = useState('');
     const [bankaccount, setBankAccount] = useState('');
+
+    const [bankaddress,setBankAddress] = useState('');
+    const [accountnumber, setAccountNumber] = useState('');
+
     const [swifcode, setSwifCode] = useState('');
     const [limit, setCreditLimit] = useState(0);
     const [used, setCreditUsed] = useState(0);
@@ -70,6 +74,8 @@ export default function Index({ session, data, contacts, country }) {
         formData.append('limit', limit ? limit : data.vendors.credit_limit);
         formData.append('used', used ? used : data.vendors.credit_used);
         formData.append('saldo', saldo ? saldo : data.vendors.credit_saldo);
+        formData.append('bankaddress', bankaddress ? bankaddress : data.vendors.bank_address);
+        formData.append('accountnumber', accountnumber ? accountnumber : data.vendors.account_number);
 
         Inertia.post('/agent-profile/update', formData, {
             onSuccess: () => {
@@ -166,14 +172,14 @@ export default function Index({ session, data, contacts, country }) {
                                                                 ))}
                                                             </select> */}
                                                             <input type="text" readOnly value={data.vendors.country} className='form-control'/>
-                                                            <p style={{ fontSize:'11px' }} className='text-danger'>if you want to change country, you must send an email to admin@arcturus.my.id</p>
+                                                            <p style={{ fontSize:'11px' }} className='text-danger'>admin@arcturus.my.id</p>
                                                         </div>
                                                         <div>
                                                             <label for="state" className="form-label">State</label>
                                                             <div className="input-group mb-3">
                                                                 <span className="input-group-text rounded-0" id="basic-addon1"><i className='fa fa-map-signs'></i></span>
-                                                                <input readOnly onChange={(e) => setState(e.target.value)} defaultValue={data.vendors.state} type="text" className="form-control" placeholder="State" aria-label="state" aria-describedby="basic-addon1" />
-                                                                <p style={{ fontSize:'11px' }} className='text-danger'>if you want to change country, you must send an email to admin@arcturus.my.id</p>
+                                                                <input onChange={(e) => setState(e.target.value)} defaultValue={data.vendors.state} type="text" className="form-control" placeholder="State" aria-label="state" aria-describedby="basic-addon1" />
+                                                                {/* <p style={{ fontSize:'11px' }} className='text-danger'>if you want to change country, you must send an email to admin@arcturus.my.id</p> */}
 
                                                             </div>
                                                         </div>
@@ -181,8 +187,8 @@ export default function Index({ session, data, contacts, country }) {
                                                             <label for="city" className="form-label">City</label>
                                                             <div className="input-group mb-3">
                                                                 <span className="input-group-text rounded-0" id="basic-addon1"><i className='fa fa-street-view'></i></span>
-                                                                <input readOnly onChange={(e) => setCity(e.target.value)} defaultValue={data.vendors.city} type="text" className="form-control" placeholder="City" aria-label="city" aria-describedby="basic-addon1" />
-                                                                <p style={{ fontSize:'11px' }} className='text-danger'>if you want to change country, you must send an email to admin@arcturus.my.id</p>
+                                                                <input onChange={(e) => setCity(e.target.value)} defaultValue={data.vendors.city} type="text" className="form-control" placeholder="City" aria-label="city" aria-describedby="basic-addon1" />
+                                                                {/* <p style={{ fontSize:'11px' }} className='text-danger'>if you want to change country, you must send an email to admin@arcturus.my.id</p> */}
 
                                                             </div>
                                                         </div>
@@ -274,8 +280,8 @@ export default function Index({ session, data, contacts, country }) {
                                                     <div className="row">
                                                         <div className="col-lg-4">
                                                             <div className="mb-3">
-                                                                <label htmlFor="bank">Bank Name</label>
-                                                                <input defaultValue={data.vendors.bank_name} onChange={(e) => setBankName(e.target.value)} type="text" className='form-control' name='bankname' />
+                                                                <label htmlFor="bank">Account Name</label>
+                                                                <input defaultValue={data.vendors.bank_account} onChange={(e) => setBankAccount(e.target.value)} type="text" className='form-control' name='bankaccount' />
                                                             </div>
                                                             {/* <div className="mb-3">
                                                                 <label htmlFor="limit">Credit Limit</label>
@@ -284,14 +290,26 @@ export default function Index({ session, data, contacts, country }) {
                                                         </div>
                                                         <div className="col-lg-4">
                                                             <div className="mb-3">
-                                                                <label htmlFor="bank">Bank Account</label>
-                                                                <input defaultValue={data.vendors.bank_account} onChange={(e) => setBankAccount(e.target.value)} type="text" className='form-control' name='bankaccount' />
+                                                                <label htmlFor="bank">Bank Name</label>
+                                                                <input defaultValue={data.vendors.bank_name} onChange={(e) => setBankName(e.target.value)} type="text" className='form-control' name='bankname' />
                                                             </div>
-                                                            {/* <div className="mb-3">
-                                                                <label htmlFor="used">Credit Used</label>
-                                                                <input defaultValue={data.vendors.credit_used} onChange={(e) => setCreditUsed(e.target.value)} type="text" className='form-control' name='used' readOnly />
-                                                            </div> */}
                                                         </div>
+
+                                                        <div className="col-lg-4">
+                                                            <div className="mb-3">
+                                                                <label htmlFor="bank">Account Number</label>
+                                                                <input defaultValue={data.vendors.account_number} onChange={(e) => setAccountNumber(e.target.value)} type="text" className='form-control' name='bankname' />
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div className="col-lg-4">
+                                                            <div className="mb-3">
+                                                                <label htmlFor="bank">Bank Address</label>
+                                                                <input defaultValue={data.vendors.bank_address} onChange={(e) => setBankAddress(e.target.value)} type="text" className='form-control' name='bankname' />
+                                                            </div>
+                                                        </div>
+
                                                         <div className="col-lg-4">
                                                             <div className="mb-3">
                                                                 <label htmlFor="bank">Swif Code</label>
@@ -302,11 +320,16 @@ export default function Index({ session, data, contacts, country }) {
                                                                 <input defaultValue={data.vendors.credit_saldo} onChange={(e) => setCreditSaldo(e.target.value)} type="text" className='form-control' name='saldo' readOnly />
                                                             </div> */}
                                                         </div>
-                                                        <button type='submit' className='btn btn-primary'>
-                                                            <i className='fa fa-save'></i>
-                                                            save
-                                                        </button>
 
+
+                                                    </div>
+                                                    <div className="row">
+                                                        <div className="col-lg-12">
+                                                            <button type='submit' className='btn btn-primary'>
+                                                                <i className='fa fa-save'></i>
+                                                                save
+                                                            </button>
+                                                        </div>
                                                     </div>
 
                                                 </div>

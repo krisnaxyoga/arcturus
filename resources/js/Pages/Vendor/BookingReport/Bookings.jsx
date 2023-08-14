@@ -18,8 +18,8 @@ export default function Bookings({ bookings }) {
                         <td>{item.booking_date}</td>
                         <td>{item.checkin_date}</td>
                         <td>{item.checkout_date}</td>
-                        <td>{item.night} /night</td>
-                        <td>{item.total_room} /room</td>
+                        {/* <td>{item.night} /night</td>
+                        <td>{item.total_room} /room</td> */}
                         <td>{item.total_guests}</td>
                         <td>{item.first_name} {item.last_name}</td>
                         <td>{formatRupiah(item.price)}</td>

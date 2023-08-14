@@ -17,7 +17,7 @@ import Modal from 'react-bootstrap/Modal';
 
 export default function Index({ session,data,roomtype,form,barroom,surcharge,black }) {
     const { url } = usePage();
-    console.log(roomtype,">>romtype");
+    // console.log(roomtype,">>romtype");
 
     const [currentPage, setCurrentPage] = useState(1)
     const [postsPerPage, setPostsPerPage] = useState(10)
@@ -66,7 +66,7 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
     };
     const buttonSendValue = (param) => {
         setModalData(param);
-        console.log(param, "param");
+        // console.log(param, "param");
         setShow(true);
     }
     const handleClose = () => {
@@ -233,7 +233,7 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
                                                             </div>
                                                             <div className="col-lg-6">
                                                                 <div className="mb-3">
-                                                                    <label htmlFor="" className='fw-bold'>Bar decription</label>
+                                                                    <label htmlFor="" className='fw-bold'>Bar description</label>
                                                                     <input onChange={(e) => setBarDesc(e.target.value)} type="text" className='form-control' />
                                                                 </div>
                                                                 <div className="mb-3">
@@ -329,7 +329,7 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
                                                             </div>
                                                             <div className="col-lg-6">
                                                                 <div className="mb-3">
-                                                                    <label htmlFor="" className='fw-bold'>Bar decription</label>
+                                                                    <label htmlFor="" className='fw-bold'>Bar description</label>
                                                                     <input defaultValue={barroom.bardesc} onChange={(e) => setBarDesc(e.target.value)} type="text" className='form-control' />
                                                                 </div>
                                                                 <div className="mb-3">

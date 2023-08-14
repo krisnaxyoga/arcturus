@@ -33,9 +33,12 @@ Route::group(['middleware' => 'guest'], function() {
     Route::get('/login/hotel', [AuthController::class, 'login'])->name('login.hotel');
     Route::get('/regiteragent', [AuthController::class, 'registeragent'])->name('agentregist');
     Route::get('/regitervendor', [AuthController::class, 'registvendor'])->name('vendorregist');
+    Route::get('/forgetpasssword/user', [AuthController::class, 'forgetpassword'])->name('forgetpassword.user');
     Route::post('/regiteragent/store', [AuthController::class, 'agentstore'])->name('agentregist.store');
     Route::post('/regitervendor/store', [AuthController::class, 'vendorstore'])->name('vendorregist.store');
     Route::post('/login', [AuthController::class, 'dologin']);
+    Route::post('/forgotpassword', [AuthController::class, 'sendEmail'])->name('forgotpassword');
+
 
 });
 
@@ -63,6 +66,7 @@ Route::group(['middleware' => ['auth', 'checkrole:1']], function() {
 
     Route::get('/admin/agent/active/{id}', [\App\Http\Controllers\Admin\Agent\AgentController::class, 'active'])->name('dashboard.agent.active');
     Route::get('/admin/agent/unactive/{id}', [\App\Http\Controllers\Admin\Agent\AgentController::class, 'unactive'])->name('dashboard.agent.unactive');
+    Route::post('/admin/agent/markup/{id}', [\App\Http\Controllers\Admin\Agent\AgentController::class, 'markup'])->name('dashboard.agent.markup');
 
     // Route::resource('/admin/agent', \App\Http\Controllers\Admin\Agent\AgentController::class);
 
@@ -105,6 +109,11 @@ Route::group(['middleware' => ['auth', 'checkrole:1']], function() {
     // report
     Route::get('/admin/report', [\App\Http\Controllers\Admin\Report\ReportController::class, 'index'])->name('dashboard.report');
 
+    //booking
+    Route::get('/admin/booking', [\App\Http\Controllers\Admin\Report\BookingController::class, 'index'])->name('dashboard.admin.booking');
+    Route::get('/admin/booking/confirmation/{id}', [\App\Http\Controllers\Admin\Report\BookingController::class, 'confirmation'])->name('admin.booking.confirmation');
+    
+
     // setting
     Route::get('/admin/setting', [\App\Http\Controllers\Admin\Setting\SettingController::class, 'index'])->name('dashboard.setting');
     Route::post('/admin/setting/store', [\App\Http\Controllers\Admin\Setting\SettingController::class, 'store'])->name('dashboard.setting.store');
@@ -144,6 +153,9 @@ Route::group(['middleware' => ['auth', 'checkrole:2']], function() {
     Route::post('/myprofile/update',[\App\Http\Controllers\Vendor\MyProfile\MyProfileController::class, 'update']);
     Route::post('/myprofile/slider/store',[\App\Http\Controllers\Vendor\MyProfile\MyProfileController::class, 'addbanner']);
     Route::get('/myprofile/slider/delete/{id}',[\App\Http\Controllers\Vendor\MyProfile\MyProfileController::class, 'destroybanner']);
+    
+    Route::get('/vendor-profile/changepassword',[\App\Http\Controllers\Vendor\MyProfile\MyProfileController::class, 'passwordchange']);
+    Route::post('/vendor-profile/updatepassword',[\App\Http\Controllers\Vendor\MyProfile\MyProfileController::class, 'updatepassword']);
 
     // room in hotel
     Route::get('/room/index',[\App\Http\Controllers\Vendor\Hotel\Room\IndexController::class, 'index'])->name('vendor.room');
@@ -248,4 +260,7 @@ Route::group(['middleware' => ['auth', 'checkrole:3']], function() {
     //notify-callback ipaymu
     Route::get('/paymentsuccess',[\App\Http\Controllers\Agent\Booking\BookingController::class, 'paymentsuccess'])->name('payment.success');
     Route::get('/notify',[\App\Http\Controllers\Agent\Booking\BookingController::class, 'notify'])->name('payment.notify');
+
+    //transfer bank
+    Route::post('/upbanktransfer',[\App\Http\Controllers\Agent\Booking\BookingController::class, 'upbanktransfer'])->name('payment.upbanktransfer');
 });

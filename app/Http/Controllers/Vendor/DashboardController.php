@@ -7,6 +7,7 @@ use App\Models\Booking;
 use App\Models\Vendor;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\RoomHotel;
 
 class DashboardController extends Controller
 {
@@ -19,18 +20,20 @@ class DashboardController extends Controller
         $iduser = auth()->user()->id;
         $vendor = Vendor::where('user_id',$iduser)->first();
         $totalincome = Booking::where('vendor_id',$vendor->id)->where('booking_status','paid')->sum('price');
-        $totalbooking = Booking::where('vendor_id',$vendor->id)->count();
+        $totalbooking = Booking::where('vendor_id',$vendor->id)->where('booking_status','paid')->count();
         $bookingsuccess = Booking::where('vendor_id',$vendor->id)->where('booking_status','paid')->count();
         $pendingpayment = Booking::where('vendor_id',$vendor->id)->where('booking_status','unpaid')->count();
         $booking = Booking::where('vendor_id',$vendor->id)->whereNotIn('booking_status', ['-', ''])->with('vendor','users')->get();
         $acyive = auth()->user()->is_active;
+        $roomhotel = Booking::where('vendor_id',$vendor->id)->where('booking_status','paid')->sum('night');
         if($acyive == 1){
             return inertia('Vendor/Index',[
                 'income'=>$totalincome,
                 'booking'=>$totalbooking,
                 'success'=>$bookingsuccess,
                 'pending'=>$pendingpayment,
-                'data'=>$booking
+                'data'=>$booking,
+                'totalroom' => $roomhotel
             ]);
         }else{
             return view('landingpage.pagenotfound.isactiveaccount');

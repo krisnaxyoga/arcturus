@@ -131,7 +131,7 @@ export default function PriceAgentRoom({ props, session, data }) {
                                                     </div>
                                                     <div className="col-lg-6">
                                                         <div className="mb-3">
-                                                            <label htmlFor="" className='fw-bold'>Bar decription</label>
+                                                            <label htmlFor="" className='fw-bold'>Bar description</label>
                                                             <input defaultValue={data[0].barroom.bardesc} onChange={(e) => setBarDesc(e.target.value)} type="text" className='form-control' />
                                                         </div>
                                                         <div className="mb-3">

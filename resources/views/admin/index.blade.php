@@ -7,8 +7,25 @@
           <!-- Content Row -->
           <div class="row">
 
+            <div class="col-xl-4 col-md-6 mb-4">
+                <div class="card border-left-warning shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                    transaction success</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{ number_format($totaltransaction, 0, ',', '.')}}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
             <!-- Earnings (Monthly) Card Example -->
-            <div class="col-xl-3 col-md-6 mb-4">
+            <div class="col-xl-2 col-md-6 mb-4">
                 <div class="card border-left-primary shadow h-100 py-2">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
@@ -26,7 +43,7 @@
             </div>
 
             <!-- Earnings (Monthly) Card Example -->
-            <div class="col-xl-3 col-md-6 mb-4">
+            <div class="col-xl-2 col-md-6 mb-4">
                 <div class="card border-left-success shadow h-100 py-2">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
@@ -44,7 +61,7 @@
             </div>
 
             <!-- Earnings (Monthly) Card Example -->
-            <div class="col-xl-3 col-md-6 mb-4">
+            <div class="col-xl-2 col-md-6 mb-4">
                 <div class="card border-left-info shadow h-100 py-2">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
@@ -67,17 +84,19 @@
             </div>
 
             <!-- Pending Requests Card Example -->
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-warning shadow h-100 py-2">
+            
+
+            <div class="col-xl-2 col-md-6 mb-4">
+                <div class="card border-left-secondary shadow h-100 py-2">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                    transaction success</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{ number_format($totaltransaction, 0, ',', '.')}}</div>
+                                <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">
+                                    total room night</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{$roomhotel}}</div>
                             </div>
                             <div class="col-auto">
-                                <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                <i class="fas fa-home fa-2x text-gray-300"></i>
                             </div>
                         </div>
                     </div>
@@ -87,6 +106,19 @@
 
         <div class="row">
             <div class="col-xl-8 col-lg-7">
+                @if (session()->has('message'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ session('message') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
+
+                @if (session()->has('error'))
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        {{ session('error') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
                 <div class="card shadow mb-4">
                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                         <h6 class="m-0 font-weight-bold text-primary">Vendor register</h6>
@@ -98,7 +130,7 @@
                                     <tr>
                                         <th>action</th>
                                         <th>status</th>
-                                        <th>Busisness Name</th>
+                                        {{-- <th>Busisness Name</th> --}}
                                         <th>Vendor Name</th>
                                         <th>Type Vendor</th>
                                         <th>Email</th>
@@ -107,7 +139,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($vendor as $item)
+                                    @foreach ($vendor as $key=>$item)
                                         <tr>
                                             <td>
                                                 @if($item->is_active == 1)
@@ -123,11 +155,28 @@
                                                     <span class="badge badge-danger">no active</span>
                                                 @endif
                                             </td>
-                                            <td>{{ $item->vendor_legal_name }}</td>
+                                            {{-- <td>{{ $item->vendor_legal_name }}</td> --}}
                                             <td>{{ $item->vendor_name}}</td>
                                             <td>
                                                 @if($item->type_vendor == 'hotel')
                                                     <span class="badge badge-secondary">HOTEL</span>
+                                                    <span class="badge badge-success">markup : Rp. {{number_format($item->system_markup ? $item->system_markup : '0', 0, ',', '.')}}</span>
+                                                    <button type="button" class="btn btn-datatable btn-icon btn-transparent-dark mr-2" onclick="showMarkupInput({{$key}})">
+                                                        <i data-feather="edit"></i>
+                                                    </button>
+                                                    <div id="markupInputContainer{{$key}}" style="display: none;">
+                                                        <form action="{{ route('dashboard.agent.markup',$item->id) }}" method="POST" enctype="multipart/form-data">
+                                                            @csrf
+                                                            @method('POST')
+                                                            <div class="mb-3">
+                                                                <label for="markupInput{{$key}}">Mark-up</label>
+                                                                <input type="text" id="markupInput{{$key}}" name="markup" value="{{$item->system_markup ? $item->system_markup : '0'}}" class="form-control">
+                                                            </div>
+                                                            <div>
+                                                                <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> save</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
                                                 @else
                                                 <span class="badge badge-warning">AGENT</span>
                                                 @endif
@@ -298,5 +347,15 @@ function number_format(number, decimals, dec_point, thousands_sep) {
     return s.join(dec);
 }
 
+</script>
+<script>
+    function showMarkupInput(key) {
+        var container = document.getElementById('markupInputContainer' + key);
+        if (container.style.display === 'none') {
+            container.style.display = 'block';
+        } else {
+            container.style.display = 'none';
+        }
+    }
 </script>
 @endsection

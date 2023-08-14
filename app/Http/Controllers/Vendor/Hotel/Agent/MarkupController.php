@@ -229,7 +229,7 @@ class MarkupController extends Controller
         $validator = Validator::make($request->all(), [
             'start' => 'required',
         ]);
-
+        
         if ($validator->fails()) {
             return redirect()
                 ->back()

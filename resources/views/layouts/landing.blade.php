@@ -18,7 +18,17 @@
 	<link rel="stylesheet" href="/landing/travel/css/jquery.timepicker.css">
 	<link rel="stylesheet" href="/landing/travel/css/flaticon.css">
 	<link rel="stylesheet" href="/landing/travel/css/style.css">
-    <link rel="icon" href="{{ $settings->logo_image ?? '/images/pms-sistem-1.png' }}">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+
+    @if(isset(Auth::user()->id) && Auth::user()->role_id == 2)
+    <link rel="icon" href="{{ $vendor->logo_img ?? '/images/pms-sistem-1.png' }}">
+     @else
+   <link rel="icon" href="{{ $settings->logo_image ?? '/images/pms-sistem-1.png' }}">
+    @endif
     <script src="/js/crypto.js"></script>
     <script>
         if ('serviceWorker' in navigator) {
@@ -37,7 +47,11 @@
 		<div class="container">
 			{{-- <a class="navbar-brand" href="index.html">Pacific<span>Travel Agency</span></a> --}}
             <a class="navbar-brand" href="/">
+                @if(isset(Auth::user()->id) && Auth::user()->role_id == 2)
+                <img style="width: 40px" src="{{ $vendor->logo_img ?? '/images/pms-sistem-1.png' }}" alt="Logo">
+                @else
                 <img style="width: 40px" src="{{ $settings->logo_image ?? '/images/pms-sistem-1.png' }}" alt="Logo">
+                @endif
                 {{-- <img style="width: 40px" src="{{ $settings->logo_image }}" alt="{{ $settings->logo_image }}"> --}}
             </a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
@@ -107,5 +121,8 @@
         <script src="/landing/travel/js/google-map.js"></script>
         <script src="/landing/travel/js/main.js"></script>
 
+        <script>
+            $('input[name="dates"]').daterangepicker();
+        </script>
     </body>
 </html>

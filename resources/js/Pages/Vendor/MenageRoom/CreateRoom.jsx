@@ -183,13 +183,13 @@ export default function Index({ session, props, attr,roomtype }) {
                                                         <div className="col-lg-2">
                                                             <div className="mb-3 mx-2">
                                                                 <label htmlFor="exampleFormControlInput1" className="form-label">Code</label>
-                                                                <input required onChange={(e) => setRagecode(e.target.value)} type="text" className="form-control" id="exampleFormControlInput1" placeholder="Rate Code" />
+                                                                <input required onChange={(e) => setRagecode(e.target.value)} type="text" className="form-control" id="exampleFormControlInput1" placeholder="Room Code" />
                                                             </div>
                                                         </div>
                                                         <div className="col-lg-4">
                                                             <div className="mb-3">
                                                                 <label htmlFor="exampleFormControlInput1" className="form-label">Room Type Description</label>
-                                                                <input required onChange={(e) => setRateDesc(e.target.value)} type="text" className="form-control" id="exampleFormControlInput1" placeholder="Rate Description" />
+                                                                <input required onChange={(e) => setRateDesc(e.target.value)} type="text" className="form-control" id="exampleFormControlInput1" placeholder="Room Description" />
                                                             </div>
                                                         </div>
                                                         <div className="col-lg-3">

@@ -19,8 +19,8 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
     const [ratecode, setRateCode] = useState('');
     const [ratedesc, setRateDesc] = useState('');
     const [minstay, setMinStay] = useState('');
-    const [beginsell, setBeginSell] = useState(bardata[0].begindate);
-    const [endsell, setEndSell] = useState(bardata[0].enddate);
+    const [beginsell, setBeginSell] = useState('');
+    const [endsell, setEndSell] = useState('');
     const [begindate, setBeginDate] = useState('');
     const [enddate, setEndDate] = useState('');
     const [cancelPolicy, setCancellationPolicy] = useState('');
@@ -242,7 +242,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
     }
     return (
         <>
-            <Layout>
+            <Layout page='/room/contract/index'>
                 <div className="container">
                     <div className="row">
                         <h1>Contract Rate</h1>
@@ -286,7 +286,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                     <div className="col-lg-4">
 
                                                                         <div className="mb-3">
-                                                                            <label htmlFor="" className='fw-bold'>Contract decription</label>
+                                                                            <label htmlFor="" className='fw-bold'>Contract description</label>
                                                                             <input defaultValue={contract.codedesc} onChange={(e) => setRateDesc(e.target.value)} type="text" className='form-control' />
                                                                         </div>
                                                                     </div>
@@ -306,13 +306,13 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                             <div className="col-lg-6">
                                                                                 <div className="mb-3">
                                                                                     <label htmlFor="" className='fw-bold'>Begin Sell date</label>
-                                                                                    <input readOnly defaultValue={bardata[0].begindate} onChange={(e) => setBeginSell(e.target.value)} type="date" className='form-control' />
+                                                                                    <input style={{backgroundColor: '#e3e6ec'}} defaultValue={contract.stayperiod_begin} onChange={(e) => setBeginSell(e.target.value)} type="date" className='form-control' />
                                                                                 </div>
                                                                             </div>
                                                                             <div className="col-lg-6">
                                                                                 <div className="mb-3">
                                                                                     <label htmlFor="" className='fw-bold'>End Sell date</label>
-                                                                                    <input readOnly defaultValue={bardata[0].enddate} onChange={(e) => setEndSell(e.target.value)} type="date" className='form-control' />
+                                                                                    <input style={{backgroundColor: '#e3e6ec'}} defaultValue={contract.stayperiod_end} onChange={(e) => setEndSell(e.target.value)} type="date" className='form-control' />
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -429,6 +429,13 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                             </label>
 
                                                                         </div>
+                                                                        <div className="mb-3">
+                                                                            <label className='text-warning' htmlFor="">Min Mark-up : {markup[0].markup_price}
+                                                                                <a href='#' className='btn btn-datatable btn-icon btn-transparent-dark mr-2' onClick={() => buttonSendValuemarkup()}>
+                                                                                    <i className='fa fa-edit'></i>
+                                                                                </a>
+                                                                            </label>
+                                                                        </div>
                                                                         {/* <div className="mb-3">
                                                                             <label htmlFor="">exclude</label>
                                                                             <select name="" id="" className='form-control' onChange={handleSelectExclude} multiple>
@@ -441,20 +448,6 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
 
                                                                         </div> */}
 
-                                                                    </div>
-                                                                </div>
-                                                                <div className="row">
-                                                                    <div className="col-lg-6">
-
-                                                                    </div>
-                                                                    <div className="col-lg-6">
-                                                                        <div className="mb-3">
-                                                                            <label className='text-warning' htmlFor="">Min Markup : {markup[0].markup_price}
-                                                                                <a href='#' className='btn btn-datatable btn-icon btn-transparent-dark mr-2' onClick={() => buttonSendValuemarkup()}>
-                                                                                    <i className='fa fa-edit'></i>
-                                                                                </a>
-                                                                            </label>
-                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </Tab>

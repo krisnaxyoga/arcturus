@@ -10,7 +10,7 @@ import Bookings from '../../Pages/Vendor/BookingHistory/Bookings';
 import { Link, usePage } from '@inertiajs/inertia-react';
 import { Inertia } from '@inertiajs/inertia';
 
-export default function Index({ props,income,booking,success,pending,data }) {
+export default function Index({ totalroom,income,booking,success,pending,data }) {
   const { url } = usePage();
   function formatRupiah(amount) {
       return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount);
@@ -45,7 +45,7 @@ export default function Index({ props,income,booking,success,pending,data }) {
               {/* <!-- Content Row --> */}
               <div className="row">
                 {/* <!-- Earnings (Monthly) Card Example --> */}
-                <div className="col-xl-3 col-md-6 mb-4">
+                <div className="col-xl-4 col-md-6 mb-4">
                   <div className="card border-left-primary shadow h-100 py-2">
                     <div className="card-body">
                       <div className="row no-gutters align-items-center">
@@ -62,7 +62,7 @@ export default function Index({ props,income,booking,success,pending,data }) {
                   </div>
                 </div>
                 {/* <!-- Earnings (Monthly) Card Example --> */}
-                <div className="col-xl-3 col-md-6 mb-4">
+                <div className="col-xl-2 col-md-6 mb-4">
                   <div className="card border-left-success shadow h-100 py-2">
                     <div className="card-body">
                       <div className="row no-gutters align-items-center">
@@ -79,12 +79,12 @@ export default function Index({ props,income,booking,success,pending,data }) {
                   </div>
                 </div>
                 {/* <!-- Earnings (Monthly) Card Example --> */}
-                <div className="col-xl-3 col-md-6 mb-4">
+                <div className="col-xl-2 col-md-6 mb-4">
                   <div className="card border-left-info shadow h-100 py-2">
                     <div className="card-body">
                       <div className="row no-gutters align-items-center">
                         <div className="col mr-2">
-                          <div className="text-xs font-weight-bold text-info text-uppercase mb-1">Payment success
+                          <div className="text-xs font-weight-bold text-info text-uppercase mb-1">Booking Paid
                           </div>
                           <div className="row no-gutters align-items-center">
                             <div className="col-auto">
@@ -93,7 +93,7 @@ export default function Index({ props,income,booking,success,pending,data }) {
                           </div>
                         </div>
                         <div className="col-auto">
-                          <i className="fas fa-home fa-2x text-gray-300"></i>
+                          <i className="fas fa-check fa-2x text-gray-300"></i>
                         </div>
                       </div>
                     </div>
@@ -101,17 +101,34 @@ export default function Index({ props,income,booking,success,pending,data }) {
                 </div>
 
                 {/* <!-- Pending Requests Card Example --> */}
-                <div className="col-xl-3 col-md-6 mb-4">
+                <div className="col-xl-2 col-md-6 mb-4">
                   <div className="card border-left-warning shadow h-100 py-2">
                     <div className="card-body">
                       <div className="row no-gutters align-items-center">
                         <div className="col mr-2">
                           <div className="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                            Pending payment</div>
+                            Booking Unpaid</div>
                           <div className="h5 mb-0 font-weight-bold text-gray-800">{pending}</div>
                         </div>
                         <div className="col-auto">
-                          <i className="fas fa-comments fa-2x text-gray-300"></i>
+                          <i className="fas fa-clock fa-2x text-gray-300"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="col-xl-2 col-md-6 mb-4">
+                  <div className="card border-left-secondary shadow h-100 py-2">
+                    <div className="card-body">
+                      <div className="row no-gutters align-items-center">
+                        <div className="col mr-2">
+                          <div className="text-xs font-weight-bold text-secondary text-uppercase mb-1">
+                            Total Room Night</div>
+                          <div className="h5 mb-0 font-weight-bold text-gray-800">{totalroom}</div>
+                        </div>
+                        <div className="col-auto">
+                          <i className="fas fa-home fa-2x text-gray-300"></i>
                         </div>
                       </div>
                     </div>
@@ -134,7 +151,7 @@ export default function Index({ props,income,booking,success,pending,data }) {
                                         <th>Booking Date</th>
                                         <th>Checkin Date</th>
                                         <th>Checkout Date</th>
-                                        <th>Durations(nights)</th>
+                                        <th>Nights</th>
                                         <th>Total Room</th>
                                         <th>Total Guest</th>
                                         <th>Guest Name</th>

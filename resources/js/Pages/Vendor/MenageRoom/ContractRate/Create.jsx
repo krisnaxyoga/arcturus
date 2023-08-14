@@ -20,8 +20,8 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
     const [ratecode, setRateCode] = useState('');
     const [ratedesc, setRateDesc] = useState('');
     const [minstay, setMinStay] = useState('');
-    const [beginsell, setBeginSell] = useState(bardata[0].begindate);
-    const [endsell, setEndSell] = useState(bardata[0].enddate);
+    const [beginsell, setBeginSell] = useState('');
+    const [endsell, setEndSell] = useState('');
     const [begindate, setBeginDate] = useState('');
     const [enddate, setEndDate] = useState('');
     const [cancelPolicy, setCancellationPolicy] = useState('');
@@ -171,8 +171,8 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
         formData.append('codedesc', ratedesc);
         formData.append('min_stay', minstay);
 
-        formData.append('stayperiod_begin', beginsell);
-        formData.append('stayperiod_end', endsell);
+        formData.append('stayperiod_begin', beginsell ? beginsell : bardata[0].begindate);
+        formData.append('stayperiod_end', endsell ? endsell : bardata[0].enddate);
         formData.append('booking_begin', begindate);
         formData.append('booking_end', enddate);
 
@@ -196,13 +196,13 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
     }
     return (
         <>
-            <Layout>
+            <Layout page='/room/contract/index'>
                 <div className="container">
                     <div className="row">
                         <h1>Contract Rate</h1>
                         {(!data || Object.keys(data).length === 0) || (!markup || Object.keys(markup).length === 0) || (!bardata || Object.keys(bardata).length === 0) ? (
                             <div className="alert alert-danger border-0 shadow-sm rounded-3">
-                                <p>Please check again the information bar and your mark up price is it complete?</p>
+                                <p>Please check again the information bar and your profile hotel is it complete?</p>
                             </div>
                         ) : (
                             <>
@@ -229,20 +229,20 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                     <div className="col-lg-4">
                                                                         <div className="mb-3">
                                                                             <label htmlFor="" className='fw-bold'>Contract Rate Code</label>
-                                                                            <input onChange={(e) => setRateCode(e.target.value)} type="text" className='form-control' />
+                                                                            <input onChange={(e) => setRateCode(e.target.value)} type="text" className='form-control' required/>
                                                                         </div>
                                                                     </div>
                                                                     <div className="col-lg-4">
 
                                                                         <div className="mb-3">
-                                                                            <label htmlFor="" className='fw-bold'>Contract decription</label>
-                                                                            <input onChange={(e) => setRateDesc(e.target.value)} type="text" className='form-control' />
+                                                                            <label htmlFor="" className='fw-bold'>Contract description</label>
+                                                                            <input onChange={(e) => setRateDesc(e.target.value)} type="text" className='form-control' required/>
                                                                         </div>
                                                                     </div>
                                                                     <div className="col-lg-4">
                                                                         <div className="mb-3">
                                                                             <label htmlFor="" className='fw-bold'>Minimum stay</label>
-                                                                            <input onChange={(e) => setMinStay(e.target.value)} type="number" className='form-control' />
+                                                                            <input onChange={(e) => setMinStay(e.target.value)} type="number" className='form-control' required/>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -255,13 +255,13 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                             <div className="col-lg-6">
                                                                                 <div className="mb-3">
                                                                                     <label htmlFor="" className='fw-bold'>Begin Sell date</label>
-                                                                                    <input readOnly defaultValue={bardata[0] .begindate} onChange={(e) => setBeginSell(e.target.value)} type="date" className='form-control' />
+                                                                                    <input style={{backgroundColor: '#e3e6ec'}} defaultValue={bardata[0] .begindate} onChange={(e) => setBeginSell(e.target.value)} type="date" className='form-control' />
                                                                                 </div>
                                                                             </div>
                                                                             <div className="col-lg-6">
                                                                                 <div className="mb-3">
                                                                                     <label htmlFor="" className='fw-bold'>End Sell date</label>
-                                                                                    <input readOnly defaultValue={bardata[0].enddate} onChange={(e) => setEndSell(e.target.value)} type="date" className='form-control' />
+                                                                                    <input style={{backgroundColor: '#e3e6ec'}} defaultValue={bardata[0].enddate} onChange={(e) => setEndSell(e.target.value)} type="date" className='form-control' />
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -270,13 +270,13 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                         <hr />
                                                                         <div className="row">
                                                                             <div className="col-lg-6">
-                                                                                <div className="mb-3">
+                                                                                <div className="mt-4">
                                                                                     <label htmlFor="" className='fw-bold'>Start date</label>
                                                                                     <input value={begindate} onChange={(e) => setBeginDate(e.target.value)} type="date" className='form-control' />
                                                                                 </div>
                                                                             </div>
                                                                             <div className="col-lg-6">
-                                                                                <div className="mb-3">
+                                                                                <div className="mt-4">
                                                                                     <label htmlFor="" className='fw-bold'>End date</label>
                                                                                     <input value={enddate} onChange={(e) => setEndDate(e.target.value)} type="date" className='form-control' />
                                                                                 </div>
@@ -294,7 +294,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                             </select>
                                                                             <p className='mt-2'>Selected: <span className='text-secondary'>{selectedDistribute.join(', ')}</span></p>
                                                                         </div>
-                                                                        <div className="mb-3">
+                                                                        {/* <div className="mb-3">
                                                                             <label htmlFor="">Exclude</label>
                                                                             <select name="" id="" className='form-control' onChange={handleSelectExclude} multiple>
 
@@ -304,11 +304,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                             </select>
                                                                             <p className='mt-2'>Selected: <span className='text-secondary'>{selectedExclude.join(', ')}</span></p>
 
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div className="row">
-                                                                    <div className="col-lg-6">
+                                                                        </div> */}
                                                                         <label htmlFor="pickdays" className='fw-bold'>valid day</label>
                                                                         <label className="form-label mx-5">
                                                                                 <input
@@ -320,7 +316,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                                 />
                                                                                 All
                                                                             </label>
-                                                                        <div className="mb-3">
+                                                                        <div className="mb-1">
                                                                             <label className="form-label mx-3">
                                                                                 <input
                                                                                     type="checkbox"
@@ -393,14 +389,13 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                             </label>
 
                                                                         </div>
-                                                                    </div>
-                                                                    <div className="col-lg-6">
                                                                         <div className="mb-3">
-                                                                            <label htmlFor="">Min Markup</label>
+                                                                            <label htmlFor="">Min Mark-up</label>
                                                                             <input  onChange={(e) => setMinMarkup(e.target.value)} type="text" defaultValue={markup.markup_price} className='form-control'/>
                                                                         </div>
                                                                     </div>
                                                                 </div>
+                                                                
                                                             </Tab>
                                                             <Tab eventKey="profile" title="Policy">
                                                                 <div className="row">

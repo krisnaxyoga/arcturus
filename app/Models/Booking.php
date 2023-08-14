@@ -21,4 +21,8 @@ class Booking extends Model
         return $this->hasMany(HotelRoomBooking::class);
     }
 
+    public function paymentgetwaytransaction() {
+        return $this->hasMany(PaymentGetwayTransaction::class);
+    }
+
 }

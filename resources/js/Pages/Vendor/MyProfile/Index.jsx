@@ -27,12 +27,14 @@ export default function Index({ session,data,country,markup,banner }) {
  const [city,setCity] = useState('');
  const [state,setState] = useState('');
 
- const [serviceValue, setServiceValue] = useState('');
  const [taxValue, setTaxValue] = useState('');
  const [bankname, setBankName] = useState('');
  const [bankaccount, setBankAccount] = useState('');
+ const [bankaddress,setBankAddress] = useState('');
+ const [accountnumber, setAccountNumber] = useState('');
  const [swifcode, setSwifCode] = useState('');
 
+ const[emailreservation, setEmailReservation] = useState('');
 
  const [imgbanner,setBanner] = useState(null);
  const [title,setTitle] = useState('');
@@ -63,11 +65,13 @@ export default function Index({ session,data,country,markup,banner }) {
         formData.append('city', city ? city : data[0].city);
         formData.append('state', state ? state : data[0].state);
 
-        formData.append('service', serviceValue ? serviceValue : markup.service);
         formData.append('tax', taxValue ? taxValue : markup.tax);
         formData.append('bank', bankname ? bankname : data[0].bank_name);
         formData.append('bankaccount', bankaccount ? bankaccount : data[0].bank_account);
         formData.append('swifcode', swifcode ? swifcode : data[0].swif_code);
+        formData.append('bankaddress', bankaddress ? bankaddress : data[0].bank_address);
+        formData.append('accountnumber', accountnumber ? accountnumber : data[0].account_number);
+        formData.append('email_reservation',emailreservation ? emailreservation : data[0].email_reservation);
 
         Inertia.post('/myprofile/update', formData, {
             onSuccess: () => {
@@ -131,7 +135,13 @@ export default function Index({ session,data,country,markup,banner }) {
                                                     <span className="input-group-text rounded-0" id="basic-addon1"><i className="fa fa-envelope" aria-hidden="true"></i></span>
                                                         <input defaultValue={data[0].users.email} onChange={(e)=>setEmail(e.target.value)} type="email" inputMode="email" className="form-control" placeholder="E-mail" aria-label="email" aria-describedby="basic-addon1"/>
                                                     </div>
+                                                    <label for="Email" className="form-label">Email Reservation</label>
+                                                <div className="input-group mb-3">
+                                                <span className="input-group-text rounded-0" id="basic-addon1"><i className="fa fa-envelope" aria-hidden="true"></i></span>
+                                                    <input defaultValue={data[0].email_reservation} onChange={(e)=>setEmailReservation(e.target.value)} type="email" inputMode="email" className="form-control" placeholder="E-mail" aria-label="email" aria-describedby="basic-addon1"/>
                                                 </div>
+                                                </div>
+                                                
 
                                                     <div className="d-flex">
                                                         <div className='mr-2'>
@@ -150,10 +160,10 @@ export default function Index({ session,data,country,markup,banner }) {
                                                         </div>
                                                     </div>
                                                     <div>
-                                                        <label for="Lastname" className="form-label">Phone Number</label>
+                                                        <label for="Lastname" className="form-label">Phone Number <span className='text-danger'>*</span></label>
                                                         <div className="input-group mb-3">
                                                             <span className="input-group-text rounded-0" id="basic-addon1"><i className='fa fa-phone'></i></span>
-                                                            <input defaultValue={data[0].phone} type="text" onChange={(e)=>setPhone(e.target.value)} className="form-control" placeholder="Phone Number" aria-label="Username" aria-describedby="basic-addon1"/>
+                                                            <input required defaultValue={data[0].phone} type="text" onChange={(e)=>setPhone(e.target.value)} className="form-control" placeholder="Phone Number" aria-label="Username" aria-describedby="basic-addon1"/>
                                                         </div>
                                                     </div>
                                                     {/* <div>
@@ -184,31 +194,32 @@ export default function Index({ session,data,country,markup,banner }) {
                                                         <label for="Lastname" className="form-label">Address Line 2</label>
                                                         <div className="input-group mb-3">
                                                         <span className="input-group-text rounded-0" id="basic-addon1"><i className="fa fa-location-arrow" aria-hidden="true"></i></span>
-                                                            <input onChange={(e)=>setAddress2(e.target.value)} defaultValue={data && data[0].address_line2 ? data[0].address_line2 : ''} type="text" className="form-control" placeholder="Address Line 2" aria-label="busisnessname" aria-describedby="basic-addon1"/>
+                                                            <input onChange={(e)=>setAddress2(e.target.value)} defaultValue={data && data[0].address_line2 == null ? data[0].address_line2 : ''} type="text" className="form-control" placeholder="Address Line 2" aria-label="busisnessname" aria-describedby="basic-addon1"/>
                                                         </div>
                                                     </div>
                                                     <div>
-                                                        <label for="Lastname" className="form-label">City <span className='text-danger'>*</span></label>
+                                                        <label for="Lastname" className="form-label">City </label>
                                                         <div className="input-group mb-3">
                                                         <span className="input-group-text rounded-0" id="basic-addon1"><i className='fa fa-street-view'></i></span>
-                                                            <input readOnly onChange={(e)=>setCity(e.target.value)} defaultValue={data[0].city} type="text" className="form-control" placeholder="City" aria-label="busisnessname" aria-describedby="basic-addon1"/>
-                                                            <p style={{ fontSize:'11px' }} className='text-danger'>if you want to change country, you must send an email to admin@arcturus.my.id</p>
+                                                            <input onChange={(e)=>setCity(e.target.value)} defaultValue={data[0].city} type="text" className="form-control" placeholder="City" aria-label="busisnessname" aria-describedby="basic-addon1"/>
+                                                            {/* <p style={{ fontSize:'11px' }} className='text-danger'>admin@arcturus.my.id</p> */}
 
                                                         </div>
                                                     </div>
                                                     <div>
-                                                        <label for="Lastname" className="form-label">State <span className='text-danger'>*</span></label>
+                                                        <label for="Lastname" className="form-label">State </label>
                                                         <div className="input-group mb-3">
                                                         <span className="input-group-text rounded-0" id="basic-addon1"><i className='fa fa-map-signs'></i></span>
-                                                            <input readOnly onChange={(e)=>setState(e.target.value)} defaultValue={data[0].state} type="text" className="form-control" placeholder="State" aria-label="busisnessname" aria-describedby="basic-addon1"/>
-                                                            <p style={{ fontSize:'11px' }} className='text-danger'>if you want to change country, you must send an email to admin@arcturus.my.id</p>
+                                                            <input onChange={(e)=>setState(e.target.value)} defaultValue={data[0].state} type="text" className="form-control" placeholder="State" aria-label="busisnessname" aria-describedby="basic-addon1"/>
+                                                            {/* <p style={{ fontSize:'11px' }} className='text-danger'>if you want to change country, you must send an email to admin@arcturus.my.id</p> */}
 
                                                         </div>
                                                     </div>
                                                     <div className='mb-3'>
                                                         <label for="Lastname" className="form-label">Country <span className='text-danger'>*</span></label>
-                                                        <input type="text" readOnly value={data[0].country} className='form-control'/>
-                                                            <p style={{ fontSize:'11px' }} className='text-danger'>if you want to change country, you must send an email to admin@arcturus.my.id</p>
+                                                        <input readOnly type="text" value={data[0].country} className='form-control'/>
+                                                        <p style={{ fontSize:'11px' }} className='text-danger'>admin@arcturus.my.id</p>
+                                                            {/* <p style={{ fontSize:'11px' }} className='text-danger'>if you want to change country, you must send an email to admin@arcturus.my.id</p> */}
 
                                                         {/* <select required onChange={(e)=>setCountry(e.target.value)} className="form-control" aria-label="Default select example">
                                                             {Object.keys(country).map(key => (
@@ -220,7 +231,7 @@ export default function Index({ session,data,country,markup,banner }) {
                                                         <div className="row">
                                                             <div className="col-lg-12">
                                                                 <div htmlFor="" className='text-info d-flex'><p>* all rates are inclusive of </p>
-                                                                    <input style={{width: '3rem'}} defaultValue={markup && markup.tax} type="text" className='form-control' placeholder='...%' onChange={(e)=>setTaxValue(e.target.value)} /> <span className='ml-2 text-warning'>% </span>
+                                                                    <input required style={{width: '3rem'}} defaultValue={markup && markup.tax} type="text" className='form-control' placeholder='...%' onChange={(e)=>setTaxValue(e.target.value)} /> <span className='ml-2 text-warning'>% </span>
                                                             <p> goverment tax & service charge</p></div>
 
                                                             </div>
@@ -254,11 +265,18 @@ export default function Index({ session,data,country,markup,banner }) {
                                 <Tab eventKey="credit" title="Bank account">
                                         <div className="card mb-4">
                                             <div className="card-header">
-                                                Bank Account
+                                                <h2>Bank Account</h2>
                                             </div>
                                             <div className="card-body">
                                                 <form onSubmit={storePost}>
                                                     <div className="row">
+
+                                                        <div className="col-lg-4">
+                                                            <div className="mb-3">
+                                                                <label htmlFor="">Account Name</label>
+                                                                <input defaultValue={data[0].bank_account} type="text" className='form-control' onChange={(e) => setBankAccount(e.target.value)}/>
+                                                            </div>
+                                                        </div>
                                                         <div className="col-lg-4">
                                                             <div className="mb-3">
                                                                 <label htmlFor="">Bank Name</label>
@@ -267,8 +285,14 @@ export default function Index({ session,data,country,markup,banner }) {
                                                         </div>
                                                         <div className="col-lg-4">
                                                             <div className="mb-3">
-                                                                <label htmlFor="">Bank account</label>
-                                                                <input defaultValue={data[0].bank_account} type="text" className='form-control' onChange={(e) => setBankAccount(e.target.value)}/>
+                                                                <label htmlFor="">Account Number</label>
+                                                                <input defaultValue={data[0].account_number} type="text" className='form-control' onChange={(e) => setAccountNumber(e.target.value)}/>
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-lg-4">
+                                                            <div className="mb-3">
+                                                                <label htmlFor="">Bank Address</label>
+                                                                <input defaultValue={data[0].bank_address} type="text" className='form-control' onChange={(e) => setBankAddress(e.target.value)}/>
                                                             </div>
                                                         </div>
                                                         <div className="col-lg-4">

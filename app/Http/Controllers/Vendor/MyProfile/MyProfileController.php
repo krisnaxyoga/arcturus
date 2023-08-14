@@ -9,6 +9,9 @@ use App\Models\User;
 use App\Models\AgentMarkupSetup;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Slider;
+
+use Illuminate\Support\Facades\Hash;
+
 class MyProfileController extends Controller
 {
     /**
@@ -82,6 +85,9 @@ class MyProfileController extends Controller
             $member->bank_name = $request->bank;
             $member->bank_account = $request->bankaccount;
             $member->swif_code = $request->swifcode;
+            $member->bank_address = $request->bankaddress;
+            $member->account_number = $request->accountnumber;
+            $member->email_reservation = $request->email_reservation;
             // $member->email = $request->email;
             $member->save();
 
@@ -161,5 +167,35 @@ class MyProfileController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function passwordchange()
+    {
+        $iduser = auth()->user()->id;
+        $data = Vendor::with('users')->where('user_id',$iduser)->get();
+
+        return inertia('Vendor/MyProfile/ChangePassword',[
+            'data' => $data
+        ]);
+    }
+
+    public function updatepassword(Request $request){
+        $iduser = auth()->user()->id;
+        $validator = Validator::make($request->all(), [
+            'password' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator->errors())
+                ->withInput($request->all());
+        } else {
+                $data = User::find($iduser);
+                $data->password = Hash::make($request->password);
+                $data->update();
+
+        return redirect()->back()->with('success', 'Password Change');
+        }
+
     }
 }

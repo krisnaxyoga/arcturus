@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Vendor;
 use App\Models\Booking;
+use App\Models\ContractRate;
+use App\Models\HotelRoomBooking;
 
 class BookingHistoryController extends Controller
 {
@@ -17,6 +19,8 @@ class BookingHistoryController extends Controller
         $userid = auth()->user()->id;
         $vendor = Vendor::where('user_id',$userid)->first();
         $data = Booking::where('vendor_id',$vendor->id)->whereNotIn('booking_status', ['-', ''])->with('vendor')->with('users')->get();
+        
+
         return inertia('Vendor/BookingHistory/Index',[
             'data'=>$data,
         ]);
@@ -44,8 +48,15 @@ class BookingHistoryController extends Controller
     public function show(string $id)
     {
         $data = Booking::where('id',$id)->whereNotIn('booking_status', ['-', ''])->with('vendor')->with('users')->first();
+        $hotelroombooking = HotelRoomBooking::where('booking_id',$id)->with('room')->get();
+        $cont_id = HotelRoomBooking::where('booking_id',$id)->first();
+        $conttract = ContractRate::where('id',$cont_id->contract_id)->first();
+
+
         return inertia('Vendor/BookingHistory/Detail',[
             'data'=>$data,
+            'roombooking'=>$hotelroombooking,
+            'contract' => $conttract,
         ]);
     }
 

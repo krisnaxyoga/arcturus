@@ -40,22 +40,22 @@
                 <div class="col-lg-12">
                     <form id="bookingForm" enctype="multipart/form-data">
                         @csrf
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h3 class="text-center">AVAILABLE ROOM</h3>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="search-property-1">
+                        <!--<div class="row">-->
+                        <!--    <div class="col-lg-12">-->
+                        <!--        <div class="card">-->
+                        <!--            <div class="card-body">-->
+                        <!--                <h3 class="text-center">ROOM</h3>-->
+                        <!--            </div>-->
+                        <!--        </div>-->
+                        <!--    </div>-->
+                        <!--</div>-->
+                        <div class="search-property-1" style="border-top: 1px solid rgba(0, 0, 0, 0.1);">
                             <div class="row no-gutters">
                                 <div class="col-md d-flex">
                                     <div class="form-group p-4">
                                         <label for="#">Check-in</label>
                                         <div class="form-field">
-                                            <input type="date" id="checkin" name="checkin" class="form-control checkindate" placeholder="Check In Date" required>
+                                            <input value="{{ $datareq['checkin'] }}" onchange="checknight()" type="date" id="checkin" name="checkin" class="form-control checkindate" placeholder="Check In Date" required>
                                         </div>
                                     </div>
                                 </div>
@@ -63,7 +63,7 @@
                                     <div class="form-group p-4">
                                         <label for="#">Check-out</label>
                                         <div class="form-field">
-                                            <input onchange="night()" id="checkout" type="date" name="checkout" class="form-control checkoutdate" placeholder="Check Out Date" required>
+                                            <input value="{{ $datareq['checkout'] }}" onchange="checknight()" id="checkout" type="date" name="checkout" class="form-control checkoutdate" placeholder="Check Out Date" required>
                                         </div>
                                     </div>
                                 </div>
@@ -74,10 +74,10 @@
                                             <div class="select-wrap">
                                                 <div class="icon"><span class="fa fa-chevron-down"></span></div>
                                                 <select name="person" id="person" class="form-control" required>
-                                                    <option value="1">1</option>
-                                                    <option value="2">2</option>
-                                                    <option value="3">3</option>
-                                                    <option value="4">4</option>
+                                                    <option  @if (($datareq['person'] ?? '') == 1) selected @endif value="1">1</option>
+                                                    <option @if (($datareq['person'] ?? '') == 2) selected @endif value="2">2</option>
+                                                    <option @if (($datareq['person'] ?? '') == 3) selected @endif value="3">3</option>
+                                                    <option @if (($datareq['person'] ?? '') == 4) selected @endif value="4">4</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -104,15 +104,21 @@
                                         </div>
                                         <div class="col-md-8">
                                             <div class="card-body">
-                                                <h3 class="card-title"><a href="#">{{$item->room->title}}</a></h3>
-                                                <span class="price">Rp. {{ number_format($item->price, 0, ',', '.')}}/{{$item->contractrate->min_stay}} night</span>
+                                                <h3 class="card-title"><a href="#">{{$item->room->ratedesc}}</a></h3>
+                                                <span class="price">Rp. {{ number_format(($item->recom_price + $item->contractrate->vendors->system_markup + $surcharprice), 0, ',', '.')}}</span>
+                                                
                                                 <p class="card-text"><small class="text-body-secondary"></small></p>
-                                                <select class="form-control room-quantity" name="room_quantity" style="width:200px" onchange="calculateTotal()">
-                                                    <option data-price="0" value="0">0</option>
-                                                    @for ($i = 1; $i <= $item->room->room_allow; $i++)
-                                                        <option data-contprice={{$item->id}} data-contractid={{$item->contract_id}} data-roomid={{$item->room->id}} data-price="{{($i * $item->price) }}" value="{{$i}}">{{$i}} room (Rp. {{ number_format(($i * $item->price), 0, ',', '.')}})</option>
-                                                    @endfor
-                                                </select>
+                                                @if($item->room->room_allow <= 0 || $blackoutVendorIds->contains($item->contractrate->vendors->id))
+                                                <span class="badge badge-danger">Sold</span>
+                                                @else
+                                                    <select class="form-control room-quantity" name="room_quantity" style="width:200px" onchange="calculateTotal()">
+                                                        <option data-price="0" value="0">0</option>
+                                                        @for ($i = 1; $i <= $item->room->room_allow; $i++)
+                                                            <option data-contprice={{$item->id}} data-contractid={{$item->contract_id}} data-roomid={{$item->room->id}} data-price="{{($i * ($item->recom_price + $item->contractrate->vendors->system_markup + $surcharprice)) }}" value="{{$i}}">{{$i}} @if($i == 1) room @else rooms @endif </option>
+                                                        @endfor
+                                                    </select>
+                                                @endif
+                                                
                                                 <p>Facilities :  @foreach ($item->room->attribute as $facilities)
                                                     {{ $facilities }},
                                                     @endforeach</p>
@@ -140,7 +146,6 @@
                                                     <div>
                                                         <p>Total Night: <span id="totalNight">0</span></p>
                                                         <input type="text" name="totalnight" value="" hidden>
-
                                                     </div>
                                                 </div>
                                             </div>
@@ -163,7 +168,7 @@
 
 
 
-    <section class="ftco-intro ftco-section ftco-no-pt">
+    {{-- <section class="ftco-intro ftco-section ftco-no-pt">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-12 text-center">
@@ -176,10 +181,11 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
     {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"></script> --}}
 
     <script>
+        night()
         //vanilla javascript
 
         // Fungsi enkripsi AES
@@ -207,6 +213,55 @@
             var decryptedData = decryptData(encryptedData, key);
             return decryptedData;
         }
+        function checknight(){
+            var checkinDate = new Date(document.getElementById('checkin').value);
+            var checkoutDate = new Date(document.getElementById('checkout').value);
+
+            var totalPriceElements = document.getElementById('totalPrice');
+
+            var timeDiff = Math.abs(checkoutDate.getTime() - checkinDate.getTime());
+            var permalam = Math.ceil(timeDiff / (1000 * 3600 * 24));
+            if (isNaN(permalam) || permalam === null) {
+                permalam = 0;
+            }
+            var totalNightElement = document.getElementById('totalNight');
+            totalNightElement.textContent = permalam;
+
+            var totalNightInput = document.querySelector('input[name="totalnight"]');
+            totalNightInput.value = permalam.toLocaleString();
+
+            var totalPrice = document.querySelector('input[name="totalprice"]');
+            console.log(totalPrice.value, ">>>total price value");
+            var cleanedPrice = totalPrice.value.replace(/,/g, '');
+
+            // Cek apakah cleanedPrice adalah angka sebelum melakukan perhitungan
+            if (!isNaN(parseInt(cleanedPrice))) {
+                var priceintext = parseInt(cleanedPrice) * parseInt(permalam);
+                console.log(parseInt(cleanedPrice), ">>>total price inte");
+                totalPriceElements.textContent = priceintext.toLocaleString();
+            } else {
+                // Jika cleanedPrice adalah NaN, set priceintext menjadi 0
+                var priceintext = 0;
+                totalPriceElements.textContent = priceintext.toLocaleString();
+            }
+            
+
+            var person = $('#person').val();
+
+            // Ubah format tanggal menjadi YYYY-MM-DD
+            var formattedCheckin = checkinDate.toISOString().slice(0, 10);
+            var formattedCheckout = checkoutDate.toISOString().slice(0, 10);
+
+            // Bentuk URL dengan parameter yang diinginkan
+            var contractId = '{{ $data[0]->contract_id }}'; // Ganti dengan cara Anda mendapatkan contract_id
+            var url = '/homepage/hotel/' + contractId +
+            '?checkin=' + formattedCheckin +
+            '&checkout=' + formattedCheckout +
+            '&person=' + person;
+
+            // Lakukan pengalihan ke halaman yang diinginkan
+            window.location.href = url;
+        }
 
         function night(){
             var checkinDate = new Date(document.getElementById('checkin').value);
@@ -216,23 +271,30 @@
 
             var timeDiff = Math.abs(checkoutDate.getTime() - checkinDate.getTime());
             var permalam = Math.ceil(timeDiff / (1000 * 3600 * 24));
-
-
+            if (isNaN(permalam) || permalam === null) {
+                permalam = 0;
+            }
             var totalNightElement = document.getElementById('totalNight');
             totalNightElement.textContent = permalam;
 
             var totalNightInput = document.querySelector('input[name="totalnight"]');
             totalNightInput.value = permalam.toLocaleString();
 
-
             var totalPrice = document.querySelector('input[name="totalprice"]');
-            console.log(totalPrice.value,">>>>total price value");
+            console.log(totalPrice.value, ">>>total price value");
             var cleanedPrice = totalPrice.value.replace(/,/g, '');
 
-            var priceintext = parseInt(cleanedPrice) * parseInt(permalam);
-            console.log(parseInt(cleanedPrice),">>>>total price inte");
-            totalPriceElements.textContent = priceintext.toLocaleString();
-
+            // Cek apakah cleanedPrice adalah angka sebelum melakukan perhitungan
+            if (!isNaN(parseInt(cleanedPrice))) {
+                var priceintext = parseInt(cleanedPrice) * parseInt(permalam);
+                console.log(parseInt(cleanedPrice), ">>>total price inte");
+                totalPriceElements.textContent = priceintext.toLocaleString();
+            } else {
+                // Jika cleanedPrice adalah NaN, set priceintext menjadi 0
+                var priceintext = 0;
+                totalPriceElements.textContent = priceintext.toLocaleString();
+            }
+            
         }
         function calculateTotal() {
             var roomQuantities = document.getElementsByClassName('room-quantity');
@@ -288,77 +350,78 @@
 
         //function untuk tanggal checkin
 
-        function setCheckInDateRestriction() {
-            var currentDate = new Date();
+        // function setCheckInDateRestriction() {
+        //     var currentDate = new Date();
 
-            // Format tanggal sebagai "YYYY-MM-DD"
-            var year = currentDate.getFullYear();
-            var month = String(currentDate.getMonth() + 1).padStart(2, '0');
-            var day = String(currentDate.getDate()).padStart(2, '0');
-            var formattedDate = year + '-' + month + '-' + day;
+        //     // Format tanggal sebagai "YYYY-MM-DD"
+        //     var year = currentDate.getFullYear();
+        //     var month = String(currentDate.getMonth() + 1).padStart(2, '0');
+        //     var day = String(currentDate.getDate()).padStart(2, '0');
+        //     var formattedDate = year + '-' + month + '-' + day;
 
-            var checkinInput = document.querySelector('.checkindate');
-            checkinInput.value = formattedDate;
-            checkinInput.min = formattedDate;
+        //     var checkinInput = document.querySelector('.checkindate');
+        //     checkinInput.value = formattedDate;
+        //     checkinInput.min = formattedDate;
 
-            var checkoutInput = document.querySelector('.checkoutdate');
+        //     var checkoutInput = document.querySelector('.checkoutdate');
 
-            checkinInput.addEventListener('input', function() {
-                var checkinDate = new Date(this.value);
-                var checkoutDate = new Date(checkoutInput.value);
+        //     checkinInput.addEventListener('input', function() {
+        //         var checkinDate = new Date(this.value);
+        //         var checkoutDate = new Date(checkoutInput.value);
 
-                if (checkinDate > checkoutDate) {
-                    checkoutInput.value = '';
-                }
+        //         if (checkinDate > checkoutDate) {
+        //             checkoutInput.value = '';
+        //         }
 
-                checkoutInput.min = this.value;
-                highlightDateRange();
-            });
+        //         checkoutInput.min = this.value;
+        //         highlightDateRange();
+        //     });
 
-            checkoutInput.addEventListener('input', function() {
-                var checkinDate = new Date(checkinInput.value);
-                var checkoutDate = new Date(this.value);
+        //     checkoutInput.addEventListener('input', function() {
+        //         var checkinDate = new Date(checkinInput.value);
+        //         var checkoutDate = new Date(this.value);
 
-                if (checkinDate > checkoutDate) {
-                    checkoutInput.value = checkinInput.value;
-                }
+        //         if (checkinDate > checkoutDate) {
+        //             checkoutInput.value = checkinInput.value;
+        //         }
 
-                highlightDateRange();
-            });
-            }
+        //         highlightDateRange();
+        //     });
+        //     }
 
-            function highlightDateRange() {
-            var checkinInput = document.querySelector('.checkindate');
-            var checkoutInput = document.querySelector('.checkoutdate');
-            var checkinDate = new Date(checkinInput.value);
-            var checkoutDate = new Date(checkoutInput.value);
+        //     function highlightDateRange() {
+        //     var checkinInput = document.querySelector('.checkindate');
+        //     var checkoutInput = document.querySelector('.checkoutdate');
+        //     var checkinDate = new Date(checkinInput.value);
+        //     var checkoutDate = new Date(checkoutInput.value);
 
-            var inputs = document.querySelectorAll('input[type="date"]');
-            inputs.forEach(function(input) {
-                input.classList.remove('highlight');
-            });
+        //     var inputs = document.querySelectorAll('input[type="date"]');
+        //     inputs.forEach(function(input) {
+        //         input.classList.remove('highlight');
+        //     });
 
-            if (checkinDate && checkoutDate && checkoutDate >= checkinDate) {
-                var currentDate = new Date(checkinDate);
-                while (currentDate <= checkoutDate) {
-                    var dateString = currentDate.toISOString().split('T')[0];
-                    var input = document.querySelector('input[value="' + dateString + '"]');
-                    if (input) {
-                        input.classList.add('highlight');
-                    }
-                    currentDate.setDate(currentDate.getDate() + 1);
-                }
-            }
-            }
+        //     if (checkinDate && checkoutDate && checkoutDate >= checkinDate) {
+        //         var currentDate = new Date(checkinDate);
+        //         while (currentDate <= checkoutDate) {
+        //             var dateString = currentDate.toISOString().split('T')[0];
+        //             var input = document.querySelector('input[value="' + dateString + '"]');
+        //             if (input) {
+        //                 input.classList.add('highlight');
+        //             }
+        //             currentDate.setDate(currentDate.getDate() + 1);
+        //         }
+        //     }
+        //     }
 
             // Panggil fungsi setCheckInDateRestriction saat halaman dimuat
-            window.addEventListener('DOMContentLoaded', setCheckInDateRestriction);
+            // window.addEventListener('DOMContentLoaded', setCheckInDateRestriction);
 
             //==================================================
             //CODE JQUERY
             //==================================================
 
             // Ketika halaman direload, ambil data dari local storage dan tampilkan ke input
+
 
             $(document).ready(function() {
                 // Cek apakah ada data di local storage
@@ -450,7 +513,7 @@
                         localStorage.clear();
                         window.location.href = "{{ route('login.agent') }}";
                     } else {
-                        console.log('Terjadi kesalahan saat menyimpan data keranjang.');
+                        console.log('Terjadi kesalahan saat menyimpan data.');
                         console.log(xhr);
                     }
                 }

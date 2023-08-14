@@ -8,7 +8,7 @@
         <div class="row no-gutters slider-text align-items-end justify-content-center" style="height:300px">
             <div class="col-md-9 ftco-animate pb-5 text-center">
                 <p class="breadcrumbs"><span class="mr-2"><a href="/">Home <i class="fa fa-chevron-right"></i></a>
-                </span> 
+                </span>
                 <span><a href="{{ route('hotel.homepage') }}">Booking <i class="fa fa-chevron-right"></i></a></span></p>
             </div>
         </div>
@@ -25,7 +25,7 @@
                     @method('POST')
                 <div class="card">
                     <div class="card-body">
-                       
+
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="mb-3">
@@ -37,7 +37,7 @@
                                     <div class="mb-3">
                                         <label for="">Last Name <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control" name="lastname" placeholder="Last Name" value="">
-                                    </div>   
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
@@ -109,7 +109,7 @@
                             </div>
                     </div>
                 </div>
-                <input type="text" hidden value="2" name="paymentmethod">
+                <input type="text" hidden value="1" name="paymentmethod">
                 {{-- <div class="card mt-4">
                     <div class="card-body">
                         <div class="row">
@@ -149,7 +149,7 @@
                         <hr>
                         <ul class="p-0">
                             @foreach ($hotelbooking as $item)
-                                <li class="d-flex justify-content-between"><span>{{$item->room->title}} * {{$item->total_room}}</span><span>Rp. {{ number_format($item->price, 0, ',', '.')}}</span> </li>
+                                <li class="d-flex justify-content-between"><span>{{$item->room->ratedesc}} * {{$item->total_room}}</span><span>Rp. {{ number_format($item->price, 0, ',', '.')}}</span> </li>
                             @endforeach
                         </ul>
                         <hr>
@@ -164,7 +164,7 @@
     </div>
 </section>
 
-<section class="ftco-intro ftco-section ftco-no-pt">
+{{-- <section class="ftco-intro ftco-section ftco-no-pt">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12 text-center">
@@ -177,6 +177,6 @@
             </div>
         </div>
     </div>
-</section>
+</section> --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"></script>
 @endsection

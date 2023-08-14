@@ -33,7 +33,7 @@ export default function Index({ props,data }) {
                 <div className="col-lg-12">
                     <div className="card">
                         <div className="card-header">
-                            <h1>Booking History</h1>
+                            <h1>Booking Report</h1>
                         </div>
                         <div className="card-body">
                             <div className="table-responsive">
@@ -45,8 +45,8 @@ export default function Index({ props,data }) {
                                             <th>Booking Date</th>
                                             <th>Checkin Date</th>
                                             <th>Checkout Date</th>
-                                            <th>Durations(nights)</th>
-                                            <th>Total Room</th>
+                                            {/* <th>Nights</th>
+                                            <th>Total Room</th> */}
                                             <th>Total Guest</th>
                                             <th>Guest Name</th>
                                             <th>Total</th>

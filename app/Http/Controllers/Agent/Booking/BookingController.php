@@ -12,6 +12,9 @@ use App\Models\Vendor;
 use App\Models\User;
 use Carbon\Carbon;
 
+use Illuminate\Support\Str;
+use App\Models\ContractRate;
+
 use Illuminate\Support\Facades\Log;
 use GuzzleHttp\Client;
 use Illuminate\Http\RedirectResponse;
@@ -42,26 +45,28 @@ class BookingController extends Controller
             'person' => 'required',
             // Add other validation rules if needed
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         } else {
             $userid = auth()->user()->id;
-    
+
+            $roomData = json_decode($request->room, true);
+            // dd($roomData);
             // Ambil data check-in dan check-out dari request
             $checkin = Carbon::parse($request->checkin);
             $checkout = Carbon::parse($request->checkout);
-    
+
             // Hitung selisih tanggal check-in dan check-out untuk mendapatkan total malam
             $totalNights = $checkout->diffInDays($checkin);
 
             $priceString = str_replace(',', '', $request->totalprice);
             // Konversi string harga menjadi angka (integer)
             $price = (int) $priceString;
-    
+
             $data =  new Booking();
             $data->user_id = $userid;
-            $data->booking_code = '#BO_'. time().$this->generateRandomString(5).uniqid();
+            $data->booking_code = '#BO_'. $this->generateRandomString(10);
             $data->vendor_id = $request->vendorid;
             $data->booking_date = date("Y-m-d");
             $data->checkin_date = $request->checkin;
@@ -72,13 +77,12 @@ class BookingController extends Controller
             $data->total_guests = $request->person;
             $data->booking_status = '-';
             $data->save();
-    
-            $roomData = json_decode($request->room, true);
+
             foreach($roomData as $item){
                 $string = str_replace(',', '', $item['price']);
                 // Konversi string harga menjadi angka (integer)
                 $priceint = (int) $string;
-                
+
                 $hotelbook = new HotelRoomBooking();
                 $hotelbook->room_id = $item['roomId'];
                 $hotelbook->booking_id = $data->id;
@@ -92,7 +96,7 @@ class BookingController extends Controller
                 $hotelbook->save();
 
             }
-    
+
             return response()->json([
                 $data->id
             ]);
@@ -192,19 +196,70 @@ class BookingController extends Controller
                             return back()->with('payment error');
                         }
                 }
+            }else{
+                $booking = $id;
+                return view('landingpage.hotel.transferbank',compact('booking'));
             }
             return redirect()
             ->route('agent.booking.history')
             ->with('success', 'Data saved!');
         }
     }
-    
+
+    public function upbanktransfer(Request $request){
+        $validator =  Validator::make($request->all(), [
+            'image' => 'nullable|mimes:png,jpg,jpeg|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator->errors())
+                ->withInput($request->all());
+        } else {
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $filename = time() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('buktiftranfer'), $filename);
+
+                // Lakukan hal lain yang diperlukan, seperti menyimpan nama file dalam database
+            }else{
+                $filename= "";
+            }
+
+            $feature = "/buktiftranfer/".$filename;
+
+            $booking = Booking::find($request->idbooking);
+            $booking->booking_status = 'proccessing';
+            $booking->save();
+
+            $userid = auth()->user()->id;
+            $trans = new PaymentGetwayTransaction;
+            $trans->total_transaction = $booking->price;
+            $trans->code = Str::random(20);
+            $trans->url_payment = $feature;
+            $trans->user_id = auth()->user()->id;
+            $trans->booking_id = $request->idbooking;
+            $trans->status = 400;
+            $trans->payment_method = 'BANK-TRANSFER';
+            $trans->trx_id = Str::random(5);
+            $trans->save();
+
+            // Mail::to($booking->vendor->email)->send(new BookingConfirmation($data));
+            // Mail::to(auth()->user()->email)->send(new BookingConfirmation($data));
+
+            return redirect()
+            ->route('agent.booking.history')
+            ->with('success', 'Transaction success');
+        }
+    }
+
     public function callApiIpaymuBtb($data)
     {
         $body = json_encode($data['body'],JSON_UNESCAPED_SLASHES);
 
         $requestBody  = strtolower(hash('sha256', $body));
-        
+
         $secret       = 'SANDBOX30C3DCD3-EA90-4DB6-B98A-2F17B6AF6FDA';
         $va           = '0000002413132123';
         $stringToSign = 'POST:' . $va . ':' . $requestBody . ':' . $secret;
@@ -280,7 +335,7 @@ class BookingController extends Controller
             $book = Booking::find($request->bookingid);
             $book->booking_status = 'paid';
             $book->save();
-        
+
             $hotelbook = HotelRoomBooking::where('booking_id',$request->bookingid)->get();
 
             foreach($hotelbook as $item){
@@ -294,12 +349,16 @@ class BookingController extends Controller
             $trans->trx_id = $request->trx_id;
             $trans->save();
 
+            $contract_id = HotelRoomBooking::where('booking_id',$request->bookingid)->first();
+            $contract = ContractRate::where('id',$contract_id->contract_id)->first();
+
             $data = [
                 'booking' => $book, // $book merupakan instance dari model Booking yang sudah Anda dapatkan
+                'contract' => $contract
             ];
 
             // Mail::to($book->vendor->email)->send(new BookingConfirmation($data));
-            // Mail::to(auth()->user()->email)->send(new BookingConfirmation($data));
+            // Mail::to(auth()->user()->email)->send(new BookingConfirmation($data)); 
 
             return redirect()
             ->route('agent.booking.history')
@@ -311,7 +370,7 @@ class BookingController extends Controller
         // return view('ipaymu.success');
     }
     public function notify(Request $request){
-        
+
         $id = auth()->user()->id;
         if($request->status == 'berhasil'){
 
@@ -336,12 +395,12 @@ class BookingController extends Controller
     function generateRandomString($length) {
         $characters = '0123456789QWERTYUIOPASDFGHJKLZXCVBNM';
         $randomString = '';
-    
+
         for ($i = 0; $i < $length; $i++) {
             $index = rand(0, strlen($characters) - 1);
             $randomString .= $characters[$index];
         }
-    
+
         return $randomString;
     }
 

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Vendor;
 use App\Models\User;
 use App\Models\Booking;
+use App\Models\RoomHotel;
 
 class DashboardController extends Controller
 {
@@ -22,7 +23,7 @@ class DashboardController extends Controller
         $totalbooking = Booking::where('user_id',$data->vendors->user_id)->count();
         $bookingsuccess = Booking::where('user_id',$data->vendors->user_id)->where('booking_status','paid')->count();
         $pendingpayment = Booking::where('user_id',$data->vendors->user_id)->where('booking_status','unpaid')->count();
-
+        $roomhotel = Booking::where('user_id',$data->vendors->user_id)->where('booking_status','paid')->sum('night');
         $bookingdata = Booking::where('user_id',$data->vendors->user_id)->with('users','vendor')->whereNotIn('booking_status', ['-', ''])->get();
         $acyive = auth()->user()->is_active;
         if($acyive == 1){
@@ -31,7 +32,8 @@ class DashboardController extends Controller
                 'booking' => $totalbooking,
                 'success' => $bookingsuccess,
                 'pending' => $pendingpayment,
-                'getbooking' => $bookingdata
+                'getbooking' => $bookingdata,
+                'totalroom' => $roomhotel
             ]);
         }else{
             return view('landingpage.pagenotfound.isactiveaccount');

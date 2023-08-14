@@ -11,6 +11,7 @@ use Illuminate\Queue\SerializesModels;
 use App\Models\Booking;
 use Carbon\Carbon;
 
+
 class UpdateStatusToCanceled implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -28,12 +29,15 @@ class UpdateStatusToCanceled implements ShouldQueue
      */
     public function handle(): void
     {
-        $unpaidInvoices = Booking::where('status', 'unpaid')
-            ->where('created_at', '<=', Carbon::now()->subHours(24))
-            ->get();
-
-        foreach ($unpaidInvoices as $invoice) {
-            $invoice->update(['status' => 'canceled']);
-        }
+        $unpaidInvoices = Booking::where('booking_status', 'unpaid')
+            ->first();
+        $unpaidInvoices->booking_status = 'canceled';
+        $unpaidInvoices->save();
+        // foreach ($unpaidInvoices as $invoice) {
+           
+        // }
+        // $queries = DB::getQueryLog();
+        // You can print or log the queries if needed
+        // dd($queries);
     }
 }

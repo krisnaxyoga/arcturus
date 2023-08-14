@@ -20,7 +20,7 @@ export default function EditSurchage({ props, session, data }) {
         const formData = new FormData();
         formData.append('start', start ? start : data.start_date);
         formData.append('end', end ? end : data.end_date);
-        formData.append('price', price ? price : data.surcharge_black_price);
+        formData.append('price', price ? price : data.surcharge_block_price);
         Inertia.post(`/room/markup/updatesurchage/${data.id}`, formData, {
             onSuccess: () => {
                 // Lakukan aksi setelah gambar berhasil diunggah

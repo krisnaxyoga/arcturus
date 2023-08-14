@@ -25,13 +25,14 @@ class ContractController extends Controller
         $iduser = auth()->user()->id;
         $data = ContractRate::where('user_id',$iduser)->get();
         $userid = auth()->user()->id;
-        $barprice = BarPrice::where('user_id',$userid)->with('barroom')->with('room')->get();
+        $barprice = BarPrice::where('user_id',$userid)->with('barroom')->with('room')->orderBy('price', 'asc')->get();
         $black = AgentMarkupDetail::where('user_id',$userid)->where('markup_cat_id','blackout')->get();
         $surc = AgentMarkupDetail::where('user_id',$userid)->where('markup_cat_id','surcharges')->get();
         $userid = auth()->user()->id;
         $barprice = BarPrice::where('user_id',$userid)
             ->with('barroom')
             ->with('room')
+            ->orderBy('price', 'asc')
             ->get();
         $barroom = BarRoom::where('user_id',$userid)->get();
 
@@ -145,15 +146,15 @@ class ContractController extends Controller
 
         $markup = AgentMarkupSetup::where('user_id',$userid)->get();
         foreach($barprice as $item){
-            $cpExists = ContractPrice::where('room_id',$item->room_id)->exists();
+            $cpExists = ContractPrice::where('contract_id',$cont)->where('room_id',$item->room_id)->exists();
             //contoh bila data $cp tidak ditemukan maka if nya seperti ini
             if(!$cpExists){
                 $data = new ContractPrice();
                 $data->room_id = $item->room_id;
                 $data->user_id =  $userid;
                 $data->contract_id = $cont;
-                $data->recom_price = $item->price * 0.8;
-                $data->price = ($item->price * 0.8)+$markup[0]->markup_price;
+                $data->recom_price = $item->price * 0.83;
+                $data->price = ($item->price * 0.83)+$markup[0]->markup_price;
                 $data->barprice_id = $item->id;
                 $data->save();
             }
@@ -175,13 +176,13 @@ class ContractController extends Controller
             $data->room_id = $barprice->room_id;
             $data->user_id =  $userid;
             $data->contract_id = $cont;
-            $data->recom_price = $barprice->price * 0.8;
+            $data->recom_price = $barprice->price * 0.83;
             if($markup->markup_price == 0){
-                $nilai = $barprice->price * 0.8;
+                $nilai = $barprice->price * 0.83;
                 $hasil = $barprice->price - $nilai + 15000;
                 $data->price = $nilai + $hasil;
             }else{
-                $data->price = ($barprice->price * 0.8)+$markup->markup_price;
+                $data->price = ($barprice->price * 0.83)+$markup->markup_price;
             }
 
             $data->barprice_id = $id;
@@ -226,6 +227,7 @@ class ContractController extends Controller
                   ->with('room')
                   ->with('barprice')
                   ->where('contract_id', $id)
+                  ->orderBy('price', 'asc')
                   ->get();
 
         return inertia('Vendor/MenageRoom/ContractRate/Edit',[

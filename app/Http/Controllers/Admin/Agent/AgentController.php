@@ -143,6 +143,15 @@ class AgentController extends Controller
 
        return redirect()->back()->with('success', 'agent active successfully.');
     }
+
+    public function markup(Request $request, $id)
+    {
+       $model = Vendor::find($id);
+        $model->system_markup = $request->markup;
+        $model->save();
+
+       return redirect()->back()->with('success', 'mark-up updated successfully.');
+    }
     public function active(string $id)
     {
 

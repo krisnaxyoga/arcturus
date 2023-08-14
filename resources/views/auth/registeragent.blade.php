@@ -104,7 +104,11 @@
                                     @enderror
                                 </div>
                                 <div class="mb-3">
-                                    <label for="name" class="form-label">Country</label>
+                                    <div class="d-flex justify-content-between">
+                                         <label for="name" class="form-label">Country <span class="text-danger">*</span></label>
+                                         <p class="text-danger" style="font-size:11px">agent verifications</p>
+                                    </div>
+                                   
                                     <select name="country" class="form-control" required>
                                         <option value="">{{ __('-- Select --') }}</option>
                                         @foreach (get_country_lists() as $id => $name)

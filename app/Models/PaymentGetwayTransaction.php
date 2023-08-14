@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class PaymentGetwayTransaction extends Model
 {
     use HasFactory;
+
+    public function booking() {
+        return $this->belongsTo(Booking::class, 'booking_id');
+    }
 }

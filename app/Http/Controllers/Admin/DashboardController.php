@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Setting;
 use App\Models\Vendor;
 use App\Models\Booking;
+use App\Models\RoomHotel;
+
 class DashboardController extends Controller
 {
     /**
@@ -22,7 +24,7 @@ class DashboardController extends Controller
             $setting = new Setting;
         }
 
-        $totalbooking = Booking::count();
+        $totalbooking = Booking::where('booking_status','paid')->count();
 
         $totaltransaction = Booking::where('booking_status','paid')->sum('price');
         $hotel = Vendor::where('type_vendor','hotel')->count();
@@ -36,7 +38,8 @@ class DashboardController extends Controller
 
         $booking = Booking::whereNotIn('booking_status', ['-', ''])->with('users','vendor')->get();
 
-        return view('admin.index',compact('setting','totalbooking','totaltransaction','hotel','agent','paid','unpaid','unknow','booking','vendor'));
+        $roomhotel = Booking::where('booking_status','paid')->sum('night');
+        return view('admin.index',compact('setting','totalbooking','totaltransaction','hotel','agent','paid','unpaid','unknow','booking','vendor','roomhotel'));
     }
 
     /**

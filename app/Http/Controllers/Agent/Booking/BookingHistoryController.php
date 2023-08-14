@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Models\Booking;
 use App\Models\PaymentGetwayTransaction;
 use App\Models\HotelRoomBooking;
+
+use App\Models\ContractRate;
 use App\Models\RoomType;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -21,7 +23,7 @@ class BookingHistoryController extends Controller
     {
         $iduser = auth()->user()->id;
         $user = User::where('id',$iduser)->with('vendors')->first();
-        $booking = Booking::with('users','vendor')->where('user_id',$user->vendors->user_id)->orderBy('created_at', 'desc')->get();
+        $booking = Booking::with('users','vendor')->whereNotIn('booking_status', ['-', ''])->where('user_id',$user->vendors->user_id)->orderBy('created_at', 'desc')->get();
         
         return inertia('Agent/BookingHistory/Index',[
             'data' => $booking,
@@ -63,10 +65,16 @@ class BookingHistoryController extends Controller
         $agent = User::where('id',$iduser)->with('vendors')->first();
         $data = Booking::where('id',$id)->with('vendor')->with('users')->first();
         //dd($room);
-
+        $cont_id = HotelRoomBooking::where('booking_id',$data->id)->first();
+        $conttract = ContractRate::where('id',$cont_id->contract_id)->first();
+        $setting = Setting::first();
+        $hotelroombooking = HotelRoomBooking::where('booking_id',$data->id)->with('room')->get();
         return inertia('Agent/BookingHistory/Detail',[
             'data' => $data,
-            'agent' => $agent
+            'agent' => $agent,
+            'setting' => $setting,
+            'contract' => $conttract,
+            'roombooking' =>$hotelroombooking,
         ]);
     }
 

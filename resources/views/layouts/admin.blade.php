@@ -32,7 +32,7 @@
 <body>
     <nav class="topnav navbar navbar-expand shadow navbar-light bg-white" id="sidenavAccordion">
         <a class="navbar-brand h-100 text-truncate" href="#">
-            <img class="img-fluid" src="{{ asset('storage/logo/' . $setting->logo_image) }}" />
+            {{-- <img class="img-fluid" src="{{ asset('storage/logo/' . $setting->logo_image) }}" /> --}}
             Admin Panel
         </a>
         <button class="btn btn-icon btn-transparent-dark order-1 order-lg-0 mr-lg-2" id="sidebarToggle"
@@ -42,25 +42,29 @@
             <li class="nav-item dropdown no-caret mr-2 dropdown-user">
                 <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage"
                     href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false"><img class="img-fluid" src="{{ asset('storage/images/user.png') }}" /></a>
+                    aria-expanded="false">
+                    <i class="fa fa-user"></i>
+                    {{-- <img class="img-fluid" src="{{ asset('storage/images/user.png') }}" /> --}}
+                </a>
                 <div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
                     aria-labelledby="navbarDropdownUserImage">
-                    <h6 class="dropdown-header d-flex align-items-center">
-                        <img class="dropdown-user-img" src="{{ asset('storage/images/user.png') }}" />
-                        <div class="dropdown-user-details">
+                    {{-- <h6 class="dropdown-header d-flex align-items-center"> --}}
+
+                        {{-- <img class="dropdown-user-img" src="{{ asset('storage/images/user.png') }}" /> --}}
+                        {{-- <div class="dropdown-user-details">
                             <div class="dropdown-user-details-name">{{ Auth::user()->name }}</div>
                             <div class="dropdown-user-details-email">{{ Auth::user()->email }}</div>
-                        </div>
-                    </h6>
+                        </div> --}}
+                    {{-- </h6> --}}
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="">
+                    {{-- <a class="dropdown-item" href="">
                         <div class="dropdown-item-icon"><i data-feather="settings"></i></div>
                         Account
-                    </a>
-                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                    </a> --}}
+                    {{-- <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                         data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                         {{-- {{ Auth::user()->name }} --}}
-                    </a>
+                    {{-- </a> --}}
                     <a class="dropdown-item" href="{{ route('logout') }}"
                         onclick="event.preventDefault();
                                   document.getElementById('logout-form').submit();">
@@ -83,6 +87,10 @@
                         <a class="nav-link {{ request()->routeIs('dashboard.index') ? 'active' : '' }}" href="{{ route('dashboard.index') }}">
                             <div class="nav-link-icon"><i data-feather="activity"></i></div>
                             Dashboard
+                        </a>
+                        <a class="nav-link {{ request()->routeIs('dashboard.admin.booking') ? 'active' : '' }}" href="{{ route('dashboard.admin.booking') }}">
+                            <div class="nav-link-icon"><i class="fas fa-fw fa-chart-area"></i></div>
+                            Booking Confirmation
                         </a>
                         <a class="nav-link {{ request()->Is('#') ? 'active' : '' }}" href="#" data-toggle="collapse" data-target="#agentCollapse"
                             aria-expanded="false" aria-controls="agentCollapse">
@@ -173,7 +181,7 @@
         crossorigin="anonymous"></script>
     <script src="/dashboard_assets/js/scripts.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-   
+
     <script src="/dashboard_assets/assets/demo/chart-area-demo.js"></script>
     <script src="/dashboard_assets/assets/demo/chart-bar-demo.js"></script>
     <script src="/dashboard_assets/assets/demo/chart-pie-demo.js"></script>
@@ -191,8 +199,8 @@
             //menu colapse pada hotel
             const menuCollapse = document.getElementById('menuCollapse');
             const activeMenu = menuCollapse.querySelector('.active');
-            
-    
+
+
             if (activeMenu) {
                 menuCollapse.classList.add('show');
             }

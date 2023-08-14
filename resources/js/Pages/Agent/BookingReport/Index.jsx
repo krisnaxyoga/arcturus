@@ -47,7 +47,7 @@ export default function Index({ props, session, data, agent }) {
                                                     <th>Booking Date</th>
                                                     <th>Checkin Date</th>
                                                     <th>Checkout Date</th>
-                                                    <th>Durations(nights)</th>
+                                                    <th>Nights</th>
                                                     <th>Total</th>
                                                     <th>Status</th>
                                                 </tr>

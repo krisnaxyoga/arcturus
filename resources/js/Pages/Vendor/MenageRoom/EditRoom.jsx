@@ -151,7 +151,7 @@ export default function Index({ session, props, attr, room,roomtype }) {
         const formData = new FormData();
         formData.append('ratecode', ratecode ? ratecode : room[0].ratecode);
         formData.append('ratedesc', ratedesc ? ratedesc : room[0].ratedesc);
-        formData.append('roomname', roomname ? roomname : room[0].title);
+        // formData.append('roomname', roomname ? roomname : room[0].title);
         const selectedValues = checkboxItems.filter((item) => item.checked).map((item) => item.label);
 
         formData.append('facilities', selectedValues.join(','));
@@ -163,11 +163,11 @@ export default function Index({ session, props, attr, room,roomtype }) {
         formData.append('roomtypeid', roomtypeid ? roomtypeid : room[0].roomtype_id);
         formData.append('adult', adult ? adult : room[0].adults);
         formData.append('child', child ? child : room[0].children);
-        formData.append('bedroom', bedroom ? bedroom : room[0].bedroom);
+        // formData.append('bedroom', bedroom ? bedroom : room[0].bedroom);
         formData.append('extra_bed', extrabed ? extrabed : room[0].extra_bed);
-        formData.append('infant', infant ? infant : room[0].infant);
-        formData.append('baby_cot', baby_cot ? baby_cot : room[0].baby_cot);
-        formData.append('max_benefit', max_benefit ? max_benefit : room[0].max_benefit);
+        // formData.append('infant', infant ? infant : room[0].infant);
+        // formData.append('baby_cot', baby_cot ? baby_cot : room[0].baby_cot);
+        // formData.append('max_benefit', max_benefit ? max_benefit : room[0].max_benefit);
 
         formData.append('allowed', allowed ? allowed : room[0].room_allow);
         images.forEach((image, index) => {
@@ -227,13 +227,13 @@ export default function Index({ session, props, attr, room,roomtype }) {
                                                         <div className="col-lg-2">
                                                             <div className="mb-3 mx-2">
                                                                 <label htmlFor="exampleFormControlInput1" className="form-label">Code</label>
-                                                                <input defaultValue={room[0].ratecode} onChange={(e) => setRagecode(e.target.value)} type="text" className="form-control" id="exampleFormControlInput1" placeholder="Rate Code" />
+                                                                <input defaultValue={room[0].ratecode} onChange={(e) => setRagecode(e.target.value)} type="text" className="form-control" id="exampleFormControlInput1" placeholder="Room Code" />
                                                             </div>
                                                         </div>
                                                         <div className="col-lg-4">
                                                             <div className="mb-3">
                                                                 <label htmlFor="exampleFormControlInput1" className="form-label">Room Type Description</label>
-                                                                <input defaultValue={room[0].ratedesc} onChange={(e) => setRateDesc(e.target.value)} type="text" className="form-control" id="exampleFormControlInput1" placeholder="Rate Description" />
+                                                                <input defaultValue={room[0].ratedesc} onChange={(e) => setRateDesc(e.target.value)} type="text" className="form-control" id="exampleFormControlInput1" placeholder="Room Description" />
                                                             </div>
                                                         </div>
                                                         <div className="col-lg-3">

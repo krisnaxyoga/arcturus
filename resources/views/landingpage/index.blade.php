@@ -43,7 +43,7 @@
                                         aria-orientation="vertical">
                                         {{-- <a class="nav-link active mr-md-1" id="v-pills-1-tab" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-1" aria-selected="true">Search Tour</a> --}}
 
-                                        <a class="nav-link" id="v-pills-2-tab" data-toggle="pill" href="#v-pills-2"
+                                        <a class="nav-link" id="v-pills-2-tab" data-toggle="pill" href="#"
                                             role="tab" aria-controls="v-pills-2" aria-selected="true">Hotel</a>
 
                                     </div>
@@ -101,13 +101,22 @@
                                                         </div>
                                                     </div> --}}
                                                     <div class="col-md d-flex">
-                                                        <div class="form-group p-4">
+                                                        {{-- <div class="form-group p-4">
                                                             <label for="#">Check-in</label>
                                                             <div class="form-field">
                                                                 <div class="icon"><span class="fa fa-calendar"></span>
                                                                 </div>
                                                                 <input type="date" name="checkin"
                                                                     class="form-control checkindate"
+                                                                    placeholder="Check In Date">
+                                                            </div>
+                                                        </div> --}}
+                                                        <div class="form-group p-4">
+                                                            <label for="#">Check-in</label>
+                                                            <div class="form-field">
+                                                                <div class="icon"><span class="fa fa-calendar"></span>
+                                                                </div>
+                                                                <input type="date" id="daterange" name="checkin" class="form-control checkindate"
                                                                     placeholder="Check In Date">
                                                             </div>
                                                         </div>
@@ -269,7 +278,7 @@
                                 distributed, and visible to your target market.</li>
                             <li>Hotels will receive promo recommendations based on their target market and statistics.</li>
                             <li>Full payment will be received 1x24 hours after the booking is confirmed.</li>
-                            <li>Lower commission fee than other OTAs. Only 2,5%- 5%.</li>
+                            {{-- <li>Lower commission fee than other OTAs. Only 2,5%- 5%.</li> --}}
                         </ul>
                         <h4>Benefits for travel agents</h4>
                         <ul>

@@ -86,6 +86,8 @@ class MyProfileController extends Controller
             $member->bank_name = $request->bank;
             $member->bank_account = $request->bankaccount;
             $member->swif_code = $request->swifcode;
+            $member->bank_address = $request->bankaddress;
+            $member->account_number = $request->accountnumber;
             // $member->credit_limit = $request->limit;
             // $member->credit_used = $request->used;
             // $member->credit_saldo = $request->saldo;

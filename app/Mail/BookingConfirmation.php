@@ -39,6 +39,9 @@ class BookingConfirmation extends Mailable
     {
         return (new Content)->view('emails.booking_confirmation')->with([
             'booking' => $this->data['booking'], // Mengirim data booking ke view template email
+            'contract' => $this->data['contract'],
+            'setting' => $this->data['setting'],
+            'agent' => $this->data['agent']
         ]);
     }
 

@@ -49,7 +49,7 @@
                         </div>
                     </div>
 
-                    <label for="name" class="form-label">Busisnes Name</label>
+                    <label for="name" class="form-label">Hotel Name</label>
                     <input type="text" name="busisnes_name"
                         class="form-control @error('busisnes_name') is-invalid @enderror" id="name">
                         @error('busisnes_name')
@@ -58,14 +58,14 @@
                             </div>
                         @enderror
 
-                    <label for="name" class="form-label">Company Name</label>
-                    <input type="text" name="company_name"
-                        class="form-control @error('company_name') is-invalid @enderror" id="name">
-                        @error('company_name')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                        @enderror
+                    <!--<label for="name" class="form-label">Company Name</label>-->
+                    <!--<input type="text" name="company_name"-->
+                    <!--    class="form-control @error('company_name') is-invalid @enderror" id="name">-->
+                    <!--    @error('company_name')-->
+                    <!--        <div class="invalid-feedback">-->
+                    <!--            {{ $message }}-->
+                    <!--        </div>-->
+                    <!--    @enderror-->
                     <div class="mb-3">
                         <label for="name" class="form-label">Address</label>
                         <input type="text" name="address" class="form-control @error('address') is-invalid @enderror"
