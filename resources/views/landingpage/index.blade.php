@@ -772,20 +772,21 @@
         </div>
     </section> --}}
 
-    {{-- <section class="ftco-intro ftco-section ftco-no-pt mt-5">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-12 text-center">
-                    <div class="img" style="background-image: url(/landing/travel/images/bg_2.jpg);">
-                        <div class="overlay"></div>
-                        <h2>We Are Pacific A Travel Agency</h2>
-                        <p>We can manage your dream building A small river named Duden flows by their place</p>
-                        <p class="mb-0"><a href="#" class="btn btn-primary px-4 py-3">Ask For A Quote</a></p>
-                    </div>
+    
+  <section class="ftco-intro ftco-section ftco-no-pt mt-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12 text-center">
+                <div class="img" style="background-image: url(/landing/travel/images/bg_2.jpg);">
+                    <div class="overlay"></div>
+                    <h2>Vibes Hospitality</h2>
+                    <!--<p>We can manage your dream building A small river named Duden flows by their place</p>-->
+                    <!--<p class="mb-0"><a href="#" class="btn btn-primary px-4 py-3">Ask For A Quote</a></p>-->
                 </div>
             </div>
         </div>
-    </section> --}}
+    </div>
+</section> 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Ambil elemen input tanggal check-in dan check-out

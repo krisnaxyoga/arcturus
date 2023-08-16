@@ -106,10 +106,10 @@
                                             <div class="card-body">
                                                 <h3 class="card-title"><a href="#">{{$item->room->ratedesc}}</a></h3>
                                                 <span class="price">Rp. {{ number_format(($item->recom_price + $item->contractrate->vendors->system_markup + $surcharprice), 0, ',', '.')}}</span>
-                                                
+                                                surcharge : {{$surchargesVendorIds}} blackout : {{$blackoutVendorIds}} vendorid :{{$item->contractrate->vendor_id}}
                                                 <p class="card-text"><small class="text-body-secondary"></small></p>
                                                 @if($item->room->room_allow <= 0 || $blackoutVendorIds->contains($item->contractrate->vendors->id))
-                                                <span class="badge badge-danger">Sold</span>
+                                                    <span class="badge badge-danger">Sold</span>
                                                 @else
                                                     <select class="form-control room-quantity" name="room_quantity" style="width:200px" onchange="calculateTotal()">
                                                         <option data-price="0" value="0">0</option>

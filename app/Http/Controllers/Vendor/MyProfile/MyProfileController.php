@@ -99,6 +99,7 @@ class MyProfileController extends Controller
                 $mark->vendor_id = $vendor[0]->id;
                 $mark->service = $request->service;
                 $mark->tax = $request->tax;
+                $mark->markup_price = 0;
                 $mark->save();
             }else{
                 $mark2 = AgentMarkupSetup::where('user_id',$id)->first();
