@@ -15,7 +15,7 @@ import Tabs from 'react-bootstrap/Tabs';
 export default function Detail({ session, data, agent,roombooking,contract }) {
     console.log(data, ">>>>>>>data country >>>>>>>>");
     function formatRupiah(amount) {
-        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount);
+        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount).slice(0, -3);
     }
     const { url } = usePage();
 

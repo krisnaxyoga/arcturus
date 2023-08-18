@@ -65,7 +65,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
     console.log(selectedDistribute, ">>>>>>>>>>>>> ISI distribute >>>>>>>>>>>>>>>>>>>>>>")
 
     function formatRupiah(amount) {
-        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount);
+        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount).slice(0, -3);
       }
     const handleSelectDistribute = (event) => {
         const selectedDistributes = event.target.value;

@@ -45,7 +45,7 @@ export default function Index({ totalroom,income,booking,success,pending,data })
               {/* <!-- Content Row --> */}
               <div className="row">
                 {/* <!-- Earnings (Monthly) Card Example --> */}
-                <div className="col-xl-4 col-md-6 mb-4">
+                <div className="col-xl-4 col-md-6 col-12 mb-4">
                   <div className="card border-left-primary shadow h-100 py-2">
                     <div className="card-body">
                       <div className="row no-gutters align-items-center">
@@ -62,7 +62,7 @@ export default function Index({ totalroom,income,booking,success,pending,data })
                   </div>
                 </div>
                 {/* <!-- Earnings (Monthly) Card Example --> */}
-                <div className="col-xl-2 col-md-6 mb-4">
+                <div className="col-xl-2 col-md-6 col-6 mb-4">
                   <div className="card border-left-success shadow h-100 py-2">
                     <div className="card-body">
                       <div className="row no-gutters align-items-center">
@@ -79,7 +79,7 @@ export default function Index({ totalroom,income,booking,success,pending,data })
                   </div>
                 </div>
                 {/* <!-- Earnings (Monthly) Card Example --> */}
-                <div className="col-xl-2 col-md-6 mb-4">
+                <div className="col-xl-2 col-md-6 col-6 mb-4">
                   <div className="card border-left-info shadow h-100 py-2">
                     <div className="card-body">
                       <div className="row no-gutters align-items-center">
@@ -101,7 +101,7 @@ export default function Index({ totalroom,income,booking,success,pending,data })
                 </div>
 
                 {/* <!-- Pending Requests Card Example --> */}
-                <div className="col-xl-2 col-md-6 mb-4">
+                <div className="col-xl-2 col-md-6 col-6 mb-4">
                   <div className="card border-left-warning shadow h-100 py-2">
                     <div className="card-body">
                       <div className="row no-gutters align-items-center">
@@ -118,7 +118,7 @@ export default function Index({ totalroom,income,booking,success,pending,data })
                   </div>
                 </div>
 
-                <div className="col-xl-2 col-md-6 mb-4">
+                <div className="col-xl-2 col-md-6 col-6 mb-4">
                   <div className="card border-left-secondary shadow h-100 py-2">
                     <div className="card-body">
                       <div className="row no-gutters align-items-center">

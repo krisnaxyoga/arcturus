@@ -56,8 +56,8 @@ export default function Index({ session,data,country,markup,banner }) {
         formData.append('country', selectcountry ? selectcountry : data[0].country);
         formData.append('busisnessname', busisnessname ? busisnessname : data[0].vendor_name);
         formData.append('email', email ? email : data[0].users.email);
-        formData.append('firstname',firstname ? firstname : data[0].first_name);
-        formData.append('lastname', lastname ? lastname : data[0].last_name);
+        formData.append('firstname',firstname ? firstname : data[0].users.first_name);
+        formData.append('lastname', lastname ? lastname : data[0].users.last_name);
         formData.append('phone', phone ? phone : data[0].phone);
         formData.append('logo', logo ? logo : data[0].logo_img);
         formData.append('address', address ? address : data[0].address_line1);
@@ -152,7 +152,7 @@ export default function Index({ session,data,country,markup,banner }) {
                                                             </div>
                                                         </div>
                                                         <div>
-                                                        <label for="Lastname" className="form-label">Last name</label>
+                                                            <label for="Lastname" className="form-label">Last name</label>
                                                             <div className="input-group mb-3">
                                                             <span className="input-group-text rounded-0" id="basic-addon1"><i className='fa fa-user'></i></span>
                                                                 <input defaultValue={data[0].users.last_name} onChange={(e)=>setLasttName(e.target.value)} type="text" className="form-control" placeholder="Last name" aria-label="lastname" aria-describedby="basic-addon1"/>

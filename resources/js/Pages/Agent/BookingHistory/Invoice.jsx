@@ -12,7 +12,7 @@ export default function Invoice({ session, data, agent, gateway, roombooking, se
     console.log(data, ">>>>>>>data >>>>>>>>");
 
     function formatRupiah(amount) {
-        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount);
+        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount).slice(0, -3);
     }
 
     const [bookingStatus, setBookingStatus] = useState('unpaid')

@@ -33,7 +33,7 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
     const [modalData, setModalData] = useState();
 
     function formatRupiah(amount) {
-        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount);
+        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount).slice(0, -3);
       }
 
     useEffect(() => {
