@@ -13,7 +13,7 @@ import { Inertia } from '@inertiajs/inertia';
 export default function Index({ totalroom,income,booking,success,pending,data }) {
   const { url } = usePage();
   function formatRupiah(amount) {
-      return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount);
+      return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount).slice(0, -3);
   }
   const [currentPage, setCurrentPage] = useState(1)
   const [postsPerPage, setPostsPerPage] = useState(10)
@@ -45,13 +45,13 @@ export default function Index({ totalroom,income,booking,success,pending,data })
               {/* <!-- Content Row --> */}
               <div className="row">
                 {/* <!-- Earnings (Monthly) Card Example --> */}
-                <div className="col-xl-4 col-md-6 col-12 mb-4">
+                <div className="col-xl-3 col-md-6 col-12 mb-4">
                   <div className="card border-left-primary shadow h-100 py-2">
                     <div className="card-body">
                       <div className="row no-gutters align-items-center">
                         <div className="col mr-2">
                           <div className="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                            total income</div>
+                            total revenue</div>
                           <div className="h5 mb-0 font-weight-bold text-gray-800">{formatRupiah(income)}</div>
                         </div>
                         <div className="col-auto">
@@ -61,25 +61,7 @@ export default function Index({ totalroom,income,booking,success,pending,data })
                     </div>
                   </div>
                 </div>
-                {/* <!-- Earnings (Monthly) Card Example --> */}
-                <div className="col-xl-2 col-md-6 col-6 mb-4">
-                  <div className="card border-left-success shadow h-100 py-2">
-                    <div className="card-body">
-                      <div className="row no-gutters align-items-center">
-                        <div className="col mr-2">
-                          <div className="text-xs font-weight-bold text-success text-uppercase mb-1">
-                            Total Booking</div>
-                          <div className="h5 mb-0 font-weight-bold text-gray-800">{booking}</div>
-                        </div>
-                        <div className="col-auto">
-                           <i className="fas fa-calendar fa-2x text-gray-300"></i>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                {/* <!-- Earnings (Monthly) Card Example --> */}
-                <div className="col-xl-2 col-md-6 col-6 mb-4">
+                <div className="col-xl-3 col-md-6 col-6 mb-4">
                   <div className="card border-left-info shadow h-100 py-2">
                     <div className="card-body">
                       <div className="row no-gutters align-items-center">
@@ -101,7 +83,7 @@ export default function Index({ totalroom,income,booking,success,pending,data })
                 </div>
 
                 {/* <!-- Pending Requests Card Example --> */}
-                <div className="col-xl-2 col-md-6 col-6 mb-4">
+                <div className="col-xl-3 col-md-6 col-6 mb-4">
                   <div className="card border-left-warning shadow h-100 py-2">
                     <div className="card-body">
                       <div className="row no-gutters align-items-center">
@@ -118,7 +100,7 @@ export default function Index({ totalroom,income,booking,success,pending,data })
                   </div>
                 </div>
 
-                <div className="col-xl-2 col-md-6 col-6 mb-4">
+                <div className="col-xl-3 col-md-6 col-6 mb-4">
                   <div className="card border-left-secondary shadow h-100 py-2">
                     <div className="card-body">
                       <div className="row no-gutters align-items-center">

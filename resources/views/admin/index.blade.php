@@ -7,13 +7,13 @@
           <!-- Content Row -->
           <div class="row">
 
-            <div class="col-xl-4 col-md-6 mb-4">
+            <div class="col-xl-2 col-md-6 mb-4">
                 <div class="card border-left-warning shadow h-100 py-2">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                    transaction success</div>
+                                    total revenue</div>
                                 <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{ number_format($totaltransaction, 0, ',', '.')}}</div>
                             </div>
                             <div class="col-auto">
@@ -66,7 +66,7 @@
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">total Booking transaction
+                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">total paid
                                 </div>
                                 <div class="row no-gutters align-items-center">
                                     <div class="col-auto">
@@ -84,6 +84,29 @@
             </div>
 
             <!-- Pending Requests Card Example -->
+
+            <div class="col-xl-2 col-md-6 mb-4">
+                <div class="card border-left-danger shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">total unpaid
+                                </div>
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col-auto">
+                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ $totalunpaid }}</div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             
 
             <div class="col-xl-2 col-md-6 mb-4">
