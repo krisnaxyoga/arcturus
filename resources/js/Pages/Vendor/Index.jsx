@@ -38,8 +38,8 @@ export default function Index({ totalroom,income,booking,success,pending,data })
             {/* <!-- Begin Page Content --> */}
             <div className="container-fluid">
               {/* <!-- Page Heading --> */}
-              <div className="d-sm-flex align-items-center justify-content-between mb-4">
-                <h1 className="h3 mb-0 text-gray-800">Dashboard</h1>
+              <div className="d-sm-flex align-items-center justify-content-center mb-4">
+               <h1 className="h3 mb-0 text-gray-800">Hotel Dashboard</h1>
               </div>
 
               {/* <!-- Content Row --> */}
