@@ -38,7 +38,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
 
     const [showModalTable, setShowModalTable] = useState(false);
 
-    const [minMarkup, setMinMarkup] = useState('');
+    const [percentage, setPercentage] = useState('');
 
 
     const [checkboxes, setCheckboxes] = useState({
@@ -229,7 +229,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
         formData.append('cencellation_policy', cancelPolicy ? cancelPolicy : contract.cencellation_policy);
         formData.append('deposit_policy', depositPolicy ? depositPolicy : contract.deposit_policy);
 
-        formData.append('minmarkup',minMarkup ? minMarkup:markup[0].markup_price);
+        formData.append('percentage',percentage ? percentage:contract.percentage);
 
         formData.append('distribute', selectedDistribute);
         formData.append('except', selectedExclude);
@@ -430,11 +430,9 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
 
                                                                         </div>
                                                                         <div className="mb-3">
-                                                                            <label className='text-warning' htmlFor="">Min Mark-up : {markup[0].markup_price}
-                                                                                <a href='#' className='btn btn-datatable btn-icon btn-transparent-dark mr-2' onClick={() => buttonSendValuemarkup()}>
-                                                                                    <i className='fa fa-edit'></i>
-                                                                                </a>
-                                                                            </label>
+                                                                            <div className="d-flex" style={{marginTop:'2.3rem'}}>
+                                                                            <input style={{width: '4rem'}} onChange={(e) => setPercentage(e.target.value)} type="text" defaultValue={contract.percentage} className='form-control'/> <p style={{marginTop: '8px',marginLeft: '7px'}}>% of BAR</p>
+                                                                            </div>
                                                                         </div>
                                                                         {/* <div className="mb-3">
                                                                             <label htmlFor="">exclude</label>
@@ -507,8 +505,8 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                                         <th>room type</th>
                                                                                         <th>bar</th>
                                                                                         <th>contract recomended</th>
-                                                                                        <th>min mark-up</th>
-                                                                                        <th>selling rate</th>
+                                                                                        {/* <th>min mark-up</th>
+                                                                                        <th>selling rate</th> */}
                                                                                         <th>Actions</th>
                                                                                     </tr>
                                                                                 </thead>
@@ -527,22 +525,22 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                                                         <i className='fa fa-edit'></i>
                                                                                                     </a>
                                                                                                 </td>
-                                                                                                <td>
+                                                                                                {/* <td>
                                                                                                     {markup[0].markup_price === 0 ? (
                                                                                                         formatRupiah(parseInt(item.barprice.price) - parseInt(item.recom_price + 15000))
                                                                                                     ) : (
                                                                                                         formatRupiah(markup[0].markup_price)
                                                                                                     )}
-                                                                                                </td>
+                                                                                                </td> */}
 
-                                                                                                <td >
+                                                                                                {/* <td >
                                                                                                     {markup[0].markup_price === 0 ? (
                                                                                                         formatRupiah(parseInt(item.recom_price) + (parseInt(item.barprice.price) - parseInt(item.recom_price + 15000)))
                                                                                                     ) : (
                                                                                                         formatRupiah(parseInt(item.recom_price) + parseInt(markup[0].markup_price))
                                                                                                     )
                                                                                                     }
-                                                                                                </td>
+                                                                                                </td> */}
                                                                                                 <td>
                                                                                                     <a href={`/room/contract/destroycontractprice/${item.id}`} className='btn btn-datatable btn-icon btn-transparent-dark mr-2'>
                                                                                                         <i className='fa fa-trash'></i>
@@ -586,7 +584,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                     />
                                                                 </Form.Group>
                                                                 <Form.Group controlId="formRate">
-                                                                    <Form.Label>Rate Price</Form.Label>
+                                                                    <Form.Label>Bar Price</Form.Label>
                                                                     <Form.Control
                                                                         type="text"
                                                                         name="rate"
@@ -605,7 +603,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                         onChange={handleRateMinChange}
                                                                     />
                                                                 </Form.Group>
-                                                                <Form.Group controlId="formMarkup">
+                                                                {/* <Form.Group controlId="formMarkup">
                                                                     <Form.Label>Markup</Form.Label>
                                                                     <Form.Control
                                                                         type="text"
@@ -617,8 +615,8 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                         )}
                                                                         disabled
                                                                     />
-                                                                </Form.Group>
-                                                                <Form.Group controlId="formSelling">
+                                                                </Form.Group> */}
+                                                                {/* <Form.Group controlId="formSelling">
                                                                     <Form.Label>Selling</Form.Label>
                                                                     {sellingPrice > modalData?.barprice.price ? (
                                                                         <>
@@ -634,7 +632,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                         value={sellingPrice}
                                                                         disabled
                                                                     />
-                                                                </Form.Group>
+                                                                </Form.Group> */}
                                                                 <a href={`/room/contract/updatecontractprice/${modalData?.id}/${minPrice ? minPrice : modalData?.recom_price}/${sellingPrice}`} className='btn btn-primary mt-4'>
                                                                     Save Changes
                                                                 </a>
@@ -697,25 +695,25 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                         </Modal.Footer>
                                                     </Modal>
 
-                                                    <Modal show={showModalMarkup} onHide={handleCloseModalMarkup}>
+                                                    {/* <Modal show={showModalMarkup} onHide={handleCloseModalMarkup}>
                                                         <Modal.Header>
                                                             <Modal.Title>Edit Select RoomType</Modal.Title>
                                                         </Modal.Header>
                                                         <Modal.Body>
                                                            <form action="">
                                                             <label htmlFor="">Min Markup</label>
-                                                            <input type="text" className='form-control' defaultValue={markup[0].markup_price} onChange={(e) =>setMinMarkup(e.target.value)}/>
+                                                            <input type="text" className='form-control' defaultValue={contract.percentage} onChange={(e) =>setPercentage(e.target.value)}/>
                                                            </form>
                                                         </Modal.Body>
                                                         <Modal.Footer>
-                                                            <a href={`/room/markup/updateprice/${minMarkup}`} className='btn btn-primary'>
+                                                            <a href={`/room/markup/updateprice/${contract.percentage}`} className='btn btn-primary'>
                                                                 <i className='fa fa-plus'></i> save
                                                             </a>
                                                             <Button variant="secondary" onClick={handleCloseModalMarkup}>
                                                                 Close
                                                             </Button>
                                                         </Modal.Footer>
-                                                    </Modal>
+                                                    </Modal> */}
                                                 </div>
                                                 <hr />
                                                 <div className="row justify-content-between"> {/* Use justify-content-between to move the buttons to both ends */}

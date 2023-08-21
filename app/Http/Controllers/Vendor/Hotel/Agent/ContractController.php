@@ -111,24 +111,8 @@ class ContractController extends Controller
                 $data->deposit_policy = $request->deposit_policy;
                 $data->except = explode(",",$request->except);
                 $data->distribute = explode(",",$request->distribute);
+                $data->percentage = $request->percentage;
                 $data->save();
-
-                $markup = AgentMarkupSetup::where('user_id',$id)->get();
-
-                if($markup->isEmpty()){
-                    $newmarkup = new AgentMarkupSetup();
-                    $newmarkup->user_id = $id;
-                    $newmarkup->vendor_id = $vendorid->id;
-                    $newmarkup->markup_price = $request->minmarkup;
-                    $newmarkup->tax = 0;
-                    $newmarkup->service = 0;
-                    $newmarkup->save();
-
-                }else{
-                    $markupupdate = AgentMarkupSetup::find($markup[0]->id);
-                    $markupupdate->markup_price = $request->minmarkup;
-                    $markupupdate->save();
-                }
 
 
             return redirect()
@@ -144,17 +128,33 @@ class ContractController extends Controller
         $userid = auth()->user()->id;
         $barprice = BarPrice::where('user_id',$userid)->get();
 
-        $markup = AgentMarkupSetup::where('user_id',$userid)->get();
+        // $markup = AgentMarkupSetup::where('user_id',$userid)->get();
+
+        $contract = ContractRate::find($cont);
+
         foreach($barprice as $item){
             $cpExists = ContractPrice::where('contract_id',$cont)->where('room_id',$item->room_id)->exists();
+             // ================================== OLD RUMUS ============================================
             //contoh bila data $cp tidak ditemukan maka if nya seperti ini
+            // if(!$cpExists){
+            //     $data = new ContractPrice();
+            //     $data->room_id = $item->room_id;
+            //     $data->user_id =  $userid;
+            //     $data->contract_id = $cont;
+            //     $data->recom_price = $item->price * 0.83;
+            //     $data->price = ($item->price * 0.83)+$markup[0]->markup_price;
+            //     $data->barprice_id = $item->id;
+            //     $data->save();
+            // }
+            // ================================== OLD RUMUS ============================================
+
             if(!$cpExists){
                 $data = new ContractPrice();
                 $data->room_id = $item->room_id;
                 $data->user_id =  $userid;
                 $data->contract_id = $cont;
-                $data->recom_price = $item->price * 0.83;
-                $data->price = ($item->price * 0.83)+$markup[0]->markup_price;
+                $data->recom_price = $item->price * ((100 - $contract->percentage)/100);
+                $data->price = 0;
                 $data->barprice_id = $item->id;
                 $data->save();
             }
@@ -170,20 +170,31 @@ class ContractController extends Controller
         // dd($id,$cont);
         $barprice = BarPrice::find($id);
         $userid = auth()->user()->id;
-        $markup = AgentMarkupSetup::where('user_id',$userid)->first();
+        $contract = ContractRate::find($cont);
+
+        // $markup = AgentMarkupSetup::where('user_id',$userid)->first();
+
+        //=====================================OLD RUMUS=============================================
+            // $data = new ContractPrice();
+            // $data->room_id = $barprice->room_id;
+            // $data->user_id =  $userid;
+            // $data->contract_id = $cont;
+            // $data->recom_price = $barprice->price * 0.83;
+            // if($markup->markup_price == 0){
+            //     $nilai = $barprice->price * 0.83;
+            //     $hasil = $barprice->price - $nilai + 15000;
+            //     $data->price = $nilai + $hasil;
+            // }else{
+            //     $data->price = ($barprice->price * 0.83)+$markup->markup_price;
+            // }
+            //=========================================OLD RUMUS================================================
 
             $data = new ContractPrice();
             $data->room_id = $barprice->room_id;
             $data->user_id =  $userid;
             $data->contract_id = $cont;
-            $data->recom_price = $barprice->price * 0.83;
-            if($markup->markup_price == 0){
-                $nilai = $barprice->price * 0.83;
-                $hasil = $barprice->price - $nilai + 15000;
-                $data->price = $nilai + $hasil;
-            }else{
-                $data->price = ($barprice->price * 0.83)+$markup->markup_price;
-            }
+            $data->recom_price = $barprice->price * ((100 - $contract->percentage)/100);
+            $data->price = 0;
 
             $data->barprice_id = $id;
             $data->save();
@@ -272,6 +283,7 @@ class ContractController extends Controller
                 $data->deposit_policy = $request->deposit_policy;
                 $data->except = explode(",",$request->except);
                 $data->distribute = explode(",",$request->distribute);
+                $data->percentage = $request->percentage;
                 $data->save();
 
             return redirect()

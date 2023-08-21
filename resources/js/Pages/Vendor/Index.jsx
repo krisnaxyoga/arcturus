@@ -61,6 +61,7 @@ export default function Index({ totalroom,income,booking,success,pending,data })
                     </div>
                   </div>
                 </div>
+
                 <div className="col-xl-3 col-md-6 col-6 mb-4">
                   <div className="card border-left-info shadow h-100 py-2">
                     <div className="card-body">
@@ -106,7 +107,8 @@ export default function Index({ totalroom,income,booking,success,pending,data })
                       <div className="row no-gutters align-items-center">
                         <div className="col mr-2">
                           <div className="text-xs font-weight-bold text-secondary text-uppercase mb-1">
-                            Total Room Night</div>
+                            Total Room Night
+                            </div>
                           <div className="h5 mb-0 font-weight-bold text-gray-800">{totalroom}</div>
                         </div>
                         <div className="col-auto">

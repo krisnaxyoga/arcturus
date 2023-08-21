@@ -105,8 +105,10 @@
                                         <div class="col-md-8">
                                             <div class="card-body">
                                                 <h3 class="card-title"><a href="#">{{$item->room->ratedesc}}</a></h3>
-                                                <span class="price">Rp. {{ number_format(($item->recom_price + $item->contractrate->vendors->system_markup + $surcharprice), 0, ',', '.')}}</span>
-                                                surcharge : {{$surchargesVendorIds}} blackout : {{$blackoutVendorIds}} vendorid :{{$item->contractrate->vendor_id}}
+                                                {{-- <span class="price">Rp. {{ number_format(($item->recom_price + $item->contractrate->vendors->system_markup + $surcharprice), 0, ',', '.')}}</span> --}}
+                                                {{-- surcharge : {{$surchargesVendorIds}} blackout : {{$blackoutVendorIds}} vendorid :{{$item->contractrate->vendor_id}} --}}
+                                                
+                                                <span class="price">Rp. {{ number_format(($item->recom_price + $item->contractrate->vendors->system_markup), 0, ',', '.')}}</span>
                                                 <p class="card-text"><small class="text-body-secondary"></small></p>
                                                 @if($item->room->room_allow <= 0 || $blackoutVendorIds->contains($item->contractrate->vendors->id))
                                                     <span class="badge badge-danger">Sold</span>
@@ -114,7 +116,9 @@
                                                     <select class="form-control room-quantity" name="room_quantity" style="width:200px" onchange="calculateTotal()">
                                                         <option data-price="0" value="0">0</option>
                                                         @for ($i = 1; $i <= $item->room->room_allow; $i++)
-                                                            <option data-contprice={{$item->id}} data-contractid={{$item->contract_id}} data-roomid={{$item->room->id}} data-price="{{($i * ($item->recom_price + $item->contractrate->vendors->system_markup + $surcharprice)) }}" value="{{$i}}">{{$i}} @if($i == 1) room @else rooms @endif </option>
+                                                            {{-- <option data-contprice={{$item->id}} data-contractid={{$item->contract_id}} data-roomid={{$item->room->id}} data-price="{{($i * ($item->recom_price + $item->contractrate->vendors->system_markup + $surcharprice)) }}" value="{{$i}}">{{$i}} @if($i == 1) room @else rooms @endif </option> --}}
+                                                            <option data-contprice={{$item->id}} data-contractid={{$item->contract_id}} data-roomid={{$item->room->id}} data-price="{{($i * ($item->recom_price + $item->contractrate->vendors->system_markup)) }}" value="{{$i}}">{{$i}} @if($i == 1) room @else rooms @endif </option>
+                                                     
                                                         @endfor
                                                     </select>
                                                 @endif

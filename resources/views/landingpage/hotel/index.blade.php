@@ -131,12 +131,14 @@
             <div class="row">
 
                 @foreach ($data as $item)
-                    @if(!$blackoutVendorIds->contains($item->contractrate->vendor_id))
+                    {{-- @if(!$blackoutVendorIds->contains($item->contractrate->vendor_id)) --}}
                     <div class="col-md-4 ftco-animate">
                         <div class="project-wrap hotel">
                             <a href="{{ route('hoteldetail.homepage', ['id' => $item->contract_id]) }}?{{ http_build_query($requestdata) }}" class="img"
                                 style="background-image: url({{$item->room->feature_image}});">
-                                <span class="price">Rp. {{ number_format(($item->recom_price + $item->contractrate->vendors->system_markup + $surcharprice), 0, ',', '.')}}</span>
+                                {{-- <span class="price">Rp. {{ number_format(($item->recom_price + $item->contractrate->vendors->system_markup + $surcharprice), 0, ',', '.')}}</span> --}}
+                                
+                                <span class="price">Rp. {{ number_format(($item->recom_price + $item->contractrate->vendors->system_markup), 0, ',', '.')}}</span>
                             </a>
                             <div class="text p-4">
                                 <p class="star mb-2">
@@ -159,7 +161,7 @@
                             </div>
                         </div>
                     </div>
-                @endif
+                {{-- @endif --}}
                 @endforeach
             </div>
             <div class="row mt-5">

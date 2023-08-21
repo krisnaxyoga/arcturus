@@ -35,7 +35,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
 
     const [showModal, setShowModal] = useState(false);
 
-    const [minMarkup, setMinMarkup] = useState('');
+    const [percentage, setPercentage] = useState('');
 
 
     const [selectedDistribute, setSelectedDistribute] = useState([]);
@@ -186,7 +186,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
 
         formData.append('distribute',selectedDistribute);
         formData.append('except',selectedExclude);
-        formData.append('minmarkup',minMarkup ? minMarkup:markup.markup_price);
+        formData.append('percentage',percentage);
 
         Inertia.post('/room/contract/store', formData, {
             onSuccess: () => {
@@ -390,8 +390,10 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
 
                                                                         </div>
                                                                         <div className="mb-3">
-                                                                            <label htmlFor="">Min Mark-up</label>
-                                                                            <input  onChange={(e) => setMinMarkup(e.target.value)} type="text" defaultValue={markup.markup_price} className='form-control'/>
+                                                                            <div className="d-flex" style={{marginTop:'2.3rem'}}>
+                                                                            <input style={{width: '4rem'}} onChange={(e) => setPercentage(e.target.value)} type="text" className='form-control'/> <p style={{marginTop: '8px',marginLeft: '7px'}}>% of BAR</p>
+                                                                            </div>
+                                                                            
                                                                         </div>
                                                                     </div>
                                                                 </div>
