@@ -53,6 +53,12 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
           }
     };
 
+    const handleRemoveSelected = (valueToRemove) => {
+        setSelectedDistribute((prevSelectedValues) =>
+          prevSelectedValues.filter((value) => value !== valueToRemove)
+        );
+      };
+      
     const handleSelectExclude = (event) => {
         const selectedExcludes = event.target.value;
         const isSelected = selectedExclude.includes(selectedExcludes);
@@ -249,8 +255,8 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                 <hr />
                                                                 <div className="row">
                                                                     <div className="col-lg-6">
-                                                                        <label htmlFor="" className='fw-bold'>STAY PERIODS</label>
-                                                                        <hr />
+                                                                        <label htmlFor="" className='font-weight-bolder'>STAY PERIODS</label>
+                                                                   
                                                                         <div className="row">
                                                                             <div className="col-lg-6">
                                                                                 <div className="mb-3">
@@ -265,34 +271,64 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-
-                                                                        <label htmlFor="" className='fw-bold'>BOOKING PERIODS</label>
                                                                         <hr />
+                                                                        <label htmlFor="" className='font-weight-bolder'>BOOKING PERIODS</label>
                                                                         <div className="row">
                                                                             <div className="col-lg-6">
-                                                                                <div className="mt-4">
+                                                                                <div>
                                                                                     <label htmlFor="" className='fw-bold'>Start date</label>
                                                                                     <input value={begindate} onChange={(e) => setBeginDate(e.target.value)} type="date" className='form-control' />
                                                                                 </div>
                                                                             </div>
                                                                             <div className="col-lg-6">
-                                                                                <div className="mt-4">
+                                                                                <div>
                                                                                     <label htmlFor="" className='fw-bold'>End date</label>
                                                                                     <input value={enddate} onChange={(e) => setEndDate(e.target.value)} type="date" className='form-control' />
                                                                                 </div>
                                                                             </div>
                                                                         </div>
+                                                                        <div className="mb-3">
+                                                                            <div className="d-flex" style={{marginTop:'2.3rem'}}>
+                                                                            <input style={{width: '4rem'}} onChange={(e) => setPercentage(e.target.value)} type="number" defaultValue={0} className='form-control'/> <p style={{marginTop: '8px',marginLeft: '7px'}}>% off BAR</p>
+                                                                            </div>
+                                                                            
+                                                                        </div>
                                                                     </div>
                                                                     <div className="col-lg-6">
-                                                                        <div className="mb-3">
+                                                                    <div className="mb-5">
                                                                             <label htmlFor="">Market</label>
-                                                                            <select name="" id="" className='form-control' onChange={handleSelectDistribute} multiple>
+                                                                            <select
+                                                                                name=""
+                                                                                id=""
+                                                                                className="form-control"
+                                                                                onChange={handleSelectDistribute}
+                                                                                multiple
+                                                                            >
                                                                                 <option value="all">all</option>
-                                                                                    {Object.keys(country).map(key => (
-                                                                                        <option key={key} value={country[key]}>{country[key]}</option>
-                                                                                    ))}
+                                                                                {Object.keys(country).map((key) => (
+                                                                                <option key={key} value={country[key]}>
+                                                                                    {country[key]}
+                                                                                </option>
+                                                                                ))}
                                                                             </select>
-                                                                            <p className='mt-2'>Selected: <span className='text-secondary'>{selectedDistribute.join(', ')}</span></p>
+                                                                            <p className="mt-2">
+                                                                                Selected Values:{" "}
+                                                                                <span className="text-secondary">
+                                                                                {selectedDistribute.map((value) => (
+                                                                                    <ul key={value}>
+                                                                                        <li>
+                                                                                        {value}{" "}
+                                                                                        <button style={{borderRadius:'20px'}}
+                                                                                            className="btn btn-sm btn-danger"
+                                                                                            onClick={() => handleRemoveSelected(value)}
+                                                                                        >
+                                                                                            x
+                                                                                        </button>{" "}
+                                                                                        </li>
+                                                                                    </ul>
+                                                                                ))}
+                                                                                </span>
+                                                                            </p>
                                                                         </div>
                                                                         {/* <div className="mb-3">
                                                                             <label htmlFor="">Exclude</label>
@@ -389,12 +425,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                             </label>
 
                                                                         </div>
-                                                                        <div className="mb-3">
-                                                                            <div className="d-flex" style={{marginTop:'2.3rem'}}>
-                                                                            <input style={{width: '4rem'}} onChange={(e) => setPercentage(e.target.value)} type="text" className='form-control'/> <p style={{marginTop: '8px',marginLeft: '7px'}}>% of BAR</p>
-                                                                            </div>
-                                                                            
-                                                                        </div>
+                                                                     
                                                                     </div>
                                                                 </div>
                                                                 
@@ -471,84 +502,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                         </div>
                                                     </div>
 
-                                                    <Modal show={showModal} onHide={handleCloseModal}>
-                                                        <Modal.Header closeButton>
-                                                            <Modal.Title>Edit Selling Rate</Modal.Title>
-                                                        </Modal.Header>
-                                                        <Modal.Body>
-                                                            <Form onSubmit={handleUpdatePrice} >
-                                                                <Form.Group controlId="formCode">
-                                                                    <Form.Label>Room Type Code</Form.Label>
-                                                                    <Form.Control
-                                                                        type="text"
-                                                                        name="code"
-                                                                        defaultValue={modalData?.room?.ratecode}
-                                                                        disabled
-                                                                    />
-                                                                </Form.Group>
-                                                                <Form.Group controlId="formName">
-                                                                    <Form.Label>Room Type Name</Form.Label>
-                                                                    <Form.Control
-                                                                        type="text"
-                                                                        name="name"
-                                                                        defaultValue={modalData?.room?.ratedesc}
-                                                                        disabled
-                                                                    />
-                                                                </Form.Group>
-                                                                <Form.Group controlId="formRate">
-                                                                    <Form.Label>Rate Price</Form.Label>
-                                                                    <Form.Control
-                                                                        type="text"
-                                                                        name="rate"
-                                                                        data-price={modalData?.price}
-                                                                        defaultValue={modalData?.price}
-                                                                        disabled
-                                                                    />
-                                                                </Form.Group>
-                                                                <Form.Group controlId="formRateMin">
-                                                                    <Form.Label>Rate Minimum</Form.Label>
-                                                                    <Form.Control
-                                                                        type="text"
-                                                                        name="rate_min"
-                                                                        data-id={modalData?.id}
-                                                                        data-ratecode={modalData?.room?.ratecode}
-                                                                        data-ratedesc={modalData?.room?.ratedesc}
-                                                                        defaultValue={modalData?.price * 0.75}
-                                                                        onChange={handleRateMinChange}
-                                                                    />
-                                                                </Form.Group>
-                                                                <Form.Group controlId="formMarkup">
-                                                                    <Form.Label>Markup</Form.Label>
-                                                                    <Form.Control
-                                                                        type="text"
-                                                                        name="markup"
-                                                                        defaultValue={markup?.markup_price}
-                                                                        disabled
-                                                                    />
-                                                                </Form.Group>
-                                                                <Form.Group controlId="formSelling">
-                                                                    <Form.Label>Selling</Form.Label>
-                                                                    <Form.Control
-                                                                        type="text"
-                                                                        name="selling"
-                                                                        placeholder={modalData?.price * 0.75 + markup?.markup_price}
-                                                                        //defaultValue={modalData?.price * 0.75 + markup[0]?.markup_price}
-                                                                        value={sellingPrice}
-                                                                        disabled
-                                                                    />
-                                                                </Form.Group>
-                                                                <Button variant="primary" type="submit">
-                                                                    Save Changes
-                                                                </Button>
-                                                            </Form>
-                                                        </Modal.Body>
-                                                        <Modal.Footer>
-                                                            <Button variant="secondary" onClick={handleCloseModal}>
-                                                                Close
-                                                            </Button>
-                                                        </Modal.Footer>
-                                                    </Modal>
-
+                                                   
 
                                                 </div>
                                                 <hr />

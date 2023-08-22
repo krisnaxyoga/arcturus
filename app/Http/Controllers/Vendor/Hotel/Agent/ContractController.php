@@ -172,9 +172,9 @@ class ContractController extends Controller
         $userid = auth()->user()->id;
         $contract = ContractRate::find($cont);
 
-        // $markup = AgentMarkupSetup::where('user_id',$userid)->first();
+            // $markup = AgentMarkupSetup::where('user_id',$userid)->first();
 
-        //=====================================OLD RUMUS=============================================
+            //=====================================OLD RUMUS=============================================
             // $data = new ContractPrice();
             // $data->room_id = $barprice->room_id;
             // $data->user_id =  $userid;
@@ -238,7 +238,7 @@ class ContractController extends Controller
                   ->with('room')
                   ->with('barprice')
                   ->where('contract_id', $id)
-                  ->orderBy('price', 'asc')
+                  ->orderBy('recom_price', 'asc')
                   ->get();
 
         return inertia('Vendor/MenageRoom/ContractRate/Edit',[
@@ -270,6 +270,17 @@ class ContractController extends Controller
         } else {
                 $userid = auth()->user()->id;
                 $data = ContractRate::find($id);
+
+                if($data->percentage != $request->percentage){
+                    $barprice = BarPrice::where('user_id',$userid)->get();
+                    $contractprice = ContractPrice::where('contract_id',$id)->get();
+                    foreach($barprice as $key=>$item){
+                        $cont = ContractPrice::find($contractprice[$key]->id);
+                        $cont->recom_price = $item->price * ((100 - $request->percentage)/100);
+                        $cont->save();
+                    }
+                }
+
                 $data->user_id = $userid;
                 $data->ratecode = $request->ratecode;
                 $data->codedesc = $request->codedesc;
@@ -285,6 +296,8 @@ class ContractController extends Controller
                 $data->distribute = explode(",",$request->distribute);
                 $data->percentage = $request->percentage;
                 $data->save();
+
+                
 
             return redirect()
             ->route('contract.index')
