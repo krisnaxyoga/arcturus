@@ -42,4 +42,8 @@ class RoomHotel extends Model
     public function promotprice() {
         return $this->hasMany(PromoPrice::class);
     }
+
+    public function advancepurchaseprice() {
+        return $this->hasMany(AdvancePurchasePrice::class);
+    }
 }

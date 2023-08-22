@@ -15,7 +15,7 @@ import { Inertia } from '@inertiajs/inertia';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 
-export default function PriceAgentRoom({ country, session, data, markup, bardata }) {
+export default function PriceAgentRoom({ country, session, data, markup, bardata,cont }) {
 
     const [ratecode, setRateCode] = useState('');
     const [ratedesc, setRateDesc] = useState('');
@@ -58,7 +58,9 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
           prevSelectedValues.filter((value) => value !== valueToRemove)
         );
       };
-      
+
+    //   console.log(cont,"nilainya contract");
+
     const handleSelectExclude = (event) => {
         const selectedExcludes = event.target.value;
         const isSelected = selectedExclude.includes(selectedExcludes);
@@ -204,12 +206,16 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
         <>
             <Layout page='/room/contract/index'>
                 <div className="container">
+                <h1>Contract Rate</h1>
                     <div className="row">
-                        <h1>Contract Rate</h1>
+                        
                         {(!data || Object.keys(data).length === 0) || (!markup || Object.keys(markup).length === 0) || (!bardata || Object.keys(bardata).length === 0) ? (
-                            <div className="alert alert-danger border-0 shadow-sm rounded-3">
-                                <p>Please check again the information bar and your profile hotel is it complete?</p>
+                            <div className="col-lg-6">
+                                <div className="alert alert-danger border-0 shadow-sm rounded-3">
+                                    <p>Please check again the information bar and your profile hotel is it complete?</p>
+                                </div>
                             </div>
+                            
                         ) : (
                             <>
                                 <div className="col-lg-11">
@@ -246,10 +252,22 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                         </div>
                                                                     </div>
                                                                     <div className="col-lg-4">
-                                                                        <div className="mb-3">
+                                                                    {cont === true ? (
+                                                                        <>
+                                                                          <div className="mb-3">
                                                                             <label htmlFor="" className='fw-bold'>Minimum stay</label>
                                                                             <input onChange={(e) => setMinStay(e.target.value)} type="number" className='form-control' required/>
                                                                         </div>
+                                                                        </>
+                                                                    ):(
+                                                                        <>
+                                                                          <div className="mb-3">
+                                                                            <label htmlFor="" className='fw-bold'>Minimum stay</label>
+                                                                            <input readOnly onChange={(e) => setMinStay(e.target.value)} type="number" className='form-control' value={1}/>
+                                                                        </div>
+                                                                        </>
+                                                                    )}
+                                                                      
                                                                     </div>
                                                                 </div>
                                                                 <hr />
@@ -288,48 +306,57 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                             </div>
                                                                         </div>
                                                                         <div className="mb-3">
-                                                                            <div className="d-flex" style={{marginTop:'2.3rem'}}>
+                                                                            <div className="d-flex mt-3">
                                                                             <input style={{width: '4rem'}} onChange={(e) => setPercentage(e.target.value)} type="number" defaultValue={0} className='form-control'/> <p style={{marginTop: '8px',marginLeft: '7px'}}>% off BAR</p>
                                                                             </div>
                                                                             
                                                                         </div>
                                                                     </div>
                                                                     <div className="col-lg-6">
-                                                                    <div className="mb-5">
-                                                                            <label htmlFor="">Market</label>
-                                                                            <select
-                                                                                name=""
-                                                                                id=""
-                                                                                className="form-control"
-                                                                                onChange={handleSelectDistribute}
-                                                                                multiple
-                                                                            >
-                                                                                <option value="all">all</option>
-                                                                                {Object.keys(country).map((key) => (
-                                                                                <option key={key} value={country[key]}>
-                                                                                    {country[key]}
-                                                                                </option>
-                                                                                ))}
-                                                                            </select>
-                                                                            <p className="mt-2">
-                                                                                Selected Values:{" "}
-                                                                                <span className="text-secondary">
-                                                                                {selectedDistribute.map((value) => (
-                                                                                    <ul key={value}>
-                                                                                        <li>
-                                                                                        {value}{" "}
-                                                                                        <button style={{borderRadius:'20px'}}
-                                                                                            className="btn btn-sm btn-danger"
-                                                                                            onClick={() => handleRemoveSelected(value)}
-                                                                                        >
-                                                                                            x
-                                                                                        </button>{" "}
-                                                                                        </li>
-                                                                                    </ul>
-                                                                                ))}
-                                                                                </span>
-                                                                            </p>
-                                                                        </div>
+                                                                        {cont === true ? (
+                                                                             <div className="mb-5">
+                                                                             <label htmlFor="">Market</label>
+                                                                             <select
+                                                                                 name=""
+                                                                                 id=""
+                                                                                 className="form-control"
+                                                                                 onChange={handleSelectDistribute}
+                                                                                 multiple
+                                                                             >
+                                                                                 <option value="all">all</option>
+                                                                                 {Object.keys(country).map((key) => (
+                                                                                 <option key={key} value={country[key]}>
+                                                                                     {country[key]}
+                                                                                 </option>
+                                                                                 ))}
+                                                                             </select>
+                                                                             <p className="mt-2">
+                                                                                 Selected Values:{" "}
+                                                                                 <span className="text-secondary">
+                                                                                 {selectedDistribute.map((value) => (
+                                                                                     <ul key={value}>
+                                                                                         <li>
+                                                                                         {value}{" "}
+                                                                                         <button style={{borderRadius:'20px'}}
+                                                                                             className="btn btn-sm btn-danger"
+                                                                                             onClick={() => handleRemoveSelected(value)}
+                                                                                         >
+                                                                                             x
+                                                                                         </button>{" "}
+                                                                                         </li>
+                                                                                     </ul>
+                                                                                 ))}
+                                                                                 </span>
+                                                                             </p>
+                                                                         </div>
+                                                                        ) : (
+                                                                            <>
+                                                                            <label htmlFor="" style={{marginTop:'2rem'}}> Market</label>
+                                                                            <input type="text" readOnly value={'all'} className='form-control'/>
+                                                                            </>
+                                                                        )
+                                                                        }
+                                                                   
                                                                         {/* <div className="mb-3">
                                                                             <label htmlFor="">Exclude</label>
                                                                             <select name="" id="" className='form-control' onChange={handleSelectExclude} multiple>

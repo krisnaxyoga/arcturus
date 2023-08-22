@@ -12,6 +12,8 @@ use App\Models\AgentMarkupSetup;
 use App\Models\AgentMarkupDetail;
 use App\Models\ContractRate;
 use App\Models\ContractPrice;
+use App\Models\AdvancePurchase;
+use App\Models\AdvancePurchasePrice;
 
 use Illuminate\Support\Facades\Validator;
 
@@ -67,11 +69,14 @@ class ContractController extends Controller
         $barprice = BarPrice::where('user_id',$userid)->with('barroom')->with('room')->get();
         $bardata = BarRoom::where('user_id',$userid)->get();
         $country =  get_country_lists();
+        $contract = ContractRate::where('user_id',$userid)->exists();
+        
             return inertia('Vendor/MenageRoom/ContractRate/Create',[
                 'data' => $barprice,
                 'bardata' => $bardata,
                 'markup' => $price,
-                'country' => $country
+                'country' => $country,
+                'cont' => $contract
             ]);
         }
 
@@ -93,7 +98,7 @@ class ContractController extends Controller
                 ->withInput($request->all());
         } else {
                 $id = auth()->user()->id;
-
+                $contract = ContractRate::where('user_id',$id)->exists();
                 $vendorid = Vendor::where('user_id',$id)->first();
                 // dd($vendorid);
                 $data =  new ContractRate();
@@ -105,15 +110,38 @@ class ContractController extends Controller
                 $data->stayperiod_end = $request->stayperiod_end;
                 $data->booking_begin = $request->booking_begin;
                 $data->booking_end = $request->booking_end;
-                $data->min_stay = $request->min_stay;
+                if($contract == false){
+                    $data->min_stay = 1;
+                    $data->distribute = ["all"];
+                    $data->rolerate = 1;
+
+                }else{
+                    $data->min_stay = $request->min_stay;
+                    $data->distribute = explode(",",$request->distribute);
+                    $data->rolerate = 2;
+                }
+                
                 $data->pick_day = explode(",", $request->pick_day);
                 $data->cencellation_policy = $request->cencellation_policy;
                 $data->deposit_policy = $request->deposit_policy;
                 $data->except = explode(",",$request->except);
-                $data->distribute = explode(",",$request->distribute);
                 $data->percentage = $request->percentage;
                 $data->save();
 
+                $interval = 7;
+                $startDate = now()->addDays($interval); // Mulai dari 7 hari kemudian
+
+                for ($i = 1; $i <= 6; $i++) {
+                    $advancepurchase = new AdvancePurchase;
+                    $advancepurchase->user_id = $id;
+                    $advancepurchase->vendor_id = $vendorid->id;
+                    $advancepurchase->contract_id = $data->id;
+                    $advancepurchase->day = $interval * $i;
+                    $advancepurchase->beginsell = $startDate->copy()->addDays($interval * ($i - 1));
+                    $advancepurchase->endsell = $startDate->copy()->addDays($interval * $i)->subDay(); // Karena endsell sehari sebelumnya
+                    $advancepurchase->is_active = 1;
+                    $advancepurchase->save();
+                }
 
             return redirect()
             ->route('contract.edit',$data->id)
@@ -157,6 +185,29 @@ class ContractController extends Controller
                 $data->price = 0;
                 $data->barprice_id = $item->id;
                 $data->save();
+
+                $advancepurchase = AdvancePurchase::where('contract_id',$contract->id)->get();
+                foreach($advancepurchase as $key=>$item){
+                    $nilai = [
+                        0 => 0.962,
+                        1 => 0.925444,
+                        2 => 0.890277128,
+                        3 => 0.856446597136,
+                        4 => 0.823901626444832,
+                        5 => 0.792593364639928,
+                    ];
+    
+                    $advanceprice = new AdvancePurchasePrice;
+                    $advanceprice->room_id = $item->room_id;
+                    $advanceprice->user_id = $userid;
+                    $advanceprice->vendor_id = $item->vendor_id;
+                    $advanceprice->contract_id = $cont;
+                    $advanceprice->advance_id = $item->id;
+                    $advanceprice->price = $data->recom_price * $nilai[$key];
+                    $advanceprice->rolerate = 2;
+                    $advanceprice->is_active = $item->is_active;
+                    $advanceprice->save();
+                }
             }
         }
 
@@ -195,9 +246,35 @@ class ContractController extends Controller
             $data->contract_id = $cont;
             $data->recom_price = $barprice->price * ((100 - $contract->percentage)/100);
             $data->price = 0;
+            
 
             $data->barprice_id = $id;
             $data->save();
+
+            
+            $advancepurchase = AdvancePurchase::where('contract_id',$contract->id)->get();
+            foreach($advancepurchase as $key=>$item){
+                $nilai = [
+                    0 => 0.962,
+                    1 => 0.925444,
+                    2 => 0.890277128,
+                    3 => 0.856446597136,
+                    4 => 0.823901626444832,
+                    5 => 0.792593364639928,
+                ];
+
+                $advanceprice = new AdvancePurchasePrice;
+                $advanceprice->room_id = $barprice->room_id;
+                $advanceprice->user_id = $userid;
+                $advanceprice->vendor_id = $item->vendor_id;
+                $advanceprice->contract_id = $contract->id;
+                $advanceprice->advance_id = $item->id;
+                $advanceprice->price = $data->recom_price * $nilai[$key];
+                $advanceprice->rolerate = 2;
+                $advanceprice->is_active = $item->is_active;
+                $advanceprice->save();
+            }
+            
 
         return redirect()->back()->with('message', 'Room Type add');
 
@@ -234,6 +311,9 @@ class ContractController extends Controller
         $country =  get_country_lists();
 
         $contract = ContractRate::find($id);
+        $advancepurchase = AdvancePurchase::where('contract_id',$contract->id)->get();
+        $advanceprice = AdvancePurchasePrice::where('contract_id',$contract->id)->with('room')->get();
+
         $contractprice = ContractPrice::where('user_id', $userid)
                   ->with('room')
                   ->with('barprice')
@@ -247,7 +327,9 @@ class ContractController extends Controller
             'markup' => $price,
             'contract' => $contract,
             'contractprice' => $contractprice,
-            'country'=> $country
+            'country'=> $country,
+            'advancepurchase' => $advancepurchase,
+            'advanceprice'=>$advanceprice
         ]);
     }
 

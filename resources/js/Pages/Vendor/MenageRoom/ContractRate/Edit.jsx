@@ -14,7 +14,7 @@ import { Inertia } from '@inertiajs/inertia';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 
-export default function PriceAgentRoom({ country, session, data, markup, bardata, contract, contractprice }) {
+export default function PriceAgentRoom({ country, session, data, markup, bardata, contract, contractprice, advancepurchase,advanceprice }) {
 
     const [ratecode, setRateCode] = useState('');
     const [ratedesc, setRateDesc] = useState('');
@@ -258,7 +258,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                             </div>
                         ) : (
                             <>
-                                <div className="col-lg-11">
+                                <div className="col-lg-12">
                                     <form onSubmit={storePost}>
                                         <div className="card">
                                             <div className="card-body">
@@ -340,7 +340,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                             </div>
                                                                         </div>
                                                                         <div className="mb-3">
-                                                                            <div className="d-flex" style={{marginTop:'2.3rem'}}>
+                                                                            <div className="d-flex">
                                                                             <input style={{width: '4rem'}} onChange={(e) => setPercentage(e.target.value)} type="text" defaultValue={contract.percentage} className='form-control'/> <p style={{marginTop: '8px',marginLeft: '7px'}}>% off BAR</p>
                                                                             </div>
                                                                         </div>
@@ -612,7 +612,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                         disabled
                                                                     />
                                                                 </Form.Group>
-                                                                <Form.Group controlId="formRate">
+                                                                {/* <Form.Group controlId="formRate">
                                                                     <Form.Label>Bar Price</Form.Label>
                                                                     <Form.Control
                                                                         type="text"
@@ -621,7 +621,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                         defaultValue={modalData?.barprice.price}
                                                                         disabled
                                                                     />
-                                                                </Form.Group>
+                                                                </Form.Group> */}
                                                                 <Form.Group controlId="formRateMin">
                                                                     <Form.Label>Rate Minimum</Form.Label>
                                                                     <Form.Control
@@ -665,7 +665,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                 <a href={`/room/contract/updatecontractprice/${modalData?.id}/${minPrice ? minPrice : modalData?.recom_price}/${sellingPrice}`} className='btn btn-primary mt-4'>
                                                                     Save Changes
                                                                 </a>
-                                                                <Button className='mt-4' variant="secondary" onClick={handleCloseModal}>
+                                                                <Button className='ml-1 mt-4' variant="secondary" onClick={handleCloseModal}>
                                                                     Close
                                                                 </Button>
                                                             </Form>
@@ -768,6 +768,92 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                             </div>
                                         </div>
                                     </form>
+                                </div>
+                                <div className="col-lg-12">
+                                {advancepurchase.map((item, index) => (
+                                    <>
+                                    <div className="row" key={index}>
+                                        <div className="col-lg-12">
+                                            <form action="">
+                                            <div className="card mt-3">
+                                                <div className="card-header">
+                                                    <div className="d-flex justify-content-between">
+                                                        <h2>
+                                                             ADVANCE PURCHASE 
+                                                        </h2>
+                                                        <span className='d-flex'>
+                                                            <input type="text" className='form-control' style={{width:'4rem'}} defaultValue={item.day}/>
+                                                            <p className='text-dark' style={{marginTop: '8px',marginLeft: '7px'}}> DAYS</p>
+                                                        </span>
+                                                    </div>
+                                                   
+                                                </div>
+                                                <div className="card-body">
+                                                    <div className="row mb-3">
+                                                        <div className="col-lg-6">
+                                                            <label htmlFor="">Begin Sell Date</label>
+                                                            <input type="date" defaultValue={item.beginsell} className='form-control form-control-solid'/>
+                                                        </div>
+                                                        <div className="col-lg-6">
+                                                            <label htmlFor="">End Sell Date</label>
+                                                            <input type="date" defaultValue={item.beginsell} className='form-control form-control-solid'/>
+                                                        </div>
+                                                    </div>
+                                                    <div className="row">
+                                                    <div className="col-lg-12">
+                                                                <div className="card">
+                                                                    <div className="card-body">
+                                                                        <div className="table-responsive">
+                                                                            <table id="dataTable" width="100%" cellSpacing="0">
+                                                                                <thead>
+                                                                                    <tr>
+                                                                                        <th>room type</th>
+                                                                                        <th>contract</th>
+                                                                                        <th>Actions</th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                    
+                                                                                {advanceprice.filter(
+                                                                                    (advancepriceItem) =>
+                                                                                        advancepriceItem.advance_id === item.id
+                                                                                    )
+                                                                                    .map((advancepriceItem, index) => (
+                                                                                    <tr key={index}>
+                                                                                        <td>{advancepriceItem.room.ratedesc}</td>
+                                                                                        <td>
+                                                                                        {formatRupiah(advancepriceItem.price)}
+                                                                                        <a
+                                                                                            href="#"
+                                                                                            className="btn btn-datatable btn-icon btn-transparent-dark mr-2"
+                                                                                            onClick={() => buttonSendValue(item)}
+                                                                                        >
+                                                                                            <i className="fa fa-edit"></i>
+                                                                                        </a>
+                                                                                        <a
+                                                                                            href={`/room/contract/destroycontractprice/${item.id}`}
+                                                                                            className="btn btn-datatable btn-icon btn-transparent-dark mr-2"
+                                                                                        >
+                                                                                            <i className="fa fa-trash"></i>
+                                                                                        </a>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    ))}
+
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    </>
+                                ))}
                                 </div>
                             </>
                         )}
