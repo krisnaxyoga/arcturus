@@ -307,7 +307,19 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                         </div>
                                                                         <div className="mb-3">
                                                                             <div className="d-flex mt-3">
-                                                                            <input style={{width: '4rem'}} onChange={(e) => setPercentage(e.target.value)} type="number" defaultValue={0} className='form-control'/> <p style={{marginTop: '8px',marginLeft: '7px'}}>% off BAR</p>
+                                                                            <input style={{width: '4rem'}} onChange={(e) => setPercentage(e.target.value)} type="number" defaultValue={0} className='form-control'/> <p style={{marginTop: '8px',marginLeft: '7px'}}>
+                                                                            {cont === true ? (
+                                                                                <>
+                                                                               
+                                                                                % discount of contract rate
+                                                                                </>
+                                                                            ):(
+                                                                                <>
+                                                                                  % off BAR
+                                                                                </>
+                                                                            )}
+                                                                               
+                                                                                </p>
                                                                             </div>
                                                                             
                                                                         </div>
@@ -331,23 +343,17 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                                  ))}
                                                                              </select>
                                                                              <p className="mt-2">
-                                                                                 Selected Values:{" "}
-                                                                                 <span className="text-secondary">
-                                                                                 {selectedDistribute.map((value) => (
-                                                                                     <ul key={value}>
-                                                                                         <li>
-                                                                                         {value}{" "}
-                                                                                         <button style={{borderRadius:'20px'}}
-                                                                                             className="btn btn-sm btn-danger"
-                                                                                             onClick={() => handleRemoveSelected(value)}
-                                                                                         >
-                                                                                             x
-                                                                                         </button>{" "}
-                                                                                         </li>
-                                                                                     </ul>
-                                                                                 ))}
-                                                                                 </span>
-                                                                             </p>
+                                                                                Selected Values:{" "}
+                                                                                <span className="text-secondary">
+                                                                                {selectedDistribute.map((value) => (
+                                                                                    <span key={value}>
+                                                                                        <span  onClick={() => handleRemoveSelected(value)} class="btn badge badge-success text-light mx-1">
+                                                                                        {value} <span class="mx-1 badge badge-danger">x</span>
+                                                                                        </span>
+                                                                                    </span>
+                                                                                ))}
+                                                                                </span>
+                                                                            </p>
                                                                          </div>
                                                                         ) : (
                                                                             <>
@@ -511,10 +517,10 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                                 <thead>
                                                                                     <tr>
                                                                                     <th>room type</th>
-                                                                                        <th>bar</th>
-                                                                                        <th>contract recomended</th>
-                                                                                        <th>min mark-up</th>
-                                                                                        <th>selling rate</th>
+                                                                                        {/* <th>bar</th> */}
+                                                                                        <th>contract rate</th>
+                                                                                        {/* <th>min mark-up</th> */}
+                                                                                        {/* <th>selling rate</th> */}
                                                                                         <th>Actions</th>
                                                                                     </tr>
                                                                                 </thead>

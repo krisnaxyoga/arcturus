@@ -38,7 +38,16 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
 
     const [showModalTable, setShowModalTable] = useState(false);
 
+    
+    const [showModalAdvance, setShowModalAdvance] = useState(false);
+
     const [percentage, setPercentage] = useState(contract.percentage);
+    
+    // advance purchase variable
+    const [day, setDay] = useState('');
+    const [price, setPrice] = useState('');
+    // const [beginselladvance, setBeginselladvance] = useState('');
+    // const [endselladvance, setEndselladvance] = useState('');
 
 
     const [checkboxes, setCheckboxes] = useState({
@@ -110,6 +119,12 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
     const buttonSendValueTable = (item) => {
         setShowModalTable(true);
     };
+
+    const buttonSendValueAdvance = (item) => {
+        setModalData(item);
+        setShowModalAdvance(true);
+    };
+
     const handleCloseModalTable = () => {
         setShowModalTable(false);
     };
@@ -131,6 +146,10 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
 
     const handleCloseModal = () => {
         setShowModal(false);
+    };
+
+    const handleCloseModalAdvance = () => {
+        setShowModalAdvance(false);
     };
 
     const handleCloseModalMarkup = () => {
@@ -246,6 +265,22 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
             },
         });
     }
+
+    const storeAdvance = async (e,itemId,itemDay) => {
+        e.preventDefault();
+        const formData = new FormData();
+
+        formData.append('day', day ? day : itemDay);
+        // formData.append('beginsell',beginselladvance ? beginselladvance : itemBeginsell);
+        // formData.append('endsell',endselladvance ? endselladvance : itemEndsell);
+        
+        Inertia.post(`/contract/advancepurchase/${itemId}`, formData, {
+            onSuccess: () => {
+                window.location.reload();
+            },
+        });
+    }
+    
     return (
         <>
             <Layout page='/room/contract/index'>
@@ -341,7 +376,19 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                         </div>
                                                                         <div className="mb-3">
                                                                             <div className="d-flex">
-                                                                            <input style={{width: '4rem'}} onChange={(e) => setPercentage(e.target.value)} type="text" defaultValue={contract.percentage} className='form-control'/> <p style={{marginTop: '8px',marginLeft: '7px'}}>% off BAR</p>
+                                                                            <input style={{width: '4rem'}} onChange={(e) => setPercentage(e.target.value)} type="text" defaultValue={contract.percentage} className='form-control'/> <p style={{marginTop: '8px',marginLeft: '7px'}}>
+                                                                               {contract.rolerate === 1 ? (
+                                                                                <>
+                                                                                % off BAR
+                                                                                </>
+                                                                               ):(
+                                                                                <>
+                                                                                % discount of contract rate
+                                                                                </>
+                                                                               )}
+                                                                                
+                                                                                
+                                                                            </p>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -530,8 +577,16 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                                 <thead>
                                                                                     <tr>
                                                                                         <th>room type</th>
-                                                                                        <th>bar</th>
-                                                                                        <th>contract recomended</th>
+                                                                                        {contract.rolerate === 1 ? (
+                                                                                            <>
+                                                                                            <th>bar</th>
+                                                                                            </>
+                                                                                        ):(
+                                                                                            <>
+                                                                                            </>
+                                                                                        )}
+                                                                                      
+                                                                                        <th>contract rate</th>
                                                                                         {/* <th>min mark-up</th>
                                                                                         <th>selling rate</th> */}
                                                                                         <th>Actions</th>
@@ -543,16 +598,20 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                                             <tr key={index}>
 
                                                                                                 <td>{item.room.ratedesc}</td>
-                                                                                                <td>
-                                                                                                    {formatRupiah(item.barprice.price)}
-                                                                                                </td>
+                                                                                                {contract.rolerate === 1 ? (
+                                                                                                     <td>
+                                                                                                        {formatRupiah(item.barprice.price)}
+                                                                                                    </td> 
+                                                                                                ):(
+                                                                                                    <>
+                                                                                                    </>
+                                                                                                )}
+                                                                                                
                                                                                                 <td>
                                                                                                 {contract.percentage === percentage
                                                                                                     ? formatRupiah(item.recom_price)
                                                                                                     : formatRupiah(item.barprice.price * ((100 - percentage) / 100))}
-                                                                                                    <a href='#' className='btn btn-datatable btn-icon btn-transparent-dark mr-2' onClick={() => buttonSendValue(item)}>
-                                                                                                        <i className='fa fa-edit'></i>
-                                                                                                    </a>
+                                                                                                   
                                                                                                 </td>
                                                                                                 {/* <td>
                                                                                                     {markup[0].markup_price === 0 ? (
@@ -571,6 +630,9 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                                                     }
                                                                                                 </td> */}
                                                                                                 <td>
+                                                                                                    <a href='#' className='btn btn-datatable btn-icon btn-transparent-dark mr-2' onClick={() => buttonSendValue(item)}>
+                                                                                                        <i className='fa fa-edit'></i>
+                                                                                                    </a>
                                                                                                     <a href={`/room/contract/destroycontractprice/${item.id}`} className='btn btn-datatable btn-icon btn-transparent-dark mr-2'>
                                                                                                         <i className='fa fa-trash'></i>
                                                                                                     </a>
@@ -731,7 +793,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                         <Modal.Body>
                                                            <form action="">
                                                             <label htmlFor="">Min Markup</label>
-                                                            <input type="text" className='form-control' defaultValue={contract.percentage} onChange={(e) =>setPercentage(e.target.value)}/>
+                                                            <input type="text" className='form-conshowModalMarkuptrol' defaultValue={contract.percentage} onChange={(e) =>setPercentage(e.target.value)}/>
                                                            </form>
                                                         </Modal.Body>
                                                         <Modal.Footer>
@@ -774,29 +836,41 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                     <>
                                     <div className="row" key={index}>
                                         <div className="col-lg-12">
-                                            <form action="">
+                                            <form onSubmit={(e) => storeAdvance(e, item.id,item.beginsell,item.endsell,item.day)}>
                                             <div className="card mt-3">
                                                 <div className="card-header">
                                                     <div className="d-flex justify-content-between">
                                                         <h2>
                                                              ADVANCE PURCHASE 
                                                         </h2>
+                                                      
                                                         <span className='d-flex'>
-                                                            <input type="text" className='form-control' style={{width:'4rem'}} defaultValue={item.day}/>
+                                                            <input onChange={(e) => setDay(e.target.value)} type="number" className='form-control' style={{width:'5rem'}} defaultValue={item.day}/>
                                                             <p className='text-dark' style={{marginTop: '8px',marginLeft: '7px'}}> DAYS</p>
                                                         </span>
                                                     </div>
                                                    
                                                 </div>
                                                 <div className="card-body">
+                                                    {item.is_active === 1 ? (
+                                                        <>
+                                                        <a href={`/advance/updateadvancetstatus/${item.id}/2`} className='btn btn-danger'>off</a>
+                                                        </>
+                                                    ):(
+                                                        <>
+                                                        <a href={`/advance/updateadvancetstatus/${item.id}/1`} className='btn btn-success mx-2'>on</a>
+                                                        </>
+                                                    )}
+                                                        
+                                                        
                                                     <div className="row mb-3">
                                                         <div className="col-lg-6">
                                                             <label htmlFor="">Begin Sell Date</label>
-                                                            <input type="date" defaultValue={item.beginsell} className='form-control form-control-solid'/>
+                                                            <input readOnly type="date" defaultValue={item.beginsell} onChange={(e) => setBeginselladvance(e.target.value)} className='form-control form-control-solid'/>
                                                         </div>
                                                         <div className="col-lg-6">
                                                             <label htmlFor="">End Sell Date</label>
-                                                            <input type="date" defaultValue={item.beginsell} className='form-control form-control-solid'/>
+                                                            <input readOnly type="date" defaultValue={item.endsell} onChange={(e) => setEndselladvance(e.target.value)} className='form-control form-control-solid'/>
                                                         </div>
                                                     </div>
                                                     <div className="row">
@@ -823,15 +897,17 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                                         <td>{advancepriceItem.room.ratedesc}</td>
                                                                                         <td>
                                                                                         {formatRupiah(advancepriceItem.price)}
+                                                                                        </td>
+                                                                                        <td>
                                                                                         <a
                                                                                             href="#"
                                                                                             className="btn btn-datatable btn-icon btn-transparent-dark mr-2"
-                                                                                            onClick={() => buttonSendValue(item)}
+                                                                                            onClick={() => buttonSendValueAdvance(advancepriceItem)}
                                                                                         >
                                                                                             <i className="fa fa-edit"></i>
                                                                                         </a>
                                                                                         <a
-                                                                                            href={`/room/contract/destroycontractprice/${item.id}`}
+                                                                                            href={`/contract/destroyadvanceprice/${advancepriceItem.id}`}
                                                                                             className="btn btn-datatable btn-icon btn-transparent-dark mr-2"
                                                                                         >
                                                                                             <i className="fa fa-trash"></i>
@@ -847,6 +923,10 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                 </div>
                                                             </div>
                                                     </div>
+                                                    <hr />
+                                                    <div className="my-3">
+                                                        <button className='btn btn-primary' type='submit'> <i className='fa fa-save'></i> save</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                             </form>
@@ -859,6 +939,43 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                         )}
                     </div>
                 </div>
+                <Modal show={showModalAdvance} onHide={handleCloseModalAdvance}>
+                    <Modal.Header>
+                        <Modal.Title>Edit Advance Price Rate</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Form>
+                           
+                            <Form.Group controlId="formName">
+                                <Form.Label>Room Type Name</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="name"
+                                    defaultValue={modalData?.room?.ratedesc}
+                                    disabled
+                                />
+                            </Form.Group>
+                            <Form.Group controlId="formRateMin">
+                                <Form.Label>Rate Minimum</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="rate_min"
+                                    data-id={modalData?.id}
+                                    defaultValue={modalData?.price}
+                                    onChange={(e) =>setPrice(e.target.value)}
+                                />
+                            </Form.Group>
+                            
+                            <a href={`/room/contract/updateadvancetprice/${modalData?.id}/${price ? price : modalData?.price}`} className='btn btn-primary mt-4'>
+                                Save Changes
+                            </a>
+                            <Button className='ml-1 mt-4' variant="secondary" onClick={handleCloseModalAdvance}>
+                                Close
+                            </Button>
+                        </Form>
+                    </Modal.Body>
+
+                </Modal>
             </Layout>
         </>
     )

@@ -14,7 +14,7 @@ use App\Models\ContractRate;
 use App\Models\ContractPrice;
 use App\Models\AdvancePurchase;
 use App\Models\AdvancePurchasePrice;
-
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 
 class ContractController extends Controller
@@ -160,8 +160,10 @@ class ContractController extends Controller
 
         $contract = ContractRate::find($cont);
 
-        foreach($barprice as $item){
-            $cpExists = ContractPrice::where('contract_id',$cont)->where('room_id',$item->room_id)->exists();
+        $contractroleone= ContractRate::where('user_id',$userid)->where('rolerate',1)->first();
+
+        foreach($barprice as $baritem){
+            $cpExists = ContractPrice::where('contract_id',$cont)->where('room_id',$baritem->room_id)->exists();
              // ================================== OLD RUMUS ============================================
             //contoh bila data $cp tidak ditemukan maka if nya seperti ini
             // if(!$cpExists){
@@ -177,13 +179,21 @@ class ContractController extends Controller
             // ================================== OLD RUMUS ============================================
 
             if(!$cpExists){
+                
                 $data = new ContractPrice();
-                $data->room_id = $item->room_id;
+                $data->room_id = $baritem->room_id;
                 $data->user_id =  $userid;
                 $data->contract_id = $cont;
-                $data->recom_price = $item->price * ((100 - $contract->percentage)/100);
+
+                if($contract->rolerate == 1){
+                    $data->recom_price = $baritem->price * ((100 - $contract->percentage)/100);
+                }else{
+                    $contprice = ContractPrice::where('contract_id',$contractroleone->id)->where('barprice_id',$baritem->id)->where('room_id', $baritem->room_id)->first();
+                    $data->recom_price = $contprice->recom_price * ((100 - $contract->percentage)/100);
+                }
+               
                 $data->price = 0;
-                $data->barprice_id = $item->id;
+                $data->barprice_id = $baritem->id;
                 $data->save();
 
                 $advancepurchase = AdvancePurchase::where('contract_id',$contract->id)->get();
@@ -198,7 +208,7 @@ class ContractController extends Controller
                     ];
     
                     $advanceprice = new AdvancePurchasePrice;
-                    $advanceprice->room_id = $item->room_id;
+                    $advanceprice->room_id = $baritem->room_id;
                     $advanceprice->user_id = $userid;
                     $advanceprice->vendor_id = $item->vendor_id;
                     $advanceprice->contract_id = $cont;
@@ -223,6 +233,7 @@ class ContractController extends Controller
         $userid = auth()->user()->id;
         $contract = ContractRate::find($cont);
 
+        $contractroleone= ContractRate::where('user_id',$userid)->where('rolerate',1)->first();
             // $markup = AgentMarkupSetup::where('user_id',$userid)->first();
 
             //=====================================OLD RUMUS=============================================
@@ -244,7 +255,12 @@ class ContractController extends Controller
             $data->room_id = $barprice->room_id;
             $data->user_id =  $userid;
             $data->contract_id = $cont;
-            $data->recom_price = $barprice->price * ((100 - $contract->percentage)/100);
+            if($contract->rolerate == 1){
+                $data->recom_price = $baritem->price * ((100 - $contract->percentage)/100);
+            }else{
+                $contprice = ContractPrice::where('contract_id',$contractroleone->id)->where('barprice_id',$baritem->id)->where('room_id', $baritem->room_id)->first();
+                $data->recom_price = $contprice->recom_price * ((100 - $contract->percentage)/100);
+            }
             $data->price = 0;
             
 
@@ -312,7 +328,10 @@ class ContractController extends Controller
 
         $contract = ContractRate::find($id);
         $advancepurchase = AdvancePurchase::where('contract_id',$contract->id)->get();
-        $advanceprice = AdvancePurchasePrice::where('contract_id',$contract->id)->with('room')->get();
+        $advanceprice = AdvancePurchasePrice::where('contract_id',$contract->id)
+                                        ->with('room')
+                                        ->orderBy('price', 'asc')
+                                        ->get();
 
         $contractprice = ContractPrice::where('user_id', $userid)
                   ->with('room')
@@ -396,4 +415,61 @@ class ContractController extends Controller
         $data->delete();
         return redirect()->back()->with('message', 'Data Delete');
     }
+
+    /**
+     * ADVANCE PURCHASE FUNCTION
+     */
+
+    public function updateadvance(Request $request,$id){
+        $validator = Validator::make($request->all(), [
+            'day' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator->errors())
+                ->withInput($request->all());
+        } else {
+            $data = AdvancePurchase::find($id);
+            $data->day = $request->day;
+            
+            $beginsell = Carbon::parse($data->beginsell); // Convert beginsell to Carbon object
+            $interval = $request->day - 1; // Calculate the interval based on input day
+            
+            // Calculate new endsell based on input day and original beginsell
+            $newEndsell = $beginsell->copy()->addDays($interval); // Calculate endsell based on new beginsell
+            
+            $data->endsell = $newEndsell; // Set the new endsell value
+            $data->save();
+
+            return redirect()->back()->with('success', 'Advance Purchase Updated!');
+        }
+    }
+
+    public function updateadvancetprice($id,$price){
+        // dd($recom);
+        $data = AdvancePurchasePrice::find($id);
+        $data->price = $price;
+        $data->save();
+
+        return redirect()->back()->with('success', 'Price update');
+    }
+
+    public function updateadvancetstatus($id,$is_active){
+        // dd($recom);
+        $data = AdvancePurchase::find($id);
+        $data->is_active = $is_active;
+        $data->save();
+
+        return redirect()->back()->with('success', 'Price update');
+    }
+
+    public function destroyadvanceprice(string $id)
+    {
+        $data = AdvancePurchasePrice::find($id);
+        $data->delete();
+        return redirect()->back()->with('success', 'Data Delete');
+    }
+
 }
