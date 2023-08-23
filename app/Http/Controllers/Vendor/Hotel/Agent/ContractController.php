@@ -383,11 +383,43 @@ class ContractController extends Controller
                 if($data->percentage != $request->percentage){
                     $barprice = BarPrice::where('user_id',$userid)->get();
                     $contractprice = ContractPrice::where('contract_id',$id)->get();
-                    foreach($barprice as $key=>$item){
+                    $contone = ContractRate::where('rolerate',1)->where('user_id',$userid)->first();
+                    $contractpriceroleone = ContractPrice::where('contract_id',$contone->id)->get();
+                    $advancepurchase = AdvancePurchase::where('contract_id',$id)->get();
+                    
+
+                    foreach($barprice as $key=>$baritem){
+
                         $cont = ContractPrice::find($contractprice[$key]->id);
-                        $cont->recom_price = $item->price * ((100 - $request->percentage)/100);
+                            if($data->rolerate == 1){
+                                $cont->recom_price = $baritem->price * ((100 - $request->percentage)/100);
+                            }else{
+                                $cont->recom_price = $contractpriceroleone->price * ((100 - $request->percentage)/100);
+                            }
+                            $advancepurchaseprice = AdvancePurchasePrice::where('contract_id',$id)->where('advance_id',$advancepurchase[0]->id)->get();
+                           
+                            foreach($advancepurchase as $index=>$item){
+                                $nilai = [
+                                    0 => 0.962,
+                                    1 => 0.925444,
+                                    2 => 0.890277128,
+                                    3 => 0.856446597136,
+                                    4 => 0.823901626444832,
+                                    5 => 0.792593364639928,
+                                ];
+
+                                
+
+                                $advanceprice = AdvancePurchasePrice::find($advancepurchaseprice[$key]->id);
+                                $advanceprice->price = $cont->recom_price * $nilai[$index];
+                                $advanceprice->save();
+                            }
+                        
                         $cont->save();
+
+                        
                     }
+                    
                 }
 
                 $data->user_id = $userid;
@@ -404,6 +436,7 @@ class ContractController extends Controller
                 $data->except = explode(",",$request->except);
                 $data->distribute = explode(",",$request->distribute);
                 $data->percentage = $request->percentage;
+
                 $data->save();
 
                 
