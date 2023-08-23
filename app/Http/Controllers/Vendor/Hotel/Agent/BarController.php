@@ -72,7 +72,11 @@ class BarController extends Controller
                 $data->user_id = $id;
                 $data->vendor_id = $vendor[0]->id;
                 $data->barcode = $request->barcode;
-                $data->bardesc = $request->bardesc;
+                if(!$request->bardesc){
+                    $data->bardesc = 'HOTEL BEST AVAILABLE RATE';
+                }else{
+                    $data->bardesc = $request->bardesc;
+                }
                 $data->begindate = $request->begin;
                 $data->enddate = $request->end;
                 $data->save();

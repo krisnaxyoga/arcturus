@@ -62,9 +62,9 @@ export default function EditBlackout({ props, session, data }) {
                                                 </button>
                                             </div>
                                             <div className="col-lg-auto">
-                                                <button onClick={() => history.back()} className="btn btn-danger">
-                                                    Cancel
-                                                </button>
+                                                <Link href={`/room/contract/index`} className='btn btn-danger'>
+                                                    <i className='fa-window-close'></i> Cancel
+                                                </Link>
                                             </div>
                                         </div>
                                     </div>

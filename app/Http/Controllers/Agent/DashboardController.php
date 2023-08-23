@@ -20,7 +20,7 @@ class DashboardController extends Controller
         //$vendor = User::where('id',$iduser)->with('vendors')->first();
         $data = User::where('id',$iduser)->with('vendors')->first();
 
-        $totalbooking = Booking::where('user_id',$data->vendors->user_id)->count();
+        $totalbooking = Booking::where('user_id',$data->vendors->user_id)->where('booking_status','paid')->sum('price');
         $bookingsuccess = Booking::where('user_id',$data->vendors->user_id)->where('booking_status','paid')->count();
         $pendingpayment = Booking::where('user_id',$data->vendors->user_id)->where('booking_status','unpaid')->count();
         $roomhotel = Booking::where('user_id',$data->vendors->user_id)->where('booking_status','paid')->sum('night');

@@ -33,7 +33,7 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
     const [modalData, setModalData] = useState();
 
     function formatRupiah(amount) {
-        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount);
+        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount).slice(0, -3);
       }
 
     useEffect(() => {
@@ -234,7 +234,7 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
                                                             <div className="col-lg-6">
                                                                 <div className="mb-3">
                                                                     <label htmlFor="" className='fw-bold'>Bar description</label>
-                                                                    <input onChange={(e) => setBarDesc(e.target.value)} type="text" className='form-control' />
+                                                                    <input onChange={(e) => setBarDesc(e.target.value)} type="text" className='form-control form-control-solid' placeholder='HOTEL BEST AVAILABLE RATE'/>
                                                                 </div>
                                                                 <div className="mb-3">
                                                                     <label htmlFor="" className='fw-bold'>End Sell date</label>
@@ -330,7 +330,7 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
                                                             <div className="col-lg-6">
                                                                 <div className="mb-3">
                                                                     <label htmlFor="" className='fw-bold'>Bar description</label>
-                                                                    <input defaultValue={barroom.bardesc} onChange={(e) => setBarDesc(e.target.value)} type="text" className='form-control' />
+                                                                    <input defaultValue={barroom.bardesc} onChange={(e) => setBarDesc(e.target.value)} type="text" className='form-control form-control-solid' />
                                                                 </div>
                                                                 <div className="mb-3">
                                                                     <label htmlFor="" className='fw-bold'>End Sell date</label>
@@ -470,7 +470,7 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
                                         </div>
                                 </div>
                             </div>
-                            <div className="row">
+                            {/* <div className="row">
                                 <div className="col-lg-6">
                                     <div className="card">
                                         <div className="card-header">
@@ -559,7 +559,7 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
                         </Tab>
                     </Tabs>
                     </div>

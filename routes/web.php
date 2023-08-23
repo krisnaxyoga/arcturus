@@ -210,6 +210,12 @@ Route::group(['middleware' => ['auth', 'checkrole:2']], function() {
     Route::get('/room/contract/destroycontractprice/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'destroycontractprice'])->name('contract.destroycontractprice');
     Route::get('/room/contract/addallcontractprice/{cont}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'addallcontractprice'])->name('contract.addallcontractprice');
 
+    //advance purchase
+    Route::post('/contract/advancepurchase/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'updateadvance'])->name('advancepurchase.contract');
+    Route::get('/contract/destroyadvanceprice/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'destroyadvanceprice'])->name('destroyadvanceprice.contract');
+    Route::get('/room/contract/updateadvancetprice/{id}/{price}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'updateadvancetprice'])->name('contract.updateadvancetprice');
+    Route::get('/advance/updateadvancetstatus/{id}/{isactive}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'updateadvancetstatus'])->name('advance.updateadvancetstatus');
+   
     //promo price
     Route::get('/room/promo/index/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\PromoPriceController::class, 'index'])->name('promo.index');
     Route::get('/room/promo/store/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\PromoPriceController::class, 'store'])->name('promo.store');

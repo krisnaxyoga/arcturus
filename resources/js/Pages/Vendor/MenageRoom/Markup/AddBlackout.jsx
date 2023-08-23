@@ -63,7 +63,7 @@ export default function AddBlackout({ props, session, data }) {
                                                 </button>
                                             </div>
                                             <div className="col-lg-auto">
-                                                <Link href={`/room/markup`} className='btn btn-danger'>
+                                                <Link href={`/room/contract/index`} className='btn btn-danger'>
                                                 <i className='fa-window-close'></i> Cancel
                                                 </Link>
                                             </div>

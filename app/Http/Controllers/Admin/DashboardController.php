@@ -27,6 +27,7 @@ class DashboardController extends Controller
         $totalbooking = Booking::where('booking_status','paid')->count();
 
         $totaltransaction = Booking::where('booking_status','paid')->sum('price');
+        $totalunpaid = Booking::where('booking_status','unpaid')->sum('price');
         $hotel = Vendor::where('type_vendor','hotel')->count();
         $agent = Vendor::where('type_vendor','agent')->count();
 
@@ -39,7 +40,7 @@ class DashboardController extends Controller
         $booking = Booking::whereNotIn('booking_status', ['-', ''])->with('users','vendor')->get();
 
         $roomhotel = Booking::where('booking_status','paid')->sum('night');
-        return view('admin.index',compact('setting','totalbooking','totaltransaction','hotel','agent','paid','unpaid','unknow','booking','vendor','roomhotel'));
+        return view('admin.index',compact('setting','totalbooking','totalunpaid','totaltransaction','hotel','agent','paid','unpaid','unknow','booking','vendor','roomhotel'));
     }
 
     /**

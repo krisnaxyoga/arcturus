@@ -16,7 +16,9 @@ import { Inertia } from '@inertiajs/inertia';
 export default function Index({ totalroom, data,booking,success,pending,getbooking }) {
   const { url } = usePage();
 
-  console.log(data, ">>>>DATA AGENT di INDEX");
+  function formatRupiah(amount) {
+    return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount).slice(0, -3);
+}
   const [currentPage, setCurrentPage] = useState(1)
   const [postsPerPage, setPostsPerPage] = useState(10)
 
@@ -40,8 +42,8 @@ export default function Index({ totalroom, data,booking,success,pending,getbooki
             {/* <!-- Begin Page Content --> */}
             <div className="container-fluid">
               {/* <!-- Page Heading --> */}
-              <div className="d-sm-flex align-items-center justify-content-between mb-4">
-                <h1 className="h3 mb-0 text-gray-800">Dashboard</h1>
+              <div className="d-sm-flex align-items-center justify-content-center mb-4">
+                <h1 className="h3 mb-0 text-gray-800">Agent Dashboard</h1> 
               </div>
 
               {/* <!-- Content Row --> */}
@@ -53,8 +55,8 @@ export default function Index({ totalroom, data,booking,success,pending,getbooki
                       <div className="row no-gutters align-items-center">
                         <div className="col mr-2">
                           <div className="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                            Total booking</div>
-                          <div className="h5 mb-0 font-weight-bold text-gray-800">{booking}</div>
+                            Total revenue</div>
+                          <div className="h5 mb-0 font-weight-bold text-gray-800">{formatRupiah(booking)}</div>
                         </div>
                         <div className="col-auto">
                           <i className="fas fa-calendar fa-2x text-gray-300"></i>
@@ -70,7 +72,7 @@ export default function Index({ totalroom, data,booking,success,pending,getbooki
                       <div className="row no-gutters align-items-center">
                         <div className="col mr-2">
                           <div className="text-xs font-weight-bold text-success text-uppercase mb-1">
-                            Booking success</div>
+                            Booking paid</div>
                           <div className="h5 mb-0 font-weight-bold text-gray-800">{success}</div>
                         </div>
                         <div className="col-auto">

@@ -69,7 +69,7 @@
                     @endif
                     {{-- <li class="nav-item {{ request()->routeIs('contact.homepage') ? 'active' : '' }}"><a href="{{ route('contact.homepage') }}" class="nav-link">Contact</a></li> --}}
                     @if(isset(Auth::user()->id))
-                        <li class="nav-item"><a href="{{route('login')}}" class="nav-link">dashboard</a></li>
+                        <li class="nav-item"><a href="{{route('login')}}" class="nav-link" @if(count($slider) == 0) style="color: rgb(8, 8, 179)" @endif>dashboard</a></li>
                     @else
                     <li class="nav-item"><a href="{{route('agentregist')}}" class="nav-link">Register Agent</a></li>
                     <li class="nav-item"><a href="{{route('vendorregist')}}" class="nav-link">Register Hotel</a></li>

@@ -9,7 +9,7 @@ export default function Detail({ session, data, agent, contract, setting, roombo
     console.log(contract, ">>>>CONTRACT");
 
     function formatRupiah(amount) {
-        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount);
+        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount).slice(0, -3);
     }
 
     const handlePrintPDF = () => {
