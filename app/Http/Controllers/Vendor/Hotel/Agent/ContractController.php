@@ -130,6 +130,7 @@ class ContractController extends Controller
 
                 $interval = 7;
                 $startDate = now()->addDays($interval); // Mulai dari 7 hari kemudian
+                $firstTime = true; // Variabel untuk melacak input pertama
 
                 for ($i = 1; $i <= 6; $i++) {
                     $advancepurchase = new AdvancePurchase;
@@ -137,8 +138,15 @@ class ContractController extends Controller
                     $advancepurchase->vendor_id = $vendorid->id;
                     $advancepurchase->contract_id = $data->id;
                     $advancepurchase->day = $interval * $i;
-                    $advancepurchase->beginsell = $startDate->copy()->addDays($interval * ($i - 1));
-                    $advancepurchase->endsell = $startDate->copy()->addDays($interval * $i)->subDay(); // Karena endsell sehari sebelumnya
+                    if ($firstTime) {
+                        $advancepurchase->beginsell = now(); // Input pertama kali adalah tanggal sekarang
+                        $firstTime = false; // Set variabel firstTime menjadi false setelah input pertama
+                        $advancepurchase->endsell = now()->addDays($interval * $i)->subDay(); // Karena endsell sehari sebelumnya
+                    } else {
+                        $advancepurchase->beginsell = $startDate->copy()->addDays($interval * ($i - 1));
+                        $advancepurchase->endsell = $startDate->copy()->addDays($interval * $i)->subDay(); // Karena endsell sehari sebelumnya
+                    }
+                    
                     $advancepurchase->is_active = 1;
                     $advancepurchase->save();
                 }
@@ -256,9 +264,9 @@ class ContractController extends Controller
             $data->user_id =  $userid;
             $data->contract_id = $cont;
             if($contract->rolerate == 1){
-                $data->recom_price = $baritem->price * ((100 - $contract->percentage)/100);
+                $data->recom_price = $barprice->price * ((100 - $contract->percentage)/100);
             }else{
-                $contprice = ContractPrice::where('contract_id',$contractroleone->id)->where('barprice_id',$baritem->id)->where('room_id', $baritem->room_id)->first();
+                $contprice = ContractPrice::where('contract_id',$contractroleone->id)->where('barprice_id',$barprice->id)->where('room_id', $barprice->room_id)->first();
                 $data->recom_price = $contprice->recom_price * ((100 - $contract->percentage)/100);
             }
             $data->price = 0;
@@ -411,8 +419,37 @@ class ContractController extends Controller
      */
     public function destroy(string $id)
     {
-        $data = ContractRate::find($id);
-        $data->delete();
+        // Hapus ContractRate
+            $data = ContractRate::find($id);
+            if ($data) {
+                $data->delete();
+            }
+
+            // Hapus ContractPrice yang terkait
+            $contractPrices = ContractPrice::where('contract_id', $id)->get();
+            foreach ($contractPrices as $contractPrice) {
+                $contp = ContractPrice::find($contractPrice->id);
+                $contp->delete();
+            }
+
+            // Hapus AdvancePurchase dan terkaitnya
+            $advancePurchase = AdvancePurchase::where('contract_id', $id)->first();
+            if ($advancePurchase) {
+                $advanceId = $advancePurchase->id;
+                $adv = AdvancePurchase::where('contract_id', $id)->get();
+                foreach($adv as $item){
+                    $advhapus = AdvancePurchase::find($item->id);
+
+                    $advancePurchasePrices = AdvancePurchasePrice::where('advance_id', $item->id)->get();
+                    foreach ($advancePurchasePrices as $advancePurchasePrice) {
+                        $advaPrice = AdvancePurchasePrice::find($advancePurchasePrice->id);
+                        $advaPrice->delete();
+                    }
+
+                    $advhapus->delete();
+                }
+            }
+
         return redirect()->back()->with('message', 'Data Delete');
     }
 

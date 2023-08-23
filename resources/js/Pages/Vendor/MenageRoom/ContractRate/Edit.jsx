@@ -46,9 +46,22 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
     // advance purchase variable
     const [day, setDay] = useState('');
     const [price, setPrice] = useState('');
-    // const [beginselladvance, setBeginselladvance] = useState('');
-    // const [endselladvance, setEndselladvance] = useState('');
+    const [beginselladvance, setBeginselladvance] = useState('');
+    const [endselladvance, setEndselladvance] = useState('');
 
+    const handleDayChange = (e, beginsell, endsell, day) => {
+        const inputDay = parseInt(e.target.value, 10);
+        setDay(inputDay);
+    
+        // Calculate beginsell and endsell based on input day
+        if (beginsell !== '' && !isNaN(beginsell)) {
+          const startDate = new Date(beginsell);
+          const newEndsell = new Date(endsell);
+          newEndsell.setDate(startDate.getDate() + inputDay);
+    
+          setEndselladvance(newEndsell.toISOString().slice(0, 10));
+        }
+      };
 
     const [checkboxes, setCheckboxes] = useState({
         sunday: false,
@@ -845,7 +858,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                         </h2>
                                                       
                                                         <span className='d-flex'>
-                                                            <input onChange={(e) => setDay(e.target.value)} type="number" className='form-control' style={{width:'5rem'}} defaultValue={item.day}/>
+                                                            <input onChange={(e) => handleDayChange(e, item.beginsell, item.endsell, item.day)} type="number" className='form-control' style={{width:'5rem'}} defaultValue={item.day}/>
                                                             <p className='text-dark' style={{marginTop: '8px',marginLeft: '7px'}}> DAYS</p>
                                                         </span>
                                                     </div>
@@ -866,11 +879,11 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                     <div className="row mb-3">
                                                         <div className="col-lg-6">
                                                             <label htmlFor="">Begin Sell Date</label>
-                                                            <input readOnly type="date" defaultValue={item.beginsell} onChange={(e) => setBeginselladvance(e.target.value)} className='form-control form-control-solid'/>
+                                                            <input readOnly type="date" defaultValue={beginselladvance ||item.beginsell} onChange={(e) => setBeginselladvance(e.target.value)} className='form-control form-control-solid'/>
                                                         </div>
                                                         <div className="col-lg-6">
                                                             <label htmlFor="">End Sell Date</label>
-                                                            <input readOnly type="date" defaultValue={item.endsell} onChange={(e) => setEndselladvance(e.target.value)} className='form-control form-control-solid'/>
+                                                            <input readOnly type="date" defaultValue={endselladvance || item.endsell} onChange={(e) => setEndselladvance(e.target.value)} className='form-control form-control-solid'/>
                                                         </div>
                                                     </div>
                                                     <div className="row">
