@@ -38,11 +38,11 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
 
     const [showModalTable, setShowModalTable] = useState(false);
 
-    
+
     const [showModalAdvance, setShowModalAdvance] = useState(false);
 
     const [percentage, setPercentage] = useState(contract.percentage);
-    
+
     // advance purchase variable
     const [day, setDay] = useState('');
     const [price, setPrice] = useState('');
@@ -52,13 +52,13 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
     const handleDayChange = (e, beginsell, endsell, day) => {
         const inputDay = parseInt(e.target.value, 10);
         setDay(inputDay);
-    
+
         // Calculate beginsell and endsell based on input day
         if (beginsell !== '' && !isNaN(beginsell)) {
           const startDate = new Date(beginsell);
           const newEndsell = new Date(endsell);
           newEndsell.setDate(startDate.getDate() + inputDay);
-    
+
           setEndselladvance(newEndsell.toISOString().slice(0, 10));
         }
       };
@@ -286,14 +286,14 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
         formData.append('day', day ? day : itemDay);
         // formData.append('beginsell',beginselladvance ? beginselladvance : itemBeginsell);
         // formData.append('endsell',endselladvance ? endselladvance : itemEndsell);
-        
+
         Inertia.post(`/contract/advancepurchase/${itemId}`, formData, {
             onSuccess: () => {
                 window.location.reload();
             },
         });
     }
-    
+
     return (
         <>
             <Layout page='/room/contract/index'>
@@ -346,16 +346,27 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                     </div>
                                                                     <div className="col-lg-4">
                                                                         <div className="mb-3">
-                                                                            <label htmlFor="" className='fw-bold'>Minimum stay</label>
+                                                                        {contract.rolerate === 1 ? (
+                                                                            <>
+                                                                             <label htmlFor="" className='fw-bold'>Minimum stay</label>
+                                                                            <input defaultValue={contract.min_stay} readOnly onChange={(e) => setMinStay(e.target.value)} type="number" className='form-control' />
+
+                                                                            </>
+                                                                        ):(
+                                                                            <>
+                                                                             <label htmlFor="" className='fw-bold'>Minimum stay</label>
                                                                             <input defaultValue={contract.min_stay} onChange={(e) => setMinStay(e.target.value)} type="number" className='form-control' />
-                                                                        </div>
+
+                                                                            </>
+                                                                        )}
+                                                                      </div>
                                                                     </div>
                                                                 </div>
                                                                 <hr />
                                                                 <div className="row">
                                                                     <div className="col-lg-6">
                                                                         <label htmlFor="" className='font-weight-bolder'>STAY PERIODS</label>
-                                                                       
+
                                                                         <div className="row">
                                                                             <div className="col-lg-6">
                                                                                 <div className="mb-3">
@@ -372,7 +383,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                         </div>
                                                                         <hr />
                                                                         <label htmlFor="" className='font-weight-bolder'>BOOKING PERIODS</label>
-                                                                        
+
                                                                         <div className="row">
                                                                             <div className="col-lg-6">
                                                                                 <div className="mb-3">
@@ -399,42 +410,54 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                                 % discount of contract rate
                                                                                 </>
                                                                                )}
-                                                                                
-                                                                                
+
+
                                                                             </p>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                     <div className="col-lg-6">
                                                                         <div className="mb-5">
-                                                                            <label htmlFor="">Market</label>
-                                                                            <select
-                                                                                name=""
-                                                                                id=""
-                                                                                className="form-control"
-                                                                                onChange={handleSelectDistribute}
-                                                                                multiple
-                                                                            >
-                                                                                <option value="all">all</option>
-                                                                                {Object.keys(country).map((key) => (
-                                                                                <option key={key} value={country[key]}>
-                                                                                    {country[key]}
-                                                                                </option>
-                                                                                ))}
-                                                                            </select>
-                                                                            <p className="mt-2">
-                                                                                Selected Values:{" "}
-                                                                                <span className="text-secondary">
-                                                                                {selectedDistribute.map((value) => (
-                                                                                    <span key={value}>
-                                                                                        <span  onClick={() => handleRemoveSelected(value)} class="btn badge badge-success text-light mx-1">
-                                                                                        {value} <span class="mx-1 badge badge-danger">x</span>
-                                                                                        </span>
-                                                                                    </span>
-                                                                                ))}
-                                                                                </span>
-                                                                            </p>
-                                                                        </div>
+
+                                                                        {contract.rolerate === 1 ? (
+                                                                                            <>
+                                                                                             <label style={{ marginTop:'2rem' }} htmlFor="">Market</label>
+                                                                                            <input type="text" value={'all'} className='form-control' readOnly/>
+                                                                                            </>
+                                                                                        ):(
+                                                                                            <>
+                                                                                             <label htmlFor="">Market</label>
+                                                                                                <select
+                                                                                                    name=""
+                                                                                                    id=""
+                                                                                                    className="form-control"
+                                                                                                    onChange={handleSelectDistribute}
+                                                                                                    multiple
+                                                                                                >
+                                                                                                    <option value="all">all</option>
+                                                                                                    {Object.keys(country).map((key) => (
+                                                                                                    <option key={key} value={country[key]}>
+                                                                                                        {country[key]}
+                                                                                                    </option>
+                                                                                                    ))}
+                                                                                                </select>
+                                                                                                <p className="mt-2">
+                                                                                                    Selected Values:{" "}
+                                                                                                    <span className="text-secondary">
+                                                                                                    {selectedDistribute.map((value) => (
+                                                                                                        <span key={value}>
+                                                                                                            <span  onClick={() => handleRemoveSelected(value)} class="btn badge badge-success text-light mx-1">
+                                                                                                            {value} <span class="mx-1 badge badge-danger">x</span>
+                                                                                                            </span>
+                                                                                                        </span>
+                                                                                                    ))}
+                                                                                                    </span>
+                                                                                                </p>
+
+                                                                                            </>
+                                                                                        )}
+
+                                                                            </div>
 
                                                                         <label htmlFor="pickdays" className='fw-bold'>Pick valid day</label>
                                                                         <label className="form-label mx-5">
@@ -520,7 +543,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                             </label>
 
                                                                         </div>
-                                                                        
+
                                                                         {/* <div className="mb-3">
                                                                             <label htmlFor="">exclude</label>
                                                                             <select name="" id="" className='form-control' onChange={handleSelectExclude} multiple>
@@ -598,7 +621,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                                             <>
                                                                                             </>
                                                                                         )}
-                                                                                      
+
                                                                                         <th>contract rate</th>
                                                                                         {/* <th>min mark-up</th>
                                                                                         <th>selling rate</th> */}
@@ -614,17 +637,17 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                                                 {contract.rolerate === 1 ? (
                                                                                                      <td>
                                                                                                         {formatRupiah(item.barprice.price)}
-                                                                                                    </td> 
+                                                                                                    </td>
                                                                                                 ):(
                                                                                                     <>
                                                                                                     </>
                                                                                                 )}
-                                                                                                
+
                                                                                                 <td>
                                                                                                 {contract.percentage === percentage
                                                                                                     ? formatRupiah(item.recom_price)
                                                                                                     : formatRupiah(item.barprice.price * ((100 - percentage) / 100))}
-                                                                                                   
+
                                                                                                 </td>
                                                                                                 {/* <td>
                                                                                                     {markup[0].markup_price === 0 ? (
@@ -854,29 +877,24 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                 <div className="card-header">
                                                     <div className="d-flex justify-content-between">
                                                         <h2>
-                                                             ADVANCE PURCHASE 
+                                                             ADVANCE PURCHASE
                                                         </h2>
-                                                      
+
                                                         <span className='d-flex'>
                                                             <input onChange={(e) => handleDayChange(e, item.beginsell, item.endsell, item.day)} type="number" className='form-control' style={{width:'5rem'}} defaultValue={item.day}/>
                                                             <p className='text-dark' style={{marginTop: '8px',marginLeft: '7px'}}> DAYS</p>
                                                         </span>
                                                     </div>
-                                                   
+
                                                 </div>
                                                 <div className="card-body">
                                                     {item.is_active === 1 ? (
                                                         <>
-                                                        <a href={`/advance/updateadvancetstatus/${item.id}/2`} className='btn btn-danger'>off</a>
-                                                        </>
-                                                    ):(
-                                                        <>
-                                                        <a href={`/advance/updateadvancetstatus/${item.id}/1`} className='btn btn-success mx-2'>on</a>
-                                                        </>
-                                                    )}
-                                                        
-                                                        
-                                                    <div className="row mb-3">
+                                                        <div className="d-flex mb-4">
+                                                        <p>status : </p> <a href={`/advance/updateadvancetstatus/${item.id}/2`} className='btn btn-success'>on</a>
+
+                                                        </div>
+                                                        <div className="row mb-3">
                                                         <div className="col-lg-6">
                                                             <label htmlFor="">Begin Sell Date</label>
                                                             <input readOnly type="date" defaultValue={beginselladvance ||item.beginsell} onChange={(e) => setBeginselladvance(e.target.value)} className='form-control form-control-solid'/>
@@ -900,7 +918,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                                     </tr>
                                                                                 </thead>
                                                                                 <tbody>
-                                                                                    
+
                                                                                 {advanceprice.filter(
                                                                                     (advancepriceItem) =>
                                                                                         advancepriceItem.advance_id === item.id
@@ -940,6 +958,15 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                     <div className="my-3">
                                                         <button className='btn btn-primary' type='submit'> <i className='fa fa-save'></i> save</button>
                                                     </div>
+                                                         </>
+                                                    ):(
+                                                        <>
+                                                        <div className="d-flex">
+                                                        <p>status : </p> <a href={`/advance/updateadvancetstatus/${item.id}/1`} className='btn btn-danger mx-2'>off</a>
+
+                                                        </div>
+                                                         </>
+                                                    )}
                                                 </div>
                                             </div>
                                             </form>
@@ -958,7 +985,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                     </Modal.Header>
                     <Modal.Body>
                         <Form>
-                           
+
                             <Form.Group controlId="formName">
                                 <Form.Label>Room Type Name</Form.Label>
                                 <Form.Control
@@ -978,7 +1005,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                     onChange={(e) =>setPrice(e.target.value)}
                                 />
                             </Form.Group>
-                            
+
                             <a href={`/room/contract/updateadvancetprice/${modalData?.id}/${price ? price : modalData?.price}`} className='btn btn-primary mt-4'>
                                 Save Changes
                             </a>
