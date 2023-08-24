@@ -14,6 +14,7 @@ use App\Models\User;
 use App\Models\ContractRate;
 use App\Models\HotelRoomBooking;
 use App\Mail\BookingConfirmation;
+use App\Mail\BookingConfirmationHotel;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
@@ -72,7 +73,7 @@ class BookingController extends Controller
 
 
 
-        Mail::to($booking->vendor->email_reservation)->send(new BookingConfirmation($data));
+        Mail::to($booking->vendor->email_reservation)->send(new BookingConfirmationHotel($data));
         Mail::to($booking->users->email)->send(new BookingConfirmation($data));
 
         return redirect()->back()->with('message', 'booking paid confirmation');

@@ -59,7 +59,7 @@ export default function Detail({ session, data, agent, contract, setting, roombo
                                                     <div className="row">
                                                         <div className="col-12">
                                                             <div className="text-center text-150">
-                                                        
+
                                                             <img src={data.vendor.logo_img} style={{ height: "20px", width: "30px" }} />
                                                             {/* <img src={agent.vendors.logo_img} style={{ height: "20px", width: "30px" }} /> */}
                                                             <br />
@@ -109,7 +109,7 @@ export default function Detail({ session, data, agent, contract, setting, roombo
 
                                                                 <div className="my-2"><i className="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span className="text-600 text-90">ID:</span> {data.booking_code}</div>
                                                                 <div className="my-2"><i className="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span className="text-600 text-90">Agent Name:</span> {data.users.first_name} {data.users.last_name}</div>
-                                                                              
+
                                                                 <div className="my-2"><i className="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span className="text-600 text-90">Booking Date:</span> {data.booking_date}</div>
 
                                                                 <div className="my-2"><i className="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span className="text-600 text-90">Status: </span>
@@ -132,9 +132,9 @@ export default function Detail({ session, data, agent, contract, setting, roombo
                                                                     <span className="text-400 text-grey-m2 align-middle">Special Request: </span> <br />
                                                                     <span className="text-400 text-110 text-blue align-middle"> {data.special_request}</span>
                                                                 </div>
-                                                            
+
                                                             </div>
-                                                            
+
                                                         </div>
                                                     </div>
 
@@ -170,16 +170,24 @@ export default function Detail({ session, data, agent, contract, setting, roombo
                                                             </div>
                                                             <div>
                                                                 <p style={{ padding: "5px 0",margin:'0px' }}>Cancellation Policy :</p> <br />
-                                                                <p>                     
+                                                                <p>
                                                                 {contract.cencellation_policy && (
                                                                     <div dangerouslySetInnerHTML={{ __html: contract.cencellation_policy.substring(0, 250) }}></div>
+                                                                    )}
+                                                                </p>
+                                                            </div>
+                                                            <div>
+                                                                <p style={{ padding: "5px 0",margin:'0px' }}>Benefit Policy :</p> <br />
+                                                                <p>
+                                                                {contract.benefit_policy && (
+                                                                    <div dangerouslySetInnerHTML={{ __html: contract.benefit_policy.substring(0, 250) }}></div>
                                                                     )}
                                                                 </p>
                                                             </div>
                                                             </div>
 
                                                             <div className="col-12 col-sm-5 text-grey text-90 order-first order-sm-last">
-                                                                
+
                                                                 <div className="row my-2 align-items-center bgc-primary-l3 p-2">
                                                                     <div className="col-7 text-right">
                                                                         Total Room :

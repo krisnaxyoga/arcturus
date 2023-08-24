@@ -475,9 +475,10 @@ class ContractController extends Controller
 
 
 
-            return redirect()
-            ->route('contract.index')
-            ->with('success', 'Data saved!');
+            // return redirect()
+            // ->route('contract.index')
+            // ->with('success', 'Data saved!');
+            return redirect()->back()->with('success', 'Data Updated');
         }
     }
 

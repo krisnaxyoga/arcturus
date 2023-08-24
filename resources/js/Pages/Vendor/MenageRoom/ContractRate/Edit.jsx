@@ -247,7 +247,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
         setBenefitPolicy(editor.getData());
     };
 
-
+console.log(contpriceone,">>>PERCENTONE")
     const storePost = async (e) => {
         e.preventDefault();
 
@@ -674,11 +674,11 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
 
                                                                                                 ):(
                                                                                                     <>
-                                                                                                    <td>{formatRupiah(contpriceone[index++].price)}</td>
+                                                                                                    <td>{formatRupiah(contpriceone[index].recom_price)}</td>
                                                                                                     <td>
                                                                                                     {contract.percentage == percentage
                                                                                                         ? formatRupiah(item.recom_price)
-                                                                                                        : formatRupiah(contpriceone[index++].price * ((100 - percentage) / 100))}
+                                                                                                        : formatRupiah(contpriceone[index].recom_price * ((100 - percentage) / 100))}
 
                                                                                                     </td>
                                                                                                     </>

@@ -31,7 +31,7 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
         }
         // window.print();
       };
-    
+
 
     return (
         <>
@@ -69,7 +69,7 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                                     <div className="row">
                                                                         <div className="col-12">
                                                                             <div className="text-center text-150">
-                                                                        
+
                                                                             <img src={data.vendor.logo_img} style={{ height: "20px", width: "30px" }} />
                                                                             {/* <img src={agent.vendors.logo_img} style={{ height: "20px", width: "30px" }} /> */}
                                                                             <br />
@@ -142,9 +142,9 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                                                     <span className="text-400 text-grey-m2 align-middle">Special Request: </span> <br />
                                                                                     <span className="text-400 text-110 text-blue align-middle"> {data.special_request}</span>
                                                                                 </div>
-                                                                            
+
                                                                             </div>
-                                                                            
+
                                                                         </div>
                                                                     </div>
 
@@ -180,9 +180,17 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                                             </div>
                                                                             <div>
                                                                                 <p style={{ padding: "5px 0",margin:'0px' }}>Cancellation Policy :</p> <br />
-                                                                                <p>                     
+                                                                                <p>
                                                                                 {contract.cencellation_policy && (
                                                                                     <div dangerouslySetInnerHTML={{ __html: contract.cencellation_policy }}></div>
+                                                                                    )}
+                                                                                </p>
+                                                                            </div>
+                                                                            <div>
+                                                                                <p style={{ padding: "5px 0",margin:'0px' }}>Benefit Policy :</p> <br />
+                                                                                <p>
+                                                                                {contract.benefit_policy && (
+                                                                                    <div dangerouslySetInnerHTML={{ __html: contract.benefit_policy }}></div>
                                                                                     )}
                                                                                 </p>
                                                                             </div>
@@ -190,7 +198,7 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
 
 
                                                                             <div className="col-12 col-sm-6 text-grey text-90 order-first order-sm-last">
-                                                                                
+
                                                                                 <div className="row my-2 align-items-center bgc-primary-l3 p-2">
                                                                                     <div className="col-7 text-right">
                                                                                         Total Room :
