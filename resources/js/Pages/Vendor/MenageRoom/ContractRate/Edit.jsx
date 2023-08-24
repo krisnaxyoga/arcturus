@@ -643,7 +643,7 @@ console.log(contpriceone,">>>PERCENTONE")
                                                                                             </>
                                                                                         ):(
                                                                                             <>
-                                                                                            <th>contract one</th>
+                                                                                            {/* <th>contract</th> */}
                                                                                             </>
                                                                                         )}
 
@@ -674,7 +674,7 @@ console.log(contpriceone,">>>PERCENTONE")
 
                                                                                                 ):(
                                                                                                     <>
-                                                                                                    <td>{formatRupiah(contpriceone[index].recom_price)}</td>
+                                                                                                    {/* <td>{formatRupiah(contpriceone[index].recom_price)}</td> */}
                                                                                                     <td>
                                                                                                     {contract.percentage == percentage
                                                                                                         ? formatRupiah(item.recom_price)
