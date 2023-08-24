@@ -19,6 +19,7 @@ class BookingReportController extends Controller
         $data = Booking::where('vendor_id',$vendor->id)->whereNotIn('booking_status', ['-', ''])->with('vendor')->with('users')->get();
         return inertia('Vendor/BookingReport/Index',[
             'data' => $data,
+            'vendor' => $vendor
         ]);
     }
 

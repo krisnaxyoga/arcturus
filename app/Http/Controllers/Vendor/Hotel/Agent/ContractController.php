@@ -24,13 +24,13 @@ class ContractController extends Controller
      */
     public function index()
     {
-        $iduser = auth()->user()->id;
-        $data = ContractRate::where('user_id',$iduser)->get();
         $userid = auth()->user()->id;
+        
+        $vendor = Vendor::where('user_id',$userid)->with('users')->first();
+        $data = ContractRate::where('user_id',$userid)->get();
         $barprice = BarPrice::where('user_id',$userid)->with('barroom')->with('room')->orderBy('price', 'asc')->get();
         $black = AgentMarkupDetail::where('user_id',$userid)->where('markup_cat_id','blackout')->get();
         $surc = AgentMarkupDetail::where('user_id',$userid)->where('markup_cat_id','surcharges')->get();
-        $userid = auth()->user()->id;
         $barprice = BarPrice::where('user_id',$userid)
             ->with('barroom')
             ->with('room')
@@ -55,7 +55,8 @@ class ContractController extends Controller
             'form'=>$is_form,
             'barroom' =>$barroom->first(),
             'surcharge'=>$surc,
-            'black'=>$black
+            'black'=>$black,
+            'vendor'=>$vendor
         ]);
     }
 
@@ -65,6 +66,7 @@ class ContractController extends Controller
     public function create()
     {
         $userid = auth()->user()->id;
+        $vendor = Vendor::where('user_id',$userid)->with('users')->first();
         $price = AgentMarkupSetup::where('user_id',$userid)->first();
         $barprice = BarPrice::where('user_id',$userid)->with('barroom')->with('room')->get();
         $bardata = BarRoom::where('user_id',$userid)->get();
@@ -76,7 +78,8 @@ class ContractController extends Controller
                 'bardata' => $bardata,
                 'markup' => $price,
                 'country' => $country,
-                'cont' => $contract
+                'cont' => $contract,
+                'vendor' => $vendor
             ]);
         }
 
@@ -329,6 +332,7 @@ class ContractController extends Controller
     public function edit(string $id)
     {
         $userid = auth()->user()->id;
+        $vendor = Vendor::where('user_id',$userid)->with('users')->first();
         $price = AgentMarkupSetup::where('user_id',$userid)->get();
         $barprice = BarPrice::where('user_id',$userid)->with('barroom')->with('room')->get();
         $bardata = BarRoom::where('user_id',$userid)->get();
@@ -356,7 +360,8 @@ class ContractController extends Controller
             'contractprice' => $contractprice,
             'country'=> $country,
             'advancepurchase' => $advancepurchase,
-            'advanceprice'=>$advanceprice
+            'advanceprice'=>$advanceprice,
+            'vendor' => $vendor
         ]);
     }
 

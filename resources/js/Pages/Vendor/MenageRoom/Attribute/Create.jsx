@@ -8,8 +8,7 @@ import Layout from '../../../../Layouts/Vendor';
 import { Link } from '@inertiajs/inertia-react';
 import { Inertia } from '@inertiajs/inertia';
 
-export default function PriceAgentRoom({ props, session, data }) {
-
+export default function PriceAgentRoom({ props, session, data,vendor }) {
     const [name, setName] = useState('');
     const [desc, setDesc] = useState('');
 
@@ -31,7 +30,7 @@ export default function PriceAgentRoom({ props, session, data }) {
     //   }
     return (
         <>
-            <Layout>
+            <Layout page={'/room/attribute'} vendor={vendor}>
                 <div className="container">
                     <h1>Amenities</h1>
                     <div className="row">

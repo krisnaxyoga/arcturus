@@ -10,7 +10,7 @@ import Bookings from '../BookingReport/Bookings';
 import { Link, usePage } from '@inertiajs/inertia-react';
 import { Inertia } from '@inertiajs/inertia';
 
-export default function Index({ props,data }) {
+export default function Index({ props,data,vendor }) {
     const { url } = usePage();
     const [currentPage, setCurrentPage] = useState(1)
     const [postsPerPage, setPostsPerPage] = useState(10)
@@ -27,7 +27,7 @@ export default function Index({ props,data }) {
 
   return (
     <>
-    <Layout page={url}>
+    <Layout page={url} vendor={vendor}>
         <div className="container">
             <div className="row">
                 <div className="col-lg-12">

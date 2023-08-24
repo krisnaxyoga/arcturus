@@ -12,7 +12,7 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 
 
-export default function Index({ session, props, attr,roomtype }) {
+export default function Index({ session, props, attr,roomtype,vendor }) {
 
     const [roomtypeid, setRoomType] = useState('');
     const [near, setNear] = useState('');
@@ -145,7 +145,7 @@ export default function Index({ session, props, attr,roomtype }) {
 
     return (
         <>
-            <Layout page={'/room/index'}>
+            <Layout page={'/room/index'} vendor={vendor}>
                 <div className="container">
                     <div className="row">
                         <h1>Create Room Type</h1>

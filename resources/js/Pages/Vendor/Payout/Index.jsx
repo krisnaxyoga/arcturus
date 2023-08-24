@@ -15,7 +15,7 @@ export default function Index({ props,data,session }) {
 
   return (
     <>
-    <Layout page={url}>
+    <Layout page={url} vendor={data}>
         <div className="container">
             <div className="row">
                 <h1>Payouts</h1>

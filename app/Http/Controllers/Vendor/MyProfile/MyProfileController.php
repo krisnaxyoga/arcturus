@@ -25,12 +25,14 @@ class MyProfileController extends Controller
         // dd($data, $iduser);
         $markup = AgentMarkupSetup::where('user_id',$iduser)->first();
         $slider = Slider::where('user_id',$iduser)->get();
+        $vendor= Vendor::with('users')->where('user_id',$iduser)->first();
 
         return inertia('Vendor/MyProfile/Index',[
             'data' => $data,
             'country'=> $country,
             'markup' => $markup,
-            'banner' => $slider
+            'banner' => $slider,
+            'vendor' => $vendor
         ]);
     }
 
@@ -174,9 +176,10 @@ class MyProfileController extends Controller
     {
         $iduser = auth()->user()->id;
         $data = Vendor::with('users')->where('user_id',$iduser)->get();
-
+        $vendor = Vendor::with('users')->where('user_id',$iduser)->first();
         return inertia('Vendor/MyProfile/ChangePassword',[
-            'data' => $data
+            'data' => $data,
+            'vendor' => $vendor
         ]);
     }
 

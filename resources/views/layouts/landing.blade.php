@@ -47,12 +47,12 @@
 		<div class="container">
 			{{-- <a class="navbar-brand" href="index.html">Pacific<span>Travel Agency</span></a> --}}
             <a class="navbar-brand" href="/">
-                @if(isset(Auth::user()->id) && Auth::user()->role_id == 2)
+                {{-- @if(isset(Auth::user()->id) && Auth::user()->role_id == 2)
                 <img style="width: 40px" src="{{ $vendor->logo_img ?? '/images/pms-sistem-1.png' }}" alt="Logo">
                 @else
                 <img style="width: 40px" src="{{ $settings->logo_image ?? '/images/pms-sistem-1.png' }}" alt="Logo">
-                @endif
-                {{-- <img style="width: 40px" src="{{ $settings->logo_image }}" alt="{{ $settings->logo_image }}"> --}}
+                @endif --}}
+                <img style="width: 40px" src="{{ $settings->logo_image }}" alt="{{ $settings->logo_image }}">
             </a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="oi oi-menu"></span> Menu

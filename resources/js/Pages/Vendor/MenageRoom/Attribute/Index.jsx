@@ -9,7 +9,7 @@ import Attributes from '../../../Vendor/MenageRoom/Attribute/Attributes';
 import { Link, usePage } from '@inertiajs/inertia-react';
 import { Inertia } from '@inertiajs/inertia';
 
-export default function Index({ props, session, data }) {
+export default function Index({ props, session, data,vendor }) {
     const { url } = usePage();
 
     const [currentPage, setCurrentPage] = useState(1)
@@ -28,7 +28,7 @@ export default function Index({ props, session, data }) {
 
     return (
         <>
-            <Layout page={url}>
+            <Layout page={url} vendor={vendor}>
                 <div className="container">
                     {session.success && (
                         <div className="alert alert-success border-0 shadow-sm rounded-3">

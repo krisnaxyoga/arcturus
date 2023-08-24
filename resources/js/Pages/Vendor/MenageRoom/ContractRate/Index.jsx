@@ -15,7 +15,7 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import Modal from 'react-bootstrap/Modal';
 
-export default function Index({ session,data,roomtype,form,barroom,surcharge,black }) {
+export default function Index({ session,data,roomtype,form,barroom,surcharge,black,vendor }) {
     const { url } = usePage();
     // console.log(roomtype,">>romtype");
 
@@ -194,7 +194,7 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
 
     return (
         <>
-        <Layout page={url}>
+        <Layout page={url} vendor={vendor}>
             <div className="container">
                 <div className="row">
                     <div className="col-lg-12">

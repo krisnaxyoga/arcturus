@@ -8,8 +8,8 @@ import Layout from '../../../../Layouts/Vendor';
 import { Link } from '@inertiajs/inertia-react';
 import { Inertia } from '@inertiajs/inertia';
 
-export default function Edit({ props, session, data }) {
-
+export default function Edit({ props, session, data,vendor }) {
+    const { url } = '/room/attribute';
     const [name, setName] = useState('');
     const [desc, setDesc] = useState('');
 
@@ -31,10 +31,10 @@ export default function Edit({ props, session, data }) {
     //   } 
     return (
         <>
-            <Layout>
+            <Layout page={'/room/attribute'} vendor={vendor}>
                 <div className="container">
-                    <div className="row">
                         <h1>Attributes </h1>
+                    <div className="row">
                         <div className="col-lg-6">
                             <form onSubmit={storePost}>
                                 <div className="card">

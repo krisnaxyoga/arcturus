@@ -15,7 +15,7 @@ import { Inertia } from '@inertiajs/inertia';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 
-export default function PriceAgentRoom({ country, session, data, markup, bardata,cont }) {
+export default function PriceAgentRoom({ country, session, data, markup, bardata,cont,vendor }) {
 
     const [ratecode, setRateCode] = useState('');
     const [ratedesc, setRateDesc] = useState('');
@@ -204,7 +204,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
     }
     return (
         <>
-            <Layout page='/room/contract/index'>
+            <Layout page='/room/contract/index' vendor={vendor}>
                 <div className="container">
                 <h1>Contract Rate</h1>
                     <div className="row">
