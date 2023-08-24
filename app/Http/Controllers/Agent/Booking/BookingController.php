@@ -64,6 +64,10 @@ class BookingController extends Controller
             // Konversi string harga menjadi angka (integer)
             $price = (int) $priceString;
 
+            $pricenomarkupString = str_replace(',','', $request->totalpricenomarkup);
+
+            $pricenomarkup = (int) $pricenomarkupString;
+
             $data =  new Booking();
             $data->user_id = $userid;
             $data->booking_code = '#BO_'. $this->generateRandomString(10);
@@ -74,6 +78,7 @@ class BookingController extends Controller
             $data->total_room = $request->totalroom;
             $data->night = $totalNights;
             $data->price = $totalNights * $price;
+            $data->pricenomarkup = $totalNights * $pricenomarkup;
             $data->total_guests = $request->person;
             $data->booking_status = '-';
             $data->save();
@@ -82,6 +87,10 @@ class BookingController extends Controller
                 $string = str_replace(',', '', $item['price']);
                 // Konversi string harga menjadi angka (integer)
                 $priceint = (int) $string;
+
+                $pString = str_replace(',','',$item['pricenomarkup']);
+
+                $pricenomarkupint = (int) $pString;
 
                 $hotelbook = new HotelRoomBooking();
                 $hotelbook->room_id = $item['roomId'];
@@ -93,6 +102,7 @@ class BookingController extends Controller
                 $hotelbook->checkin_date = $request->checkin;
                 $hotelbook->checkout_date = $request->checkout;
                 $hotelbook->price = $priceint;
+                $hotelbook->pricenomarkup = $pricenomarkupint;
                 $hotelbook->save();
 
             }
@@ -358,7 +368,7 @@ class BookingController extends Controller
             ];
 
             // Mail::to($book->vendor->email)->send(new BookingConfirmation($data));
-            // Mail::to(auth()->user()->email)->send(new BookingConfirmation($data)); 
+            // Mail::to(auth()->user()->email)->send(new BookingConfirmation($data));
 
             return redirect()
             ->route('agent.booking.history')

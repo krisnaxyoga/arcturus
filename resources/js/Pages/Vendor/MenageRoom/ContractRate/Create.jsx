@@ -26,6 +26,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
     const [enddate, setEndDate] = useState('');
     const [cancelPolicy, setCancellationPolicy] = useState('');
     const [depositPolicy, setDepositPolicy] = useState('');
+    const [benefitPolicy, setBenefitPolicy] = useState('');
 
     const [minPrice, setMinPrice] = useState('');
     const [sellingPrice, setSellingPrice] = useState('');
@@ -122,6 +123,10 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
         setDepositPolicy(editor.getData());
     };
 
+    const handleBenefitPolicyChange = (event, editor) => {
+        setBenefitPolicy(editor.getData());
+    };
+
     const [checkboxes, setCheckboxes] = useState({
         sunday: false,
         monday: false,
@@ -191,6 +196,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
 
         formData.append('cencellation_policy', cancelPolicy);
         formData.append('deposit_policy', depositPolicy);
+        formData.append('benefit_policy', benefitPolicy);
 
         formData.append('distribute',selectedDistribute);
         formData.append('except',selectedExclude);
@@ -208,14 +214,14 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                 <div className="container">
                 <h1>Contract Rate</h1>
                     <div className="row">
-                        
+
                         {(!data || Object.keys(data).length === 0) || (!markup || Object.keys(markup).length === 0) || (!bardata || Object.keys(bardata).length === 0) ? (
                             <div className="col-lg-6">
                                 <div className="alert alert-danger border-0 shadow-sm rounded-3">
                                     <p>Please check again the information bar and your profile hotel is it complete?</p>
                                 </div>
                             </div>
-                            
+
                         ) : (
                             <>
                                 <div className="col-lg-11">
@@ -267,14 +273,14 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                         </div>
                                                                         </>
                                                                     )}
-                                                                      
+
                                                                     </div>
                                                                 </div>
                                                                 <hr />
                                                                 <div className="row">
                                                                     <div className="col-lg-6">
                                                                         <label htmlFor="" className='font-weight-bolder'>STAY PERIODS</label>
-                                                                   
+
                                                                         <div className="row">
                                                                             <div className="col-lg-6">
                                                                                 <div className="mb-3">
@@ -310,7 +316,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                             <input style={{width: '4rem'}} onChange={(e) => setPercentage(e.target.value)} type="number" defaultValue={0} className='form-control'/> <p style={{marginTop: '8px',marginLeft: '7px'}}>
                                                                             {cont === true ? (
                                                                                 <>
-                                                                               
+
                                                                                 % discount of contract rate
                                                                                 </>
                                                                             ):(
@@ -318,10 +324,10 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                                   % off BAR
                                                                                 </>
                                                                             )}
-                                                                               
+
                                                                                 </p>
                                                                             </div>
-                                                                            
+
                                                                         </div>
                                                                     </div>
                                                                     <div className="col-lg-6">
@@ -362,7 +368,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                             </>
                                                                         )
                                                                         }
-                                                                   
+
                                                                         {/* <div className="mb-3">
                                                                             <label htmlFor="">Exclude</label>
                                                                             <select name="" id="" className='form-control' onChange={handleSelectExclude} multiple>
@@ -458,13 +464,33 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                             </label>
 
                                                                         </div>
-                                                                     
+
                                                                     </div>
                                                                 </div>
-                                                                
+
                                                             </Tab>
                                                             <Tab eventKey="profile" title="Policy">
                                                                 <div className="row">
+                                                                <div className="col-lg-12">
+                                                                        <div className="mb-3">
+                                                                            <label className="form-label fw-bold">Benefit Policy</label>
+                                                                            <CKEditor
+                                                                                editor={ClassicEditor}
+                                                                                data=""
+                                                                                onReady={editor => {
+                                                                                    // You can store the "editor" and use when it is needed.
+                                                                                    console.log('Editor is ready to use!', editor);
+                                                                                }}
+                                                                                onChange={handleBenefitPolicyChange}
+                                                                                onBlur={(event, editor) => {
+                                                                                    console.log('Blur.', editor);
+                                                                                }}
+                                                                                onFocus={(event, editor) => {
+                                                                                    console.log('Focus.', editor);
+                                                                                }}
+                                                                            />
+                                                                        </div>
+                                                                    </div>
                                                                     <div className="col-lg-12">
                                                                         <div className="mb-3">
                                                                             <label className="form-label fw-bold">Cancellation Policy</label>
@@ -505,6 +531,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                             />
                                                                         </div>
                                                                     </div>
+
                                                                 </div>
                                                             </Tab>
                                                         </Tabs>
@@ -535,7 +562,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                         </div>
                                                     </div>
 
-                                                   
+
 
                                                 </div>
                                                 <hr />

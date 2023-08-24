@@ -66,11 +66,11 @@ class BookingController extends Controller
             $data = [
                 'booking' => $booking, // $book merupakan instance dari model Booking yang sudah Anda dapatkan
                 'contract' => $contract,
-                'setting' => $setting = Setting::first(),
+                'setting' => Setting::first(),
                 'agent' =>$agent
             ];
-        
-        
+
+
 
         Mail::to($booking->vendor->email_reservation)->send(new BookingConfirmation($data));
         Mail::to($booking->users->email)->send(new BookingConfirmation($data));

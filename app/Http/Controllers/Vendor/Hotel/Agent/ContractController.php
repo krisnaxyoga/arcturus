@@ -25,7 +25,7 @@ class ContractController extends Controller
     public function index()
     {
         $userid = auth()->user()->id;
-        
+
         $vendor = Vendor::where('user_id',$userid)->with('users')->first();
         $data = ContractRate::where('user_id',$userid)->get();
         $barprice = BarPrice::where('user_id',$userid)->with('barroom')->with('room')->orderBy('price', 'asc')->get();
@@ -127,6 +127,7 @@ class ContractController extends Controller
                 $data->pick_day = explode(",", $request->pick_day);
                 $data->cencellation_policy = $request->cencellation_policy;
                 $data->deposit_policy = $request->deposit_policy;
+                $data->benefit_policy = $request->benefit_policy;
                 $data->except = explode(",",$request->except);
                 $data->percentage = $request->percentage;
                 $data->save();
@@ -436,6 +437,7 @@ class ContractController extends Controller
                 $data->pick_day = explode(",", $request->pick_day);
                 $data->cencellation_policy = $request->cencellation_policy;
                 $data->deposit_policy = $request->deposit_policy;
+                $data->benefit_policy = $request->benefit_policy;
                 $data->except = explode(",",$request->except);
                 $data->distribute = explode(",",$request->distribute);
                 $data->percentage = $request->percentage;
@@ -565,7 +567,7 @@ class ContractController extends Controller
         $data->save();
 
         // $advance = AdvancePurchase::where('contract_id',$data->contract_id)->where('user_id',$data->user_id)->where('is_active',1)->->orderBy('day', 'asc')->get();
-       
+
         // foreach ($advance as $itm){
         //     if($id == $itm->id){
 

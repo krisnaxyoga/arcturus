@@ -19,7 +19,7 @@ class DashboardController extends Controller
         //return inertia('Vendor/Index');
         $iduser = auth()->user()->id;
         $vendor = Vendor::where('user_id',$iduser)->with('users')->first();
-        $totalincome = Booking::where('vendor_id',$vendor->id)->where('booking_status','paid')->sum('price');
+        $totalincome = Booking::where('vendor_id',$vendor->id)->where('booking_status','paid')->sum('pricenomarkup');
         $totalbooking = Booking::where('vendor_id',$vendor->id)->where('booking_status','paid')->count();
         $bookingsuccess = Booking::where('vendor_id',$vendor->id)->where('booking_status','paid')->count();
         $pendingpayment = Booking::where('vendor_id',$vendor->id)->where('booking_status','unpaid')->count();

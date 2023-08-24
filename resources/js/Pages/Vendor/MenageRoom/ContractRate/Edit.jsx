@@ -25,6 +25,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
     const [enddate, setEndDate] = useState('');
     const [cancelPolicy, setCancellationPolicy] = useState('');
     const [depositPolicy, setDepositPolicy] = useState('');
+    const [benefitPolicy, setBenefitPolicy] = useState('');
 
     const [minPrice, setMinPrice] = useState('');
     const [sellingPrice, setSellingPrice] = useState('');
@@ -242,6 +243,10 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
         setDepositPolicy(editor.getData());
     };
 
+    const handleBenefitPolicyChange = (event, editor) => {
+        setBenefitPolicy(editor.getData());
+    };
+
 
     const storePost = async (e) => {
         e.preventDefault();
@@ -266,6 +271,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
 
         formData.append('cencellation_policy', cancelPolicy ? cancelPolicy : contract.cencellation_policy);
         formData.append('deposit_policy', depositPolicy ? depositPolicy : contract.deposit_policy);
+        formData.append('benefit_policy', benefitPolicy ? benefitPolicy : contract.benefit_policy);
 
         formData.append('percentage',percentage ? percentage:contract.percentage);
 
@@ -347,7 +353,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                     <div className="col-lg-4">
                                                                         <div className="mb-3">
                                                                         {
-                                                                            contract.rolerate == 1 ? 
+                                                                            contract.rolerate == 1 ?
                                                                                 <>
                                                                                     <label htmlFor="" className='fw-bold'>Minimum stay</label>
                                                                                     <input defaultValue={contract.min_stay} readOnly onChange={(e) => setMinStay(e.target.value)} type="number" className='form-control' />
@@ -559,6 +565,26 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                             </Tab>
                                                             <Tab eventKey="profile" title="Policy">
                                                                 <div className="row">
+                                                                <div className="col-lg-12">
+                                                                        <div className="mb-3">
+                                                                            <label className="form-label fw-bold">Benefit Policy</label>
+                                                                              <CKEditor
+                                                                                editor={ClassicEditor}
+                                                                                data={contract.benefit_policy}
+                                                                                onReady={editor => {
+                                                                                    // You can store the "editor" and use when it is needed.
+                                                                                    console.log('Editor is ready to use!', editor);
+                                                                                }}
+                                                                                onChange={handleBenefitPolicyChange}
+                                                                                onBlur={(event, editor) => {
+                                                                                    console.log('Blur.', editor);
+                                                                                }}
+                                                                                onFocus={(event, editor) => {
+                                                                                    console.log('Focus.', editor);
+                                                                                }}
+                                                                            />
+                                                                        </div>
+                                                                    </div>
                                                                     <div className="col-lg-12">
                                                                         <div className="mb-3">
                                                                             <label className="form-label fw-bold">Cancellation Policy</label>
@@ -634,7 +660,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
 
                                                                                                 <td>{item.room.ratedesc}</td>
                                                                                                 {contract.rolerate == 1 ? (
-                                                                                                    <> 
+                                                                                                    <>
                                                                                                     <td>
                                                                                                         {formatRupiah(item.barprice.price)}
                                                                                                     </td>
@@ -645,7 +671,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
 
                                                                                                     </td>
                                                                                                     </>
-                                                                                                    
+
                                                                                                 ):(
                                                                                                     <>
                                                                                                     <td>{formatRupiah(contpriceone[index++].price)}</td>
@@ -658,7 +684,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                                                     </>
                                                                                                 )}
 
-                                                                                                
+
                                                                                                 {/* <td>
                                                                                                     {markup[0].markup_price == 0 ? (
                                                                                                         formatRupiah(parseInt(item.barprice.price) - parseInt(item.recom_price + 15000))
