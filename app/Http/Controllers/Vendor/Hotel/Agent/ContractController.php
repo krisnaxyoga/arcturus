@@ -133,7 +133,7 @@ class ContractController extends Controller
 
                 $interval = 7;
                 $startDate = now()->addDays($interval); // Mulai dari 7 hari kemudian
-                $firstTime = true; // Variabel untuk melacak input pertama
+                // $firstTime = true; // Variabel untuk melacak input pertama
 
                 for ($i = 1; $i <= 6; $i++) {
                     $advancepurchase = new AdvancePurchase;
@@ -141,14 +141,14 @@ class ContractController extends Controller
                     $advancepurchase->vendor_id = $vendorid->id;
                     $advancepurchase->contract_id = $data->id;
                     $advancepurchase->day = $interval * $i;
-                    if ($firstTime) {
-                        $advancepurchase->beginsell = now(); // Input pertama kali adalah tanggal sekarang
-                        $firstTime = false; // Set variabel firstTime menjadi false setelah input pertama
-                        $advancepurchase->endsell = now()->addDays($interval * $i)->subDay(); // Karena endsell sehari sebelumnya
-                    } else {
-                        $advancepurchase->beginsell = $startDate->copy()->addDays($interval * ($i - 1));
-                        $advancepurchase->endsell = $startDate->copy()->addDays($interval * $i)->subDay(); // Karena endsell sehari sebelumnya
-                    }
+                    // if ($firstTime) {
+                    //     $advancepurchase->beginsell = now(); // Input pertama kali adalah tanggal sekarang
+                    //     $firstTime = false; // Set variabel firstTime menjadi false setelah input pertama
+                    //     $advancepurchase->endsell = now()->addDays($interval * $i)->subDay(); // Karena endsell sehari sebelumnya
+                    // } else {
+                    $advancepurchase->beginsell = $startDate->copy()->addDays($interval * ($i - 1));
+                    $advancepurchase->endsell = $startDate->copy()->addDays($interval * $i)->subDay(); // Karena endsell sehari sebelumnya
+                    // }
 
                     $advancepurchase->is_active = 2;
                     $advancepurchase->save();
@@ -345,6 +345,9 @@ class ContractController extends Controller
                                         ->orderBy('price', 'asc')
                                         ->get();
 
+        $contone = ContractRate::where('rolerate', 1)->where('user_id', $userid)->first();
+        $contractpriceroleone = ContractPrice::where('contract_id', $contone->id)->get();
+
         $contractprice = ContractPrice::where('user_id', $userid)
                   ->with('room')
                   ->with('barprice')
@@ -361,7 +364,8 @@ class ContractController extends Controller
             'country'=> $country,
             'advancepurchase' => $advancepurchase,
             'advanceprice'=>$advanceprice,
-            'vendor' => $vendor
+            'vendor' => $vendor,
+            'contpriceone' => $contractpriceroleone
         ]);
     }
 
@@ -559,6 +563,24 @@ class ContractController extends Controller
         $data = AdvancePurchase::find($id);
         $data->is_active = $is_active;
         $data->save();
+
+        // $advance = AdvancePurchase::where('contract_id',$data->contract_id)->where('user_id',$data->user_id)->where('is_active',1)->->orderBy('day', 'asc')->get();
+       
+        // foreach ($advance as $itm){
+        //     if($id == $itm->id){
+
+        //     }else{
+        //         $data2 = AdvancePurchase::find($id);
+        //         $beginsell = Carbon::parse($data->beginsell); // Convert beginsell to Carbon object
+        //     $interval = $request->day - 1; // Calculate the interval based on input day
+
+        //     // Calculate new endsell based on input day and original beginsell
+        //     $newEndsell = $beginsell->copy()->addDays($interval); // Calculate endsell based on new beginsell
+
+        //     $data->endsell = $newEndsell; // Set the new endsell value
+        //         $data2->save();
+        //     }
+        // }
 
         return redirect()->back()->with('success', 'Price update');
     }
