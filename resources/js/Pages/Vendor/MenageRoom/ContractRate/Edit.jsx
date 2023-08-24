@@ -891,7 +891,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                     {item.is_active === 1 ? (
                                                         <>
                                                         <div className="d-flex mb-4">
-                                                        <p>status : </p> <a href={`/advance/updateadvancetstatus/${item.id}/2`} className='btn btn-success'>on</a>
+                                                        <p>status : </p> <a href={`/advance/updateadvancetstatus/${item.id}/${2}`} className='btn btn-success'>on</a>
 
                                                         </div>
                                                         <div className="row mb-3">
@@ -962,7 +962,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                     ):(
                                                         <>
                                                         <div className="d-flex">
-                                                        <p>status : </p> <a href={`/advance/updateadvancetstatus/${item.id}/1`} className='btn btn-danger mx-2'>off</a>
+                                                        <p>status : </p> <a href={`/advance/updateadvancetstatus/${item.id}/${1}`} className='btn btn-danger mx-2'>off</a>
 
                                                         </div>
                                                          </>

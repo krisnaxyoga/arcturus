@@ -431,43 +431,50 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
                                     </Modal>
                                 </>
                             )}
-
+                            <div className="col-lg-11 mt-3">
+                                <div className="card">
+                                    <div className="card-header">
+                                        <h2>Contract Rate</h2>
+                                    </div>
+                                    {session.success && (
+                                        <div className="alert alert-success border-0 shadow-sm rounded-3">
+                                            {session.success}
+                                        </div>
+                                    )}
+                                    <div className="card-body">
+                                    <Link href="/room/contract/create" className="btn btn-primary mb-2">add</Link>
+                                        <div className="table-responsive">
+                                                <table className="table table-bordered" id="dataTable" width="100%" cellSpacing="0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Rate code</th>
+                                                            <th>Rate description</th>
+                                                            <th>Begin Stay</th>
+                                                            <th>End Stay</th>
+                                                            <th>Begin Booking</th>
+                                                            <th>End Booking</th>
+                                                            <th>Min Stay</th>
+                                                            <th>Market</th>
+                                                            <th>action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <Rates rates={currentPosts} />
+                                                </table>
+                                                <Pagination postsPerPage={postsPerPage} totalPosts={data.length} paginate={paginate} nextPage={nextPage} prevPage={prevPage} crntPage={currentPage}/>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
                         </Tab>
-                        <Tab eventKey="contract" title="contract">
-                            <div className="row mb-4">
-                                <div className="col-lg-12">
+                        <Tab eventKey="calender" title="calender">
+                            
+                            <div className="row">
+                                <div className="col-lg-6">
                                     <div className="card">
-                                        <div className="card-header">
-                                            <h2>Contract Rate</h2>
-                                        </div>
-                                        {session.success && (
-                                            <div className="alert alert-success border-0 shadow-sm rounded-3">
-                                                {session.success}
-                                            </div>
-                                        )}
                                         <div className="card-body">
-                                        <Link href="/room/contract/create" className="btn btn-primary mb-2">add</Link>
-                                            <div className="table-responsive">
-                                                    <table className="table table-bordered" id="dataTable" width="100%" cellSpacing="0">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Rate code</th>
-                                                                <th>Rate description</th>
-                                                                <th>Begin Stay</th>
-                                                                <th>End Stay</th>
-                                                                <th>Begin Booking</th>
-                                                                <th>End Booking</th>
-                                                                <th>Min Stay</th>
-                                                                <th>Market</th>
-                                                                <th>action</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <Rates rates={currentPosts} />
-                                                    </table>
-                                                    <Pagination postsPerPage={postsPerPage} totalPosts={data.length} paginate={paginate} nextPage={nextPage} prevPage={prevPage} crntPage={currentPage}/>
-                                                </div>
-                                            </div>
+                                            <h2>Comming soon</h2>
                                         </div>
+                                    </div>
                                 </div>
                             </div>
                             {/* <div className="row">

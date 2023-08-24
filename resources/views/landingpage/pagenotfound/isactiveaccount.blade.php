@@ -35,7 +35,7 @@
     </section>
 
 
-    <section class="ftco-section testimony-section bg-bottom" style="background-image: url(/landing/travel/images/bg_1.jpg);">
+    {{-- <section class="ftco-section testimony-section bg-bottom" style="background-image: url(/landing/travel/images/bg_1.jpg);">
         <div class="overlay"></div>
         <div class="container">
             <div class="row justify-content-center pb-4">
@@ -161,5 +161,5 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
 @endsection
