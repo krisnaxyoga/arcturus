@@ -32,11 +32,13 @@ class HomeController extends Controller
 
                 $slider = Slider::where('user_id',$iduser)->get();
             }else{
-                $slider = Slider::where('user_id',1)->get();
+                // $slider = Slider::where('user_id',1)->get();
+                $slider = Slider::all();
             }
 
         }else{
-            $slider = Slider::where('user_id',1)->get();
+            // $slider = Slider::where('user_id',1)->get();
+            $slider = Slider::all();
         }
 
         $hotel = Vendor::where('type_vendor','hotel')->count();
