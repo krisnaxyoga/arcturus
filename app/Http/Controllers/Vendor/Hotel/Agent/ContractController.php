@@ -567,25 +567,47 @@ class ContractController extends Controller
         $data->is_active = $is_active;
         $data->save();
 
-        // $advance = AdvancePurchase::where('contract_id',$data->contract_id)->where('user_id',$data->user_id)->where('is_active',1)->->orderBy('day', 'asc')->get();
+        $advance = AdvancePurchase::where('contract_id', $data->contract_id)
+        ->where('user_id', $data->user_id)
+        ->orderBy('id', 'asc')
+        ->get();
 
-        // foreach ($advance as $itm){
-        //     if($id == $itm->id){
+        $contract = ContractRate::where('id', $data->contract_id)->first();
 
-        //     }else{
-        //         $data2 = AdvancePurchase::find($id);
-        //         $beginsell = Carbon::parse($data->beginsell); // Convert beginsell to Carbon object
-        //     $interval = $request->day - 1; // Calculate the interval based on input day
+        $activeCount = 0;
+        foreach ($advance as $key => $itm) {
+            if ($itm->is_active == 1) {
+                $activeCount++;
+                
+                if ($key === 0) {
+                    // Data pertama yang aktif
+                    $itm->beginsell = now()->addDays($itm->day);
+                    $itm->endsell = Carbon::parse($contract->stayperiod_end);
+                } else {
+                    // Data kedua dan seterusnya yang aktif
+                    $prevActive = $advance[$key - 1];
+                    $itm->beginsell = $prevActive->beginsell->addDays($itm->day - $prevActive->day);
+                    $daysToAdd = Carbon::parse($contract->stayperiod_start)->diffInDays($contract->stayperiod_end) - 1;
+                    $itm->endsell = $itm->beginsell->copy()->addDays($daysToAdd);
+                }
+            } else {
+                // Data tidak aktif
+                if ($key === 0) {
+                    // Data pertama tidak aktif
+                    $itm->beginsell = now()->addDays($itm->day);
+                    $itm->endsell = $itm->beginsell->copy()->subDay();
+                } else {
+                    // Data lainnya tidak aktif
+                    $prevActive = $advance[$key - 1];
+                    $itm->beginsell = $prevActive->beginsell->addDays($itm->day - $prevActive->day);
+                    $itm->endsell = $itm->beginsell->copy()->subDay();
+                }
+            }
 
-        //     // Calculate new endsell based on input day and original beginsell
-        //     $newEndsell = $beginsell->copy()->addDays($interval); // Calculate endsell based on new beginsell
+            $itm->save();
+        }
 
-        //     $data->endsell = $newEndsell; // Set the new endsell value
-        //         $data2->save();
-        //     }
-        // }
-
-        return redirect()->back()->with('success', 'Price update');
+        return redirect()->back()->with('success', 'Advancepurchase status update');
     }
 
     public function destroyadvanceprice(string $id)

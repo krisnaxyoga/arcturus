@@ -21,7 +21,7 @@ export default function Bookings({ bookings }) {
                         <td>{item.total_room}</td>
                         <td>{item.total_guests}</td>
                         <td>{item.first_name} {item.last_name}</td>
-                        <td>{formatRupiah(item.price)}</td>
+                        <td>{formatRupiah(item.pricenomarkup)}</td>
                         <td>{item.booking_status}</td>
                         <td>
                             <Link className='btn btn-outline-warning' href={`/bookinghistory/detail/${item.id}`} title='Details'>

@@ -68,7 +68,8 @@ class BookingController extends Controller
                 'booking' => $booking, // $book merupakan instance dari model Booking yang sudah Anda dapatkan
                 'contract' => $contract,
                 'setting' => Setting::first(),
-                'agent' =>$agent
+                'agent' =>$agent,
+                'hotelbook' => $hotelbook
             ];
 
 
@@ -76,7 +77,7 @@ class BookingController extends Controller
         Mail::to($booking->vendor->email_reservation)->send(new BookingConfirmationHotel($data));
         Mail::to($booking->users->email)->send(new BookingConfirmation($data));
 
-        return redirect()->back()->with('message', 'booking paid confirmation');
+        return redirect()->back()->with('message', 'Email send to agent and hotel');
     }
 
     public function create()

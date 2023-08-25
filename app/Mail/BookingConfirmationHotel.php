@@ -42,7 +42,8 @@ class BookingConfirmationHotel extends Mailable
             'booking' => $this->data['booking'], // Mengirim data booking ke view template email
             'contract' => $this->data['contract'],
             'setting' => $this->data['setting'],
-            'agent' => $this->data['agent']
+            'agent' => $this->data['agent'],
+            'hotelbook' => $this->data['hotelbook']
         ]);
     }
 

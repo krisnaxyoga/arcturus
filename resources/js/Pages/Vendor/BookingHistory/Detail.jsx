@@ -212,7 +212,7 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                                                         Total Amount :
                                                                                     </div>
                                                                                     <div className="col-5">
-                                                                                        <span className="text-400 text-success-d3 opacity-2">{formatRupiah(data.price)}</span>
+                                                                                        <span className="text-400 text-success-d3 opacity-2">{formatRupiah(data.pricenomarkup)}</span>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>

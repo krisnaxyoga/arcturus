@@ -67,9 +67,10 @@
                                                         </div>
                                                     </div>
                                                     @else
-                                                    <span href="#" class=" btn-icon btn-transparent-dark mr-2">
+                                                    <span class=" btn-icon btn-transparent-dark mr-2">
                                                         <i data-feather="check"></i>
                                                     </span>
+                                                    <a href="{{route('admin.booking.confirmation',$item->id)}}" class="badge badge-success">send email</a>
                                                 @endif
                                                
                                             </td>
