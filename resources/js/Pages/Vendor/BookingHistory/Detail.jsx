@@ -49,13 +49,13 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
 
                                                     <div className="page-content container">
                                                         <div className="page-header text-blue-d2">
-                                                            <h1 className="page-title text-secondary-d1">
+                                                            {/* <h1 className="page-title text-secondary-d1">
                                                                 Invoice
                                                                 <small className="page-info">
                                                                     <i className="fa fa-angle-double-right text-80"></i>
                                                                     ID: {data.booking_code}
                                                                 </small>
-                                                            </h1>
+                                                            </h1> */}
 
                                                             <div className="page-tools">
                                                                 <div className="action-buttons">

@@ -152,6 +152,7 @@ class ContractController extends Controller
                     // }
 
                     $advancepurchase->is_active = 2;
+                    $advancepurchase->numberactive = $i;
                     $advancepurchase->save();
                 }
 
@@ -561,54 +562,33 @@ class ContractController extends Controller
         return redirect()->back()->with('success', 'Price update');
     }
 
-    public function updateadvancetstatus($id,$is_active){
-        // dd($recom);
+    public function updateadvancetstatus($id, $is_active) {
+
         $data = AdvancePurchase::find($id);
         $data->is_active = $is_active;
         $data->save();
 
         $advance = AdvancePurchase::where('contract_id', $data->contract_id)
-        ->where('user_id', $data->user_id)
-        ->orderBy('id', 'asc')
-        ->get();
+            ->where('user_id', $data->user_id)
+            ->orderBy('numberactive', 'asc')
+            ->get();
 
+            // dd($advance);
         $contract = ContractRate::where('id', $data->contract_id)->first();
 
-        $activeCount = 0;
         foreach ($advance as $key => $itm) {
             if ($itm->is_active == 1) {
-                $activeCount++;
-                
-                if ($key === 0) {
-                    // Data pertama yang aktif
-                    $itm->beginsell = now()->addDays($itm->day);
-                    $itm->endsell = Carbon::parse($contract->stayperiod_end);
-                } else {
-                    // Data kedua dan seterusnya yang aktif
-                    $prevActive = $advance[$key - 1];
-                    $itm->beginsell = $prevActive->beginsell->addDays($itm->day - $prevActive->day);
-                    $daysToAdd = Carbon::parse($contract->stayperiod_start)->diffInDays($contract->stayperiod_end) - 1;
-                    $itm->endsell = $itm->beginsell->copy()->addDays($daysToAdd);
-                }
-            } else {
-                // Data tidak aktif
-                if ($key === 0) {
-                    // Data pertama tidak aktif
-                    $itm->beginsell = now()->addDays($itm->day);
-                    $itm->endsell = $itm->beginsell->copy()->subDay();
-                } else {
-                    // Data lainnya tidak aktif
-                    $prevActive = $advance[$key - 1];
-                    $itm->beginsell = $prevActive->beginsell->addDays($itm->day - $prevActive->day);
-                    $itm->endsell = $itm->beginsell->copy()->subDay();
-                }
+                $date1 = $advance->get($key); // Mengakses elemen sesuai indeks saat ini
+                $date1->beginsell = now()->addDays($date1->day);
+                $date1->endsell = Carbon::parse($contract->stayperiod_end);
+                $date1->save();
             }
-
-            $itm->save();
         }
 
         return redirect()->back()->with('success', 'Advancepurchase status update');
     }
+
+
 
     public function destroyadvanceprice(string $id)
     {

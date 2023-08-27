@@ -113,7 +113,7 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
 
         Inertia.post('/room/barcode/store', formData, {
             onSuccess: () => {
-                // Lakukan aksi setelah gambar berhasil diunggah
+                // Lakukan aksi setelah gamBARberhasil diunggah
             },
         });
     }
@@ -136,7 +136,7 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
 
         Inertia.post('/room/barcode/store', formData, {
             onSuccess: () => {
-                // Lakukan aksi setelah gambar berhasil diunggah
+                // Lakukan aksi setelah gamBARberhasil diunggah
             },
         });
     }
@@ -161,7 +161,7 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
 
         Inertia.post(`/room/barcode/update/${barroom.id}`, formData, {
             onSuccess: () => {
-                // Lakukan aksi setelah gambar berhasil diunggah
+                // Lakukan aksi setelah gamBARberhasil diunggah
             },
         });
     }
@@ -177,7 +177,7 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
             onSuccess: () => {
                 // alert('data saved!');
                 window.location.reload();
-                // Lakukan aksi setelah gambar berhasil diunggah
+                // Lakukan aksi setelah gamBARberhasil diunggah
             },
         });
     }
@@ -204,7 +204,7 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
                                 className="mb-3"
                                 fill
                             >
-                        <Tab eventKey="home" title="Bar Info">
+                        <Tab eventKey="home" title="BARInfo">
 
                         {form === 'add' ? (
                                 <>
@@ -222,8 +222,8 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
                                                         <div className="row">
                                                             <div className="col-lg-6">
                                                                 <div className="mb-3">
-                                                                    <label htmlFor="" className='fw-bold'>Bar code</label>
-                                                                    <input onChange={(e) => setBarcode(e.target.value)} type="text" className='form-control' />
+                                                                    <label htmlFor="" className='fw-bold'>BAR code</label>
+                                                                    <input onChange={(e) => setBarcode(e.target.value)} type="text" className='form-control' placeholder='BAR'/>
                                                                 </div>
 
                                                                 <div className="mb-3">
@@ -233,7 +233,7 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
                                                             </div>
                                                             <div className="col-lg-6">
                                                                 <div className="mb-3">
-                                                                    <label htmlFor="" className='fw-bold'>Bar description</label>
+                                                                    <label htmlFor="" className='fw-bold'>BARdescription</label>
                                                                     <input onChange={(e) => setBarDesc(e.target.value)} type="text" className='form-control form-control-solid' placeholder='HOTEL BEST AVAILABLE RATE'/>
                                                                 </div>
                                                                 <div className="mb-3">
@@ -318,7 +318,7 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
                                                         <div className="row">
                                                             <div className="col-lg-6">
                                                                 <div className="mb-3">
-                                                                    <label htmlFor="" className='fw-bold'>Bar code</label>
+                                                                    <label htmlFor="" className='fw-bold'>BAR code</label>
                                                                     <input defaultValue={barroom.barcode} onChange={(e) => setBarcode(e.target.value)} type="text" className='form-control' />
                                                                 </div>
 
@@ -329,7 +329,7 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
                                                             </div>
                                                             <div className="col-lg-6">
                                                                 <div className="mb-3">
-                                                                    <label htmlFor="" className='fw-bold'>Bar description</label>
+                                                                    <label htmlFor="" className='fw-bold'>BARdescription</label>
                                                                     <input defaultValue={barroom.bardesc} onChange={(e) => setBarDesc(e.target.value)} type="text" className='form-control form-control-solid' />
                                                                 </div>
                                                                 <div className="mb-3">
@@ -467,7 +467,7 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
                             </div>
                         </Tab>
                         <Tab eventKey="calender" title="calender">
-                            
+
                             <div className="row">
                                 <div className="col-lg-6">
                                     <div className="card">
