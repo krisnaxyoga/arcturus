@@ -94,7 +94,7 @@
                                 </div>
                                 <div class="row no-gutters align-items-center">
                                     <div class="col-auto">
-                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ $totalunpaid }}</div>
+                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ $unpaid }}</div>
                                     </div>
 
                                 </div>

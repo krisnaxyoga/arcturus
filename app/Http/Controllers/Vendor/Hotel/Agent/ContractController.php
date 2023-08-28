@@ -577,13 +577,66 @@ class ContractController extends Controller
         $contract = ContractRate::where('id', $data->contract_id)->first();
 
         foreach ($advance as $key => $itm) {
-            if ($itm->is_active == 1) {
-                $date1 = $advance->get($key); // Mengakses elemen sesuai indeks saat ini
-                $date1->beginsell = now()->addDays($date1->day);
-                $date1->endsell = Carbon::parse($contract->stayperiod_end);
-                $date1->save();
+            if ($itm->is_active == 1 && $itm->numberactive >= 1 && $itm->numberactive <= 6) {
+                $date3 = AdvancePurchase::where('numberactive', $itm->numberactive)
+                    ->where('contract_id', $data->contract_id)
+                    ->first();
+    
+                $date3->beginsell = now()->addDays($date3->day);
+                $date3->endsell = Carbon::parse($contract->stayperiod_end);
+                $date3->save();
+    
+                if ($itm->numberactive > 1) {
+                    $up_endsell = AdvancePurchase::where('numberactive', $itm->numberactive - 1)
+                        ->where('contract_id', $data->contract_id)
+                        ->first();
+    
+                    $up_endsell->endsell = $date3->beginsell->subDay(1);
+                    $up_endsell->save();
+                }
             }
         }
+
+        // foreach ($advance as $key => $itm) {
+        //     if ($itm->is_active == 1) {
+        //         $date3 = AdvancePurchase::where('numberactive', $itm->numberactive)
+        //             ->where('contract_id', $data->contract_id)
+        //             ->first();
+        
+        //         $date3->beginsell = now()->addDays($date3->day);
+        //         $date3->endsell = Carbon::parse($contract->stayperiod_end);
+        //         $date3->save();
+        
+        //         if ($itm->numberactive > 1) {
+        //             $up_endsell = AdvancePurchase::where('numberactive', $itm->numberactive - 1)
+        //                 ->where('contract_id', $data->contract_id)
+        //                 ->first();
+        
+        //             $up_endsell->endsell = $date3->beginsell->subDay(1);
+        //             $up_endsell->save();
+        //         }
+        //     } else if ($itm->is_active == 2) {
+        //         for ($i = $itm->numberactive; $i >= 1; $i--) {
+        //             $date = AdvancePurchase::where('numberactive', $i)
+        //                 ->where('contract_id', $data->contract_id)
+        //                 ->first();
+        
+        //             $date->beginsell = now()->addDays($date->day);
+        //             $date->endsell = Carbon::parse($contract->stayperiod_end);
+        //             $date->save();
+        
+        //             if ($i < $itm->numberactive) {
+        //                 $up_endsell = AdvancePurchase::where('numberactive', $i + 1)
+        //                     ->where('contract_id', $data->contract_id)
+        //                     ->first();
+        
+        //                 $up_endsell->endsell = $date->beginsell->subDay(1);
+        //                 $up_endsell->save();
+        //             }
+        //         }
+        //     }
+        // }
+        
 
         return redirect()->back()->with('success', 'Advancepurchase status update');
     }

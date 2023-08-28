@@ -48,20 +48,20 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                 <div className="card-body">
 
                                                     <div className="page-content container">
-                                                        <div className="page-header text-blue-d2">
-                                                            {/* <h1 className="page-title text-secondary-d1">
+                                                        {/* <div className="page-header text-blue-d2">
+                                                              <h1 className="page-title text-secondary-d1">
                                                                 Invoice
                                                                 <small className="page-info">
                                                                     <i className="fa fa-angle-double-right text-80"></i>
                                                                     ID: {data.booking_code}
                                                                 </small>
-                                                            </h1> */}
+                                                            </h1> 
 
                                                             <div className="page-tools">
                                                                 <div className="action-buttons">
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </div> */}
 
                                                         <div className="container px-0">
                                                             <div className="row mt-4">
@@ -96,10 +96,10 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                                                 <div className="my-1"><i className="fa fa-phone fa-flip-horizontal text-secondary"></i> <b className="text-600">{data.phone}</b></div>
                                                                                 <div className="my-1"><i className="fa fa-envelope fa-flip-horizontal text-secondary"></i> <b className="text-600">{data.email}</b></div>
                                                                             </div>
-                                                                            <div>
+                                                                            {/* <div>
                                                                                 <span className="text-400 text-grey-m2 align-middle">Night: </span>
                                                                                 <span className="text-400 text-110 text-blue align-middle"> {data.night}</span>
-                                                                            </div>
+                                                                            </div> */}
                                                                             <div>
                                                                                 <span className="text-400 text-grey-m2 align-middle">Check in: </span>
                                                                                 <span className="text-400 text-110 text-blue align-middle"> {data.checkin_date}</span>
@@ -125,13 +125,13 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                                                 <div className="my-2"><i className="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span className="text-600 text-90">Status: </span>
                                                                                 {data.booking_status === 'paid' ? (
                                                                                                                             <>
-                                                                                                                                <span className="badge badge-success badge-pill px-25">
+                                                                                                                                <span style={{padding:'6px'}} className="badge badge-success badge-pill px-25">
                                                                                                                                     {data.booking_status}
                                                                                                                                 </span>
                                                                                                                             </>
                                                                                                                         ) : (
                                                                                                                             <>
-                                                                                                                                <span className="badge badge-warning badge-pill px-25">
+                                                                                                                                <span style={{padding:'6px'}} className="badge badge-warning badge-pill px-25">
                                                                                                                                     {data.booking_status}
                                                                                                                                 </span>
                                                                                                                             </>
@@ -153,17 +153,21 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                                     <table className="table table-bordered table-hover">
                                                                         <thead className="bgc-default-tp1 text-white">
                                                                             <tr className="justify-content-between">
-                                                                                <th>#</th>
+                                                                                <th>QTY</th>
                                                                                 <th>Room Type</th>
-                                                                                <th>Qty</th>
+                                                                                <th>Room Rate</th>
+                                                                                <th>#Night</th>
+                                                                                <th>Total Amount</th>
                                                                             </tr>
                                                                         </thead>
                                                                         <tbody className="text-95 text-secondary-d3">
                                                                             {roombooking.map((item, index) => (
                                                                                 <tr key={index} className="mb-2 mb-sm-0 py-25 justify-content-between">
-                                                                                    <td>{index + 1}</td>
-                                                                                    <td>{item.room.ratedesc}</td>
                                                                                     <td>{item.total_room}</td>
+                                                                                    <td>{item.room.ratedesc}</td>
+                                                                                    <td>{formatRupiah(item.contractprice.recom_price)}</td>
+                                                                                    <td>{data.night}</td>
+                                                                                    <td>{formatRupiah(item.pricenomarkup)}</td>
                                                                                 </tr>
                                                                             ))}
                                                                         </tbody>
@@ -171,10 +175,10 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                                         <div className="row mt-3">
                                                                         <div className="col-12 col-sm-6 text-grey-d2 text-95 mt-2 mt-lg-0">
                                                                             <div>
-                                                                                <p style={{ padding: "5px 0",margin:'0px' }}>Deposit Policy :</p> <br />
+                                                                                <p style={{ padding: "5px 0",margin:'0px' }}>Benefit Policy :</p> <br />
                                                                                 <p>
-                                                                                    {contract.deposit_policy && (
-                                                                                        <div dangerouslySetInnerHTML={{ __html: contract.deposit_policy }}></div>
+                                                                                {contract.benefit_policy && (
+                                                                                    <div dangerouslySetInnerHTML={{ __html: contract.benefit_policy }}></div>
                                                                                     )}
                                                                                 </p>
                                                                             </div>
@@ -186,11 +190,12 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                                                     )}
                                                                                 </p>
                                                                             </div>
+                                                                            
                                                                             <div>
-                                                                                <p style={{ padding: "5px 0",margin:'0px' }}>Benefit Policy :</p> <br />
+                                                                                <p style={{ padding: "5px 0",margin:'0px' }}>Deposit Policy :</p> <br />
                                                                                 <p>
-                                                                                {contract.benefit_policy && (
-                                                                                    <div dangerouslySetInnerHTML={{ __html: contract.benefit_policy }}></div>
+                                                                                    {contract.deposit_policy && (
+                                                                                        <div dangerouslySetInnerHTML={{ __html: contract.deposit_policy }}></div>
                                                                                     )}
                                                                                 </p>
                                                                             </div>

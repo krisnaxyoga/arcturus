@@ -68,7 +68,7 @@ class BookingHistoryController extends Controller
         $cont_id = HotelRoomBooking::where('booking_id',$data->id)->first();
         $conttract = ContractRate::where('id',$cont_id->contract_id)->first();
         $setting = Setting::first();
-        $hotelroombooking = HotelRoomBooking::where('booking_id',$data->id)->with('room')->get();
+        $hotelroombooking = HotelRoomBooking::where('booking_id',$data->id)->with('room')->with('contractprice')->with('vendors')->get();
         return inertia('Agent/BookingHistory/Detail',[
             'data' => $data,
             'agent' => $agent,

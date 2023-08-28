@@ -233,7 +233,7 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
                                                             </div>
                                                             <div className="col-lg-6">
                                                                 <div className="mb-3">
-                                                                    <label htmlFor="" className='fw-bold'>BARdescription</label>
+                                                                    <label htmlFor="" className='fw-bold'>BAR description</label>
                                                                     <input onChange={(e) => setBarDesc(e.target.value)} type="text" className='form-control form-control-solid' placeholder='HOTEL BEST AVAILABLE RATE'/>
                                                                 </div>
                                                                 <div className="mb-3">
@@ -329,7 +329,7 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
                                                             </div>
                                                             <div className="col-lg-6">
                                                                 <div className="mb-3">
-                                                                    <label htmlFor="" className='fw-bold'>BARdescription</label>
+                                                                    <label htmlFor="" className='fw-bold'>BAR description</label>
                                                                     <input defaultValue={barroom.bardesc} onChange={(e) => setBarDesc(e.target.value)} type="text" className='form-control form-control-solid' />
                                                                 </div>
                                                                 <div className="mb-3">

@@ -41,6 +41,15 @@
           });
         }
       </script>
+       <style>
+        /* Gaya untuk tombol WhatsApp */
+        .whatsapp-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+    </style>
 </head>
 <body>
 	<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar ftco-navbar-light" id="ftco-navbar">
@@ -85,7 +94,9 @@
         @yield('contents')
     </main>
 
-
+    <a href="https://api.whatsapp.com/send?phone=PHONE_NUMBER" target="_blank" class="whatsapp-button">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5lEK6fT2uuMM_Z2csKhVDq2UlK3vMhqlCnw&usqp=CAU" alt="WhatsApp" width="60" height="60">
+    </a>
     <footer class="ftco-footer bg-bottom ftco-no-pt" style="background-image: url(images/bg_3.jpg);">
         <div class="container">
             <div class="row">
@@ -123,6 +134,15 @@
 
         <script>
             $('input[name="dates"]').daterangepicker();
+        </script>
+        <script>
+         document.getElementById('whatsapp-button').addEventListener('click', function() {
+            var phoneNumber = 'PHONE_NUMBER'; // Ganti dengan nomor WhatsApp yang sesuai
+            var message = 'Halo! Saya ingin bertanya tentang...'; // Ganti dengan pesan yang sesuai
+            var whatsappURL = 'https://api.whatsapp.com/send?phone=' + phoneNumber + '&text=' + encodeURIComponent(message);
+            window.open(whatsappURL, '_blank');
+        });
+
         </script>
     </body>
 </html>
