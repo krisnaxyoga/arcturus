@@ -126,6 +126,11 @@
                                                 <p>Facilities :  @foreach ($item->room->attribute as $facilities)
                                                     {{ $facilities }},
                                                     @endforeach</p>
+                                                    @if(isset($item->contractrate->distribute) && $item->contractrate->distribute !== ['all'])
+                                                        @foreach ($item->contractrate->distribute as $distribution)
+                                                        <span class="badge badge-success mr-2">{{$distribution}} </span>
+                                                        @endforeach
+                                                    @endif
                                             </div>
                                         </div>
                                     </div>

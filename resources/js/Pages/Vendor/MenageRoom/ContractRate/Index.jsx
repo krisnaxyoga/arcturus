@@ -347,7 +347,7 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
                                                                                 <thead>
                                                                                     <tr>
                                                                                         <th>room type</th>
-                                                                                        <th>BAR rate</th>
+                                                                                        <th>BAR price</th>
                                                                                         <th>action</th>
                                                                                         {/* <th>child price</th> */}
                                                                                     </tr>

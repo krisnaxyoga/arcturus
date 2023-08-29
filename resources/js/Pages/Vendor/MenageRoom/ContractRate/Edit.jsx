@@ -928,6 +928,7 @@ console.log(contpriceone,">>>PERCENTONE")
                                                         <>
                                                         <div className="d-flex mb-4">
                                                         <p className='mr-2'>status : </p>  <a href={`/advance/updateadvancetstatus/${item.id}/${2}`} className='btn btn-success'>on</a>
+                                                       
 
                                                         </div>
                                                         <div className="row mb-3">
