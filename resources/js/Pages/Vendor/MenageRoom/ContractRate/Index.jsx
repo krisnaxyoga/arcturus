@@ -347,7 +347,7 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
                                                                                 <thead>
                                                                                     <tr>
                                                                                         <th>room type</th>
-                                                                                        <th>rate price</th>
+                                                                                        <th>BAR price</th>
                                                                                         <th>action</th>
                                                                                         {/* <th>child price</th> */}
                                                                                     </tr>
@@ -414,7 +414,7 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
                                             <div className="container">
                                                 <form onSubmit={updatePost}>
                                                     <div className="mb-3">
-                                                        <label htmlFor="" className='form-label'>Rate Price</label>
+                                                        <label htmlFor="" className='form-label'>BAR Price</label>
                                                         <input className='form-control' type="number" defaultValue={modalData?.price} onChange={(e) => setPrice(e.target.value)} />
                                                     </div>
                                                     <div className="mb-3">

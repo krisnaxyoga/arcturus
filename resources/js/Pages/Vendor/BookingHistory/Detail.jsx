@@ -165,9 +165,9 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                                                 <tr key={index} className="mb-2 mb-sm-0 py-25 justify-content-between">
                                                                                     <td>{item.total_room}</td>
                                                                                     <td>{item.room.ratedesc}</td>
-                                                                                    <td>{formatRupiah(item.contractprice.recom_price)}</td>
-                                                                                    <td>{data.night}</td>
                                                                                     <td>{formatRupiah(item.pricenomarkup)}</td>
+                                                                                    <td>{data.night}</td>
+                                                                                    <td>{formatRupiah(data.pricenomarkup)}</td>
                                                                                 </tr>
                                                                             ))}
                                                                         </tbody>
@@ -182,14 +182,7 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                                                     )}
                                                                                 </p>
                                                                             </div>
-                                                                            <div>
-                                                                                <p style={{ padding: "5px 0",margin:'0px' }}>Cancellation Policy :</p> <br />
-                                                                                <p>
-                                                                                {contract.cencellation_policy && (
-                                                                                    <div dangerouslySetInnerHTML={{ __html: contract.cencellation_policy }}></div>
-                                                                                    )}
-                                                                                </p>
-                                                                            </div>
+                                                                            
                                                                             
                                                                             <div>
                                                                                 <p style={{ padding: "5px 0",margin:'0px' }}>Deposit Policy :</p> <br />
@@ -203,8 +196,28 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
 
 
                                                                             <div className="col-12 col-sm-6 text-grey text-90 order-first order-sm-last">
-
+                                                                                {/* <div>
+                                                                                    <p style={{ padding: "5px 0",margin:'0px' }}>Cancellation Policy :</p> <br />
+                                                                                    <p>
+                                                                                    {contract.cencellation_policy && (
+                                                                                        <div dangerouslySetInnerHTML={{ __html: contract.cencellation_policy }}></div>
+                                                                                        )}
+                                                                                    </p>
+                                                                                </div> */}
                                                                                 <div className="row my-2 align-items-center bgc-primary-l3 p-2">
+                                                                                    <div className="col-12 text-right">
+                                                                                        <p style={{ padding: "5px 0",margin:'0px' }}>Cancellation Policy :</p> <br />
+                                                                                        <p>
+                                                                                        {contract.cencellation_policy && (
+                                                                                            <div dangerouslySetInnerHTML={{ __html: contract.cencellation_policy }}></div>
+                                                                                            )}
+                                                                                        </p>
+                                                                                    </div>
+                                                                                    {/* <div className="col-5">
+                                                                                        <span className="text-400 text-success-d3 opacity-2">{data.total_room}</span>
+                                                                                    </div> */}
+                                                                                </div>
+                                                                                {/* <div className="row my-2 align-items-center bgc-primary-l3 p-2">
                                                                                     <div className="col-7 text-right">
                                                                                         Total Room :
                                                                                     </div>
@@ -219,7 +232,7 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                                                     <div className="col-5">
                                                                                         <span className="text-400 text-success-d3 opacity-2">{formatRupiah(data.pricenomarkup)}</span>
                                                                                     </div>
-                                                                                </div>
+                                                                                </div> */}
                                                                             </div>
                                                                         </div>
 

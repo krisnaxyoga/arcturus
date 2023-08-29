@@ -468,7 +468,17 @@ class ContractController extends Controller
                         $advanceprice->price = $denden->recom_price * $nilai[$key];
                         $advanceprice->rolerate = 2;
                         $advanceprice->is_active = $item->is_active;
-                        $advanceprice->save();
+                        
+                        $existingPrice = AdvancePurchasePrice::where('room_id', $advanceprice->room_id)
+                            ->where('user_id', $advanceprice->user_id)
+                            ->where('vendor_id', $advanceprice->vendor_id)
+                            ->where('contract_id', $advanceprice->contract_id)
+                            ->where('advance_id', $advanceprice->advance_id)
+                            ->first();
+
+                        if (!$existingPrice) {
+                            $advanceprice->save();
+                        }
                     }
                 }
 
