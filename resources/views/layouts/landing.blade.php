@@ -94,8 +94,8 @@
         @yield('contents')
     </main>
 
-    <a href="https://api.whatsapp.com/send?phone=PHONE_NUMBER" target="_blank" class="whatsapp-button">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5lEK6fT2uuMM_Z2csKhVDq2UlK3vMhqlCnw&usqp=CAU" alt="WhatsApp" width="60" height="60">
+    <a href="https://api.whatsapp.com/send?phone=6287888375939" target="_blank" class="whatsapp-button">
+        <img src="https://www.morsealam.com/wp-content/uploads/2018/11/logo-whatsapp-png-transparent-background-8.png" alt="WhatsApp" width="60" height="60">
     </a>
     <footer class="ftco-footer bg-bottom ftco-no-pt" style="background-image: url(images/bg_3.jpg);">
         <div class="container">
