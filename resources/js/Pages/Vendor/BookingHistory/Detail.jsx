@@ -184,14 +184,6 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                                             </div>
                                                                             
                                                                             
-                                                                            <div>
-                                                                                <p style={{ padding: "5px 0",margin:'0px' }}>Deposit Policy :</p> <br />
-                                                                                <p>
-                                                                                    {contract.deposit_policy && (
-                                                                                        <div dangerouslySetInnerHTML={{ __html: contract.deposit_policy }}></div>
-                                                                                    )}
-                                                                                </p>
-                                                                            </div>
                                                                             </div>
 
 
@@ -210,6 +202,14 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                                                         <p>
                                                                                         {contract.cencellation_policy && (
                                                                                             <div dangerouslySetInnerHTML={{ __html: contract.cencellation_policy }}></div>
+                                                                                            )}
+                                                                                        </p>
+                                                                                    </div>
+                                                                                    <div className="col-12 text-right">
+                                                                                        <p style={{ padding: "5px 0",margin:'0px' }}>Deposit Policy :</p> <br />
+                                                                                        <p>
+                                                                                            {contract.deposit_policy && (
+                                                                                                <div dangerouslySetInnerHTML={{ __html: contract.deposit_policy }}></div>
                                                                                             )}
                                                                                         </p>
                                                                                     </div>
