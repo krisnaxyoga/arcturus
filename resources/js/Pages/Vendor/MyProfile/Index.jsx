@@ -12,7 +12,7 @@ import { Inertia } from '@inertiajs/inertia';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 
-export default function Index({ session,data,country,markup,banner }) {
+export default function Index({ session,data,country,vendor,markup,banner }) {
  console.log(data,">>>>>>>data user");
  const { url } = usePage();
  const [selectcountry,setCountry] = useState('');
@@ -99,7 +99,7 @@ export default function Index({ session,data,country,markup,banner }) {
 
   return (
     <>
-    <Layout page={url}>
+    <Layout page={url} vendor={vendor}>
         <div className="container">
             <h1>Settings</h1>
             <hr />

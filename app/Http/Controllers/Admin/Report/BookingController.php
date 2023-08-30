@@ -14,6 +14,7 @@ use App\Models\User;
 use App\Models\ContractRate;
 use App\Models\HotelRoomBooking;
 use App\Mail\BookingConfirmation;
+use App\Mail\BookingConfirmationHotel;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
@@ -66,16 +67,18 @@ class BookingController extends Controller
             $data = [
                 'booking' => $booking, // $book merupakan instance dari model Booking yang sudah Anda dapatkan
                 'contract' => $contract,
-                'setting' => $setting = Setting::first(),
-                'agent' =>$agent
+                'setting' => Setting::first(),
+                'agent' =>$agent,
+                'hotelbook' => $hotelbook
             ];
-        
-        
 
-        Mail::to($booking->vendor->email_reservation)->send(new BookingConfirmation($data));
+
+
+        Mail::to($booking->vendor->email_reservation)->send(new BookingConfirmationHotel($data));
+        Mail::to($booking->vendor->email)->send(new BookingConfirmationHotel($data));
         Mail::to($booking->users->email)->send(new BookingConfirmation($data));
 
-        return redirect()->back()->with('message', 'booking paid confirmation');
+        return redirect()->back()->with('message', 'Email send to agent and hotel');
     }
 
     public function create()

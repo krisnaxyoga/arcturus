@@ -15,10 +15,11 @@ class BookingReportController extends Controller
     public function index()
     {
         $userid = auth()->user()->id;
-        $vendor = Vendor::where('user_id',$userid)->first();
+        $vendor = Vendor::where('user_id',$userid)->with('users')->first();
         $data = Booking::where('vendor_id',$vendor->id)->whereNotIn('booking_status', ['-', ''])->with('vendor')->with('users')->get();
         return inertia('Vendor/BookingReport/Index',[
             'data' => $data,
+            'vendor' => $vendor
         ]);
     }
 

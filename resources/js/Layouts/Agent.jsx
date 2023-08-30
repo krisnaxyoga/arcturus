@@ -42,13 +42,15 @@ function Layout({ children, page, agent }) {
                     {agent.vendors.vendor_name}
                 </a>
                 <Button variant="btn btn-icon btn-transparent-dark order-1 order-lg-0 mr-lg-2" onClick={handleShow}>
-                    <i className="fa fa-bars" aria-hidden="true"></i>
+                 <i className="fa fa-bars" aria-hidden="true"></i>
                 </Button>
                 <ul className="navbar-nav align-items-center ml-auto">
+                    <li className="nav-item no-caret mr-3">{agent.first_name} {agent.last_name}</li>
                     <li className="nav-item no-caret mr-2 dropdown-user">
+                    
                         <Dropdown>
                             <Dropdown.Toggle className='p-0 rounded-circle' variant="light" id="dropdown-basic">
-                                <img className="img-fluid p-0" style={{ maxHeight: '50px', maxWidth: '50px' }} src="/images/undraw_Pic_profile_re_7g2h.png" />
+                            <img className="img-fluid p-0" style={{ maxHeight: '50px', maxWidth: '50px' }} src="/images/undraw_Pic_profile_re_7g2h.png" />
 
                             </Dropdown.Toggle>
                             <Dropdown.Menu style={{ transform: "none!important" }}>
@@ -129,11 +131,11 @@ function Layout({ children, page, agent }) {
                             <nav className="navbar navbar-dark bg-white navbar-expand d-lg-none d-xl-none fixed-bottom">
                                 <ul className="navbar-nav nav-justified w-100">
                                     <li className="nav-item">
-                                        <Link href="/" className="nav-link">
+                                        <a href="/" className="nav-link">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="dark" className="bi bi-house-door" viewBox="0 0 16 16">
                                                 <path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146ZM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5Z" />
                                             </svg>
-                                        </Link>
+                                        </a>
                                     </li>
                                     {/* seacrh */}
                                     {/* <li className="nav-item">
@@ -144,33 +146,11 @@ function Layout({ children, page, agent }) {
                     </a>
                 </li> */}
                                     <li className="nav-item">
-                                        {['top'].map((placement) => (
-                                            <OverlayTrigger
-                                                trigger="click"
-                                                key={placement}
-                                                placement={placement}
-                                                overlay={
-                                                    <Popover id={`popover-positioned-${placement}`}>
-                                                        {/* <Popover.Header as="h3">{`Popover ${placement}`}</Popover.Header> */}
-                                                        <Popover.Body>
-                                                            <Link href="#" className="nav-link text-dark">
-                                                                VIP POST
-                                                            </Link>
-                                                            <Link href="#" className="nav-link text-dark">
-                                                                NEWS POST
-                                                            </Link>
-                                                        </Popover.Body>
-                                                    </Popover>
-                                                }
-                                            >
-                                                <Button variant='light' className='rounded-5'>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="light" className="bi bi-plus-circle" viewBox="0 0 16 16">
-                                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
-                                                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-                                                    </svg>
-                                                </Button>
-                                            </OverlayTrigger>
-                                        ))}
+                                        <Link className={`nav-link ${page === '/agentdashboard' ? 'active' : ''}`} href="/agentdashboard">
+                                        
+                                            <svg xmlns="http://www.w3.org/2000/svg" id="Filled" viewBox="0 0 24 24" width="20" height="20"><path d="M20,0H4A4,4,0,0,0,0,4V16a4,4,0,0,0,4,4H6.9l4.451,3.763a1,1,0,0,0,1.292,0L17.1,20H20a4,4,0,0,0,4-4V4A4,4,0,0,0,20,0ZM7,5h5a1,1,0,0,1,0,2H7A1,1,0,0,1,7,5ZM17,15H7a1,1,0,0,1,0-2H17a1,1,0,0,1,0,2Zm0-4H7A1,1,0,0,1,7,9H17a1,1,0,0,1,0,2Z"/></svg>
+
+                                        </Link>
                                     </li>
                                     {/* notif */}
                                     {/* <li className="nav-item">
@@ -181,7 +161,7 @@ function Layout({ children, page, agent }) {
                     </a>
                 </li> */}
                                     <li className="nav-item">
-                                        <Link href="/setting" className="nav-link">
+                                        <Link className={`nav-link ${page === '/agent-profile' ? 'active' : ''}`} href="/agent-profile">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="dark" className="bi bi-person" viewBox="0 0 16 16">
                                                 <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z" />
                                             </svg>

@@ -69,7 +69,7 @@ export default function Detail({ session, data, agent }) {
                                                         </div>
                                                         <div>
                                                             <label for="totals" className="form-label">Totals</label>
-                                                            <p>{data.price}</p>
+                                                            <p>{data.pricenomarkup}</p>
                                                         </div>
                                                     </div>
                                                 </div>

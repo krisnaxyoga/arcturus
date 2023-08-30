@@ -17,12 +17,13 @@ class BookingHistoryController extends Controller
     public function index()
     {
         $userid = auth()->user()->id;
-        $vendor = Vendor::where('user_id',$userid)->first();
+        $vendor = Vendor::where('user_id',$userid)->with('users')->first();
         $data = Booking::where('vendor_id',$vendor->id)->whereNotIn('booking_status', ['-', ''])->with('vendor')->with('users')->get();
         
 
         return inertia('Vendor/BookingHistory/Index',[
             'data'=>$data,
+            'vendor'=>$vendor
         ]);
     }
 
@@ -47,8 +48,10 @@ class BookingHistoryController extends Controller
      */
     public function show(string $id)
     {
+        $userid = auth()->user()->id;
+        $vendor = Vendor::where('user_id',$userid)->with('users')->first();
         $data = Booking::where('id',$id)->whereNotIn('booking_status', ['-', ''])->with('vendor')->with('users')->first();
-        $hotelroombooking = HotelRoomBooking::where('booking_id',$id)->with('room')->get();
+        $hotelroombooking = HotelRoomBooking::where('booking_id',$id)->with('room')->with('contractprice')->get();
         $cont_id = HotelRoomBooking::where('booking_id',$id)->first();
         $conttract = ContractRate::where('id',$cont_id->contract_id)->first();
 
@@ -57,6 +60,7 @@ class BookingHistoryController extends Controller
             'data'=>$data,
             'roombooking'=>$hotelroombooking,
             'contract' => $conttract,
+            'vendor' =>$vendor
         ]);
     }
 

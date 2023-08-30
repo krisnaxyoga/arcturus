@@ -10,7 +10,7 @@ import Bookings from '../../Pages/Vendor/BookingHistory/Bookings';
 import { Link, usePage } from '@inertiajs/inertia-react';
 import { Inertia } from '@inertiajs/inertia';
 
-export default function Index({ totalroom,income,booking,success,pending,data }) {
+export default function Index({ totalroom,income,vendor,success,pending,data }) {
   const { url } = usePage();
   function formatRupiah(amount) {
       return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount).slice(0, -3);
@@ -30,7 +30,7 @@ export default function Index({ totalroom,income,booking,success,pending,data })
 
   return (
     <>
-      <Layout page={url}>
+      <Layout page={url} vendor={vendor}>
         {/* <!-- Content Wrapper --> */}
         <div id="content-wrapper" className="d-flex flex-column">
           {/* <!-- Main Content --> */}
@@ -62,7 +62,7 @@ export default function Index({ totalroom,income,booking,success,pending,data })
                   </div>
                 </div>
 
-                <div className="col-xl-3 col-md-6 col-6 mb-4">
+                <div className="col-xl-3 col-md-6 col-4 mb-4">
                   <div className="card border-left-info shadow h-100 py-2">
                     <div className="card-body">
                       <div className="row no-gutters align-items-center">
@@ -84,7 +84,7 @@ export default function Index({ totalroom,income,booking,success,pending,data })
                 </div>
 
                 {/* <!-- Pending Requests Card Example --> */}
-                <div className="col-xl-3 col-md-6 col-6 mb-4">
+                <div className="col-xl-3 col-md-6 col-4 mb-4">
                   <div className="card border-left-warning shadow h-100 py-2">
                     <div className="card-body">
                       <div className="row no-gutters align-items-center">
@@ -101,7 +101,7 @@ export default function Index({ totalroom,income,booking,success,pending,data })
                   </div>
                 </div>
 
-                <div className="col-xl-3 col-md-6 col-6 mb-4">
+                <div className="col-xl-3 col-md-6 col-4 mb-4">
                   <div className="card border-left-secondary shadow h-100 py-2">
                     <div className="card-body">
                       <div className="row no-gutters align-items-center">

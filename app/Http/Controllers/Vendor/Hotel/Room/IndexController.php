@@ -26,11 +26,13 @@ class IndexController extends Controller
     public function index()
     {
         $iduser = auth()->user()->id;
+        $vendor = Vendor::where('user_id',$iduser)->with('users')->first();
         $data = RoomHotel::where('user_id',$iduser)->get();
         // $child = ChildPriceRoom::with('roomhotel')->get();
         // $adult = AdultPriceRoom::with('roomhotel')->get();
         return inertia('Vendor/MenageRoom/Index',[
             'data'=>$data,
+            'vendor' => $vendor
         ]);
     }
 
@@ -42,9 +44,11 @@ class IndexController extends Controller
         $id = auth()->user()->id;
         $attr = AttributeRoom::where('user_id',$id)->get();
         $roomtype = Roomtype::all();
+        $vendor = Vendor::where('user_id',$id)->with('users')->first();
         return inertia('Vendor/MenageRoom/CreateRoom',[
             'attr' => $attr,
-            'roomtype' => $roomtype
+            'roomtype' => $roomtype,
+            'vendor'=>$vendor
         ]);
     }
 
@@ -163,13 +167,15 @@ class IndexController extends Controller
     public function edit(string $id)
     {
         $iduser = auth()->user()->id;
+        $vendor = Vendor::where('user_id',$iduser)->with('users')->first();
         $attr = AttributeRoom::where('user_id',$iduser)->get();
         $room = RoomHotel::query()->where('user_id',$iduser)->where('id',$id)->get();
         $roomtype = Roomtype::all();
         return inertia('Vendor/MenageRoom/EditRoom',[
             'room' => $room,
             'attr' => $attr,
-            'roomtype' => $roomtype
+            'roomtype' => $roomtype,
+            'vendor' => $vendor
         ]);
     }
 

@@ -107,25 +107,30 @@
                                                 <h3 class="card-title"><a href="#">{{$item->room->ratedesc}}</a></h3>
                                                 {{-- <span class="price">Rp. {{ number_format(($item->recom_price + $item->contractrate->vendors->system_markup + $surcharprice), 0, ',', '.')}}</span> --}}
                                                 {{-- surcharge : {{$surchargesVendorIds}} blackout : {{$blackoutVendorIds}} vendorid :{{$item->contractrate->vendor_id}} --}}
-                                                
+
                                                 <span class="price">Rp. {{ number_format(($item->recom_price + $item->contractrate->vendors->system_markup), 0, ',', '.')}}</span>
                                                 <p class="card-text"><small class="text-body-secondary"></small></p>
                                                 @if($item->room->room_allow <= 0 || $blackoutVendorIds->contains($item->contractrate->vendors->id))
                                                     <span class="badge badge-danger">Sold</span>
                                                 @else
                                                     <select class="form-control room-quantity" name="room_quantity" style="width:200px" onchange="calculateTotal()">
-                                                        <option data-price="0" value="0">0</option>
+                                                        <option data-price="0" value="0" data-pricenomarkup="0">0</option>
                                                         @for ($i = 1; $i <= $item->room->room_allow; $i++)
                                                             {{-- <option data-contprice={{$item->id}} data-contractid={{$item->contract_id}} data-roomid={{$item->room->id}} data-price="{{($i * ($item->recom_price + $item->contractrate->vendors->system_markup + $surcharprice)) }}" value="{{$i}}">{{$i}} @if($i == 1) room @else rooms @endif </option> --}}
-                                                            <option data-contprice={{$item->id}} data-contractid={{$item->contract_id}} data-roomid={{$item->room->id}} data-price="{{($i * ($item->recom_price + $item->contractrate->vendors->system_markup)) }}" value="{{$i}}">{{$i}} @if($i == 1) room @else rooms @endif </option>
-                                                     
+                                                            <option data-contprice={{$item->id}} data-contractid={{$item->contract_id}} data-roomid={{$item->room->id}} data-price="{{($i * ($item->recom_price + $item->contractrate->vendors->system_markup)) }}" data-pricenomarkup="{{ $i * $item->recom_price }}" value="{{$i}}">{{$i}} @if($i == 1) room @else rooms @endif </option>
+
                                                         @endfor
                                                     </select>
                                                 @endif
-                                                
+
                                                 <p>Facilities :  @foreach ($item->room->attribute as $facilities)
                                                     {{ $facilities }},
                                                     @endforeach</p>
+                                                    @if(isset($item->contractrate->distribute) && $item->contractrate->distribute !== ['all'])
+                                                        @foreach ($item->contractrate->distribute as $distribution)
+                                                        <span class="badge badge-success mr-2">{{$distribution}} </span>
+                                                        @endforeach
+                                                    @endif
                                             </div>
                                         </div>
                                     </div>
@@ -156,6 +161,8 @@
                                             <div class="col-lg-6 text-right" style="border-left: 1px solid #ccc;">
                                                 <p>Total Price: <span class="text-danger fs-3 fw-bold">Rp.<span id="totalPrice">0</span></span> </p>
                                                 <input type="text" name="totalprice" value="" hidden>
+                                                <input type="text" name="totalpricenomarkup" value="" hidden>
+                                                <span style="display: none" id="totalPricenomarkup"></span>
                                                 <a id="booking" class="btn btn-primary" href="#">Book Now</a>
                                             </div>
                                         </div>
@@ -222,6 +229,7 @@
             var checkoutDate = new Date(document.getElementById('checkout').value);
 
             var totalPriceElements = document.getElementById('totalPrice');
+            var totalPricenomarkupElements = document.getElementById('totalPricenomarkup');
 
             var timeDiff = Math.abs(checkoutDate.getTime() - checkinDate.getTime());
             var permalam = Math.ceil(timeDiff / (1000 * 3600 * 24));
@@ -238,17 +246,27 @@
             console.log(totalPrice.value, ">>>total price value");
             var cleanedPrice = totalPrice.value.replace(/,/g, '');
 
+            var totalPricenomarkup = document.querySelector('input[name="totalpricenomarkup"]');
+            console.log(totalPricenomarkup.value, ">>>total price value");
+            var cleanedPricenomarkup = totalPricenomarkup.value.replace(/,/g, '');
+
             // Cek apakah cleanedPrice adalah angka sebelum melakukan perhitungan
             if (!isNaN(parseInt(cleanedPrice))) {
                 var priceintext = parseInt(cleanedPrice) * parseInt(permalam);
                 console.log(parseInt(cleanedPrice), ">>>total price inte");
                 totalPriceElements.textContent = priceintext.toLocaleString();
+
+                var pricenomarkupintext = parseInt(cleanedPricenomarkup) * parseInt(permalam);
+                console.log(parseInt(cleanedPricenomarkup), ">>>total price inte");
+                totalPricenomarkupElements.textContent = pricenomarkupintext.toLocaleString();
             } else {
                 // Jika cleanedPrice adalah NaN, set priceintext menjadi 0
                 var priceintext = 0;
                 totalPriceElements.textContent = priceintext.toLocaleString();
+                var pricenomarkupintext = 0;
+                totalPricenomarkupElements.textContent = pricenomarkupintext.toLocaleString();
             }
-            
+
 
             var person = $('#person').val();
 
@@ -272,6 +290,7 @@
             var checkoutDate = new Date(document.getElementById('checkout').value);
 
             var totalPriceElements = document.getElementById('totalPrice');
+            var totalPricenomarkupElements = document.getElementById('totalPricenomarkup');
 
             var timeDiff = Math.abs(checkoutDate.getTime() - checkinDate.getTime());
             var permalam = Math.ceil(timeDiff / (1000 * 3600 * 24));
@@ -288,24 +307,35 @@
             console.log(totalPrice.value, ">>>total price value");
             var cleanedPrice = totalPrice.value.replace(/,/g, '');
 
+            var totalPricenomarkup = document.querySelector('input[name="totalpricenomarkup"]');
+            console.log(totalPricenomarkup.value, ">>>total price value");
+            var cleanedPricenomarkup = totalPricenomarkup.value.replace(/,/g, '');
+
             // Cek apakah cleanedPrice adalah angka sebelum melakukan perhitungan
             if (!isNaN(parseInt(cleanedPrice))) {
                 var priceintext = parseInt(cleanedPrice) * parseInt(permalam);
                 console.log(parseInt(cleanedPrice), ">>>total price inte");
                 totalPriceElements.textContent = priceintext.toLocaleString();
+
+                var pricenomarkupintext = parseInt(cleanedPricenomarkup) * parseInt(permalam);
+                totalPricenomarkupElements.textContent = pricenomarkupintext.toLocaleString();
             } else {
                 // Jika cleanedPrice adalah NaN, set priceintext menjadi 0
                 var priceintext = 0;
                 totalPriceElements.textContent = priceintext.toLocaleString();
+                var pricenomarkupintext = 0;
+                totalPricenomarkupElements.textContent = pricenomarkupintext.toLocaleString();
             }
-            
+
         }
         function calculateTotal() {
             var roomQuantities = document.getElementsByClassName('room-quantity');
             var totalRoomElement = document.getElementById('totalRoom');
             var totalPriceElement = document.getElementById('totalPrice');
+            var totalPricenomarkupElement = document.getElementById('totalPricenomarkup');
             var totalRoom = 0;
             var totalPrice = 0;
+            var totalPricenomarkup = 0;
             var totalNight = document.querySelector('input[name="totalnight"]');
 
             // Mengambil data yang dipilih dan menyimpannya ke dalam array
@@ -314,17 +344,25 @@
             for (var i = 0; i < roomQuantities.length; i++) {
                 var quantity = parseInt(roomQuantities[i].value);
                 var price = parseInt(roomQuantities[i].options[roomQuantities[i].selectedIndex].dataset.price);
+
+                var pricenomarkup = parseInt(roomQuantities[i].options[roomQuantities[i].selectedIndex].dataset.pricenomarkup);
                 var roomId = parseInt(roomQuantities[i].options[roomQuantities[i].selectedIndex].dataset.roomid);
                 var contractId = parseInt(roomQuantities[i].options[roomQuantities[i].selectedIndex].dataset.contractid);
                 var contpricetId = parseInt(roomQuantities[i].options[roomQuantities[i].selectedIndex].dataset.contprice);
 
+                totalPricenomarkup += pricenomarkup;
                 totalRoom += quantity;
                 totalPrice += price;
+
+                console.log("Room Quantity:", quantity);
+                console.log("Price:", price);
+                console.log("Pricenomarkup:", pricenomarkup);
 
                 if (quantity > 0) {
                     selectedItems.push({
                         roomId: roomId,
                         price: price,
+                        pricenomarkup: pricenomarkup,
                         quantity: quantity,
                         contractid: contractId,
                         contpriceid: contpricetId
@@ -333,8 +371,6 @@
             }
 
             // Menyimpan data yang dipilih ke localStorage
-            // localStorage.setItem('selectedItems', JSON.stringify(selectedItems));
-                // Menyimpan keranjang yang telah diperbarui di localStorage
             var encryptionKey = 'KunciEnkripsiRahasia';
             saveEncryptedDataToLocalStorage(selectedItems, encryptionKey);
 
@@ -342,6 +378,7 @@
             var decryptedData = getDecryptedDataFromLocalStorage(encryptionKey);
             console.log(decryptedData);
 
+            console.log(totalPrice,totalPricenomarkup,">>>totalnomarkup");
             totalRoomElement.textContent = totalRoom;
             var priceintext = parseInt(totalPrice * totalNight.value);
             totalPriceElement.textContent = priceintext.toLocaleString();
@@ -349,8 +386,13 @@
             totalRoomInput.value = totalRoom;
             var totalPriceInput = document.querySelector('input[name="totalprice"]');
             totalPriceInput.value = totalPrice.toLocaleString();
-        }
 
+            // Perhitungan untuk totalPricenomarkupInput
+            var pricenomarkupintext = parseInt(totalPricenomarkup * totalNight.value);
+            totalPricenomarkupElement.textContent = pricenomarkupintext.toLocaleString();
+            var totalPricenomarkupInput = document.querySelector('input[name="totalpricenomarkup"]');
+            totalPricenomarkupInput.value = totalPricenomarkup.toLocaleString();
+        }
 
         //function untuk tanggal checkin
 
@@ -475,6 +517,7 @@
         $('#booking').off('click').on('click', function() {
             var totalRoom = $('input[name="totalroom"]').val();
             var totalPrice = $('input[name="totalprice"]').val();
+            var totalPricenomarkup = $('input[name="totalpricenomarkup"]').val();
             var checkIn = $('input[name="checkin"]').val();
             var checkOut = $('input[name="checkout"]').val();
             var vendorid = $('input[name="vendorid"]').val();
@@ -499,6 +542,7 @@
                     checkout: checkOut,
                     totalroom: totalRoom,
                     totalprice: totalPrice,
+                    totalpricenomarkup: totalPricenomarkup,
                     person: person,
                     vendorid: vendorid
                 },

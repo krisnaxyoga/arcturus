@@ -50,24 +50,23 @@
           <td colspan="2" style="font-size:20px;padding:30px 15px 0 15px;">Room Type</td>
         </tr>
         <tr>
-            <td colspan="2" style="padding:15px;">
-                <?php foreach ($hotelbook as $key => $item) { ?>
-                    <p style="font-size:14px;margin:0;padding:10px;border:solid 1px #ddd;font-weight:bold;">
-                        <span style="display:block;font-size:13px;font-weight:normal;">{{ $item->room->ratedesc}}</span> Rp. {{ number_format($item->price, 0, ',', '.')}} / Night <b style="font-size:12px;font-weight:300;"> </b>
-                      </p>
-                <?php } ?>
-    
-                <p style="font-size:14px;margin:0;padding:10px;border:solid 1px #ddd;font-weight:bold;">Total amount : </span> Rp. {{ number_format($booking->price, 0, ',', '.')}}</p>
-             
-              </td>
+          <td colspan="2" style="padding:15px;">
+            <?php foreach ($hotelbook as $key => $item) { ?>
+                <p style="font-size:14px;margin:0;padding:10px;border:solid 1px #ddd;font-weight:bold;">
+                    <span style="display:block;font-size:13px;font-weight:normal;">{{ $item->room->ratedesc}}</span> Rp. {{ number_format($item->pricenomarkup, 0, ',', '.')}} / Night <b style="font-size:12px;font-weight:300;"> </b>
+                  </p>
+            <?php } ?>
+
+            <p style="font-size:14px;margin:0;padding:10px;border:solid 1px #ddd;font-weight:bold;">Total amount : </span> Rp. {{ number_format($booking->pricenomarkup, 0, ',', '.')}}</p>
+         
+          </td>
         </tr>
       </tbody>
       <tfooter>
         <tr>
             <td colspan="2" style="font-size:14px;padding:50px 15px 0 15px;">
-            <strong style="display:block;margin:0 0 10px 0;">Regards</strong> {{$booking->vendor->vendor_name}}<br> {{$booking->vendor->address_line1}},{{$booking->vendor->city}},{{$booking->vendor->country}}<br><br>
-            <b>Phone:</b> {{$booking->vendor->phone}}<br>
-            <b>Email:</b> {{$booking->vendor->email}}
+            <strong style="display:block;margin:0 0 10px 0;">Regards</strong> ARCTURUS<br><br>
+            <b>Email:</b> info@arcturus.my.id
             </td>
         </tr>
         </tfooter>

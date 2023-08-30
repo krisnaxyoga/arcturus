@@ -41,18 +41,27 @@
           });
         }
       </script>
+       <style>
+        /* Gaya untuk tombol WhatsApp */
+        .whatsapp-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+    </style>
 </head>
 <body>
 	<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar ftco-navbar-light" id="ftco-navbar">
 		<div class="container">
 			{{-- <a class="navbar-brand" href="index.html">Pacific<span>Travel Agency</span></a> --}}
             <a class="navbar-brand" href="/">
-                @if(isset(Auth::user()->id) && Auth::user()->role_id == 2)
+                {{-- @if(isset(Auth::user()->id) && Auth::user()->role_id == 2)
                 <img style="width: 40px" src="{{ $vendor->logo_img ?? '/images/pms-sistem-1.png' }}" alt="Logo">
                 @else
                 <img style="width: 40px" src="{{ $settings->logo_image ?? '/images/pms-sistem-1.png' }}" alt="Logo">
-                @endif
-                {{-- <img style="width: 40px" src="{{ $settings->logo_image }}" alt="{{ $settings->logo_image }}"> --}}
+                @endif --}}
+                <img style="width: 40px" src="{{ $settings->logo_image }}" alt="{{ $settings->logo_image }}">
             </a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="oi oi-menu"></span> Menu
@@ -85,7 +94,9 @@
         @yield('contents')
     </main>
 
-
+    <a href="https://api.whatsapp.com/send?phone=6287888375939" target="_blank" class="whatsapp-button">
+        <img src="https://www.morsealam.com/wp-content/uploads/2018/11/logo-whatsapp-png-transparent-background-8.png" alt="WhatsApp" width="60" height="60">
+    </a>
     <footer class="ftco-footer bg-bottom ftco-no-pt" style="background-image: url(images/bg_3.jpg);">
         <div class="container">
             <div class="row">
@@ -123,6 +134,15 @@
 
         <script>
             $('input[name="dates"]').daterangepicker();
+        </script>
+        <script>
+         document.getElementById('whatsapp-button').addEventListener('click', function() {
+            var phoneNumber = 'PHONE_NUMBER'; // Ganti dengan nomor WhatsApp yang sesuai
+            var message = 'Halo! Saya ingin bertanya tentang...'; // Ganti dengan pesan yang sesuai
+            var whatsappURL = 'https://api.whatsapp.com/send?phone=' + phoneNumber + '&text=' + encodeURIComponent(message);
+            window.open(whatsappURL, '_blank');
+        });
+
         </script>
     </body>
 </html>

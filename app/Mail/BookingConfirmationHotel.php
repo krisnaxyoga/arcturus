@@ -9,11 +9,12 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class BookingConfirmation extends Mailable
+class BookingConfirmationHotel extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $data;
+
     /**
      * Create a new message instance.
      */
@@ -37,7 +38,7 @@ class BookingConfirmation extends Mailable
      */
     public function content(): Content
     {
-        return (new Content)->view('emails.booking_confirmation')->with([
+        return (new Content)->view('emails.booking_confirmationhotel')->with([
             'booking' => $this->data['booking'], // Mengirim data booking ke view template email
             'contract' => $this->data['contract'],
             'setting' => $this->data['setting'],

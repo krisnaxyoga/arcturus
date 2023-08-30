@@ -12,11 +12,9 @@
   </head>
   <body>
     <div class="container">
-        <div class="mt-4">
             <main>
                 @yield('contents')
             </main>
-        </div>
     </div>
 
 

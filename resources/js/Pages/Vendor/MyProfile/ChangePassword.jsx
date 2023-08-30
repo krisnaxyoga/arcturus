@@ -31,7 +31,7 @@ export default function EditPassword({ props, session, data }) {
     //   } 
     return (
         <>
-            <Layout page={url} agent={data}>
+            <Layout page={url} vendor={data}>
                 <div className="container">
                         <h1>New Password</h1>
                     <div className="row">

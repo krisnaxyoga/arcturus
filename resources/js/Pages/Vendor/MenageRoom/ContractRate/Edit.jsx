@@ -14,7 +14,7 @@ import { Inertia } from '@inertiajs/inertia';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 
-export default function PriceAgentRoom({ country, session, data, markup, bardata, contract, contractprice, advancepurchase,advanceprice }) {
+export default function PriceAgentRoom({ country, session, data, markup, bardata, contract, contractprice, advancepurchase,advanceprice,vendor,contpriceone }) {
 
     const [ratecode, setRateCode] = useState('');
     const [ratedesc, setRateDesc] = useState('');
@@ -25,6 +25,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
     const [enddate, setEndDate] = useState('');
     const [cancelPolicy, setCancellationPolicy] = useState('');
     const [depositPolicy, setDepositPolicy] = useState('');
+    const [benefitPolicy, setBenefitPolicy] = useState('');
 
     const [minPrice, setMinPrice] = useState('');
     const [sellingPrice, setSellingPrice] = useState('');
@@ -38,11 +39,11 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
 
     const [showModalTable, setShowModalTable] = useState(false);
 
-    
+
     const [showModalAdvance, setShowModalAdvance] = useState(false);
 
     const [percentage, setPercentage] = useState(contract.percentage);
-    
+
     // advance purchase variable
     const [day, setDay] = useState('');
     const [price, setPrice] = useState('');
@@ -52,13 +53,13 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
     const handleDayChange = (e, beginsell, endsell, day) => {
         const inputDay = parseInt(e.target.value, 10);
         setDay(inputDay);
-    
+
         // Calculate beginsell and endsell based on input day
         if (beginsell !== '' && !isNaN(beginsell)) {
           const startDate = new Date(beginsell);
           const newEndsell = new Date(endsell);
           newEndsell.setDate(startDate.getDate() + inputDay);
-    
+
           setEndselladvance(newEndsell.toISOString().slice(0, 10));
         }
       };
@@ -194,7 +195,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
     const handleRateMinChange = (e) => {
         const value = e.target.value;
 
-        if (markup[0].markup_price === 0) {
+        if (markup[0].markup_price == 0) {
             const selling = Number(value) + Number(modalData?.barprice.price) - ((modalData?.barprice.price * 0.8) + 15000);
             setSellingPrice(selling);
         } else {
@@ -242,7 +243,11 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
         setDepositPolicy(editor.getData());
     };
 
+    const handleBenefitPolicyChange = (event, editor) => {
+        setBenefitPolicy(editor.getData());
+    };
 
+console.log(contpriceone,">>>PERCENTONE")
     const storePost = async (e) => {
         e.preventDefault();
 
@@ -260,12 +265,13 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
 
 
         const days = checkboxes ? checkboxes : contract.pick_day;
-        const trueDays = Object.keys(days).filter((day) => days[day] === true);
+        const trueDays = Object.keys(days).filter((day) => days[day] == true);
 
         formData.append('pick_day', trueDays);
 
         formData.append('cencellation_policy', cancelPolicy ? cancelPolicy : contract.cencellation_policy);
         formData.append('deposit_policy', depositPolicy ? depositPolicy : contract.deposit_policy);
+        formData.append('benefit_policy', benefitPolicy ? benefitPolicy : contract.benefit_policy);
 
         formData.append('percentage',percentage ? percentage:contract.percentage);
 
@@ -286,21 +292,21 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
         formData.append('day', day ? day : itemDay);
         // formData.append('beginsell',beginselladvance ? beginselladvance : itemBeginsell);
         // formData.append('endsell',endselladvance ? endselladvance : itemEndsell);
-        
+
         Inertia.post(`/contract/advancepurchase/${itemId}`, formData, {
             onSuccess: () => {
                 window.location.reload();
             },
         });
     }
-    
+
     return (
         <>
-            <Layout page='/room/contract/index'>
+            <Layout page='/room/contract/index' vendor={vendor}>
                 <div className="container">
                     <div className="row">
                         <h1>Contract Rate</h1>
-                        {(!contract || Object.keys(contract).length === 0) || (!markup || Object.keys(markup).length === 0) || (!bardata || Object.keys(bardata).length === 0) ? (
+                        {(!contract || Object.keys(contract).length == 0) || (!markup || Object.keys(markup).length == 0) || (!bardata || Object.keys(bardata).length == 0) ? (
                             <div className="alert alert-danger border-0 shadow-sm rounded-3">
                                 <p>Please check again the information bar and your mark up price is it complete?</p>
                             </div>
@@ -346,43 +352,52 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                     </div>
                                                                     <div className="col-lg-4">
                                                                         <div className="mb-3">
-                                                                            <label htmlFor="" className='fw-bold'>Minimum stay</label>
-                                                                            <input defaultValue={contract.min_stay} onChange={(e) => setMinStay(e.target.value)} type="number" className='form-control' />
-                                                                        </div>
+                                                                        {
+                                                                            contract.rolerate == 1 ?
+                                                                                <>
+                                                                                    <label htmlFor="" className='fw-bold'>Minimum stay</label>
+                                                                                    <input defaultValue={contract.min_stay} readOnly onChange={(e) => setMinStay(e.target.value)} type="number" className='form-control' />
+                                                                                </> :
+                                                                                <>
+                                                                                    <label htmlFor="" className='fw-bold'>Minimum stay</label>
+                                                                                    <input defaultValue={contract.min_stay} onChange={(e) => setMinStay(e.target.value)} type="number" className='form-control' />
+                                                                                </>
+                                                                        }
+                                                                      </div>
                                                                     </div>
                                                                 </div>
                                                                 <hr />
                                                                 <div className="row">
                                                                     <div className="col-lg-6">
                                                                         <label htmlFor="" className='font-weight-bolder'>STAY PERIODS</label>
-                                                                       
+
                                                                         <div className="row">
                                                                             <div className="col-lg-6">
                                                                                 <div className="mb-3">
-                                                                                    <label htmlFor="" className='fw-bold'>Begin Sell date</label>
+                                                                                    <label htmlFor="" className='fw-bold'>Begin Stay date</label>
                                                                                     <input style={{backgroundColor: '#e3e6ec'}} defaultValue={contract.stayperiod_begin} onChange={(e) => setBeginSell(e.target.value)} type="date" className='form-control' />
                                                                                 </div>
                                                                             </div>
                                                                             <div className="col-lg-6">
                                                                                 <div className="mb-3">
-                                                                                    <label htmlFor="" className='fw-bold'>End Sell date</label>
+                                                                                    <label htmlFor="" className='fw-bold'>End Stay date</label>
                                                                                     <input style={{backgroundColor: '#e3e6ec'}} defaultValue={contract.stayperiod_end} onChange={(e) => setEndSell(e.target.value)} type="date" className='form-control' />
                                                                                 </div>
                                                                             </div>
                                                                         </div>
                                                                         <hr />
                                                                         <label htmlFor="" className='font-weight-bolder'>BOOKING PERIODS</label>
-                                                                        
+
                                                                         <div className="row">
                                                                             <div className="col-lg-6">
                                                                                 <div className="mb-3">
-                                                                                    <label htmlFor="" className='fw-bold'>Start date</label>
+                                                                                    <label htmlFor="" className='fw-bold'>Begin Sell date</label>
                                                                                     <input defaultValue={contract.booking_begin} onChange={(e) => setBeginDate(e.target.value)} type="date" className='form-control' />
                                                                                 </div>
                                                                             </div>
                                                                             <div className="col-lg-6">
                                                                                 <div className="mb-3">
-                                                                                    <label htmlFor="" className='fw-bold'>End date</label>
+                                                                                    <label htmlFor="" className='fw-bold'>End Sell date</label>
                                                                                     <input defaultValue={contract.booking_end} onChange={(e) => setEndDate(e.target.value)} type="date" className='form-control' />
                                                                                 </div>
                                                                             </div>
@@ -390,7 +405,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                         <div className="mb-3">
                                                                             <div className="d-flex">
                                                                             <input style={{width: '4rem'}} onChange={(e) => setPercentage(e.target.value)} type="text" defaultValue={contract.percentage} className='form-control'/> <p style={{marginTop: '8px',marginLeft: '7px'}}>
-                                                                               {contract.rolerate === 1 ? (
+                                                                               {contract.rolerate == 1 ? (
                                                                                 <>
                                                                                 % off BAR
                                                                                 </>
@@ -399,42 +414,54 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                                 % discount of contract rate
                                                                                 </>
                                                                                )}
-                                                                                
-                                                                                
+
+
                                                                             </p>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                     <div className="col-lg-6">
                                                                         <div className="mb-5">
-                                                                            <label htmlFor="">Market</label>
-                                                                            <select
-                                                                                name=""
-                                                                                id=""
-                                                                                className="form-control"
-                                                                                onChange={handleSelectDistribute}
-                                                                                multiple
-                                                                            >
-                                                                                <option value="all">all</option>
-                                                                                {Object.keys(country).map((key) => (
-                                                                                <option key={key} value={country[key]}>
-                                                                                    {country[key]}
-                                                                                </option>
-                                                                                ))}
-                                                                            </select>
-                                                                            <p className="mt-2">
-                                                                                Selected Values:{" "}
-                                                                                <span className="text-secondary">
-                                                                                {selectedDistribute.map((value) => (
-                                                                                    <span key={value}>
-                                                                                        <span  onClick={() => handleRemoveSelected(value)} class="btn badge badge-success text-light mx-1">
-                                                                                        {value} <span class="mx-1 badge badge-danger">x</span>
-                                                                                        </span>
-                                                                                    </span>
-                                                                                ))}
-                                                                                </span>
-                                                                            </p>
-                                                                        </div>
+
+                                                                        {contract.rolerate == 1 ? (
+                                                                                            <>
+                                                                                             <label style={{ marginTop:'2rem' }} htmlFor="">Market</label>
+                                                                                            <input type="text" value={'all'} className='form-control' readOnly/>
+                                                                                            </>
+                                                                                        ):(
+                                                                                            <>
+                                                                                             <label htmlFor="">Market</label>
+                                                                                                <select
+                                                                                                    name=""
+                                                                                                    id=""
+                                                                                                    className="form-control"
+                                                                                                    onChange={handleSelectDistribute}
+                                                                                                    multiple
+                                                                                                >
+                                                                                                    <option value="all">all</option>
+                                                                                                    {Object.keys(country).map((key) => (
+                                                                                                    <option key={key} value={country[key]}>
+                                                                                                        {country[key]}
+                                                                                                    </option>
+                                                                                                    ))}
+                                                                                                </select>
+                                                                                                <p className="mt-2">
+                                                                                                    Selected Values:{" "}
+                                                                                                    <span className="text-secondary">
+                                                                                                    {selectedDistribute.map((value) => (
+                                                                                                        <span key={value}>
+                                                                                                            <span  onClick={() => handleRemoveSelected(value)} class="btn badge badge-success text-light mx-1">
+                                                                                                            {value} <span class="mx-1 badge badge-danger">x</span>
+                                                                                                            </span>
+                                                                                                        </span>
+                                                                                                    ))}
+                                                                                                    </span>
+                                                                                                </p>
+
+                                                                                            </>
+                                                                                        )}
+
+                                                                            </div>
 
                                                                         <label htmlFor="pickdays" className='fw-bold'>Pick valid day</label>
                                                                         <label className="form-label mx-5">
@@ -520,7 +547,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                             </label>
 
                                                                         </div>
-                                                                        
+
                                                                         {/* <div className="mb-3">
                                                                             <label htmlFor="">exclude</label>
                                                                             <select name="" id="" className='form-control' onChange={handleSelectExclude} multiple>
@@ -538,6 +565,26 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                             </Tab>
                                                             <Tab eventKey="profile" title="Policy">
                                                                 <div className="row">
+                                                                <div className="col-lg-12">
+                                                                        <div className="mb-3">
+                                                                            <label className="form-label fw-bold">Benefit Policy</label>
+                                                                              <CKEditor
+                                                                                editor={ClassicEditor}
+                                                                                data={contract.benefit_policy}
+                                                                                onReady={editor => {
+                                                                                    // You can store the "editor" and use when it is needed.
+                                                                                    console.log('Editor is ready to use!', editor);
+                                                                                }}
+                                                                                onChange={handleBenefitPolicyChange}
+                                                                                onBlur={(event, editor) => {
+                                                                                    console.log('Blur.', editor);
+                                                                                }}
+                                                                                onFocus={(event, editor) => {
+                                                                                    console.log('Focus.', editor);
+                                                                                }}
+                                                                            />
+                                                                        </div>
+                                                                    </div>
                                                                     <div className="col-lg-12">
                                                                         <div className="mb-3">
                                                                             <label className="form-label fw-bold">Cancellation Policy</label>
@@ -590,15 +637,16 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                                 <thead>
                                                                                     <tr>
                                                                                         <th>room type</th>
-                                                                                        {contract.rolerate === 1 ? (
+                                                                                        {contract.rolerate == 1 ? (
                                                                                             <>
                                                                                             <th>bar</th>
                                                                                             </>
                                                                                         ):(
                                                                                             <>
+                                                                                            {/* <th>contract</th> */}
                                                                                             </>
                                                                                         )}
-                                                                                      
+
                                                                                         <th>contract rate</th>
                                                                                         {/* <th>min mark-up</th>
                                                                                         <th>selling rate</th> */}
@@ -611,23 +659,34 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                                             <tr key={index}>
 
                                                                                                 <td>{item.room.ratedesc}</td>
-                                                                                                {contract.rolerate === 1 ? (
-                                                                                                     <td>
+                                                                                                {contract.rolerate == 1 ? (
+                                                                                                    <>
+                                                                                                    <td>
                                                                                                         {formatRupiah(item.barprice.price)}
-                                                                                                    </td> 
+                                                                                                    </td>
+                                                                                                    <td>
+                                                                                                    {contract.percentage == percentage
+                                                                                                        ? formatRupiah(item.recom_price)
+                                                                                                        : formatRupiah(item.barprice.price * ((100 - percentage) / 100))}
+
+                                                                                                    </td>
+                                                                                                    </>
+
                                                                                                 ):(
                                                                                                     <>
+                                                                                                    {/* <td>{formatRupiah(contpriceone[index].recom_price)}</td> */}
+                                                                                                    <td>
+                                                                                                    {contract.percentage == percentage
+                                                                                                        ? formatRupiah(item.recom_price)
+                                                                                                        : formatRupiah(contpriceone[index].recom_price * ((100 - percentage) / 100))}
+
+                                                                                                    </td>
                                                                                                     </>
                                                                                                 )}
-                                                                                                
-                                                                                                <td>
-                                                                                                {contract.percentage === percentage
-                                                                                                    ? formatRupiah(item.recom_price)
-                                                                                                    : formatRupiah(item.barprice.price * ((100 - percentage) / 100))}
-                                                                                                   
-                                                                                                </td>
+
+
                                                                                                 {/* <td>
-                                                                                                    {markup[0].markup_price === 0 ? (
+                                                                                                    {markup[0].markup_price == 0 ? (
                                                                                                         formatRupiah(parseInt(item.barprice.price) - parseInt(item.recom_price + 15000))
                                                                                                     ) : (
                                                                                                         formatRupiah(markup[0].markup_price)
@@ -635,7 +694,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                                                 </td> */}
 
                                                                                                 {/* <td >
-                                                                                                    {markup[0].markup_price === 0 ? (
+                                                                                                    {markup[0].markup_price == 0 ? (
                                                                                                         formatRupiah(parseInt(item.recom_price) + (parseInt(item.barprice.price) - parseInt(item.recom_price + 15000)))
                                                                                                     ) : (
                                                                                                         formatRupiah(parseInt(item.recom_price) + parseInt(markup[0].markup_price))
@@ -712,7 +771,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                     <Form.Control
                                                                         type="text"
                                                                         name="markup"
-                                                                        defaultValue={markup[0].markup_price === 0 ? (
+                                                                        defaultValue={markup[0].markup_price == 0 ? (
                                                                             modalData?.barprice.price - ((modalData?.barprice.price * 0.8) + 15000)
                                                                         ) : (
                                                                             markup[0].markup_price
@@ -763,7 +822,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                 <tbody>
                                                                     {data.map((item) => {
                                                                         const roomExistsInContract = contractprice.some(
-                                                                            (contractItem) => contractItem.room_id === item.room.id
+                                                                            (contractItem) => contractItem.room_id == item.room.id
                                                                         );
 
                                                                         return (
@@ -854,35 +913,31 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                 <div className="card-header">
                                                     <div className="d-flex justify-content-between">
                                                         <h2>
-                                                             ADVANCE PURCHASE 
+                                                             ADVANCE PURCHASE
                                                         </h2>
-                                                      
+
                                                         <span className='d-flex'>
                                                             <input onChange={(e) => handleDayChange(e, item.beginsell, item.endsell, item.day)} type="number" className='form-control' style={{width:'5rem'}} defaultValue={item.day}/>
                                                             <p className='text-dark' style={{marginTop: '8px',marginLeft: '7px'}}> DAYS</p>
                                                         </span>
                                                     </div>
-                                                   
+
                                                 </div>
                                                 <div className="card-body">
-                                                    {item.is_active === 1 ? (
+                                                    {item.is_active == 1 ? (
                                                         <>
-                                                        <a href={`/advance/updateadvancetstatus/${item.id}/2`} className='btn btn-danger'>off</a>
-                                                        </>
-                                                    ):(
-                                                        <>
-                                                        <a href={`/advance/updateadvancetstatus/${item.id}/1`} className='btn btn-success mx-2'>on</a>
-                                                        </>
-                                                    )}
-                                                        
-                                                        
-                                                    <div className="row mb-3">
+                                                        <div className="d-flex mb-4">
+                                                        <p className='mr-2'>status : </p>  <a href={`/advance/updateadvancetstatus/${item.id}/${2}`} className='btn btn-success'>on</a>
+                                                       
+
+                                                        </div>
+                                                        <div className="row mb-3">
                                                         <div className="col-lg-6">
-                                                            <label htmlFor="">Begin Sell Date</label>
+                                                            <label htmlFor="">Begin Stay Date</label>
                                                             <input readOnly type="date" defaultValue={beginselladvance ||item.beginsell} onChange={(e) => setBeginselladvance(e.target.value)} className='form-control form-control-solid'/>
                                                         </div>
                                                         <div className="col-lg-6">
-                                                            <label htmlFor="">End Sell Date</label>
+                                                            <label htmlFor="">End Stay Date</label>
                                                             <input readOnly type="date" defaultValue={endselladvance || item.endsell} onChange={(e) => setEndselladvance(e.target.value)} className='form-control form-control-solid'/>
                                                         </div>
                                                     </div>
@@ -900,10 +955,10 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                                     </tr>
                                                                                 </thead>
                                                                                 <tbody>
-                                                                                    
+
                                                                                 {advanceprice.filter(
                                                                                     (advancepriceItem) =>
-                                                                                        advancepriceItem.advance_id === item.id
+                                                                                        advancepriceItem.advance_id == item.id
                                                                                     )
                                                                                     .map((advancepriceItem, index) => (
                                                                                     <tr key={index}>
@@ -940,6 +995,15 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                     <div className="my-3">
                                                         <button className='btn btn-primary' type='submit'> <i className='fa fa-save'></i> save</button>
                                                     </div>
+                                                         </>
+                                                    ):(
+                                                        <>
+                                                        <div className="d-flex">
+                                                        <p>status : </p> <a href={`/advance/updateadvancetstatus/${item.id}/${1}`} className='btn btn-danger mx-2'>off</a>
+
+                                                        </div>
+                                                         </>
+                                                    )}
                                                 </div>
                                             </div>
                                             </form>
@@ -958,7 +1022,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                     </Modal.Header>
                     <Modal.Body>
                         <Form>
-                           
+
                             <Form.Group controlId="formName">
                                 <Form.Label>Room Type Name</Form.Label>
                                 <Form.Control
@@ -978,7 +1042,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                     onChange={(e) =>setPrice(e.target.value)}
                                 />
                             </Form.Group>
-                            
+
                             <a href={`/room/contract/updateadvancetprice/${modalData?.id}/${price ? price : modalData?.price}`} className='btn btn-primary mt-4'>
                                 Save Changes
                             </a>

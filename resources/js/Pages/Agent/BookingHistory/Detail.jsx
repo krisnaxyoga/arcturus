@@ -38,7 +38,7 @@ export default function Detail({ session, data, agent, contract, setting, roombo
                             <div className="card mb-3" id="print-card">
                                 <div className="card-body">
                                     <div className="page-content container">
-                                        <div className="page-header text-blue-d2">
+                                        {/* <div className="page-header text-blue-d2">
                                             <h1 className="page-title text-secondary-d1">
                                                 Invoice
                                                 <small className="page-info">
@@ -51,7 +51,7 @@ export default function Detail({ session, data, agent, contract, setting, roombo
                                                 <div className="action-buttons">
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> */}
 
                                         <div className="container px-0">
                                             <div className="row mt-4">
@@ -59,7 +59,7 @@ export default function Detail({ session, data, agent, contract, setting, roombo
                                                     <div className="row">
                                                         <div className="col-12">
                                                             <div className="text-center text-150">
-                                                        
+
                                                             <img src={data.vendor.logo_img} style={{ height: "20px", width: "30px" }} />
                                                             {/* <img src={agent.vendors.logo_img} style={{ height: "20px", width: "30px" }} /> */}
                                                             <br />
@@ -86,10 +86,10 @@ export default function Detail({ session, data, agent, contract, setting, roombo
                                                                 <div className="my-1"><i className="fa fa-phone fa-flip-horizontal text-secondary"></i> <b className="text-600">{data.phone}</b></div>
                                                                 <div className="my-1"><i className="fa fa-envelope fa-flip-horizontal text-secondary"></i> <b className="text-600">{data.email}</b></div>
                                                             </div>
-                                                            <div>
+                                                            {/* <div>
                                                                 <span className="text-400 text-grey-m2 align-middle">Night: </span>
                                                                 <span className="text-400 text-110 text-blue align-middle"> {data.night}</span>
-                                                            </div>
+                                                            </div> */}
                                                             <div>
                                                                 <span className="text-400 text-grey-m2 align-middle">Check in: </span>
                                                                 <span className="text-400 text-110 text-blue align-middle"> {data.checkin_date}</span>
@@ -109,19 +109,19 @@ export default function Detail({ session, data, agent, contract, setting, roombo
 
                                                                 <div className="my-2"><i className="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span className="text-600 text-90">ID:</span> {data.booking_code}</div>
                                                                 <div className="my-2"><i className="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span className="text-600 text-90">Agent Name:</span> {data.users.first_name} {data.users.last_name}</div>
-                                                                              
+
                                                                 <div className="my-2"><i className="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span className="text-600 text-90">Booking Date:</span> {data.booking_date}</div>
 
                                                                 <div className="my-2"><i className="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span className="text-600 text-90">Status: </span>
                                                                 {data.booking_status === 'paid' ? (
                                                                                                             <>
-                                                                                                                <span className="badge badge-success badge-pill px-25">
+                                                                                                                <span style={{padding:'6px'}} className="badge badge-success badge-pill px-25">
                                                                                                                     {data.booking_status}
                                                                                                                 </span>
                                                                                                             </>
                                                                                                         ) : (
                                                                                                             <>
-                                                                                                                <span className="badge badge-warning badge-pill px-25">
+                                                                                                                <span style={{padding:'6px'}} className="badge badge-warning badge-pill px-25">
                                                                                                                     {data.booking_status}
                                                                                                                 </span>
                                                                                                             </>
@@ -132,9 +132,9 @@ export default function Detail({ session, data, agent, contract, setting, roombo
                                                                     <span className="text-400 text-grey-m2 align-middle">Special Request: </span> <br />
                                                                     <span className="text-400 text-110 text-blue align-middle"> {data.special_request}</span>
                                                                 </div>
-                                                            
+
                                                             </div>
-                                                            
+
                                                         </div>
                                                     </div>
 
@@ -143,24 +143,45 @@ export default function Detail({ session, data, agent, contract, setting, roombo
                                                     <table className="table table-bordered table-hover">
                                                         <thead className="bgc-default-tp1 text-white">
                                                             <tr className="justify-content-between">
-                                                                <th>#</th>
+                                                                <th>QTY</th>
+                                                                <th>Room Rate</th>
                                                                 <th>Room Type</th>
-                                                                <th>Qty</th>
+                                                                <th>#Night</th>
+                                                                <th>Total Amount</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody className="text-95 text-secondary-d3">
                                                             {roombooking.map((item, index) => (
                                                                 <tr key={index} className="mb-2 mb-sm-0 py-25 justify-content-between">
-                                                                    <td>{index + 1}</td>
-                                                                    <td>{item.room.ratedesc}</td>
                                                                     <td>{item.total_room}</td>
+                                                                    <td>{formatRupiah(parseInt(item.contractprice.recom_price + item.vendors.system_markup))}</td>
+                                                                    <td>{item.room.ratedesc}</td>
+                                                                    <td>{data.night}</td>
+                                                                    <td>{formatRupiah(data.price)}</td>
                                                                 </tr>
                                                             ))}
                                                         </tbody>
                                                     </table>
                                                         <div className="row mt-3">
                                                             <div className="col-12 col-sm-7 text-grey-d2 text-95 mt-2 mt-lg-0">
-                                                             <div>
+                                                            <div>
+                                                                <p style={{ padding: "5px 0",margin:'0px' }}>Benefit Policy :</p> <br />
+                                                                <p>
+                                                                {contract.benefit_policy && (
+                                                                    <div dangerouslySetInnerHTML={{ __html: contract.benefit_policy.substring(0, 250) }}></div>
+                                                                    )}
+                                                                </p>
+                                                            </div>
+                                                            <div>
+                                                                <p style={{ padding: "5px 0",margin:'0px' }}>Cancellation Policy :</p> <br />
+                                                                <p>
+                                                                {contract.cencellation_policy && (
+                                                                    <div dangerouslySetInnerHTML={{ __html: contract.cencellation_policy.substring(0, 250) }}></div>
+                                                                    )}
+                                                                </p>
+                                                            </div>
+                                                            
+                                                            <div>
                                                                 <p style={{ padding: "5px 0",margin:'0px' }}>Deposit Policy :</p> <br />
                                                                 <p>
                                                                     {contract.deposit_policy && (
@@ -168,24 +189,24 @@ export default function Detail({ session, data, agent, contract, setting, roombo
                                                                     )}
                                                                 </p>
                                                             </div>
-                                                            <div>
-                                                                <p style={{ padding: "5px 0",margin:'0px' }}>Cancellation Policy :</p> <br />
-                                                                <p>                     
-                                                                {contract.cencellation_policy && (
-                                                                    <div dangerouslySetInnerHTML={{ __html: contract.cencellation_policy.substring(0, 250) }}></div>
-                                                                    )}
-                                                                </p>
-                                                            </div>
                                                             </div>
 
                                                             <div className="col-12 col-sm-5 text-grey text-90 order-first order-sm-last">
-                                                                
+
                                                                 <div className="row my-2 align-items-center bgc-primary-l3 p-2">
                                                                     <div className="col-7 text-right">
                                                                         Total Room :
                                                                     </div>
                                                                     <div className="col-5">
                                                                         <span className="text-400 text-success-d3 opacity-2">{data.total_room}</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="row my-2 align-items-center bgc-primary-l3 p-2">
+                                                                    <div className="col-7 text-right">
+                                                                        Total Amount :
+                                                                    </div>
+                                                                    <div className="col-5">
+                                                                        <span className="text-400 text-success-d3 opacity-2">{formatRupiah(data.price)}</span>
                                                                     </div>
                                                                 </div>
                                                             </div>

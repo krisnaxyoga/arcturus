@@ -12,7 +12,7 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 
 
-export default function Index({ session, props, attr, room,roomtype }) {
+export default function Index({ session, props, attr, room,roomtype,vendor }) {
 
     // const [inputs, setInputs] = useState(['']); // State untuk menyimpan nilai-nilai input
     // const [maxadult, setAdult] = useState([{ value: '', id: 1 }]);
@@ -188,7 +188,7 @@ export default function Index({ session, props, attr, room,roomtype }) {
 
     return (
         <>
-            <Layout page={'/room/index'}>
+            <Layout page={'/room/index'} vendor={vendor}>
                 <div className="container">
                     <h1>Create Room Type</h1>
                     {session.success && (

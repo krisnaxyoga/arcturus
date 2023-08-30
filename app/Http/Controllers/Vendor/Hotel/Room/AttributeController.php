@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\AttributeRoom;
 use Illuminate\Support\Facades\Validator;
 
+use App\Models\Vendor;
 class AttributeController extends Controller
 {
     /**
@@ -15,9 +16,11 @@ class AttributeController extends Controller
     public function index()
     {
         $id = auth()->user()->id;
+        $vendor = Vendor::where('user_id',$id)->with('users')->first();
         $data = AttributeRoom::where('user_id',$id)->get();
         return inertia('Vendor/MenageRoom/Attribute/Index',[
-            'data' => $data
+            'data' => $data,
+            'vendor' => $vendor
         ]);
     }
 
@@ -26,7 +29,11 @@ class AttributeController extends Controller
      */
     public function create()
     {
-        return inertia('Vendor/MenageRoom/Attribute/Create');
+        $id = auth()->user()->id;
+        $vendor = Vendor::where('user_id',$id)->with('users')->first();
+        return inertia('Vendor/MenageRoom/Attribute/Create',[
+            'vendor' => $vendor
+        ]);
     }
 
     /**
@@ -71,8 +78,11 @@ class AttributeController extends Controller
     public function edit(string $id)
     {
         $data = AttributeRoom::find($id);
+        $id = auth()->user()->id;
+        $vendor = Vendor::where('user_id',$id)->with('users')->first();
         return inertia('Vendor/MenageRoom/Attribute/Edit',[
-            'data'=>$data
+            'data'=>$data,
+            'vendor'=>$vendor
         ]);
     }
 
