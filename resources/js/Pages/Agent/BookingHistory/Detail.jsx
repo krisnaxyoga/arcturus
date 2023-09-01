@@ -56,14 +56,32 @@ export default function Detail({ session, data, agent, contract, setting, roombo
                                         <div className="container px-0">
                                             <div className="row mt-4">
                                                 <div className="col-12 col-lg-12">
-                                                    <div className="row">
-                                                        <div className="col-12">
+                                                    <div className="row justify-content-between">
+                                                        <div className="col-4">
+                                                            <div className="text-center text-150">
+
+                                                            <img src={agent.vendors.logo_img} style={{ height: "20px", width: "30px" }} />
+                                                            {/* <img src={agent.vendors.logo_img} style={{ height: "20px", width: "30px" }} /> */}
+                                                            <br />
+                                                                <span className="text-default-d3">{agent.vendors.vendor_name}</span>
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-4">
                                                             <div className="text-center text-150">
 
                                                             <img src={data.vendor.logo_img} style={{ height: "20px", width: "30px" }} />
                                                             {/* <img src={agent.vendors.logo_img} style={{ height: "20px", width: "30px" }} /> */}
                                                             <br />
                                                                 <span className="text-default-d3">{data.vendor.vendor_name}</span>
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-4">
+                                                            <div className="text-center text-150">
+
+                                                            <img src={setting.logo_image} style={{ height: "20px", width: "30px" }} />
+                                                            {/* <img src={agent.vendors.logo_img} style={{ height: "20px", width: "30px" }} /> */}
+                                                            <br />
+                                                                <span className="text-default-d3">{setting.company_name}</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -144,26 +162,26 @@ export default function Detail({ session, data, agent, contract, setting, roombo
                                                         <thead className="bgc-default-tp1 text-white">
                                                             <tr className="justify-content-between">
                                                                 <th>QTY</th>
-                                                                <th>Room Rate</th>
+                                                                {/* <th>Room Rate</th> */}
                                                                 <th>Room Type</th>
                                                                 <th>#Night</th>
-                                                                <th>Total Amount</th>
+                                                                {/* <th>Total Amount</th> */}
                                                             </tr>
                                                         </thead>
                                                         <tbody className="text-95 text-secondary-d3">
                                                         {roombooking.map((item, index) => {
                                                        
-                                                           const recomPrice = parseInt(item.contractprice.recom_price);
-                                                           const systemMarkup = parseInt(item.vendors.system_markup);
+                                                        //    const recomPrice = parseInt(item.contractprice.recom_price);
+                                                        //    const systemMarkup = parseInt(item.vendors.system_markup);
                                                        
-                                                           const totalPrice = recomPrice + systemMarkup;
+                                                        //    const totalPrice = recomPrice + systemMarkup;
                                                             return (
                                                                 <tr key={index} className="mb-2 mb-sm-0 py-25 justify-content-between">
                                                                     <td>{item.total_room}</td>
-                                                                    <td>{formatRupiah(totalPrice)}</td>
+                                                                    {/* <td>{formatRupiah(totalPrice)}</td> */}
                                                                     <td>{item.room.ratedesc}</td>
                                                                     <td>{data.night}</td>
-                                                                    <td>{formatRupiah(data.price)}</td>
+                                                                    {/* <td>{formatRupiah(data.price)}</td> */}
                                                                 </tr>
                                                             );
                                                         })}
