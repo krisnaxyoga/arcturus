@@ -112,7 +112,7 @@ Route::group(['middleware' => ['auth', 'checkrole:1']], function() {
     //booking
     Route::get('/admin/booking', [\App\Http\Controllers\Admin\Report\BookingController::class, 'index'])->name('dashboard.admin.booking');
     Route::get('/admin/booking/confirmation/{id}', [\App\Http\Controllers\Admin\Report\BookingController::class, 'confirmation'])->name('admin.booking.confirmation');
-    
+
 
     // setting
     Route::get('/admin/setting', [\App\Http\Controllers\Admin\Setting\SettingController::class, 'index'])->name('dashboard.setting');
@@ -121,6 +121,11 @@ Route::group(['middleware' => ['auth', 'checkrole:1']], function() {
 
     Route::post('/admin/storeslider/',[\App\Http\Controllers\Admin\Setting\SettingController::class,'storeslider'])->name('dashboard.setting.storeslider');
     Route::delete('/admin/destroyslider/{id}',[\App\Http\Controllers\Admin\Setting\SettingController::class,'destroyslider'])->name('dashboard.setting.destroyslider');
+
+    //payment admin to hotel
+    Route::get('/admin/paymenthotel', [\App\Http\Controllers\Admin\Hotel\PaymentController::class, 'index'])->name('dashboard.paymenttohotel.index');
+    Route::get('/admin/paymenthotel/edit/{id}', [\App\Http\Controllers\Admin\Hotel\PaymentController::class, 'edit'])->name('dashboard.paymenttohotel.edit');
+    Route::post('/admin/paymenthotel/update/{id}', [\App\Http\Controllers\Admin\Hotel\PaymentController::class, 'update'])->name('dashboard.paymenttohotel.update');
 
 });
 
@@ -153,7 +158,7 @@ Route::group(['middleware' => ['auth', 'checkrole:2']], function() {
     Route::post('/myprofile/update',[\App\Http\Controllers\Vendor\MyProfile\MyProfileController::class, 'update']);
     Route::post('/myprofile/slider/store',[\App\Http\Controllers\Vendor\MyProfile\MyProfileController::class, 'addbanner']);
     Route::get('/myprofile/slider/delete/{id}',[\App\Http\Controllers\Vendor\MyProfile\MyProfileController::class, 'destroybanner']);
-    
+
     Route::get('/vendor-profile/changepassword',[\App\Http\Controllers\Vendor\MyProfile\MyProfileController::class, 'passwordchange']);
     Route::post('/vendor-profile/updatepassword',[\App\Http\Controllers\Vendor\MyProfile\MyProfileController::class, 'updatepassword']);
 
@@ -215,7 +220,7 @@ Route::group(['middleware' => ['auth', 'checkrole:2']], function() {
     Route::get('/contract/destroyadvanceprice/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'destroyadvanceprice'])->name('destroyadvanceprice.contract');
     Route::get('/room/contract/updateadvancetprice/{id}/{price}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'updateadvancetprice'])->name('contract.updateadvancetprice');
     Route::get('/advance/updateadvancetstatus/{id}/{isactive}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'updateadvancetstatus'])->name('advance.updateadvancetstatus');
-   
+
     //promo price
     Route::get('/room/promo/index/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\PromoPriceController::class, 'index'])->name('promo.index');
     Route::get('/room/promo/store/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\PromoPriceController::class, 'store'])->name('promo.store');

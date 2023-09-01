@@ -1,11 +1,19 @@
 @extends('layouts.admin')
 @section('title', 'Attribute')
 @section('content')
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <section>
         <div class="container mt-5">
 
             <div class="row">
                 <div class="col-lg-12">
+
+                    @if (session('message'))
+                        <div class="alert alert-success">
+                            {{ session('message') }}
+                        </div>
+                    @endif
                     <div class="card">
                         <div class="card-header">
                             <h1>
@@ -16,34 +24,37 @@
                                 @endif @yield('title')
                             </h1>
                         </div>
+
                         <div class="card-body">
                             <form
-                                action="@if ($model->exists) {{ route('dashboard.attribute.update', ['id' => $model->id]) }} @else {{ route('dashboard.attribute.store') }} @endif"
+                                action="{{ route('dashboard.paymenttohotel.update', ['id' => $model->id]) }}"
                                 method="POST" enctype="multipart/form-data">
                                 @csrf
-                                @method($model->exists ? 'PUT' : 'POST')
+                                @method('POST')
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label for="name" class="form-label">Attribute Name</label>
-                                            <input type="text" name="name" class="form-control" id="vendor_name"
-                                                value="{{ $model->name }}" placeholder="Attribute Name">
+                                            <ul>
+                                                <li>{{ $model->vendor_name }}</li>
+                                                <li>{{ $model->bank_account }}</li>
+                                                <li>{{ $model->account_number }}</li>
+                                                <li>{{ $model->bank_address }}</li>
+                                            </ul>
                                         </div>
+                                        @if ($widraw !== null)
+                                            @if ($widraw->vendor_id == $model->id)
+                                                <img src="{{ $widraw->image }}" alt="" class="img-fluid">
+                                            @endif
+                                        @endif
                                     </div>
-
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label for="description" class="form-label">Description</label>
-                                            <input type="text" name="description" class="form-control" id="description"
-                                                value="{{ $model->description }}" placeholder="Description">
+                                            <label for="name" class="form-label">image</label>
+                                            <input type="file" id="image-input" class="form-control" name="image">
+                                            <img id="image-preview" class="mt-3 img-fluid" style="width: 500px" src="#" alt="Preview">
                                         </div>
                                     </div>
                                 </div>
-                                @if (session('message'))
-                                    <div class="alert alert-success">
-                                        {{ session('message') }}
-                                    </div>
-                                @endif
                                 <hr>
                                 <div class="row justify-content-between">
                                     <div class="col-lg-auto">
@@ -52,7 +63,7 @@
                                         </button>
                                     </div>
                                     <div class="col-lg-auto">
-                                        <a href="{{ route('dashboard.attribute') }}" class="btn btn-danger">
+                                        <a href="{{ route('dashboard.paymenttohotel.index') }}" class="btn btn-danger">
                                             Cancel
                                         </a>
                                     </div>
@@ -64,4 +75,23 @@
             </div>
         </div>
     </section>
-@endsection
+    <script>
+        $(document).ready(function() {
+          // Mengaktifkan event change pada input file
+          $('#image-input').change(function() {
+            // Mengecek apakah ada file yang dipilih
+            if (this.files && this.files[0]) {
+              var reader = new FileReader();
+
+              reader.onload = function(e) {
+                // Menampilkan pratinjau gambar pada elemen img
+                $('#image-preview').attr('src', e.target.result);
+              }
+
+              reader.readAsDataURL(this.files[0]);
+            }
+          });
+        });
+        </script>
+
+    @endsection

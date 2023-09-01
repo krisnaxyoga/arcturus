@@ -29,9 +29,9 @@
                                                 <td>{{ $item->bank_account }}</td>
                                                 <td>{{ $item->account_number }}</td>
                                                 <td>{{ $item->bank_address }}</td>
-                                                <td><a href="{{ route('dashboard.hotel.edit', $item->id) }}"
+                                                <td><a href="{{ route('dashboard.paymenttohotel.edit', $item->id) }}"
                                                         class="btn btn-datatable btn-icon btn-transparent-dark mr-2"><i
-                                                            data-feather="edit"></i></a>
+                                                            data-feather="share"></i></a>
                                                 </td>
 
                                             </tr>
