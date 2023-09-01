@@ -10,6 +10,7 @@ use App\Models\HotelRoomBooking;
 use App\Models\PaymentGetwayTransaction;
 use App\Models\Vendor;
 use App\Models\User;
+use App\Models\Setting;
 use Carbon\Carbon;
 
 use Illuminate\Support\Str;
@@ -18,7 +19,7 @@ use App\Models\ContractRate;
 use Illuminate\Support\Facades\Log;
 use GuzzleHttp\Client;
 use Illuminate\Http\RedirectResponse;
-use App\Mail\BookingConfirmation;
+use App\Mail\PaymentNotif;
 use Illuminate\Support\Facades\Mail;
 
 use Illuminate\Support\Facades\Validator;
@@ -215,6 +216,9 @@ class BookingController extends Controller
             ->with('success', 'Data saved!');
         }
     }
+    public function paymentbookingpage($booking){
+        return view('landingpage.hotel.transferbank',compact('booking'));
+    }
 
     public function upbanktransfer(Request $request){
         $validator =  Validator::make($request->all(), [
@@ -255,7 +259,8 @@ class BookingController extends Controller
             $trans->trx_id = Str::random(5);
             $trans->save();
 
-            // Mail::to($booking->vendor->email)->send(new BookingConfirmation($data));
+            $Setting = Setting::where('id',1)->first();
+            Mail::to($Setting->email)->send(new PaymentNotif($trans));
             // Mail::to(auth()->user()->email)->send(new BookingConfirmation($data));
 
             return redirect()

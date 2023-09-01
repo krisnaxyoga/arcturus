@@ -20,35 +20,9 @@
     <section class="ftco-section">
         <div class="container">
             <div class="row">
-                {{-- <div class="col-lg-3">
-                    <div class="card ftco-animate mb-3">
-                        <div class="card-body">
-                            <form action="">
-                                <div class="mb-3">
-                                    <label for="">select room rate</label>
-                                    <select name="" class="category form-control" id="">
-                                        @foreach ($roomtype as $item)
-                                        <option value="{{$item->id}}">{{$item->title}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </form>
-                            <span id="load"></span>
-                        </div>
-                    </div>
-                </div> --}}
                 <div class="col-lg-12">
                     <form id="bookingForm" enctype="multipart/form-data">
                         @csrf
-                        <!--<div class="row">-->
-                        <!--    <div class="col-lg-12">-->
-                        <!--        <div class="card">-->
-                        <!--            <div class="card-body">-->
-                        <!--                <h3 class="text-center">ROOM</h3>-->
-                        <!--            </div>-->
-                        <!--        </div>-->
-                        <!--    </div>-->
-                        <!--</div>-->
                         <div class="search-property-1" style="border-top: 1px solid rgba(0, 0, 0, 0.1);">
                             <div class="row no-gutters">
                                 <div class="col-md d-flex">
@@ -83,13 +57,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                {{-- <div class="col-md d-flex">
-                                    <div class="form-group d-flex w-100 border-0">
-                                        <div class="form-field w-100 align-items-center d-flex">
-                                            <a href="#" style="padding: 2rem;" class="align-self-stretch form-control btn btn-primary">Check Availability</a>
-                                        </div>
-                                    </div>
-                                </div> --}}
+                               
                             </div>
                         </div>
 
@@ -123,14 +91,15 @@
                                                     </select>
                                                 @endif
 
-                                                <p>Facilities :  @foreach ($item->room->attribute as $facilities)
+                                                {{-- <p>Facilities :  @foreach ($item->room->attribute as $facilities)
                                                     {{ $facilities }},
                                                     @endforeach</p>
                                                     @if(isset($item->contractrate->distribute) && $item->contractrate->distribute !== ['all'])
                                                         @foreach ($item->contractrate->distribute as $distribution)
                                                         <span class="badge badge-success mr-2">{{$distribution}} </span>
                                                         @endforeach
-                                                    @endif
+                                                    @endif --}}
+                                                    <p>Benefits : {!!$item->contractrate->benefit_policy!!}</p>
                                             </div>
                                         </div>
                                     </div>

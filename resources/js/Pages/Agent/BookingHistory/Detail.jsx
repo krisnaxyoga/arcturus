@@ -151,15 +151,22 @@ export default function Detail({ session, data, agent, contract, setting, roombo
                                                             </tr>
                                                         </thead>
                                                         <tbody className="text-95 text-secondary-d3">
-                                                            {roombooking.map((item, index) => (
+                                                        {roombooking.map((item, index) => {
+                                                       
+                                                           const recomPrice = parseInt(item.contractprice.recom_price);
+                                                           const systemMarkup = parseInt(item.vendors.system_markup);
+                                                       
+                                                           const totalPrice = recomPrice + systemMarkup;
+                                                            return (
                                                                 <tr key={index} className="mb-2 mb-sm-0 py-25 justify-content-between">
                                                                     <td>{item.total_room}</td>
-                                                                    <td>{formatRupiah(parseInt(item.contractprice.recom_price + item.vendors.system_markup))}</td>
+                                                                    <td>{formatRupiah(totalPrice)}</td>
                                                                     <td>{item.room.ratedesc}</td>
                                                                     <td>{data.night}</td>
                                                                     <td>{formatRupiah(data.price)}</td>
                                                                 </tr>
-                                                            ))}
+                                                            );
+                                                        })}
                                                         </tbody>
                                                     </table>
                                                         <div className="row mt-3">
@@ -172,43 +179,44 @@ export default function Detail({ session, data, agent, contract, setting, roombo
                                                                     )}
                                                                 </p>
                                                             </div>
-                                                            <div>
-                                                                <p style={{ padding: "5px 0",margin:'0px' }}>Cancellation Policy :</p> <br />
-                                                                <p>
-                                                                {contract.cencellation_policy && (
-                                                                    <div dangerouslySetInnerHTML={{ __html: contract.cencellation_policy.substring(0, 250) }}></div>
-                                                                    )}
-                                                                </p>
-                                                            </div>
-                                                            
-                                                            <div>
-                                                                <p style={{ padding: "5px 0",margin:'0px' }}>Deposit Policy :</p> <br />
-                                                                <p>
-                                                                    {contract.deposit_policy && (
-                                                                        <div dangerouslySetInnerHTML={{ __html: contract.deposit_policy.substring(0, 250) }}></div>
-                                                                    )}
-                                                                </p>
-                                                            </div>
+                                                           
                                                             </div>
 
                                                             <div className="col-12 col-sm-5 text-grey text-90 order-first order-sm-last">
 
-                                                                <div className="row my-2 align-items-center bgc-primary-l3 p-2">
+                                                                {/* <div className="row my-2 align-items-center bgc-primary-l3 p-2">
                                                                     <div className="col-7 text-right">
                                                                         Total Room :
                                                                     </div>
                                                                     <div className="col-5">
                                                                         <span className="text-400 text-success-d3 opacity-2">{data.total_room}</span>
                                                                     </div>
+                                                                </div> */}
+                                                                <div className='text-right'>
+                                                                    <p style={{ padding: "5px 0",margin:'0px' }}>Cancellation Policy :</p> <br />
+                                                                    <p>
+                                                                    {contract.cencellation_policy && (
+                                                                        <div dangerouslySetInnerHTML={{ __html: contract.cencellation_policy.substring(0, 250) }}></div>
+                                                                        )}
+                                                                    </p>
                                                                 </div>
-                                                                <div className="row my-2 align-items-center bgc-primary-l3 p-2">
+                                                                
+                                                                <div className='text-right'>
+                                                                    <p style={{ padding: "5px 0",margin:'0px' }}>Deposit Policy :</p> <br />
+                                                                    <p>
+                                                                        {contract.deposit_policy && (
+                                                                            <div dangerouslySetInnerHTML={{ __html: contract.deposit_policy.substring(0, 250) }}></div>
+                                                                        )}
+                                                                    </p>
+                                                                </div>
+                                                                {/* <div className="row my-2 align-items-center bgc-primary-l3 p-2">
                                                                     <div className="col-7 text-right">
                                                                         Total Amount :
                                                                     </div>
                                                                     <div className="col-5">
                                                                         <span className="text-400 text-success-d3 opacity-2">{formatRupiah(data.price)}</span>
                                                                     </div>
-                                                                </div>
+                                                                </div> */}
                                                             </div>
                                                         </div>
 
@@ -226,9 +234,18 @@ export default function Detail({ session, data, agent, contract, setting, roombo
                             </div>
 
                             <div className="d-flex justify-content-between mt-3">
-                                <button className="btn btn-primary" onClick={handlePrintPDF}>
-                                    <i className="fa fa-file-pdf"></i> Print as PDF
-                                </button>
+                               
+                                {data.booking_status === 'unpaid' ? (
+                                            <>
+                                                <a href={`/paymentbookingpage/${data.id}`} className='btn btn-warning'>pay</a>
+                                            </>
+                                        ) : (
+                                            <>
+                                                 <button className="btn btn-primary" onClick={handlePrintPDF}>
+                                                    <i className="fa fa-file-pdf"></i> Print as PDF
+                                                </button>
+                                            </>
+                                        )}
                                 <button onClick={() => history.back()} className="btn btn-danger ml-2">
                                     Cancel
                                 </button>

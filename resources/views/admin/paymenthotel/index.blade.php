@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'Hotel')
+@section('title', 'Hotel Payroll')
 @section('content')
     <section>
         <div class="container">
@@ -16,10 +16,9 @@
                                     <thead>
                                         <tr>
                                             <th>Hotel Name</th>
-                                            {{-- <th>Company Name</th> --}}
-                                            <th>Address</th>
-                                            <th>Phone</th>
-                                            <th>Email</th>
+                                            <th>Bank Account</th>
+                                            <th>Account Number</th>
+                                            <th>Bank Address</th>
                                             <th>action</th>
                                         </tr>
                                     </thead>
@@ -27,26 +26,12 @@
                                         @foreach ($data as $item)
                                             <tr>
                                                 <td>{{ $item->vendor_name }}</td>
-                                                {{-- <td>{{ $item->vendor_legal_name }}</td> --}}
-                                                <td>{{ $item->address_line1 }}</td>
-                                                <td>{{ $item->phone }}</td>
-                                                <td>{{ $item->email }}</td>
+                                                <td>{{ $item->bank_account }}</td>
+                                                <td>{{ $item->account_number }}</td>
+                                                <td>{{ $item->bank_address }}</td>
                                                 <td><a href="{{ route('dashboard.hotel.edit', $item->id) }}"
                                                         class="btn btn-datatable btn-icon btn-transparent-dark mr-2"><i
                                                             data-feather="edit"></i></a>
-
-                                                    <form class="d-inline"
-                                                        action="{{ route('dashboard.hotel.delete', $item->id) }}"
-                                                        method="POST"
-                                                        onSubmit="return confirm('Apakah anda yakin akan menghapus data ini?');">
-                                                        @csrf
-                                                        @method('delete')
-
-                                                        <button type="submit"
-                                                            class="btn btn-datatable btn-icon btn-transparent-dark mr-2">
-                                                            <i data-feather="trash-2"></i>
-                                                        </button>
-                                                    </form>
                                                 </td>
 
                                             </tr>

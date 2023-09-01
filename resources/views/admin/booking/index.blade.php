@@ -70,7 +70,7 @@
                                                     <span class=" btn-icon btn-transparent-dark mr-2">
                                                         <i data-feather="check"></i>
                                                     </span>
-                                                    <a href="{{route('admin.booking.confirmation',$item->id)}}" class="badge badge-success">send email</a>
+                                                    <a href="{{route('admin.booking.confirmation',$item->id)}}" class="badge badge-warning">send email</a>
                                                 @endif
                                                
                                             </td>

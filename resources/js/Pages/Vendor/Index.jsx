@@ -153,7 +153,7 @@ export default function Index({ totalroom,income,vendor,success,pending,data }) 
                 </div>
               </div>
               {/* <!-- Content Row --> */}
-
+              
             </div>
             {/* <!-- End of Begin Page Content --> */}
           </div>

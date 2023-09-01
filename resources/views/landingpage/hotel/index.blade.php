@@ -150,16 +150,17 @@
                                 </p>
                                 <div class="d-flex">
                                     <span class="days">min. {{$item->contractrate->min_stay}} night</span>
-                                    @if(isset($item->contractrate->distribute) && $item->contractrate->distribute !== ['all'])
+                                    {{-- @if(isset($item->contractrate->distribute) && $item->contractrate->distribute !== ['all'])
                                         @foreach ($item->contractrate->distribute as $distribution)
                                        
                                            @if($requestdata['country'] == $distribution)
                                            <span class="badge badge-success mx-2">{{$requestdata['country']}} </span>
                                            @endif
-                                       
-                                            {{-- atau kode lain yang ingin Anda terapkan --}}
+                                           @if($requestdata['country'] == 'all')
+                                           <span class="badge badge-success mx-2">wordwide market </span>
+                                           @endif
                                         @endforeach
-                                    @endif
+                                    @endif --}}
 
                                 </div>
                                 

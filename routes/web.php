@@ -268,5 +268,7 @@ Route::group(['middleware' => ['auth', 'checkrole:3']], function() {
     Route::get('/notify',[\App\Http\Controllers\Agent\Booking\BookingController::class, 'notify'])->name('payment.notify');
 
     //transfer bank
+    Route::get('/paymentbookingpage/{id}',[\App\Http\Controllers\Agent\Booking\BookingController::class, 'paymentbookingpage'])->name('payment.paymentbookingpage');
+
     Route::post('/upbanktransfer',[\App\Http\Controllers\Agent\Booking\BookingController::class, 'upbanktransfer'])->name('payment.upbanktransfer');
 });

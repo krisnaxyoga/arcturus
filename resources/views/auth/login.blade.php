@@ -19,7 +19,7 @@
 <section class="vh-100">
     <div class="container-fluid">
       <div class="row">
-        <div class="col-sm-6 text-black">
+        <div class="col-sm-12 col-md-12  col-lg-6 text-black">
   
           <div class="px-5 ms-xl-4 mt-5 text-center">
             <i class="fas fa-crow fa-2x me-3 pt-5 mt-xl-4" style="color: #709085;"></i>
@@ -82,7 +82,7 @@
           </div>
   
         </div>
-        <div class="col-sm-6 px-0 d-none d-sm-block">
+        <div class="col-sm-12 col-md-12 col-lg-6 px-0 d-none d-sm-none d-lg-block d-xl-block d-md-none">
           <img src="https://w0.peakpx.com/wallpaper/269/841/HD-wallpaper-nusa-penida-nusa-penida-stock-nusa-penida-island.jpg"
             alt="Login image" class="w-100 login-image" style="object-fit: cover; object-position: left;">
         </div>

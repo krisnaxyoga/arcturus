@@ -25,9 +25,13 @@
             <div class="col-lg-6">
                 <div class="card">
                     <div class="card-body">
-                        <h2 class="text-center">BCA</h2>
-                        <h3 class="text-center">PT Surya Langit Biru</h3>
-                        <h3 class="badge badge-success text-center">2027999995</h3>
+                        <h2>BCA</h2>
+                        <h3>PT Surya Langit Biru</h3>
+                        <div class="d-flex">
+                             <h3 class="badge badge-success text-center m-0" style="font-size: 30px;" id="textToCopy">2027999995</h3>
+                             <button class="copy-button mx-2 btn btn-success" onclick="copyToClipboard()"><i class="fa fa-copy"></i></button>
+                        </div>
+                       
                     </div>
                 </div>
             </div>
@@ -55,6 +59,18 @@
       </div>
 
     </section>
+    <script>
+        function copyToClipboard() {
+            const textToCopy = document.getElementById('textToCopy');
+            const textArea = document.createElement('textarea');
+            textArea.value = textToCopy.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            alert('Text copied to clipboard');
+        }
+    </script>
     <script>
         $(document).ready(function() {
           // Mengaktifkan event change pada input file
