@@ -120,7 +120,7 @@
     </div>
 </section>
 
-    <section class="ftco-section">
+    <section class="ftco-section pt-2">
         @if ($requestdata['country'] === null && $requestdata['state'] === null && $requestdata['person'] === null && $requestdata['checkin'] === null && $requestdata['checkout'] === null)
 
         <div>
@@ -129,56 +129,112 @@
         @else
         <div class="container">
             <div class="row">
-
-                @foreach ($data as $key=>$item)
-                    {{-- @if(!$blackoutVendorIds->contains($item->contractrate->vendor_id)) --}}
-                    <div class="col-md-4 ftco-animate">
-                        <div class="project-wrap hotel">
-                            <a href="{{ route('hoteldetail.homepage', ['id' => $item->contract_id]) }}?{{ http_build_query($requestdata) }}" class="img"
-                                style="background-image: url({{$item->room->feature_image}});">
-                                {{-- <span class="price">Rp. {{ number_format(($item->recom_price + $item->contractrate->vendors->system_markup + $surcharprice), 0, ',', '.')}}</span> --}}
-                                
-                                <span class="price">Rp. {{ number_format(($item->recom_price + $item->contractrate->vendors->system_markup), 0, ',', '.')}}</span>
-                            </a>
-                            <div class="text p-4">
-                                <p class="star mb-2">
-                                    <span class="fa fa-star"></span>
-                                    <span class="fa fa-star"></span>
-                                    <span class="fa fa-star"></span>
-                                    <span class="fa fa-star"></span>
-                                    <span class="fa fa-star"></span>
-                                </p>
-                                <div class="d-flex">
-                                    <span class="days">min. {{$item->contractrate->min_stay}} night</span>
-                                    {{-- @if(isset($item->contractrate->distribute) && $item->contractrate->distribute !== ['all'])
-                                        @foreach ($item->contractrate->distribute as $distribution)
-                                       
-                                           @if($requestdata['country'] == $distribution)
-                                           <span class="badge badge-success mx-2">{{$requestdata['country']}} </span>
-                                           @endif
-                                           @if($requestdata['country'] == 'all')
-                                           <span class="badge badge-success mx-2">wordwide market </span>
-                                           @endif
-                                        @endforeach
-                                    @endif --}}
-
-                                </div>
-                                
-                                <h3><a href="{{ route('hoteldetail.homepage', ['id' => $item->contract_id]) }}?{{ http_build_query($requestdata) }}">{{$item->contractrate->vendors->vendor_name}}</a></h3>
-                               
-                                <p class="location"><span class="fa fa-map-marker"></span> {{$item->contractrate->vendors->city}},{{$item->contractrate->vendors->state}}, {{$item->contractrate->vendors->country}}</p>
-                                <ul>
-                                    <li><span class="flaticon-381-user-7"><i class="fa fa-user"></i></span>{{$item->room->adults}}</li>
-                                    @if($item->room->extra_bed != 0)
-                                        <li><span class="flaticon-king-size"></span>{{$item->room->extra_bed}}</li>
-                                    @endif
-                                    
-                                </ul>
-                            </div>
+                <div class="col-lg-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <p style="color: #1a2b48;
+                            font-size: 20px;
+                            font-weight: 500;
+                        ">Filter By</p>
                         </div>
                     </div>
-                {{-- @endif --}}
-                @endforeach
+                    <div class="card">
+                        <div class="card-body">
+                            <a class="text-dark" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                Filter Price
+                              </a>
+                              <div class="collapse active" id="collapseExample">
+                                <div>
+                                    <form method="post" action="/action_page_post.php">
+                                        <div data-role="rangeslider">
+                                          <label for="price-min">Price:</label>
+                                          <input type="range" name="price-min" id="price-min" value="200" min="0" max="1000">
+                                          <label for="price-max">Price:</label>
+                                          <input type="range" name="price-max" id="price-max" value="800" min="0" max="1000">
+                                        </div>
+                                          <input class="btn btn-secondary" type="submit" data-inline="true" value="Submit">
+                                         </form>
+
+                                </div>
+                              </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-9">
+                    <div class="row">
+                        <div class="col-lg-12 d-flex justify-content-between">
+                            <span class="price" style="color: #1a2b48;
+                                        font-size: 20px;
+                                        font-weight: 500;
+                                    ">
+                            {{ $data->count() }} Hotel Founds
+                            </span>
+                            <span>
+                                <form action="">
+                                    <p class="d-flex">
+                                        <span>Show on the map | Sort by:</span>
+                                        <select type="text" class="form-control">
+                                            <option value="recomended">recomended</option>
+                                            <option value="recomended">Price (Low to Hight)</option>
+                                            <option value="recomended">Price (Hight to Low)</option>
+                                        </select>
+                                    </p>
+                                </form>
+                            </span>
+                        </div>
+
+                        @foreach ($data as $key=>$item)
+                        <div class="col-md-12 ftco-animate">
+                            <div class="">
+                                <div class="item-loop-list">
+                                    <div class="thumb-image">
+                                        <a href="{{ route('hoteldetail.homepage', ['id' => $item->contract_id]) }}?{{ http_build_query($requestdata) }}">
+                                            <img src="{{$item->room->feature_image}}" class="img img-fluid rounded-start" alt="{{$item->room->feature_image}}">
+                                        </a>
+                                    </div>
+                                    <div class="g-info">
+                                        <p class="star mb-2">
+                                            <span class="fa fa-star"></span>
+                                            <span class="fa fa-star"></span>
+                                            <span class="fa fa-star"></span>
+                                            <span class="fa fa-star"></span>
+                                            <span class="fa fa-star"></span>
+                                        </p>
+                                        <h3><a href="{{ route('hoteldetail.homepage', ['id' => $item->contract_id]) }}?{{ http_build_query($requestdata) }}">{{$item->contractrate->vendors->vendor_name}}</a></h3>
+
+                                        <p class="m-0"><i class="fa fa-trophy" aria-hidden="true"></i> Benefits :
+                                            @if (strlen($item->contractrate->benefit_policy) > 40)
+                                            {!! Str::limit($item->contractrate->benefit_policy, 40) !!}
+                                            @endif
+                                        </p>
+                                    </div>
+                                    <div class="g-rate-price">
+                                        <span class="price" style="color: #1a2b48;
+                                        font-size: 18px;
+                                        font-weight: 500;
+                                    ">
+                                        <span style="color: #5e6d77;
+                                        font-size: 14px;
+                                        font-weight: 400;">
+                                            From
+                                        </span> <br>
+                                        Rp. {{ number_format(($item->recom_price + $item->contractrate->vendors->system_markup), 0, ',', '.')}}</span>
+
+                                        <span style="color: #5e6d77;
+                                        font-size: 10px;
+                                        font-weight: 400;">
+                                            /Night
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+
+                        <!-- JavaScript untuk mengontrol tampilan elemen tambahan -->
+                     <!-- JavaScript untuk mengontrol tampilan elemen tambahan -->
+                    </div>
+                </div>
             </div>
             <div class="row mt-5">
                 <div class="col text-center">
@@ -245,4 +301,46 @@
 
         });
     </script> --}}
+    <!-- Tambahkan script Nouislider -->
+<link href="https://cdn.jsdelivr.net/npm/nouislider@16.0.2/distribute/nouislider.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/nouislider@16.0.2/distribute/nouislider.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const priceRange = document.getElementById('priceRange');
+
+        // Inisialisasi Nouislider
+        const slider = noUiSlider.create(priceRange, {
+            start: [100, 1000], // Nilai awal untuk range harga
+            connect: true, // Menghubungkan slider
+            range: {
+                'min': 0,
+                'max': 2000 // Nilai maksimum untuk range harga
+            }
+        });
+
+        // Menangani perubahan pada slider
+        slider.on('update', function(values, handle) {
+            const minPrice = values[0];
+            const maxPrice = values[1];
+
+            // Tampilkan nilai harga pada elemen label atau input sesuai kebutuhan Anda
+            // Contoh: document.getElementById('minPriceLabel').textContent = minPrice;
+            // Contoh: document.getElementById('maxPriceLabel').textContent = maxPrice;
+        });
+
+        // Menangani perubahan pada form (submit, AJAX, dsb.)
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Dapatkan nilai range harga yang dipilih
+            const selectedRange = slider.get();
+
+            // Kirim data range harga ke server atau lakukan yang sesuai dengan kebutuhan aplikasi Anda
+            console.log('Selected Price Range:', selectedRange);
+        });
+    });
+</script>
+
 @endsection

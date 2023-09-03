@@ -3,7 +3,7 @@
 @section('contents')
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <section class="hero-wrap hero-wrap-2" style="background-image: url('/landing/travel/images/bg_1.jpg'); height:300px">
+    {{-- <section class="hero-wrap hero-wrap-2" style="background-image: url('/landing/travel/images/bg_1.jpg'); height:300px">
         <div class="overlay" style="height: 300px"></div>
         <div class="container">
             <div class="row no-gutters slider-text align-items-end justify-content-center" style="height:300px">
@@ -15,10 +15,58 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
 
+    <div class="hero-wrap" style="height:400px">
+        <div id="demo" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                @foreach ($slider as $index => $item)
+                    <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
+                        <img src="{{ $item->image }}" alt="{{ $item->image }}"
+                            style="width:100%;height:600px; object-fit: cover;">
+                    </div>
+                @endforeach
+            </div>
+            <a class="carousel-control-prev" href="#demo" data-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </a>
+            <a class="carousel-control-next" href="#demo" data-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </a>
+        </div>
+    </div>
     <section class="ftco-section">
         <div class="container">
+            <div class="row">
+                <div class="col-lg-9">
+                    <p class="star mb-2">
+                        <span class="fa fa-star"></span>
+                        <span class="fa fa-star"></span>
+                        <span class="fa fa-star"></span>
+                        <span class="fa fa-star"></span>
+                        <span class="fa fa-star"></span>
+                    </p>
+                   <h1>{{ $vendordetail->vendor_name }}</h1>
+                   <p><i class="fa fa-map-marker"></i> {{ $vendordetail->country }}</p>
+
+
+                </div>
+                <div class="col-lg-3">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="d-flex">
+                                <img src="{{ $vendordetail->logo_img ?? asset('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjCX5TOKkOk3MBt8V-f8PbmGrdLHCi4BoUOs_yuZ1pekOp8U_yWcf40t66JZ4_e_JYpRTOVCl0m8ozEpLrs9Ip2Cm7kQz4fUnUFh8Jcv8fMFfPbfbyWEEKne0S9e_U6fWEmcz0oihuJM6sP1cGFqdJZbLjaEQnGdgJvcxctqhMbNw632OKuAMBMwL86/s414/pp%20kosong%20wa%20default.jpg') }}" alt="Profile Image">
+
+                                <div>
+                                    <p>{{ $vendordetail->vendor_name }}</p>
+                                    <p>Member since {{ \Carbon\Carbon::parse($vendordetail->created_at)->format('F Y') }}</p>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-lg-12">
                     <form id="bookingForm" enctype="multipart/form-data">
@@ -57,7 +105,7 @@
                                         </div>
                                     </div>
                                 </div>
-                               
+
                             </div>
                         </div>
 
@@ -78,8 +126,9 @@
 
                                                 <span class="price">Rp. {{ number_format(($item->recom_price + $item->contractrate->vendors->system_markup), 0, ',', '.')}}</span>
                                                 <p class="card-text"><small class="text-body-secondary"></small></p>
-                                                @if($item->room->room_allow <= 0 || $blackoutVendorIds->contains($item->contractrate->vendors->id))
-                                                    <span class="badge badge-danger">Sold</span>
+                                                {{-- @if($item->room->room_allow <= 0 || $blackoutVendorIds->contains($item->contractrate->vendors->id)) --}}
+                                                @if($item->room->room_allow <= 0)
+                                                <span class="badge badge-danger">Sold</span>
                                                 @else
                                                     <select class="form-control room-quantity" name="room_quantity" style="width:200px" onchange="calculateTotal()">
                                                         <option data-price="0" value="0" data-pricenomarkup="0">0</option>

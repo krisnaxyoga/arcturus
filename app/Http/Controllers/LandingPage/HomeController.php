@@ -156,7 +156,7 @@ class HomeController extends Controller
 
         // $vendorIds = $vendor->pluck('contractrate.vendor_id')->toArray();
 
-       
+
         // $blackoutVendorIds = AgentMarkupDetail::where('vendor_id', $vendorIds)
         //         ->where('markup_cat_id', 'blackout')
         //         ->where(function ($q) use ($checkin, $checkout) {
@@ -180,7 +180,7 @@ class HomeController extends Controller
         //                 });
         //         })
         //     ->pluck('vendor_id');
-            
+
         // $surchargesDetail = AgentMarkupDetail::where('vendor_id', $vendorIds)
         //     ->where('markup_cat_id', 'surcharges')
         //     ->where(function ($q) use ($checkin, $checkout) {
@@ -256,7 +256,7 @@ class HomeController extends Controller
         $data->appends($requestdata);
 
         // return view('landingpage.hotel.index',compact('data','requestdata','blackoutVendorIds','surchargesDetail','surcharprice'));
-        
+
         return view('landingpage.hotel.index',compact('data','requestdata'));
     }
 
@@ -268,8 +268,7 @@ class HomeController extends Controller
 
         $category = $request->input('data.category');
         $datareq = $request->all();
-        // dd($datareq['checkin']);
-
+        // dd($datareq['checkin']);\
 
         if ($category) {
             $vendor = ContractPrice::whereHas('room', function ($query) use ($category) {
@@ -287,6 +286,8 @@ class HomeController extends Controller
                 ->with('room')
                 ->get();
         }
+
+        $slider = Slider::where('user_id',$vendor[0]->user_id)->get();
 
         if (isset($datareq['checkin']) && isset($datareq['checkout'])) {
             $inputCheckin = $datareq['checkin'];
@@ -314,10 +315,10 @@ class HomeController extends Controller
 
         $roomtype = RoomHotel::where('vendor_id',$vendor[0]->contractrate->vendor_id)->get();
 
-        $surcharprice = 0;
+        // $surcharprice = 0;
 
-        $surchargesVendorIds = 0;
-        $blackoutVendorIds = 0;
+        // $surchargesVendorIds = 0;
+        // $blackoutVendorIds = 0;
 
         if (isset($datareq)) {
             // Lakukan sesuatu dengan $datareq
@@ -390,46 +391,49 @@ class HomeController extends Controller
 
                 // dd($surchargesprice);
 
-                $blackoutVendorIds = AgentMarkupDetail::where('vendor_id', $vendorIds)
-                    ->where('markup_cat_id', 'blackout')
-                    ->where(function ($q) use ($checkin, $checkout) {
-                        $q->where(function ($qq) use ($checkin, $checkout) {
-                            $qq->where('start_date', '<=', Carbon::createFromFormat('Y-m-d', $checkout)->subDay())
-                                ->where('end_date', '>=', $checkin)
-                                ->where('markup_cat_id', 'blackout');
-                        });
-                    })
-                    ->orWhere(function ($q) use ($checkin, $checkout) {
-                        $q->where('start_date', '<=', $checkout)
-                            ->where('end_date', '>=', $checkout)
-                            ->where('markup_cat_id', 'blackout')
-                            ->whereNotIn('vendor_id', function ($query) use ($checkin, $checkout) {
-                                $query->select('vendor_id')
-                                    ->from('agent_markup_details')
-                                    ->where('markup_cat_id', 'blackout')
-                                    ->where('start_date', '<=', $checkout)
-                                    ->where('end_date', '>=', $checkin);
-                            });
-                    })
-                    ->pluck('vendor_id');
+                // $blackoutVendorIds = AgentMarkupDetail::where('vendor_id', $vendorIds)
+                //     ->where('markup_cat_id', 'blackout')
+                //     ->where(function ($q) use ($checkin, $checkout) {
+                //         $q->where(function ($qq) use ($checkin, $checkout) {
+                //             $qq->where('start_date', '<=', Carbon::createFromFormat('Y-m-d', $checkout)->subDay())
+                //                 ->where('end_date', '>=', $checkin)
+                //                 ->where('markup_cat_id', 'blackout');
+                //         });
+                //     })
+                //     ->orWhere(function ($q) use ($checkin, $checkout) {
+                //         $q->where('start_date', '<=', $checkout)
+                //             ->where('end_date', '>=', $checkout)
+                //             ->where('markup_cat_id', 'blackout')
+                //             ->whereNotIn('vendor_id', function ($query) use ($checkin, $checkout) {
+                //                 $query->select('vendor_id')
+                //                     ->from('agent_markup_details')
+                //                     ->where('markup_cat_id', 'blackout')
+                //                     ->where('start_date', '<=', $checkout)
+                //                     ->where('end_date', '>=', $checkin);
+                //             });
+                //     })
+                //     ->pluck('vendor_id');
                     // dd($blackoutVendorIds);
 
-            if ($surchargesDetail->isNotEmpty() ) {
-                $surchargesVendorIds = $surchargesDetail; // Mengisi koleksi dengan daftar vendor_id
-               
-                $surcharprice = $surchargesprice->surcharge_block_price;
+        //     if ($surchargesDetail->isNotEmpty() ) {
+        //         $surchargesVendorIds = $surchargesDetail; // Mengisi koleksi dengan daftar vendor_id
 
-            }else{
-                $surcharprice = 0;
-            }
-        } else {
-            $surchargesVendorIds = 0;
-            $blackoutVendorIds = 0;
+        //         $surcharprice = $surchargesprice->surcharge_block_price;
+
+        //     }else{
+        //         $surcharprice = 0;
+        //     }
+        // } else {
+        //     $surchargesVendorIds = 0;
+        //     $blackoutVendorIds = 0;
         }
 
         $data = $vendor;
-        return view('landingpage.hotel.detail',compact('data','roomtype','service','vendordetail','datareq','surcharprice','surchargesVendorIds','blackoutVendorIds'));
+        // return view('landingpage.hotel.detail',compact('data','roomtype','service','vendordetail','datareq','surcharprice','surchargesVendorIds','blackoutVendorIds'));
+
+        return view('landingpage.hotel.detail',compact('data','slider','roomtype','service','vendordetail','datareq'));
     }
+
 
     /**
      * Store a newly created resource in storage.

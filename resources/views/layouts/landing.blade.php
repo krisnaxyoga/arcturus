@@ -23,7 +23,6 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
-
     @if(isset(Auth::user()->id) && Auth::user()->role_id == 2)
     <link rel="icon" href="{{ $vendor->logo_img ?? '/images/pms-sistem-1.png' }}">
      @else
