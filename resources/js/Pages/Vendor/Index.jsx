@@ -5,6 +5,8 @@ import React, { useState } from 'react';
 import Layout from '../../Layouts/Vendor';
 
 import Pagination from '../../Components/Pagination';
+
+import Bookings from '../../Pages/Vendor/BookingHistory/Bookings';
 import TransfFromAdmin from '../../Pages/Vendor/TransfFromAdmin/Index';
 //import Link
 import { Link, usePage } from '@inertiajs/inertia-react';
@@ -18,6 +20,7 @@ export default function Index({ totalroom,income,vendor,success,pending,data,wid
   const [currentPage, setCurrentPage] = useState(1)
   const [postsPerPage, setPostsPerPage] = useState(10)
 
+  console.log(widraw,">>>>>DATA")
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = data.slice(indexOfFirstPost, indexOfLastPost);
@@ -122,7 +125,7 @@ export default function Index({ totalroom,income,vendor,success,pending,data,wid
                 </div>
               </div>
               <div className="row">
-                <div className="col-lg-12">
+                <div className="col-lg-8">
                   <div className="card">
                     <div className="card-header">
                       <h2>Booking</h2>
@@ -153,21 +156,18 @@ export default function Index({ totalroom,income,vendor,success,pending,data,wid
                     </div>
                   </div>
                 </div>
-              </div>
-              {/* <!-- Content Row --> */}
-              <div className="row">
-                <div className="col-lg-12">
-                  <div className="card">
+                <div className="col-lg-4">
+                <div className="card">
                     <div className="card-header">
-                      <h2>Widraw</h2>
+                      <h2>Evidence of transfer</h2>
                     </div>
                     <div className="card-body">
                       <div className="table-responsive">
                             <table className="table table-bordered" id="dataTable" width="100%" cellSpacing="0">
                                 <thead>
                                     <tr>
-                                        <th>No</th>
-                                        <th>Transfer</th>
+                                        <th>Date</th>
+                                        <th>Check transfer</th>
                                     </tr>
                                 </thead>
                                 <TransfFromAdmin TransfFromAdmin={currentWidraw} />
@@ -178,6 +178,7 @@ export default function Index({ totalroom,income,vendor,success,pending,data,wid
                   </div>
                 </div>
               </div>
+              {/* <!-- Content Row --> */}
             </div>
             {/* <!-- End of Begin Page Content --> */}
           </div>

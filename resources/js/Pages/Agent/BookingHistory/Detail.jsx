@@ -75,15 +75,15 @@ export default function Detail({ session, data, agent, contract, setting, roombo
                                                                 <span className="text-default-d3">{data.vendor.vendor_name}</span>
                                                             </div>
                                                         </div>
-                                                        <div className="col-4">
+                                                        {/* <div className="col-4">
                                                             <div className="text-center text-150">
 
                                                             <img src={setting.logo_image} style={{ height: "20px", width: "30px" }} />
-                                                            {/* <img src={agent.vendors.logo_img} style={{ height: "20px", width: "30px" }} /> */}
+                                                            <img src={agent.vendors.logo_img} style={{ height: "20px", width: "30px" }} /> 
                                                             <br />
                                                                 <span className="text-default-d3">{setting.company_name}</span>
                                                             </div>
-                                                        </div>
+                                                        </div> */}
                                                     </div>
 
                                                     <hr className="row brc-default-l1 mx-n1 mb-4"/>
@@ -240,8 +240,8 @@ export default function Detail({ session, data, agent, contract, setting, roombo
 
                                                         <hr />
 
-                                                        <div>
-                                                            <span className="text-secondary-d1 text-105">Thank you for your business</span>
+                                                        <div className='d-flex'>
+                                                        <img src={setting.logo_image} style={{ height: "20px", width: "20px" }} /> <span className="mx-2 text-secondary-d1 text-105">Thank you for your business</span>
                                                         </div>
                                                     </div>
                                                 </div>
