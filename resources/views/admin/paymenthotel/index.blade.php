@@ -16,6 +16,7 @@
                                     <thead>
                                         <tr>
                                             <th>Hotel Name</th>
+                                            <th>Bank Name</th>
                                             <th>Bank Account</th>
                                             <th>Account Number</th>
                                             <th>Bank Address</th>
@@ -26,6 +27,7 @@
                                         @foreach ($data as $item)
                                             <tr>
                                                 <td>{{ $item->vendor_name }}</td>
+                                                <td>{{ $item->bank_name }}</td>
                                                 <td>{{ $item->bank_account }}</td>
                                                 <td>{{ $item->account_number }}</td>
                                                 <td>{{ $item->bank_address }}</td>

@@ -6,14 +6,22 @@
     <section>
         <div class="container mt-5">
 
-            <div class="row">
+            <div class="row mb-3">
                 <div class="col-lg-12">
 
-                    @if (session('message'))
-                        <div class="alert alert-success">
-                            {{ session('message') }}
-                        </div>
-                    @endif
+                    @if (session()->has('message'))
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    {{ session('message') }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            @endif
+                
+                            @if (session()->has('error'))
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    {{ session('error') }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            @endif
                     <div class="card">
                         <div class="card-header">
                             <h1>
@@ -36,16 +44,12 @@
                                         <div class="mb-3">
                                             <ul>
                                                 <li>{{ $model->vendor_name }}</li>
+                                                <li>{{ $model->bank_name }}</li>
                                                 <li>{{ $model->bank_account }}</li>
                                                 <li>{{ $model->account_number }}</li>
                                                 <li>{{ $model->bank_address }}</li>
                                             </ul>
                                         </div>
-                                        @if ($widraw !== null)
-                                            @if ($widraw->vendor_id == $model->id)
-                                                <img src="{{ $widraw->image }}" alt="" class="img-fluid">
-                                            @endif
-                                        @endif
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="mb-3">
@@ -69,6 +73,42 @@
                                     </div>
                                 </div>
                             </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                        @if ($widraw !== null)
+                           <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellSpacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>image</th>
+                                        <th>action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($widraw as $item)
+                                        <tr>
+                                            <td>{{ $item->created_at }}</td>
+                                            <td> <img src="{{ $item->image }}" style="width: 400px" class="img-fluid" alt="{{ $item->image }}"> </td>
+                                            <td>
+                                                <a href="{{ route('dashboard.paymenttohotel.destroy', $item->id) }}"
+                                                    class="btn btn-datatable btn-icon btn-transparent-dark mr-2"><i
+                                                        data-feather="trash"></i>
+                                                    </a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                           </div>
+                        @endif
+                        
                         </div>
                     </div>
                 </div>

@@ -126,7 +126,8 @@ Route::group(['middleware' => ['auth', 'checkrole:1']], function() {
     Route::get('/admin/paymenthotel', [\App\Http\Controllers\Admin\Hotel\PaymentController::class, 'index'])->name('dashboard.paymenttohotel.index');
     Route::get('/admin/paymenthotel/edit/{id}', [\App\Http\Controllers\Admin\Hotel\PaymentController::class, 'edit'])->name('dashboard.paymenttohotel.edit');
     Route::post('/admin/paymenthotel/update/{id}', [\App\Http\Controllers\Admin\Hotel\PaymentController::class, 'update'])->name('dashboard.paymenttohotel.update');
-
+    Route::get('/admin/paymenthotel/destroy/{id}', [\App\Http\Controllers\Admin\Hotel\PaymentController::class, 'destroy'])->name('dashboard.paymenttohotel.destroy');
+   
 });
 
 // untuk vendor

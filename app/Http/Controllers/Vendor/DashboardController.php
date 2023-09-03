@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\RoomHotel;
 use App\Models\WidrawVendor;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -27,7 +28,10 @@ class DashboardController extends Controller
         $booking = Booking::where('vendor_id',$vendor->id)->whereNotIn('booking_status', ['-', ''])->with('vendor','users')->get();
         $acyive = auth()->user()->is_active;
         $roomhotel = Booking::where('vendor_id',$vendor->id)->where('booking_status','paid')->sum('night');
-        $widraw = WidrawVendor::where('vendor_id',$vendor->id)->where('created_at',now())->get();
+        $widraw = WidrawVendor::where('vendor_id', $vendor->id)
+        ->whereDate('created_at', '=', Carbon::today())
+        ->get();
+        // dd($widraw,$vendor->id,Carbon::today());
         if($acyive == 1){
             return inertia('Vendor/Index',[
                 'income'=>$totalincome,

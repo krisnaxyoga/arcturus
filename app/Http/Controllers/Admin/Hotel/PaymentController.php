@@ -9,6 +9,7 @@ use App\Models\Setting;
 use App\Models\Vendor;
 use App\Models\WidrawVendor;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 class PaymentController extends Controller
 {
@@ -68,7 +69,7 @@ class PaymentController extends Controller
         }
 
         $model = Vendor::find($id);
-        $widraw = WidrawVendor::where('vendor_id',$id)->first();
+        $widraw = WidrawVendor::where('vendor_id',$id)->whereDate('created_at', '=', Carbon::today())->get();
 
         return view('admin.paymenthotel.form',compact('model','setting','widraw'));
     }
@@ -109,9 +110,7 @@ class PaymentController extends Controller
                 $data->image = $feature;
                 $data->save();
 
-                return redirect()
-                ->route('dashboard.paymenttohotel.index')
-                ->with('message', 'Data berhasil disimpan.');
+                return redirect()->back()->with('message', 'Data Save!');
             }
     }
 
@@ -120,6 +119,8 @@ class PaymentController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $widraw = WidrawVendor::find($id);
+        $widraw->delete();
+        return redirect()->back()->with('message', 'Data deleted!');
     }
 }
