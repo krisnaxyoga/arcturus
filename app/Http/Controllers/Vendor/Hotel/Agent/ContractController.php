@@ -16,6 +16,7 @@ use App\Models\AdvancePurchase;
 use App\Models\AdvancePurchasePrice;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
+use Inertia\Response;
 
 class ContractController extends Controller
 {
@@ -578,7 +579,7 @@ class ContractController extends Controller
         foreach ($advance as $key => $itm) {
             if ($itm->is_active == 1) {
                 $activeCount++;
-                
+
                 if ($key === 0) {
                     // Data pertama yang aktif
                     $itm->beginsell = now()->addDays($itm->day);

@@ -14,9 +14,6 @@ use App\Http\Controllers\RedircetController;
 |
 */
 
-
-
-
 Route::get('/homepage/hotel', [\App\Http\Controllers\LandingPage\HomeController::class, 'hotel'])->name('hotel.homepage');
 Route::get('/homepage/about', [\App\Http\Controllers\LandingPage\HomeController::class, 'about'])->name('about.homepage');
 Route::get('/homepage/contact', [\App\Http\Controllers\LandingPage\HomeController::class, 'contact'])->name('contact.homepage');
@@ -38,8 +35,6 @@ Route::group(['middleware' => 'guest'], function() {
     Route::post('/regitervendor/store', [AuthController::class, 'vendorstore'])->name('vendorregist.store');
     Route::post('/login', [AuthController::class, 'dologin']);
     Route::post('/forgotpassword', [AuthController::class, 'sendEmail'])->name('forgotpassword');
-
-
 });
 
 Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {
@@ -112,7 +107,7 @@ Route::group(['middleware' => ['auth', 'checkrole:1']], function() {
     //booking
     Route::get('/admin/booking', [\App\Http\Controllers\Admin\Report\BookingController::class, 'index'])->name('dashboard.admin.booking');
     Route::get('/admin/booking/confirmation/{id}', [\App\Http\Controllers\Admin\Report\BookingController::class, 'confirmation'])->name('admin.booking.confirmation');
-    
+
 
     // setting
     Route::get('/admin/setting', [\App\Http\Controllers\Admin\Setting\SettingController::class, 'index'])->name('dashboard.setting');
@@ -153,7 +148,7 @@ Route::group(['middleware' => ['auth', 'checkrole:2']], function() {
     Route::post('/myprofile/update',[\App\Http\Controllers\Vendor\MyProfile\MyProfileController::class, 'update']);
     Route::post('/myprofile/slider/store',[\App\Http\Controllers\Vendor\MyProfile\MyProfileController::class, 'addbanner']);
     Route::get('/myprofile/slider/delete/{id}',[\App\Http\Controllers\Vendor\MyProfile\MyProfileController::class, 'destroybanner']);
-    
+
     Route::get('/vendor-profile/changepassword',[\App\Http\Controllers\Vendor\MyProfile\MyProfileController::class, 'passwordchange']);
     Route::post('/vendor-profile/updatepassword',[\App\Http\Controllers\Vendor\MyProfile\MyProfileController::class, 'updatepassword']);
 
@@ -210,12 +205,17 @@ Route::group(['middleware' => ['auth', 'checkrole:2']], function() {
     Route::get('/room/contract/destroycontractprice/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'destroycontractprice'])->name('contract.destroycontractprice');
     Route::get('/room/contract/addallcontractprice/{cont}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'addallcontractprice'])->name('contract.addallcontractprice');
 
+    //surcharge controller
+    Route::get('/room/surcharge/index',[\App\Http\Controllers\Vendor\Hotel\Agent\SurchargeController::class, 'index'])->name('surcharge.index');
+    Route::get('/room/surcharge/{hotel_room_id}/load-dates',[\App\Http\Controllers\Vendor\Hotel\Agent\SurchargeController::class, 'load_dates'])->name('surcharge.load_dates');
+    Route::post('/room/surcharge/store',[\App\Http\Controllers\Vendor\Hotel\Agent\SurchargeController::class, 'store'])->name('surcharge.store');
+
     //advance purchase
     Route::post('/contract/advancepurchase/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'updateadvance'])->name('advancepurchase.contract');
     Route::get('/contract/destroyadvanceprice/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'destroyadvanceprice'])->name('destroyadvanceprice.contract');
     Route::get('/room/contract/updateadvancetprice/{id}/{price}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'updateadvancetprice'])->name('contract.updateadvancetprice');
     Route::get('/advance/updateadvancetstatus/{id}/{isactive}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'updateadvancetstatus'])->name('advance.updateadvancetstatus');
-   
+
     //promo price
     Route::get('/room/promo/index/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\PromoPriceController::class, 'index'])->name('promo.index');
     Route::get('/room/promo/store/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\PromoPriceController::class, 'store'])->name('promo.store');

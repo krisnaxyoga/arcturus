@@ -150,8 +150,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
 
         setSellingPrice(sellprice)
 
-
-        setShowModal(true);
+        setShowModal(true)
     };
 
     const buttonSendValuemarkup = () => {
@@ -189,9 +188,6 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
         });
     };
 
-    console.log(checkboxes, ">>>>>>>>>>>> ISI ARRAY SEKARANG>>>>>>>>>>>>>")
-
-
     const handleRateMinChange = (e) => {
         const value = e.target.value;
 
@@ -204,10 +200,8 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
         }
 
         setMinPrice(value)
-
-
-
     }
+
     const handleCheckboxChangeAll = (event) => {
         const { checked } = event.target;
         if (checked) {
@@ -247,7 +241,6 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
         setBenefitPolicy(editor.getData());
     };
 
-console.log(contpriceone,">>>PERCENTONE")
     const storePost = async (e) => {
         e.preventDefault();
 
