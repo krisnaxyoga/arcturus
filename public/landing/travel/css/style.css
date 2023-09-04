@@ -10126,3 +10126,20 @@ textarea.form-control {
     padding: 15px 15px 15px 0;
     position: relative;
 }
+
+@media (max-width: 766px){
+  .g-rate-price {
+      flex: 0 0 100%;
+      padding: 0 15px 10px;
+  }
+  .thumb-image {
+    flex: 0 0 100%;
+  }
+  .g-info {
+    display: flex;
+    flex: 0 0 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding-bottom: 0;
+  }
+}

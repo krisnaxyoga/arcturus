@@ -1,6 +1,11 @@
 @extends('layouts.landing')
 @section('title', 'Hotel')
 @section('contents')
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
 <style>
     .slidecontainer {
       width: 100%;
@@ -88,6 +93,22 @@
                                 </div>
                             </div>
                             <div class="col-md d-flex">
+                                <?php
+                                $checkin = date('m/d/Y', strtotime($requestdata['checkin']));
+                                $checkout = date('m/d/Y', strtotime($requestdata['checkout']));
+                                ?>
+                                <div class="form-group mb-3 mt-2 mx-2">
+                                    <label class="pl-3 mt-3" for="">CheckIn - CheckOut</label>
+                                    <input class="form-control checkindate" type="text" name="dates" value="{{ $checkin }} - {{ $checkout }}" />
+                                </div>
+                                <input value="{{ $requestdata['checkin'] }}" type="hidden" name="checkin"
+                                class="form-control checkindate"
+                                placeholder="Check In Date">
+                                <input value="{{ $requestdata['checkout'] }}" type="hidden" name="checkout"
+                                class="form-control checkoutdate"
+                                placeholder="Check Out Date">
+                            </div>
+                            {{-- <div class="col-md d-flex">
                                 <div class="form-group mb-3 mt-2 mx-2">
                                     <label class="pl-3 mt-3" for="#">Check-in</label>
                                     <div class="form-field">
@@ -97,8 +118,8 @@
                                             placeholder="Check In Date">
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md d-flex">
+                            </div> --}}
+                            {{-- <div class="col-md d-flex">
                                 <div class="form-group mb-3 mt-2 mx-2">
                                     <label class="pl-3 mt-3" for="#">Check-out</label>
                                     <div class="form-field">
@@ -108,7 +129,7 @@
                                             placeholder="Check Out Date">
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="col-md d-flex">
                                 <div class="form-group mb-3 mt-2 mx-2">
                                     <label class="pl-3 mt-3" for="#">Person</label>
@@ -162,10 +183,10 @@
                     </div>
                     <div class="card">
                         <div class="card-body">
-                            <a class="text-secondary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                            <a class="text-secondary" data-toggle="collapse" href="#collapseExample1" role="button" aria-expanded="false" aria-controls="collapseExample">
                                 Filter Price
                               </a>
-                              <div class="collapse show" id="collapseExample">
+                              <div class="collapse show" id="collapseExample1">
                                 <div>
                                     <form method="post" action="/action_page_post.php">
                                         <div data-role="rangeslider">
@@ -228,14 +249,14 @@
 
                         @foreach ($data as $key=>$item)
                         <div class="col-md-12 ftco-animate">
-                            <div class="">
-                                <div class="item-loop-list">
-                                    <div class="thumb-image">
+                            <div class="mb-3">
+                                <div class="row border">
+                                    <div class="col-lg-3 p-0">
                                         <a href="{{ route('hoteldetail.homepage', ['id' => $item->contract_id]) }}?{{ http_build_query($requestdata) }}">
                                             <img src="{{$item->room->feature_image}}" class="img img-fluid rounded-start" alt="{{$item->room->feature_image}}">
                                         </a>
                                     </div>
-                                    <div class="g-info">
+                                    <div class="col-lg-6">
                                         <p class="star mb-2">
                                             <span class="fa fa-star"></span>
                                             <span class="fa fa-star"></span>
@@ -245,13 +266,21 @@
                                         </p>
                                         <h3><a href="{{ route('hoteldetail.homepage', ['id' => $item->contract_id]) }}?{{ http_build_query($requestdata) }}">{{$item->contractrate->vendors->vendor_name}}</a></h3>
 
+                                        <p class="location"><span class="fa fa-map-marker"></span> {{$item->contractrate->vendors->city}},{{$item->contractrate->vendors->state}}, {{$item->contractrate->vendors->country}}</p>
+                                        <div class="d-flex">
+                                           <p><span class="flaticon-381-user-7"><i class="fa fa-user"></i></span> {{$item->room->adults}}</p> 
+                                            @if($item->room->extra_bed != 0)
+                                           <p class="mx-4"><span class="flaticon-king-size"></span> {{$item->room->extra_bed}}</p> 
+                                            @endif
+                                            
+                                        </div>
                                         <p class="m-0"><i class="fa fa-trophy" aria-hidden="true"></i> Benefits :
                                             @if (strlen($item->contractrate->benefit_policy) > 40)
-                                            {!! Str::limit($item->contractrate->benefit_policy, 40) !!}
+                                            {!! Str::limit($item->contractrate->benefit_policy,40) !!}
                                             @endif
                                         </p>
                                     </div>
-                                    <div class="g-rate-price">
+                                    <div class="col-lg-3 border-left">
                                         <span class="price" style="color: #1a2b48;
                                         font-size: 18px;
                                         font-weight: 500;
@@ -268,6 +297,7 @@
                                         font-weight: 400;">
                                             /Night
                                         </span>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -291,7 +321,7 @@
 
     </section>
 
-
+    
 
     {{-- <section class="ftco-intro ftco-section ftco-no-pt">
         <div class="container">
@@ -393,5 +423,22 @@
     slider.oninput = function() {
       output.innerHTML = this.value;
     }
+    </script>
+    <script>
+        $('input[name="dates"]').daterangepicker();
+
+            // Tambahkan event listener untuk deteksi klik tombol "Apply"
+        $('input[name="dates"]').on('apply.daterangepicker', function(ev, picker) {
+            // Mengambil tanggal checkin dan checkout dari Date Range Picker
+            const checkin = picker.startDate.format('YYYY-MM-DD');
+            const checkout = picker.endDate.format('YYYY-MM-DD');
+            
+            // Memperbarui nilai input tanggal checkin dan checkout
+            $('input[name="checkin"]').val(checkin);
+            $('input[name="checkout"]').val(checkout);
+
+            // Memperbarui nilai input dengan tampilan tanggal
+            $(this).val(checkin + ' - ' + checkout);
+        });
     </script>
 @endsection

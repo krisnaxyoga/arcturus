@@ -299,6 +299,12 @@ class HomeController extends Controller
 
         $slider = Slider::where('user_id',$vendor[0]->user_id)->get();
 
+        $inputCheckin1 = $datareq['checkin'];
+        $inputCheckout1 = $datareq['checkout'];
+        $checkin2 = Carbon::createFromFormat('Y-m-d', $inputCheckin1);
+        $checkout2 = Carbon::createFromFormat('Y-m-d', $inputCheckout1);
+        $Nights = $checkout2->diffInDays($checkin2);
+
         if (isset($datareq['checkin']) && isset($datareq['checkout'])) {
             $inputCheckin = $datareq['checkin'];
             $inputCheckout = $datareq['checkout'];
@@ -441,7 +447,7 @@ class HomeController extends Controller
         $data = $vendor;
         // return view('landingpage.hotel.detail',compact('data','roomtype','service','vendordetail','datareq','surcharprice','surchargesVendorIds','blackoutVendorIds'));
 
-        return view('landingpage.hotel.detail',compact('data','slider','roomtype','service','vendordetail','datareq','contractprice'));
+        return view('landingpage.hotel.detail',compact('data','slider','Nights','roomtype','service','vendordetail','datareq','contractprice'));
     }
 
 

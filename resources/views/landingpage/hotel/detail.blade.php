@@ -2,7 +2,11 @@
 @section('title', 'Hotel')
 @section('contents')
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script> --}}
     {{-- <section class="hero-wrap hero-wrap-2" style="background-image: url('/landing/travel/images/bg_1.jpg'); height:300px">
         <div class="overlay" style="height: 300px"></div>
         <div class="container">
@@ -106,9 +110,25 @@
                         <div class="search-property-1" style="border-top: 1px solid rgba(0, 0, 0, 0.1);">
                             <div class="row no-gutters">
                                 <div class="col-md d-flex">
+                                    <?php
+                                    $checkin = date('m/d/Y', strtotime($datareq['checkin']));
+                                    $checkout = date('m/d/Y', strtotime($datareq['checkout']));
+                                    ?>
+                                    <div class="form-group p-4">
+                                        <label class="pl-3 mt-3" for="">CheckIn - CheckOut</label>
+                                        <input class="form-control checkindate" type="text" name="dates" value="{{ $checkin }} - {{ $checkout }}" />
+                                    </div>
+                                    <input value="{{ $datareq['checkin'] }}"  id="checkin" type="hidden" name="checkin"
+                                    class="form-control checkindate"
+                                    placeholder="Check In Date">
+                                    <input value="{{ $datareq['checkout'] }}" id="checkout" type="hidden" name="checkout"
+                                    class="form-control checkoutdate"
+                                    placeholder="Check Out Date">
+                                </div>
+                                {{-- <div class="col-md d-flex">
                                     <div class="form-group p-4">
                                         <label for="#">Check-in</label>
-                                        <div class="">
+                                        <div class="date-input-wrapper">
                                             <input value="{{ $datareq['checkin'] }}" onchange="checknight()" type="date"
                                                 id="checkin" name="checkin" class="form-control checkindate"
                                                 placeholder="Check In Date" required>
@@ -118,13 +138,13 @@
                                 <div class="col-md d-flex">
                                     <div class="form-group p-4">
                                         <label for="#">Check-out</label>
-                                        <div class="">
+                                        <div class="date-input-wrapper">
                                             <input value="{{ $datareq['checkout'] }}" onchange="checknight()" id="checkout"
                                                 type="date" name="checkout" class="form-control checkoutdate"
                                                 placeholder="Check Out Date" required>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div class="col-md d-flex">
                                     <div class="form-group p-4" style="    border-right: 1px solid rgba(0, 0, 0, 0.1);">
                                         <label for="#">Person</label>
@@ -165,7 +185,7 @@
                                                     {{-- surcharge : {{$surchargesVendorIds}} blackout : {{$blackoutVendorIds}} vendorid :{{$item->contractrate->vendor_id}} --}}
 
                                                     <span class="price">Rp.
-                                                        {{ number_format($item->recom_price + $item->contractrate->vendors->system_markup, 0, ',', '.') }}</span>
+                                                        {{ number_format($item->recom_price + $item->contractrate->vendors->system_markup, 0, ',', '.') }} / night</span>
                                                        
                                                         
                                                     <p class="card-text"><small class="text-body-secondary"></small></p>
@@ -220,32 +240,34 @@
                                                                 @foreach ($itemprice->contractrate->distribute as $distribute)
                                                                      <span class="badge badge-secondary mx-1">{{$distribute}}</span>
                                                                 @endforeach
-                                                                <p>Min Stay : {{$itemprice->contractrate->min_stay}} /night</p>
+                                                                <p>Min Stay : {{$itemprice->contractrate->min_stay}} nights</p>
                                                                 <span class="price">Rp.
-                                                                    {{ number_format($itemprice->recom_price + $itemprice->contractrate->vendors->system_markup, 0, ',', '.') }}</span>
+                                                                    {{ number_format($itemprice->recom_price + $itemprice->contractrate->vendors->system_markup, 0, ',', '.') }} / night</span>
                                                                     @if ($itemprice->room->room_allow <= 0)
                                                                         <span class="badge badge-danger">Sold</span>
                                                                     @else
-                                                                        <select class="form-control room-quantity" name="room_quantity"
-                                                                            style="width:200px" onchange="calculateTotal()">
-                                                                            <option data-price="0" value="0" data-pricenomarkup="0">
-                                                                                0</option>
-                                                                            @for ($i = 1; $i <= $itemprice->room->room_allow; $i++)
-                                                                                {{-- <option data-contprice={{$itemprice->id}} data-contractid={{$itemprice->contract_id}} data-roomid={{$itemprice->room->id}} data-price="{{($i * ($itemprice->recom_price + $itemprice->contractrate->vendors->system_markup + $surcharprice)) }}" value="{{$i}}">{{$i}} @if ($i == 1) room @else rooms @endif </option> --}}
-                                                                                <option data-contprice={{ $itemprice->id }}
-                                                                                    data-contractid={{ $itemprice->contract_id }}
-                                                                                    data-roomid={{ $itemprice->room->id }}
-                                                                                    data-price="{{ $i * ($itemprice->recom_price + $itemprice->contractrate->vendors->system_markup) }}"
-                                                                                    data-pricenomarkup="{{ $i * $itemprice->recom_price }}"
-                                                                                    value="{{ $i }}">{{ $i }}
-                                                                                    @if ($i == 1)
-                                                                                        room
-                                                                                    @else
-                                                                                        rooms
-                                                                                    @endif
-                                                                                </option>
-                                                                            @endfor
-                                                                        </select>
+                                                                        @if($Nights >= $itemprice->contractrate->min_stay)
+                                                                            <select class="form-control room-quantity" name="room_quantity"
+                                                                                style="width:200px" onchange="calculateTotal()">
+                                                                                <option data-price="0" value="0" data-pricenomarkup="0">
+                                                                                    0</option>
+                                                                                @for ($i = 1; $i <= $itemprice->room->room_allow; $i++)
+                                                                                    {{-- <option data-contprice={{$itemprice->id}} data-contractid={{$itemprice->contract_id}} data-roomid={{$itemprice->room->id}} data-price="{{($i * ($itemprice->recom_price + $itemprice->contractrate->vendors->system_markup + $surcharprice)) }}" value="{{$i}}">{{$i}} @if ($i == 1) room @else rooms @endif </option> --}}
+                                                                                    <option data-contprice={{ $itemprice->id }}
+                                                                                        data-contractid={{ $itemprice->contract_id }}
+                                                                                        data-roomid={{ $itemprice->room->id }}
+                                                                                        data-price="{{ $i * ($itemprice->recom_price + $itemprice->contractrate->vendors->system_markup) }}"
+                                                                                        data-pricenomarkup="{{ $i * $itemprice->recom_price }}"
+                                                                                        value="{{ $i }}">{{ $i }}
+                                                                                        @if ($i == 1)
+                                                                                            room
+                                                                                        @else
+                                                                                            rooms
+                                                                                        @endif
+                                                                                    </option>
+                                                                                @endfor
+                                                                            </select>
+                                                                            @endif
                                                                     @endif
                                                                 @endif
                                                             @endforeach
@@ -734,7 +756,25 @@
         //CODE JQUERY
         //==================================================
     </script>
+    <script>
+        $('input[name="dates"]').daterangepicker();
 
+            // Tambahkan event listener untuk deteksi klik tombol "Apply"
+        $('input[name="dates"]').on('apply.daterangepicker', function(ev, picker) {
+            // Mengambil tanggal checkin dan checkout dari Date Range Picker
+            const checkin = picker.startDate.format('YYYY-MM-DD');
+            const checkout = picker.endDate.format('YYYY-MM-DD');
+            
+            // Memperbarui nilai input tanggal checkin dan checkout
+            $('input[name="checkin"]').val(checkin);
+            $('input[name="checkout"]').val(checkout);
+
+            // Memperbarui nilai input dengan tampilan tanggal
+            $(this).val(checkin + ' - ' + checkout);
+
+            checknight()
+        });
+    </script>
     <style>
         .loader {
             border: 5px solid #8bc1f3;
@@ -767,5 +807,22 @@
                 transform: rotate(360deg);
             }
         }
+
+                /* Gaya untuk input tanggal */
+        .date-input-wrapper input[type="date"] {
+            /* Menghilangkan tombol kalender */
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            cursor: pointer; /* Mengubah kursor menjadi tangan saat mengarah ke input */
+        }
+
+        /* Gaya saat input tanggal dalam keadaan fokus */
+        .date-input-wrapper input[type="date"]:focus {
+            outline: none; /* Menghilangkan garis pinggir saat fokus */
+            border: 1px solid #ced4da; /* Menambahkan garis tepi */
+            /* Anda dapat menyesuaikan gaya lain sesuai kebutuhan */
+        }
+
     </style>
 @endsection

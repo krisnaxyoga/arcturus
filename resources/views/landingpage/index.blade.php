@@ -1,7 +1,10 @@
 @extends('layouts.landing')
 @section('title', 'Home Page')
 @section('contents')
-
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     {{-- <div class="hero-wrap js-fullheight" style="background-image: url('/landing/travel/images/bg_5.jpg');"> --}}
     <div class="hero-wrap" style="height:600px">
         {{-- <div class="overlay"></div> --}}
@@ -86,6 +89,19 @@
                                                             </div>
                                                         </div>
                                                         <div class="col-md d-flex">
+                                                           
+                                                            <div class="form-group mb-3 mt-2 mx-2">
+                                                                <label class="pl-3 mt-3" for="">CheckIn - CheckOut</label>
+                                                                <input class="form-control" type="text" name="dates" value="" />
+                                                            </div>
+                                                            <input value="" type="hidden" name="checkin"
+                                                            class="form-control checkindate"
+                                                            placeholder="Check In Date">
+                                                            <input value="" type="hidden" name="checkout"
+                                                            class="form-control checkoutdate"
+                                                            placeholder="Check Out Date">
+                                                        </div>
+                                                        {{-- <div class="col-md d-flex">
                                                             <div class="form-group mb-3 mt-2 mx-2">
                                                                 <label class="pl-3 mt-3" for="#">Check-in</label>
                                                                 <div class="form-field">
@@ -105,7 +121,7 @@
                                                                         placeholder="Check Out Date">
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </div> --}}
                                                         <div class="col-md d-flex">
                                                             <div class="form-group mb-3 mt-2 mx-2">
                                                                 <label class="pl-3 mt-3" for="#">Person</label>
@@ -831,5 +847,46 @@
             dots[slideIndex - 1].className += " active";
         }
     </script>
+ <script>
+    $('input[name="dates"]').daterangepicker();
 
+        // Tambahkan event listener untuk deteksi klik tombol "Apply"
+    $('input[name="dates"]').on('apply.daterangepicker', function(ev, picker) {
+        // Mengambil tanggal checkin dan checkout dari Date Range Picker
+        const checkin = picker.startDate.format('YYYY-MM-DD');
+        const checkout = picker.endDate.format('YYYY-MM-DD');
+        
+        // Memperbarui nilai input tanggal checkin dan checkout
+        $('input[name="checkin"]').val(checkin);
+        $('input[name="checkout"]').val(checkout);
+
+        // Memperbarui nilai input dengan tampilan tanggal
+        $(this).val(checkin + ' - ' + checkout);
+    });
+</script>
+<script>
+    // Inisialisasi Date Range Picker
+    $('input[name="dates"]').daterangepicker({
+        startDate: moment().format('YYYY-MM-DD'), // Tanggal checkin (hari ini)
+        endDate: moment().add(1, 'days').format('YYYY-MM-DD'), // Tanggal checkout (besok)
+        autoUpdateInput: false, // Menonaktifkan pembaruan otomatis
+        locale: {
+            format: 'YYYY-MM-DD', // Format tanggal yang diharapkan
+        }
+    });
+
+    // Tambahkan event listener untuk deteksi klik tombol "Apply"
+    $('input[name="dates"]').on('apply.daterangepicker', function(ev, picker) {
+        // Mengambil tanggal checkin dan checkout dari Date Range Picker
+        const checkin = picker.startDate.format('YYYY-MM-DD');
+        const checkout = picker.endDate.format('YYYY-MM-DD');
+        
+        // Memperbarui nilai input tanggal checkin dan checkout
+        $('input[name="checkin"]').val(checkin);
+        $('input[name="checkout"]').val(checkout);
+
+        // Memperbarui nilai input dengan tampilan tanggal
+        $(this).val(checkin + ' - ' + checkout);
+    });
+</script>
 @endsection
