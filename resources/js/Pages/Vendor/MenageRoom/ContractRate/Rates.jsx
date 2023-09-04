@@ -5,9 +5,9 @@ export default function Rates({ rates }) {
 
     return (
         <tbody>
-            {rates.map((item, index) => (
+            {rates.map((item) => (
                 <>
-                    <tr key={index}>
+                    <tr key={item.id}>
                         <td>{item.ratecode}</td>
                         <td>{item.codedesc}</td>
                         <td>{item.stayperiod_begin}</td>
