@@ -6,7 +6,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Button from 'react-bootstrap/Button';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
-import Offcanvas from 'react-bootstrap/Offcanvas';
+import '../../css/app.css';
 
 
 function Layout({ children, page, vendor }) {
@@ -41,6 +41,8 @@ function Layout({ children, page, vendor }) {
         }else if(page === '/room/index'){
             setIsOpen2(true);
         }else if(page === '/room/contract/index') {
+            setIsOpen2(true);
+        }else if(page === '/room/surcharge/index') {
             setIsOpen2(true);
         }
         else{
@@ -105,6 +107,7 @@ function Layout({ children, page, vendor }) {
                                         <Link className={`nav-link ${page === '/room/attribute' ? 'active' : ''}`} href="/room/attribute">Amenities</Link>
                                         <Link className={`nav-link ${page === '/room/index' ? 'active' : ''}`} href="/room/index">Room Types</Link>
                                         <Link className={`nav-link ${page === '/room/contract/index' ? 'active' : ''}`} href="/room/contract/index">Rates</Link>
+                                        <Link className={`nav-link ${page === '/room/surcharge/index' ? 'active' : ''}`} href="/room/surcharge/index">Surcharge</Link>
                                     </div>}
                                 </div>
 

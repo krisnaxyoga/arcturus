@@ -16,6 +16,7 @@ use App\Models\AdvancePurchase;
 use App\Models\AdvancePurchasePrice;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
+use Inertia\Response;
 
 class ContractController extends Controller
 {
@@ -591,22 +592,31 @@ class ContractController extends Controller
         $contract = ContractRate::where('id', $data->contract_id)->first();
 
         foreach ($advance as $key => $itm) {
-            if ($itm->is_active == 1 && $itm->numberactive >= 1 && $itm->numberactive <= 6) {
-                $date3 = AdvancePurchase::where('numberactive', $itm->numberactive)
-                    ->where('contract_id', $data->contract_id)
-                    ->first();
+            if ($itm->is_active == 1) {
+                $activeCount++;
 
-                $date3->beginsell = now()->addDays($date3->day);
-                $date3->endsell = Carbon::parse($contract->stayperiod_end);
-                $date3->save();
-
-                if ($itm->numberactive > 1) {
-                    $up_endsell = AdvancePurchase::where('numberactive', $itm->numberactive - 1)
-                        ->where('contract_id', $data->contract_id)
-                        ->first();
-
-                    $up_endsell->endsell = $date3->beginsell->subDay(1);
-                    $up_endsell->save();
+                if ($key === 0) {
+                    // Data pertama yang aktif
+                    $itm->beginsell = now()->addDays($itm->day);
+                    $itm->endsell = Carbon::parse($contract->stayperiod_end);
+                } else {
+                    // Data kedua dan seterusnya yang aktif
+                    $prevActive = $advance[$key - 1];
+                    $itm->beginsell = $prevActive->beginsell->addDays($itm->day - $prevActive->day);
+                    $daysToAdd = Carbon::parse($contract->stayperiod_start)->diffInDays($contract->stayperiod_end) - 1;
+                    $itm->endsell = $itm->beginsell->copy()->addDays($daysToAdd);
+                }
+            } else {
+                // Data tidak aktif
+                if ($key === 0) {
+                    // Data pertama tidak aktif
+                    $itm->beginsell = now()->addDays($itm->day);
+                    $itm->endsell = $itm->beginsell->copy()->subDay();
+                } else {
+                    // Data lainnya tidak aktif
+                    $prevActive = $advance[$key - 1];
+                    $itm->beginsell = $prevActive->beginsell->addDays($itm->day - $prevActive->day);
+                    $itm->endsell = $itm->beginsell->copy()->subDay();
                 }
             }
         }

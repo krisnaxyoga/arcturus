@@ -2,7 +2,7 @@
 @section('title', 'Hotel')
 @section('contents')
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     {{-- <section class="hero-wrap hero-wrap-2" style="background-image: url('/landing/travel/images/bg_1.jpg'); height:300px">
         <div class="overlay" style="height: 300px"></div>
         <div class="container">
@@ -38,31 +38,44 @@
     <section class="ftco-section">
         <div class="container">
             <div class="row">
-                <div class="col-lg-9">
-                    <p class="star mb-2">
-                        <span class="fa fa-star"></span>
-                        <span class="fa fa-star"></span>
-                        <span class="fa fa-star"></span>
-                        <span class="fa fa-star"></span>
-                        <span class="fa fa-star"></span>
-                    </p>
-                   <h1>{{ $vendordetail->vendor_name }}</h1>
-                   <p><i class="fa fa-map-marker"></i> {{ $vendordetail->country }}</p>
-
-
-                </div>
-                <div class="col-lg-3">
-                    <div class="card mb-3">
+                <div class="col-lg-12">
+                    <div class="card mb-3 border-0">
                         <div class="card-body">
-                            <div class="d-flex">
-                                <img src="{{ $vendordetail->logo_img ?? asset('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjCX5TOKkOk3MBt8V-f8PbmGrdLHCi4BoUOs_yuZ1pekOp8U_yWcf40t66JZ4_e_JYpRTOVCl0m8ozEpLrs9Ip2Cm7kQz4fUnUFh8Jcv8fMFfPbfbyWEEKne0S9e_U6fWEmcz0oihuJM6sP1cGFqdJZbLjaEQnGdgJvcxctqhMbNw632OKuAMBMwL86/s414/pp%20kosong%20wa%20default.jpg') }}" alt="Profile Image">
+                            <div class="row">
+                                <div class="col-lg-9">
+                                    <p class="star mb-2">
+                                        <span class="fa fa-star"></span>
+                                        <span class="fa fa-star"></span>
+                                        <span class="fa fa-star"></span>
+                                        <span class="fa fa-star"></span>
+                                        <span class="fa fa-star"></span>
+                                    </p>
+                                    <h1>{{ $vendordetail->vendor_name }}</h1>
+                                    <p><i class="fa fa-map-marker"></i> {{ $vendordetail->country }}</p>
 
-                                <div>
-                                    <p>{{ $vendordetail->vendor_name }}</p>
-                                    <p>Member since {{ \Carbon\Carbon::parse($vendordetail->created_at)->format('F Y') }}</p>
 
                                 </div>
+                                <div class="col-lg-3">
+                                    <div class="card mb-3">
+                                        <div class="card-body">
+                                            <div class="d-flex">
+                                                <img class="img-fluid" style="max-width: 80px; max-height:100px;"
+                                                    src="{{ $vendordetail->logo_img ?? asset('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjCX5TOKkOk3MBt8V-f8PbmGrdLHCi4BoUOs_yuZ1pekOp8U_yWcf40t66JZ4_e_JYpRTOVCl0m8ozEpLrs9Ip2Cm7kQz4fUnUFh8Jcv8fMFfPbfbyWEEKne0S9e_U6fWEmcz0oihuJM6sP1cGFqdJZbLjaEQnGdgJvcxctqhMbNw632OKuAMBMwL86/s414/pp%20kosong%20wa%20default.jpg') }}"
+                                                    alt="Profile Image">
+
+                                                <div>
+                                                    <p>{{ $vendordetail->vendor_name }}</p>
+                                                    <p>Member since
+                                                        {{ \Carbon\Carbon::parse($vendordetail->created_at)->format('F Y') }}
+                                                    </p>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -77,7 +90,9 @@
                                     <div class="form-group p-4">
                                         <label for="#">Check-in</label>
                                         <div class="form-field">
-                                            <input value="{{ $datareq['checkin'] }}" onchange="checknight()" type="date" id="checkin" name="checkin" class="form-control checkindate" placeholder="Check In Date" required>
+                                            <input value="{{ $datareq['checkin'] }}" onchange="checknight()" type="date"
+                                                id="checkin" name="checkin" class="form-control checkindate"
+                                                placeholder="Check In Date" required>
                                         </div>
                                     </div>
                                 </div>
@@ -85,7 +100,9 @@
                                     <div class="form-group p-4">
                                         <label for="#">Check-out</label>
                                         <div class="form-field">
-                                            <input value="{{ $datareq['checkout'] }}" onchange="checknight()" id="checkout" type="date" name="checkout" class="form-control checkoutdate" placeholder="Check Out Date" required>
+                                            <input value="{{ $datareq['checkout'] }}" onchange="checknight()" id="checkout"
+                                                type="date" name="checkout" class="form-control checkoutdate"
+                                                placeholder="Check Out Date" required>
                                         </div>
                                     </div>
                                 </div>
@@ -96,10 +113,14 @@
                                             <div class="select-wrap">
                                                 <div class="icon"><span class="fa fa-chevron-down"></span></div>
                                                 <select name="person" id="person" class="form-control" required>
-                                                    <option  @if (($datareq['person'] ?? '') == 1) selected @endif value="1">1</option>
-                                                    <option @if (($datareq['person'] ?? '') == 2) selected @endif value="2">2</option>
-                                                    <option @if (($datareq['person'] ?? '') == 3) selected @endif value="3">3</option>
-                                                    <option @if (($datareq['person'] ?? '') == 4) selected @endif value="4">4</option>
+                                                    <option @if (($datareq['person'] ?? '') == 1) selected @endif
+                                                        value="1">1</option>
+                                                    <option @if (($datareq['person'] ?? '') == 2) selected @endif
+                                                        value="2">2</option>
+                                                    <option @if (($datareq['person'] ?? '') == 3) selected @endif
+                                                        value="3">3</option>
+                                                    <option @if (($datareq['person'] ?? '') == 4) selected @endif
+                                                        value="4">4</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -111,49 +132,65 @@
 
                         <div class="row">
                             @foreach ($data as $item)
-                            <div class="col-md-12 ftco-animate">
-                                <div class="card mb-3">
-                                    <div class="row g-0">
-                                        <div class="col-md-4">
-                                            <img src="{{$item->room->feature_image}}" class="img img-fluid rounded-start" alt="{{$item->room->feature_image}}">
+                                <div class="col-md-12 ftco-animate">
+                                    <div class="card mb-3">
+                                        <div class="row g-0">
+                                            <div class="col-md-4">
+                                                <img src="{{ $item->room->feature_image }}"
+                                                    class="img img-fluid rounded-start"
+                                                    alt="{{ $item->room->feature_image }}">
 
-                                        </div>
-                                        <div class="col-md-8">
-                                            <div class="card-body">
-                                                <h3 class="card-title"><a href="#">{{$item->room->ratedesc}}</a></h3>
-                                                {{-- <span class="price">Rp. {{ number_format(($item->recom_price + $item->contractrate->vendors->system_markup + $surcharprice), 0, ',', '.')}}</span> --}}
-                                                {{-- surcharge : {{$surchargesVendorIds}} blackout : {{$blackoutVendorIds}} vendorid :{{$item->contractrate->vendor_id}} --}}
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="card-body">
+                                                    <h3 class="card-title"><a
+                                                            href="#">{{ $item->room->ratedesc }}</a></h3>
+                                                    {{-- <span class="price">Rp. {{ number_format(($item->recom_price + $item->contractrate->vendors->system_markup + $surcharprice), 0, ',', '.')}}</span> --}}
+                                                    {{-- surcharge : {{$surchargesVendorIds}} blackout : {{$blackoutVendorIds}} vendorid :{{$item->contractrate->vendor_id}} --}}
 
-                                                <span class="price">Rp. {{ number_format(($item->recom_price + $item->contractrate->vendors->system_markup), 0, ',', '.')}}</span>
-                                                <p class="card-text"><small class="text-body-secondary"></small></p>
-                                                {{-- @if($item->room->room_allow <= 0 || $blackoutVendorIds->contains($item->contractrate->vendors->id)) --}}
-                                                @if($item->room->room_allow <= 0)
-                                                <span class="badge badge-danger">Sold</span>
-                                                @else
-                                                    <select class="form-control room-quantity" name="room_quantity" style="width:200px" onchange="calculateTotal()">
-                                                        <option data-price="0" value="0" data-pricenomarkup="0">0</option>
-                                                        @for ($i = 1; $i <= $item->room->room_allow; $i++)
-                                                            {{-- <option data-contprice={{$item->id}} data-contractid={{$item->contract_id}} data-roomid={{$item->room->id}} data-price="{{($i * ($item->recom_price + $item->contractrate->vendors->system_markup + $surcharprice)) }}" value="{{$i}}">{{$i}} @if($i == 1) room @else rooms @endif </option> --}}
-                                                            <option data-contprice={{$item->id}} data-contractid={{$item->contract_id}} data-roomid={{$item->room->id}} data-price="{{($i * ($item->recom_price + $item->contractrate->vendors->system_markup)) }}" data-pricenomarkup="{{ $i * $item->recom_price }}" value="{{$i}}">{{$i}} @if($i == 1) room @else rooms @endif </option>
+                                                    <span class="price">Rp.
+                                                        {{ number_format($item->recom_price + $item->contractrate->vendors->system_markup, 0, ',', '.') }}</span>
+                                                    <p class="card-text"><small class="text-body-secondary"></small></p>
+                                                    {{-- @if ($item->room->room_allow <= 0 || $blackoutVendorIds->contains($item->contractrate->vendors->id)) --}}
+                                                    @if ($item->room->room_allow <= 0)
+                                                        <span class="badge badge-danger">Sold</span>
+                                                    @else
+                                                        <select class="form-control room-quantity" name="room_quantity"
+                                                            style="width:200px" onchange="calculateTotal()">
+                                                            <option data-price="0" value="0" data-pricenomarkup="0">
+                                                                0</option>
+                                                            @for ($i = 1; $i <= $item->room->room_allow; $i++)
+                                                                {{-- <option data-contprice={{$item->id}} data-contractid={{$item->contract_id}} data-roomid={{$item->room->id}} data-price="{{($i * ($item->recom_price + $item->contractrate->vendors->system_markup + $surcharprice)) }}" value="{{$i}}">{{$i}} @if ($i == 1) room @else rooms @endif </option> --}}
+                                                                <option data-contprice={{ $item->id }}
+                                                                    data-contractid={{ $item->contract_id }}
+                                                                    data-roomid={{ $item->room->id }}
+                                                                    data-price="{{ $i * ($item->recom_price + $item->contractrate->vendors->system_markup) }}"
+                                                                    data-pricenomarkup="{{ $i * $item->recom_price }}"
+                                                                    value="{{ $i }}">{{ $i }}
+                                                                    @if ($i == 1)
+                                                                        room
+                                                                    @else
+                                                                        rooms
+                                                                    @endif
+                                                                </option>
+                                                            @endfor
+                                                        </select>
+                                                    @endif
 
-                                                        @endfor
-                                                    </select>
-                                                @endif
-
-                                                {{-- <p>Facilities :  @foreach ($item->room->attribute as $facilities)
+                                                    {{-- <p>Facilities :  @foreach ($item->room->attribute as $facilities)
                                                     {{ $facilities }},
                                                     @endforeach</p>
-                                                    @if(isset($item->contractrate->distribute) && $item->contractrate->distribute !== ['all'])
+                                                    @if (isset($item->contractrate->distribute) && $item->contractrate->distribute !== ['all'])
                                                         @foreach ($item->contractrate->distribute as $distribution)
                                                         <span class="badge badge-success mr-2">{{$distribution}} </span>
                                                         @endforeach
                                                     @endif --}}
-                                                    <p>Benefits : {!!$item->contractrate->benefit_policy!!}</p>
+                                                    <p>Benefits : {!! $item->contractrate->benefit_policy !!}</p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                             @endforeach
                         </div>
                         <div class="row">
@@ -166,7 +203,8 @@
                                                     <div>
                                                         <p>Total Room: <span id="totalRoom">0</span></p>
                                                         <input type="text" name="totalroom" value="" hidden>
-                                                        <input type="text" name="vendorid" value="{{$data[0]->contractrate->vendor_id}}" hidden>
+                                                        <input type="text" name="vendorid"
+                                                            value="{{ $data[0]->contractrate->vendor_id }}" hidden>
                                                     </div>
                                                 </div>
                                                 <div class="d-flex justify-content-between">
@@ -177,7 +215,8 @@
                                                 </div>
                                             </div>
                                             <div class="col-lg-6 text-right" style="border-left: 1px solid #ccc;">
-                                                <p>Total Price: <span class="text-danger fs-3 fw-bold">Rp.<span id="totalPrice">0</span></span> </p>
+                                                <p>Total Price: <span class="text-danger fs-3 fw-bold">Rp.<span
+                                                            id="totalPrice">0</span></span> </p>
                                                 <input type="text" name="totalprice" value="" hidden>
                                                 <input type="text" name="totalpricenomarkup" value="" hidden>
                                                 <span style="display: none" id="totalPricenomarkup"></span>
@@ -242,7 +281,8 @@
             var decryptedData = decryptData(encryptedData, key);
             return decryptedData;
         }
-        function checknight(){
+
+        function checknight() {
             var checkinDate = new Date(document.getElementById('checkin').value);
             var checkoutDate = new Date(document.getElementById('checkout').value);
 
@@ -295,15 +335,15 @@
             // Bentuk URL dengan parameter yang diinginkan
             var contractId = '{{ $data[0]->contract_id }}'; // Ganti dengan cara Anda mendapatkan contract_id
             var url = '/homepage/hotel/' + contractId +
-            '?checkin=' + formattedCheckin +
-            '&checkout=' + formattedCheckout +
-            '&person=' + person;
+                '?checkin=' + formattedCheckin +
+                '&checkout=' + formattedCheckout +
+                '&person=' + person;
 
             // Lakukan pengalihan ke halaman yang diinginkan
             window.location.href = url;
         }
 
-        function night(){
+        function night() {
             var checkinDate = new Date(document.getElementById('checkin').value);
             var checkoutDate = new Date(document.getElementById('checkout').value);
 
@@ -346,6 +386,7 @@
             }
 
         }
+
         function calculateTotal() {
             var roomQuantities = document.getElementsByClassName('room-quantity');
             var totalRoomElement = document.getElementById('totalRoom');
@@ -363,7 +404,8 @@
                 var quantity = parseInt(roomQuantities[i].value);
                 var price = parseInt(roomQuantities[i].options[roomQuantities[i].selectedIndex].dataset.price);
 
-                var pricenomarkup = parseInt(roomQuantities[i].options[roomQuantities[i].selectedIndex].dataset.pricenomarkup);
+                var pricenomarkup = parseInt(roomQuantities[i].options[roomQuantities[i].selectedIndex].dataset
+                    .pricenomarkup);
                 var roomId = parseInt(roomQuantities[i].options[roomQuantities[i].selectedIndex].dataset.roomid);
                 var contractId = parseInt(roomQuantities[i].options[roomQuantities[i].selectedIndex].dataset.contractid);
                 var contpricetId = parseInt(roomQuantities[i].options[roomQuantities[i].selectedIndex].dataset.contprice);
@@ -396,7 +438,7 @@
             var decryptedData = getDecryptedDataFromLocalStorage(encryptionKey);
             console.log(decryptedData);
 
-            console.log(totalPrice,totalPricenomarkup,">>>totalnomarkup");
+            console.log(totalPrice, totalPricenomarkup, ">>>totalnomarkup");
             totalRoomElement.textContent = totalRoom;
             var priceintext = parseInt(totalPrice * totalNight.value);
             totalPriceElement.textContent = priceintext.toLocaleString();
@@ -477,57 +519,62 @@
         //     }
         //     }
 
-            // Panggil fungsi setCheckInDateRestriction saat halaman dimuat
-            // window.addEventListener('DOMContentLoaded', setCheckInDateRestriction);
+        // Panggil fungsi setCheckInDateRestriction saat halaman dimuat
+        // window.addEventListener('DOMContentLoaded', setCheckInDateRestriction);
 
-            //==================================================
-            //CODE JQUERY
-            //==================================================
+        //==================================================
+        //CODE JQUERY
+        //==================================================
 
-            // Ketika halaman direload, ambil data dari local storage dan tampilkan ke input
+        // Ketika halaman direload, ambil data dari local storage dan tampilkan ke input
 
 
-            $(document).ready(function() {
-                // Cek apakah ada data di local storage
+        $(document).ready(function() {
+            // Cek apakah ada data di local storage
 
-                // Ambil data terenkripsi dari local storage
-                var encryptionKey = 'KunciEnkripsiRahasia';
-                var decryptedData = getDecryptedDataFromLocalStorage(encryptionKey);
-                console.log(decryptedData,">>>>>>>>decriptdata");
-                // Tampilkan data ke dalam input elemen
-                // $("#checkin").val(decryptedData.checkin);
-                // $("#checkout").val(decryptedData.checkout);
-                // $('input[name="totalroom"]').val(decryptedData.totalroom);
-                // $("#totalprice").val(decryptedData.totalprice);
-                // $('#totalroom').val(decryptedData.totalroom);
-                // $('input[name="totalprice"]').val(decryptedData.totalprice);
-                // $("#person").val(decryptedData.person);
+            // Ambil data terenkripsi dari local storage
+            var encryptionKey = 'KunciEnkripsiRahasia';
+            var decryptedData = getDecryptedDataFromLocalStorage(encryptionKey);
+            console.log(decryptedData, ">>>>>>>>decriptdata");
+            // Tampilkan data ke dalam input elemen
+            // $("#checkin").val(decryptedData.checkin);
+            // $("#checkout").val(decryptedData.checkout);
+            // $('input[name="totalroom"]').val(decryptedData.totalroom);
+            // $("#totalprice").val(decryptedData.totalprice);
+            // $('#totalroom').val(decryptedData.totalroom);
+            // $('input[name="totalprice"]').val(decryptedData.totalprice);
+            // $("#person").val(decryptedData.person);
 
-            });
+        });
 
-            $('.category').change(function() {
+        $('.category').change(function() {
             var nilaiInput = $(this).val();
-            console.log(nilaiInput,">>>>>>nilai select");
+            console.log(nilaiInput, ">>>>>>nilai select");
 
             // Tampilkan loading
-            $('#load').append('<div id="loading" class="d-flex"><div class="loader mx-2"></div><p>Loading...</p></div>');
+            $('#load').append(
+                '<div id="loading" class="d-flex"><div class="loader mx-2"></div><p>Loading...</p></div>');
 
-            if(nilaiInput == 0){
+            if (nilaiInput == 0) {
                 window.location.reload();
-            }else{
+            } else {
                 $.ajax({
-                url: "{{route('hoteldetail.homepage',$data[0]->contract_id)}}",
-                method: 'GET',
-                data: { data:{category:nilaiInput} },
-                success: function(response) {
-                    $('#loading').remove();
-                    $('body').html(response);
-                },
-                error: function(error) {
-                    $('#loading').remove();
-                    console.log('Errorr.');
-                    console.log(error);
-                }
+                    url: "{{ route('hoteldetail.homepage', $data[0]->contract_id) }}",
+                    method: 'GET',
+                    data: {
+                        data: {
+                            category: nilaiInput
+                        }
+                    },
+                    success: function(response) {
+                        $('#loading').remove();
+                        $('body').html(response);
+                    },
+                    error: function(error) {
+                        $('#loading').remove();
+                        console.log('Errorr.');
+                        console.log(error);
+                    }
                 });
             }
         });
@@ -569,7 +616,8 @@
                     console.log(response, "hasil");
                     var id = response[0];
                     localStorage.clear();
-                    window.location.href = "{{ route('booking.agent.detail', ['id' => ':id']) }}".replace(':id', id);
+                    window.location.href = "{{ route('booking.agent.detail', ['id' => ':id']) }}"
+                        .replace(':id', id);
                     // window.location.reload();
                 },
                 error: function(xhr) {
@@ -585,31 +633,42 @@
                 }
             });
         });
-         //==================================================
+        //==================================================
         //CODE JQUERY
         //==================================================
     </script>
 
-     <style>
+    <style>
         .loader {
-          border: 5px solid #8bc1f3;
-          border-radius: 50%;
-          border-top: 5px solid #f78787;
-          width: 20px;
-          height: 20px;
-          -webkit-animation: spin 2s linear infinite; /* Safari */
-          animation: spin 2s linear infinite;
+            border: 5px solid #8bc1f3;
+            border-radius: 50%;
+            border-top: 5px solid #f78787;
+            width: 20px;
+            height: 20px;
+            -webkit-animation: spin 2s linear infinite;
+            /* Safari */
+            animation: spin 2s linear infinite;
         }
 
         /* Safari */
         @-webkit-keyframes spin {
-          0% { -webkit-transform: rotate(0deg); }
-          100% { -webkit-transform: rotate(360deg); }
+            0% {
+                -webkit-transform: rotate(0deg);
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg);
+            }
         }
 
         @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
-        </style>
+    </style>
 @endsection

@@ -2,6 +2,16 @@
 /node_modules
 /public/build
 /public/hot
+/public/agent
+/public/buktitransfer
+/public/feature
+/public/hotel
+/public/images
+/public/logo
+/public/room
+/public/slider
+/public/widraw
+/public/img
 /public/storage
 /storage/*.key
 /vendor
