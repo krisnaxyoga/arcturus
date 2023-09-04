@@ -1,7 +1,45 @@
 @extends('layouts.landing')
 @section('title', 'Hotel')
 @section('contents')
-
+<style>
+    .slidecontainer {
+      width: 100%;
+    }
+    
+    .slider {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 25px;
+      background: #d3d3d3;
+      outline: none;
+      opacity: 0.7;
+      -webkit-transition: .2s;
+      transition: opacity .2s;
+      border-radius: 17px;
+    }
+    
+    .slider:hover {
+      opacity: 1;
+    }
+    
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 25px;
+      height: 25px;
+      background:  #f15d30;
+      cursor: pointer;
+      border-radius: 17px;
+    }
+    
+    .slider::-moz-range-thumb {
+      width: 25px;
+      height: 25px;
+      background:  #f15d30;
+      cursor: pointer;
+      border-radius: 17px;
+    }
+    </style>
 
 <section class="hero-wrap hero-wrap-2" style="background-image: url('/landing/travel/images/bg_1.jpg'); height:300px">
     <div class="overlay" style="height: 300px"></div>
@@ -22,49 +60,38 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="search-wrap-1 ftco-animate">
-                    <form action="{{route('hotel.homepage')}}" method="get" class="search-property-1">
-                        @csrf
-                        <div class="row no-gutters">
+                    <form action="{{ route('hotel.homepage') }}" method="get"
+                    class="search-property-1">
+                    @csrf
+                    <div class="g-field-search">
+                        <div class="row">
                             <div class="col-md d-flex">
-                                <div class="form-group p-4 border-0">
-                                    <label for="#">Country</label>
-                                    <div class="form-field">
-                                        <div class="select-wrap">
-                                            <div class="icon"><span class="fa fa-chevron-down"></span></div>
-                                             <select name="country" id=""  class="form-control">
-                                            <option value="">{{ __('-- Select --') }}</option>
-                                            @foreach (get_country_lists() as $id => $name)
-                                                <option @if (($requestdata['country'] ?? '') == $name) selected @endif value="{{ $name }}">{{ $name }}</option>
-                                            @endforeach
-                                        </select>
-                                        </div>
-                                    </div>
+                                <div class="form-group border-0 mb-3 mt-2 mx-2">
+                                    <label class="pl-3 mt-3" for="">country</label>
+                                    <select name="country" id=""
+                                    class="form-control ">
+                                    <option value="">{{ __('-- Select --') }}
+                                    </option>
+                                    @foreach (get_country_lists() as $id => $name)
+                                        <option @if (($requestdata['country'] ?? '') == $name) selected @endif value="{{ $name }}">{{ $name }}</option>
+                                    @endforeach
+                                </select>
                                 </div>
                             </div>
                             <div class="col-md d-flex">
-                                <div class="form-group p-4 border-0">
-                                    <label for="#">State</label>
+                                <div class="form-group mb-3 mt-2 mx-2">
+                                    <label class="pl-3 mt-3" for="#">State</label>
                                     <div class="form-field">
                                         {{-- <div class="icon"><span class="fa fa-search"></span></div> --}}
                                         <input value="{{ $requestdata['state'] }}" type="text" name="state" class="form-control" placeholder="state...">
                                     </div>
                                 </div>
                             </div>
-                            <!--<div class="col-md d-flex">-->
-                            <!--    <div class="form-group p-4 border-0">-->
-                            <!--        <label for="#">City</label>-->
-                            <!--        <div class="form-field">-->
-                            <!--            {{-- <div class="icon"><span class="fa fa-search"></span></div> --}}-->
-                            <!--            <input type="text" name="city" class="form-control" placeholder="city...">-->
-                            <!--        </div>-->
-                            <!--    </div>-->
-                            <!--</div>-->
                             <div class="col-md d-flex">
-                                <div class="form-group p-4">
-                                    <label for="#">Check-in</label>
+                                <div class="form-group mb-3 mt-2 mx-2">
+                                    <label class="pl-3 mt-3" for="#">Check-in</label>
                                     <div class="form-field">
-                                        <div class="icon"><span class="fa fa-calendar"></span>
-                                        </div>
+
                                         <input value="{{ $requestdata['checkin'] }}" type="date" name="checkin"
                                             class="form-control checkindate"
                                             placeholder="Check In Date">
@@ -72,11 +99,10 @@
                                 </div>
                             </div>
                             <div class="col-md d-flex">
-                                <div class="form-group p-4">
-                                    <label for="#">Check-out</label>
+                                <div class="form-group mb-3 mt-2 mx-2">
+                                    <label class="pl-3 mt-3" for="#">Check-out</label>
                                     <div class="form-field">
-                                        <div class="icon"><span class="fa fa-calendar"></span>
-                                        </div>
+
                                         <input value="{{ $requestdata['checkout'] }}" type="date" name="checkout"
                                             class="form-control checkoutdate"
                                             placeholder="Check Out Date">
@@ -84,36 +110,32 @@
                                 </div>
                             </div>
                             <div class="col-md d-flex">
-                                <div class="form-group p-4">
-                                    <label for="#">Person</label>
-                                    <div class="form-field">
-                                        <div class="select-wrap">
-                                            <div class="icon"><span class="fa fa-chevron-down"></span></div>
-                                            <select name="person" id="" class="form-control">
-                                                <option  @if (($requestdata['person'] ?? '') == 1) selected @endif value="1">1</option>
-                                                <option @if (($requestdata['person'] ?? '') == 2) selected @endif value="2">2</option>
-                                                <option @if (($requestdata['person'] ?? '') == 3) selected @endif value="3">3</option>
-                                                <option @if (($requestdata['person'] ?? '') == 4) selected @endif value="4">4</option>
-                                            </select>
-                                        </div>
-                                    </div>
+                                <div class="form-group mb-3 mt-2 mx-2">
+                                    <label class="pl-3 mt-3" for="#">Person</label>
+                                    <select name="person" id="" class="form-control">
+                                        <option  @if (($requestdata['person'] ?? '') == 1) selected @endif value="1">1</option>
+                                        <option @if (($requestdata['person'] ?? '') == 2) selected @endif value="2">2</option>
+                                        <option @if (($requestdata['person'] ?? '') == 3) selected @endif value="3">3</option>
+                                        <option @if (($requestdata['person'] ?? '') == 4) selected @endif value="4">4</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md d-flex">
-                                <div class="form-group d-flex w-100 border-0">
-                                    <div class="form-field w-100 align-items-center d-flex">
-                                        {{-- <input value="{{ $requestdata['country'] }}" name="country" type="hidden">
-                                        <input value="{{ $requestdata['state'] }}" name="state" type="hidden">
-                                        <input value="{{ $requestdata['checkin'] }}" name="checkin" type="hidden">
-                                        <input value="{{ $requestdata['checkout'] }}" name="checkout" type="hidden">
-                                        <input value="{{ $requestdata['person'] }}" name="person" type="hidden"> --}}
-
-                                        <input type="submit" value="Search" class="align-self-stretch form-control btn btn-primary">
+                                {{-- <div class="form-group border-0">
+                                    <div style="height: 7rem" class="form-field align-items-center">
+                                        <input type="submit" value="Search"
+                                        class="form-control btn btn-primary">
                                     </div>
-                                </div>
+                                </div> --}}
+                                <button class="btn btn-primary w-100 rounded-0" type="submit">
+                                    search
+                                </button>
                             </div>
                         </div>
-                    </form>
+
+                    </div>
+                </form>
+                    
                 </div>
             </div>
         </div>
@@ -132,7 +154,7 @@
                 <div class="col-lg-3">
                     <div class="card">
                         <div class="card-body">
-                            <p style="color: #1a2b48;
+                            <p class="m-0" style="color: #1a2b48;
                             font-size: 20px;
                             font-weight: 500;
                         ">Filter By</p>
@@ -140,21 +162,42 @@
                     </div>
                     <div class="card">
                         <div class="card-body">
-                            <a class="text-dark" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                            <a class="text-secondary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
                                 Filter Price
                               </a>
-                              <div class="collapse active" id="collapseExample">
+                              <div class="collapse show" id="collapseExample">
                                 <div>
                                     <form method="post" action="/action_page_post.php">
                                         <div data-role="rangeslider">
-                                          <label for="price-min">Price:</label>
-                                          <input type="range" name="price-min" id="price-min" value="200" min="0" max="1000">
-                                          <label for="price-max">Price:</label>
-                                          <input type="range" name="price-max" id="price-max" value="800" min="0" max="1000">
+                                          <label for="price-min">Range:</label>
+                                          <input type="range" min="1000000" max="10000000" value="5000000" class="slider" id="myRange">
+                                          <p>Value: <span id="demo"></span></p>
                                         </div>
                                           <input class="btn btn-secondary" type="submit" data-inline="true" value="Submit">
                                          </form>
 
+                                </div>
+                              </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <a class="text-secondary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                Property type
+                              </a>
+                              <div class="collapse show" id="collapseExample">
+                                <div>
+                                    <form action="/action_page.php">
+                                        <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
+                                        <label for="vehicle1"> Hotels</label><br>
+                                        <input type="checkbox" id="vehicle2" name="vehicle2" value="Car">
+                                        <label for="vehicle2"> Villas</label><br>
+                                        <input type="checkbox" id="vehicle2" name="vehicle2" value="Car">
+                                        <label for="vehicle2"> Apartements</label><br>
+                                        <input type="checkbox" id="vehicle3" name="vehicle3" value="Boat">
+                                        <label for="vehicle3"> Resorts</label><br><br>
+                                        <input class="btn btn-secondary" type="submit" value="Submit">
+                                      </form>
                                 </div>
                               </div>
                         </div>
@@ -342,5 +385,13 @@
         });
     });
 </script>
-
+<script>
+    var slider = document.getElementById("myRange");
+    var output = document.getElementById("demo");
+    output.innerHTML = slider.value;
+    
+    slider.oninput = function() {
+      output.innerHTML = this.value;
+    }
+    </script>
 @endsection

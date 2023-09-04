@@ -58,26 +58,45 @@
                                 <div class="col-lg-3">
                                     <div class="card mb-3">
                                         <div class="card-body">
-                                            <div class="d-flex">
-                                                <img class="img-fluid" style="max-width: 80px; max-height:100px;"
+                                            
+                                                <img class="img-fluid" style="max-width: 80px; max-height:80px;"
                                                     src="{{ $vendordetail->logo_img ?? asset('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjCX5TOKkOk3MBt8V-f8PbmGrdLHCi4BoUOs_yuZ1pekOp8U_yWcf40t66JZ4_e_JYpRTOVCl0m8ozEpLrs9Ip2Cm7kQz4fUnUFh8Jcv8fMFfPbfbyWEEKne0S9e_U6fWEmcz0oihuJM6sP1cGFqdJZbLjaEQnGdgJvcxctqhMbNw632OKuAMBMwL86/s414/pp%20kosong%20wa%20default.jpg') }}"
                                                     alt="Profile Image">
 
                                                 <div>
-                                                    <p>{{ $vendordetail->vendor_name }}</p>
-                                                    <p>Member since
+                                                    <p class="m-0" style="font-weight: 700;sont-size:14px">{{ $vendordetail->vendor_name }}</p>
+                                                    <p>Member since <br>
                                                         {{ \Carbon\Carbon::parse($vendordetail->created_at)->format('F Y') }}
                                                     </p>
 
                                                 </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <h3>Description</h3>
+                                    <p>
+                                        Built in 1986, Hotel Stanford is a distinct addition to New York (NY) and a smart choice for travelers. The excitement of the city center is only 0 KM away. No less exceptional is the hotel’s easy access to the city’s myriad attractions and landmarks, such as Toto Music Studio, British Virgin Islands Tourist Board, L’Atelier Du Chocolat. Start and end in San Francisco! With the in-depth cultural tour Northern California Summer 2019, you have a 8 day tour package taking you through San Francisco, USA and 9 other destinations in USA. Northern California Summer 2019 includes accommodation as well as an expert guide, meals, transport and more.
+                                    </p>
+                                </div>
+                                <div class="col-lg-12">
+                                    <h3>HIGHLIGHTS</h3>
+                                    <ul>
+                                        <li>Visit the Museum of Modern Art in Manhattan</li>
+                                        <li>See amazing works of contemporary art, including Vincent van Gogh's The Starry Night</li>
+                                        <li>Check out Campbell's Soup Cans by Warhol and The Dance (I) by Matisse</li>
+                                        <li>Behold masterpieces by Gauguin, Dali, Picasso, and Pollock</li>
+                                        <li>Enjoy free audio guides available in English, French, German, Italian, Spanish, Portuguese</li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                </div>
+                <div class="col-lg-12">
+                    <h3>  Available Rooms</h3>
                 </div>
             </div>
             <div class="row">
@@ -89,7 +108,7 @@
                                 <div class="col-md d-flex">
                                     <div class="form-group p-4">
                                         <label for="#">Check-in</label>
-                                        <div class="form-field">
+                                        <div class="">
                                             <input value="{{ $datareq['checkin'] }}" onchange="checknight()" type="date"
                                                 id="checkin" name="checkin" class="form-control checkindate"
                                                 placeholder="Check In Date" required>
@@ -99,7 +118,7 @@
                                 <div class="col-md d-flex">
                                     <div class="form-group p-4">
                                         <label for="#">Check-out</label>
-                                        <div class="form-field">
+                                        <div class="">
                                             <input value="{{ $datareq['checkout'] }}" onchange="checknight()" id="checkout"
                                                 type="date" name="checkout" class="form-control checkoutdate"
                                                 placeholder="Check Out Date" required>
@@ -109,9 +128,7 @@
                                 <div class="col-md d-flex">
                                     <div class="form-group p-4" style="    border-right: 1px solid rgba(0, 0, 0, 0.1);">
                                         <label for="#">Person</label>
-                                        <div class="form-field">
-                                            <div class="select-wrap">
-                                                <div class="icon"><span class="fa fa-chevron-down"></span></div>
+                                        <div class="">
                                                 <select name="person" id="person" class="form-control" required>
                                                     <option @if (($datareq['person'] ?? '') == 1) selected @endif
                                                         value="1">1</option>
@@ -122,7 +139,6 @@
                                                     <option @if (($datareq['person'] ?? '') == 4) selected @endif
                                                         value="4">4</option>
                                                 </select>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -131,7 +147,7 @@
                         </div>
 
                         <div class="row">
-                            @foreach ($data as $item)
+                            @foreach ($data as $key=>$item)
                                 <div class="col-md-12 ftco-animate">
                                     <div class="card mb-3">
                                         <div class="row g-0">
@@ -150,6 +166,8 @@
 
                                                     <span class="price">Rp.
                                                         {{ number_format($item->recom_price + $item->contractrate->vendors->system_markup, 0, ',', '.') }}</span>
+                                                       
+                                                        
                                                     <p class="card-text"><small class="text-body-secondary"></small></p>
                                                     {{-- @if ($item->room->room_allow <= 0 || $blackoutVendorIds->contains($item->contractrate->vendors->id)) --}}
                                                     @if ($item->room->room_allow <= 0)
@@ -186,6 +204,54 @@
                                                         @endforeach
                                                     @endif --}}
                                                     <p>Benefits : {!! $item->contractrate->benefit_policy !!}</p>
+                                                    {{-- {{$contractprice}} --}}
+                                                    @if($contractprice->count() != 0)
+                                                    <a class="text-primary" style="font-size:14px" data-toggle="collapse" href="#collapseExample{{$key}}" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                                        View More Rate
+                                                      </a>
+                                                      <div class="collapse" id="collapseExample{{$key}}">
+                                                        <div>
+                                                            
+                                                            @foreach ($contractprice as $itemprice)
+                                                                @if($itemprice->room_id == $item->room->id)
+                                                                
+                                                                <hr>
+                                                                <p style="font-size:20px;font-weight:700" class="m-0 p-0">{{$itemprice->contractrate->codedesc}}</p> 
+                                                                @foreach ($itemprice->contractrate->distribute as $distribute)
+                                                                     <span class="badge badge-secondary mx-1">{{$distribute}}</span>
+                                                                @endforeach
+                                                                <p>Min Stay : {{$itemprice->contractrate->min_stay}} /night</p>
+                                                                <span class="price">Rp.
+                                                                    {{ number_format($itemprice->recom_price + $itemprice->contractrate->vendors->system_markup, 0, ',', '.') }}</span>
+                                                                    @if ($itemprice->room->room_allow <= 0)
+                                                                        <span class="badge badge-danger">Sold</span>
+                                                                    @else
+                                                                        <select class="form-control room-quantity" name="room_quantity"
+                                                                            style="width:200px" onchange="calculateTotal()">
+                                                                            <option data-price="0" value="0" data-pricenomarkup="0">
+                                                                                0</option>
+                                                                            @for ($i = 1; $i <= $itemprice->room->room_allow; $i++)
+                                                                                {{-- <option data-contprice={{$itemprice->id}} data-contractid={{$itemprice->contract_id}} data-roomid={{$itemprice->room->id}} data-price="{{($i * ($itemprice->recom_price + $itemprice->contractrate->vendors->system_markup + $surcharprice)) }}" value="{{$i}}">{{$i}} @if ($i == 1) room @else rooms @endif </option> --}}
+                                                                                <option data-contprice={{ $itemprice->id }}
+                                                                                    data-contractid={{ $itemprice->contract_id }}
+                                                                                    data-roomid={{ $itemprice->room->id }}
+                                                                                    data-price="{{ $i * ($itemprice->recom_price + $itemprice->contractrate->vendors->system_markup) }}"
+                                                                                    data-pricenomarkup="{{ $i * $itemprice->recom_price }}"
+                                                                                    value="{{ $i }}">{{ $i }}
+                                                                                    @if ($i == 1)
+                                                                                        room
+                                                                                    @else
+                                                                                        rooms
+                                                                                    @endif
+                                                                                </option>
+                                                                            @endfor
+                                                                        </select>
+                                                                    @endif
+                                                                @endif
+                                                            @endforeach
+                                                        </div>
+                                                      </div>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -228,6 +294,37 @@
                             </div>
                         </div>
                     </form>
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="row my-3">
+                                <div class="col-lg-12">
+                                    <h3>Rules</h3> 
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-lg-4">
+                                   <p style="font-size: 20px;
+                                   margin-bottom: 5px;">Hotel Policies</p> 
+                                </div>
+                                <div class="col-lg-8">
+                                    <p style="font-size: 15px;
+                                    font-weight: 700;
+                                    margin-bottom: 5px;">Benefit</p>
+                                    {!!$data[0]->contractrate->benefit_policy!!}
+                                    <p style="font-size: 15px;
+                                    font-weight: 700;
+                                    margin-bottom: 5px;">Deposit</p>
+                                    {!!$data[0]->contractrate->deposit_policy!!}
+                                    <p style="font-size: 15px;
+                                    font-weight: 700;
+                                    margin-bottom: 5px;">Cencellation</p>
+                                    {!!$data[0]->contractrate->cencellation_policy!!}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -108,28 +108,29 @@ class HomeController extends Controller
                 });
             });
         })
+        ->whereHas('contractrate', function ($query) use ($totalNights) {
+            $query->where(function ($subquery) use ($totalNights) {
+                $subquery->where('min_stay', '=', 1);
+            });
+            
+        })
         // ->whereHas('contractrate', function ($query) use ($totalNights) {
+        //     $minstay = ContractRate::where('min_stay', '<=', $totalNights)
+        //         ->orderBy('min_stay', 'desc')
+        //         ->first();
+
+        //     if ($minstay) {
+        //         $totalNights = $minstay->min_stay;
+        //     }
+
         //     $query->where(function ($subquery) use ($totalNights) {
         //         $subquery->where('min_stay', '>=', $totalNights);
+        //         // Tambahan: Kondisi stay period
+        //         $subquery->whereDate('stayperiod_begin', '<=', now())
+        //         ->whereDate('stayperiod_end', '>=', now());
         //     });
+        //     // $query->where('rolerate', 1);
         // })
-        ->whereHas('contractrate', function ($query) use ($totalNights) {
-            $minstay = ContractRate::where('min_stay', '<=', $totalNights)
-                ->orderBy('min_stay', 'desc')
-                ->first();
-
-            if ($minstay) {
-                $totalNights = $minstay->min_stay;
-            }
-
-            $query->where(function ($subquery) use ($totalNights) {
-                $subquery->where('min_stay', '>=', $totalNights);
-                // Tambahan: Kondisi stay period
-                $subquery->whereDate('stayperiod_begin', '<=', now())
-                ->whereDate('stayperiod_end', '>=', now());
-            });
-
-        })
         // ->whereHas('room', function ($query) use ($request) {
         //     $query->when($request->person, function ($q, $person) {
         //         return $q->where('adults', '>=', $person);
@@ -287,6 +288,15 @@ class HomeController extends Controller
                 ->get();
         }
 
+        $contractprice = ContractPrice::where('user_id', $vendor[0]->user_id)
+            ->with('contractrate')
+            ->with('contractrate.vendors')
+            ->with('room')
+            ->whereHas('contractrate', function ($query) {
+                $query->where('rolerate', '=', 2);
+            })
+            ->get();
+
         $slider = Slider::where('user_id',$vendor[0]->user_id)->get();
 
         if (isset($datareq['checkin']) && isset($datareq['checkout'])) {
@@ -431,7 +441,7 @@ class HomeController extends Controller
         $data = $vendor;
         // return view('landingpage.hotel.detail',compact('data','roomtype','service','vendordetail','datareq','surcharprice','surchargesVendorIds','blackoutVendorIds'));
 
-        return view('landingpage.hotel.detail',compact('data','slider','roomtype','service','vendordetail','datareq'));
+        return view('landingpage.hotel.detail',compact('data','slider','roomtype','service','vendordetail','datareq','contractprice'));
     }
 
 

@@ -20,6 +20,8 @@ function type_vendor(){
 function get_country_lists(){
     $countries = array
     (
+        
+        'ID' => 'Indonesia',
         'AF' => 'Afghanistan',
         'AX' => 'Aland Islands',
         'AL' => 'Albania',
@@ -121,7 +123,6 @@ function get_country_lists(){
         'HU' => 'Hungary',
         'IS' => 'Iceland',
         'IN' => 'India',
-        'ID' => 'Indonesia',
         'IR' => 'Iran, Islamic Republic Of',
         'IQ' => 'Iraq',
         'IE' => 'Ireland',
