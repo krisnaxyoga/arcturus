@@ -62,7 +62,7 @@
                                 <div class="col-lg-3">
                                     <div class="card mb-3">
                                         <div class="card-body">
-                                            
+
                                                 <img class="img-fluid" style="max-width: 80px; max-height:80px;"
                                                     src="{{ $vendordetail->logo_img ?? asset('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjCX5TOKkOk3MBt8V-f8PbmGrdLHCi4BoUOs_yuZ1pekOp8U_yWcf40t66JZ4_e_JYpRTOVCl0m8ozEpLrs9Ip2Cm7kQz4fUnUFh8Jcv8fMFfPbfbyWEEKne0S9e_U6fWEmcz0oihuJM6sP1cGFqdJZbLjaEQnGdgJvcxctqhMbNw632OKuAMBMwL86/s414/pp%20kosong%20wa%20default.jpg') }}"
                                                     alt="Profile Image">
@@ -82,18 +82,14 @@
                                 <div class="col-lg-12">
                                     <h3>Description</h3>
                                     <p>
-                                        Built in 1986, Hotel Stanford is a distinct addition to New York (NY) and a smart choice for travelers. The excitement of the city center is only 0 KM away. No less exceptional is the hotel’s easy access to the city’s myriad attractions and landmarks, such as Toto Music Studio, British Virgin Islands Tourist Board, L’Atelier Du Chocolat. Start and end in San Francisco! With the in-depth cultural tour Northern California Summer 2019, you have a 8 day tour package taking you through San Francisco, USA and 9 other destinations in USA. Northern California Summer 2019 includes accommodation as well as an expert guide, meals, transport and more.
+                                        {{ $vendordetail->description }}
                                     </p>
                                 </div>
                                 <div class="col-lg-12">
                                     <h3>HIGHLIGHTS</h3>
-                                    <ul>
-                                        <li>Visit the Museum of Modern Art in Manhattan</li>
-                                        <li>See amazing works of contemporary art, including Vincent van Gogh's The Starry Night</li>
-                                        <li>Check out Campbell's Soup Cans by Warhol and The Dance (I) by Matisse</li>
-                                        <li>Behold masterpieces by Gauguin, Dali, Picasso, and Pollock</li>
-                                        <li>Enjoy free audio guides available in English, French, German, Italian, Spanish, Portuguese</li>
-                                    </ul>
+                                    <p>
+                                        {{ $vendordetail->highlight }}
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -186,8 +182,8 @@
 
                                                     <span class="price">Rp.
                                                         {{ number_format($item->recom_price + $item->contractrate->vendors->system_markup, 0, ',', '.') }} / night</span>
-                                                       
-                                                        
+
+
                                                     <p class="card-text"><small class="text-body-secondary"></small></p>
                                                     {{-- @if ($item->room->room_allow <= 0 || $blackoutVendorIds->contains($item->contractrate->vendors->id)) --}}
                                                     @if ($item->room->room_allow <= 0)
@@ -231,12 +227,12 @@
                                                       </a>
                                                       <div class="collapse" id="collapseExample{{$key}}">
                                                         <div>
-                                                            
+
                                                             @foreach ($contractprice as $itemprice)
                                                                 @if($itemprice->room_id == $item->room->id)
-                                                                
+
                                                                 <hr>
-                                                                <p style="font-size:20px;font-weight:700" class="m-0 p-0">{{$itemprice->contractrate->codedesc}}</p> 
+                                                                <p style="font-size:20px;font-weight:700" class="m-0 p-0">{{$itemprice->contractrate->codedesc}}</p>
                                                                 @foreach ($itemprice->contractrate->distribute as $distribute)
                                                                      <span class="badge badge-secondary mx-1">{{$distribute}}</span>
                                                                 @endforeach
@@ -321,14 +317,14 @@
                         <div class="col-lg-12">
                             <div class="row my-3">
                                 <div class="col-lg-12">
-                                    <h3>Rules</h3> 
+                                    <h3>Rules</h3>
                                 </div>
                             </div>
-                            
+
                             <div class="row">
                                 <div class="col-lg-4">
                                    <p style="font-size: 20px;
-                                   margin-bottom: 5px;">Hotel Policies</p> 
+                                   margin-bottom: 5px;">Hotel Policies</p>
                                 </div>
                                 <div class="col-lg-8">
                                     <p style="font-size: 15px;
@@ -764,7 +760,7 @@
             // Mengambil tanggal checkin dan checkout dari Date Range Picker
             const checkin = picker.startDate.format('YYYY-MM-DD');
             const checkout = picker.endDate.format('YYYY-MM-DD');
-            
+
             // Memperbarui nilai input tanggal checkin dan checkout
             $('input[name="checkin"]').val(checkin);
             $('input[name="checkout"]').val(checkout);

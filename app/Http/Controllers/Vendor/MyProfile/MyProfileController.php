@@ -20,6 +20,7 @@ class MyProfileController extends Controller
     public function index()
     {
         $country = get_country_lists();
+        $property = type_property();
         $iduser = auth()->user()->id;
         $data = Vendor::with('users')->where('user_id',$iduser)->get();
         // dd($data, $iduser);
@@ -32,7 +33,8 @@ class MyProfileController extends Controller
             'country'=> $country,
             'markup' => $markup,
             'banner' => $slider,
-            'vendor' => $vendor
+            'vendor' => $vendor,
+            'property' => $property,
         ]);
     }
 
@@ -90,6 +92,9 @@ class MyProfileController extends Controller
             $member->bank_address = $request->bankaddress;
             $member->account_number = $request->accountnumber;
             $member->email_reservation = $request->email_reservation;
+            $member->highlight = $request->highlight;
+            $member->description = $request->description;
+            $member->type_property = $request->type_property;
             // $member->email = $request->email;
             $member->save();
 

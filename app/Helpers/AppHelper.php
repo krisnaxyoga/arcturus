@@ -17,10 +17,29 @@ function type_vendor(){
     return $type;
 }
 
+function type_property(){
+    $type = array
+    (
+        'AT' => 'Apartments',
+        'HT' =>'Hotels',
+        'HS' =>'Homestays',
+        'VS' =>'Villas',
+        'BT' =>'Boats',
+        'MT' =>'Motels',
+        'RS' =>'Resorts',
+        'LG' =>'Lodges',
+        'HH' =>'Holiday homes',
+        'CZ' =>'Cruises',
+    );
+
+    return $type;
+}
+
+
 function get_country_lists(){
     $countries = array
     (
-        
+
         'ID' => 'Indonesia',
         'AF' => 'Afghanistan',
         'AX' => 'Aland Islands',

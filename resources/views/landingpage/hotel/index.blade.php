@@ -10,7 +10,7 @@
     .slidecontainer {
       width: 100%;
     }
-    
+
     .slider {
       -webkit-appearance: none;
       width: 100%;
@@ -22,11 +22,11 @@
       transition: opacity .2s;
       border-radius: 17px;
     }
-    
+
     .slider:hover {
       opacity: 1;
     }
-    
+
     .slider::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
@@ -36,7 +36,7 @@
       cursor: pointer;
       border-radius: 17px;
     }
-    
+
     .slider::-moz-range-thumb {
       width: 25px;
       height: 25px;
@@ -156,7 +156,7 @@
 
                     </div>
                 </form>
-                    
+
                 </div>
             </div>
         </div>
@@ -209,14 +209,11 @@
                               <div class="collapse show" id="collapseExample">
                                 <div>
                                     <form action="/action_page.php">
-                                        <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
-                                        <label for="vehicle1"> Hotels</label><br>
-                                        <input type="checkbox" id="vehicle2" name="vehicle2" value="Car">
-                                        <label for="vehicle2"> Villas</label><br>
-                                        <input type="checkbox" id="vehicle2" name="vehicle2" value="Car">
-                                        <label for="vehicle2"> Apartements</label><br>
-                                        <input type="checkbox" id="vehicle3" name="vehicle3" value="Boat">
-                                        <label for="vehicle3"> Resorts</label><br><br>
+                                        @foreach (type_property() as $id => $name)
+                                        <input type="checkbox" id="vehicle1{{ $id }}" name="vehicle1{{ $id }}" value="{{ $name }}">
+                                        <label for="vehicle1{{ $id }}"> {{ $name }}</label><br>
+                                            {{-- <option @if (($requestdata['country'] ?? '') == $name) selected @endif value="{{ $name }}">{{ $name }}</option> --}}
+                                        @endforeach
                                         <input class="btn btn-secondary" type="submit" value="Submit">
                                       </form>
                                 </div>
@@ -268,11 +265,11 @@
 
                                         <p class="location"><span class="fa fa-map-marker"></span> {{$item->contractrate->vendors->city}},{{$item->contractrate->vendors->state}}, {{$item->contractrate->vendors->country}}</p>
                                         <div class="d-flex">
-                                           <p><span class="flaticon-381-user-7"><i class="fa fa-user"></i></span> {{$item->room->adults}}</p> 
+                                           <p><span class="flaticon-381-user-7"><i class="fa fa-user"></i></span> {{$item->room->adults}}</p>
                                             @if($item->room->extra_bed != 0)
-                                           <p class="mx-4"><span class="flaticon-king-size"></span> {{$item->room->extra_bed}}</p> 
+                                           <p class="mx-4"><span class="flaticon-king-size"></span> {{$item->room->extra_bed}}</p>
                                             @endif
-                                            
+
                                         </div>
                                         <p class="m-0"><i class="fa fa-trophy" aria-hidden="true"></i> Benefits :
                                             @if (strlen($item->contractrate->benefit_policy) > 40)
@@ -297,7 +294,7 @@
                                         font-weight: 400;">
                                             /Night
                                         </span>
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -321,7 +318,7 @@
 
     </section>
 
-    
+
 
     {{-- <section class="ftco-intro ftco-section ftco-no-pt">
         <div class="container">
@@ -419,7 +416,7 @@
     var slider = document.getElementById("myRange");
     var output = document.getElementById("demo");
     output.innerHTML = slider.value;
-    
+
     slider.oninput = function() {
       output.innerHTML = this.value;
     }
@@ -432,7 +429,7 @@
             // Mengambil tanggal checkin dan checkout dari Date Range Picker
             const checkin = picker.startDate.format('YYYY-MM-DD');
             const checkout = picker.endDate.format('YYYY-MM-DD');
-            
+
             // Memperbarui nilai input tanggal checkin dan checkout
             $('input[name="checkin"]').val(checkin);
             $('input[name="checkout"]').val(checkout);

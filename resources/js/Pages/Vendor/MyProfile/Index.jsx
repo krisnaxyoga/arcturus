@@ -12,10 +12,11 @@ import { Inertia } from '@inertiajs/inertia';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 
-export default function Index({ session,data,country,vendor,markup,banner }) {
- console.log(data,">>>>>>>data user");
+export default function Index({ session,data,country,vendor,markup,banner,property }) {
+//  console.log(data,">>>>>>>data user");
  const { url } = usePage();
  const [selectcountry,setCountry] = useState('');
+ const [type_property,setProperty] = useState('');
  const [busisnessname,setBusisness] = useState('');
  const [email,setEmail] = useState('');
  const [firstname,setFirstName] = useState('');
@@ -26,6 +27,8 @@ export default function Index({ session,data,country,vendor,markup,banner }) {
  const [address2,setAddress2] = useState('');
  const [city,setCity] = useState('');
  const [state,setState] = useState('');
+ const [description,setDesc] = useState('');
+ const [highlight,setHight] = useState('');
 
  const [taxValue, setTaxValue] = useState('');
  const [bankname, setBankName] = useState('');
@@ -64,6 +67,9 @@ export default function Index({ session,data,country,vendor,markup,banner }) {
         formData.append('address2', address2 ? address2 : data[0].address_line2);
         formData.append('city', city ? city : data[0].city);
         formData.append('state', state ? state : data[0].state);
+        formData.append('description', description ? description : data[0].description);
+        formData.append('highlight', highlight ? highlight : data[0].highlight);
+        formData.append('type_property', type_property ? type_property : data[0].type_property);
 
         formData.append('tax', taxValue ? taxValue : markup.tax);
         formData.append('bank', bankname ? bankname : data[0].bank_name);
@@ -141,7 +147,7 @@ export default function Index({ session,data,country,vendor,markup,banner }) {
                                                     <input defaultValue={data[0].email_reservation} onChange={(e)=>setEmailReservation(e.target.value)} type="email" inputMode="email" className="form-control" placeholder="E-mail" aria-label="email" aria-describedby="basic-addon1"/>
                                                 </div>
                                                 </div>
-                                                
+
 
                                                     <div className="d-flex">
                                                         <div className='mr-2'>
@@ -180,6 +186,8 @@ export default function Index({ session,data,country,vendor,markup,banner }) {
                                                     <div className="mb-3">
                                                         <img style={{width:"100px"}} src={data[0].logo_img||'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Image_not_available.png/640px-Image_not_available.png'} alt="" />
                                                     </div>
+
+
                                                 </div>
                                                 <div className="col-lg-6">
                                                     <p style={{fontWeight:"bold"}}>Location Information</p>
@@ -214,6 +222,14 @@ export default function Index({ session,data,country,vendor,markup,banner }) {
                                                             {/* <p style={{ fontSize:'11px' }} className='text-danger'>if you want to change country, you must send an email to admin@arcturus.my.id</p> */}
 
                                                         </div>
+                                                    </div>
+                                                    <div className="mb-3">
+                                                        <label htmlFor="">Property Type</label>
+                                                         <select required onChange={(e)=>setProperty(e.target.value)} className="form-control" aria-label="Default select example">
+                                                            {Object.keys(property).map(key => (
+                                                                <option key={key} selected={property[key] === data[0].type_property} value={property[key]}>{property[key]}</option>
+                                                            ))}
+                                                        </select>
                                                     </div>
                                                     <div className='mb-3'>
                                                         <label for="Lastname" className="form-label">Country <span className='text-danger'>*</span></label>
@@ -251,6 +267,19 @@ export default function Index({ session,data,country,vendor,markup,banner }) {
                                                             <input type="text" className="form-control" placeholder="Zip code" aria-label="busisnessname" aria-describedby="basic-addon1"/>
                                                         </div>
                                                     </div> */}
+
+                                                </div>
+                                            </div>
+                                            <div className="row">
+                                                <div className="col-lg-12">
+                                                    <div className="mb-3">
+                                                        <label htmlFor="">Highlight</label>
+                                                        <textarea onChange={(e)=>setHight(e.target.value)} className='form-control' cols="30" rows="10">{data[0].highlight}</textarea>
+                                                    </div>
+                                                    <div className="mb-3">
+                                                        <label htmlFor="">Description</label>
+                                                        <textarea onChange={(e)=>setDesc(e.target.value)} className='form-control' cols="30" rows="10">{data[0].description}</textarea>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <hr />
