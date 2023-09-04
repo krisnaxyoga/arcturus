@@ -7,12 +7,14 @@ use App\Models\User;
 use App\Models\Agent;
 use App\Models\Vendor;
 use App\Models\Role;
+use App\Models\Setting;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 use App\Mail\ForgotPassword;
+use App\Mail\RegisterNotif;
 
 class AuthController extends Controller
 {
@@ -103,6 +105,8 @@ class AuthController extends Controller
             $member->is_active = 0;
             $member->save();
 
+            $Setting = Setting::where('id',1)->first();
+            Mail::to($Setting->email)->send(new RegisterNotif($data, $member));
 
             // update vendor_id in tabel users where id = $data->id
             $user = User::find($data->id);
@@ -157,6 +161,10 @@ class AuthController extends Controller
             $user->vendor_id = $member->id;
             $user->save();
             // dd($member->id);
+
+            $Setting = Setting::where('id',1)->first();
+            Mail::to($Setting->email)->send(new RegisterNotif($data, $member));
+            
             return redirect()
                 ->route('login')
                 ->with('message', 'register success');

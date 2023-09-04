@@ -75,6 +75,7 @@ class BookingController extends Controller
 
 
         Mail::to($booking->vendor->email_reservation)->send(new BookingConfirmationHotel($data));
+        Mail::to($booking->vendor->email)->send(new BookingConfirmationHotel($data));
         Mail::to($booking->users->email)->send(new BookingConfirmation($data));
 
         return redirect()->back()->with('message', 'Email send to agent and hotel');

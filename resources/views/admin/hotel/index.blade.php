@@ -16,7 +16,7 @@
                                     <thead>
                                         <tr>
                                             <th>Hotel Name</th>
-                                            <th>Company Name</th>
+                                            {{-- <th>Company Name</th> --}}
                                             <th>Address</th>
                                             <th>Phone</th>
                                             <th>Email</th>
@@ -27,7 +27,7 @@
                                         @foreach ($data as $item)
                                             <tr>
                                                 <td>{{ $item->vendor_name }}</td>
-                                                <td>{{ $item->vendor_legal_name }}</td>
+                                                {{-- <td>{{ $item->vendor_legal_name }}</td> --}}
                                                 <td>{{ $item->address_line1 }}</td>
                                                 <td>{{ $item->phone }}</td>
                                                 <td>{{ $item->email }}</td>

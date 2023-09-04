@@ -139,6 +139,11 @@
                                         Room Atributes
                                     </a>
                                 </li>
+                                <li class="list-unstyled">
+                                    <a href="{{ route('dashboard.paymenttohotel.index') }}" class="nav-link {{ request()->routeIs('dashboard.paymenttohotel.index') ? 'active' : '' }}">
+                                       Payment To Hotel
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                         <a class="nav-link {{ request()->routeIs('dashboard.user') ? 'active' : '' }}" href="{{ route('dashboard.user') }}">

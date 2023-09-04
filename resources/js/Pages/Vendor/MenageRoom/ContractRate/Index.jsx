@@ -114,7 +114,7 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
 
         Inertia.post('/room/barcode/store', formData, {
             onSuccess: () => {
-                // Lakukan aksi setelah gambar berhasil diunggah
+                // Lakukan aksi setelah gamBARberhasil diunggah
             },
         });
     }
@@ -138,7 +138,7 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
 
         Inertia.post('/room/barcode/store', formData, {
             onSuccess: () => {
-                // Lakukan aksi setelah gambar berhasil diunggah
+                // Lakukan aksi setelah gamBARberhasil diunggah
             },
         });
     }
@@ -163,7 +163,7 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
 
         Inertia.post(`/room/barcode/update/${barroom.id}`, formData, {
             onSuccess: () => {
-                // Lakukan aksi setelah gambar berhasil diunggah
+                // Lakukan aksi setelah gamBARberhasil diunggah
             },
         });
     }
@@ -179,7 +179,7 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
             onSuccess: () => {
                 // alert('data saved!');
                 window.location.reload();
-                // Lakukan aksi setelah gambar berhasil diunggah
+                // Lakukan aksi setelah gamBARberhasil diunggah
             },
         });
     }

@@ -10097,3 +10097,32 @@ textarea.form-control {
   100% {
     stroke-dasharray: 89, 200;
     stroke-dashoffset: -136px; } }
+
+
+.item-loop-list {
+    border: 1px solid #dfdfdf;
+    display: flex;
+    margin-bottom: 30px;
+    overflow: hidden;
+    position: relative;
+}
+
+.thumb-image {
+    background: #ccc;
+    flex: 0 0 30%;
+    height: 190px;
+    overflow: hidden;
+    padding: 0;
+    position: relative;
+}
+.g-info {
+    flex: 0 0 45%;
+    padding: 15px;
+    position: relative;
+}
+
+.g-rate-price {
+    flex: 1;
+    padding: 15px 15px 15px 0;
+    position: relative;
+}

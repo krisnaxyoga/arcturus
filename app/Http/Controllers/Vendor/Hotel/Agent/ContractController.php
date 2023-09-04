@@ -153,6 +153,7 @@ class ContractController extends Controller
                     // }
 
                     $advancepurchase->is_active = 2;
+                    $advancepurchase->numberactive = $i;
                     $advancepurchase->save();
                 }
 
@@ -402,6 +403,10 @@ class ContractController extends Controller
                             $cont = ContractPrice::find($contractprice[$key]->id);
                             $cont->recom_price = $baritem->price * ((100 - $request->percentage) / 100);
                             $cont->save();
+
+                            $cont2 = ContractPrice::where('rolerate', 2)->where('user_id', $userid)->first();
+                            $cont2->recom_price = $cont->recom_price * ((100 - $cont2->percentage) / 100);
+                            $cont2->save();
                         }
                     } else {
                         foreach ($contractpriceroleone as $key => $contractpriceroleones) {
@@ -468,7 +473,17 @@ class ContractController extends Controller
                         $advanceprice->price = $denden->recom_price * $nilai[$key];
                         $advanceprice->rolerate = 2;
                         $advanceprice->is_active = $item->is_active;
-                        $advanceprice->save();
+
+                        $existingPrice = AdvancePurchasePrice::where('room_id', $advanceprice->room_id)
+                            ->where('user_id', $advanceprice->user_id)
+                            ->where('vendor_id', $advanceprice->vendor_id)
+                            ->where('contract_id', $advanceprice->contract_id)
+                            ->where('advance_id', $advanceprice->advance_id)
+                            ->first();
+
+                        if (!$existingPrice) {
+                            $advanceprice->save();
+                        }
                     }
                 }
 
@@ -562,20 +577,20 @@ class ContractController extends Controller
         return redirect()->back()->with('success', 'Price update');
     }
 
-    public function updateadvancetstatus($id,$is_active){
-        // dd($recom);
+    public function updateadvancetstatus($id, $is_active) {
+
         $data = AdvancePurchase::find($id);
         $data->is_active = $is_active;
         $data->save();
 
         $advance = AdvancePurchase::where('contract_id', $data->contract_id)
-        ->where('user_id', $data->user_id)
-        ->orderBy('id', 'asc')
-        ->get();
+            ->where('user_id', $data->user_id)
+            ->orderBy('numberactive', 'asc')
+            ->get();
 
+            // dd($advance);
         $contract = ContractRate::where('id', $data->contract_id)->first();
 
-        $activeCount = 0;
         foreach ($advance as $key => $itm) {
             if ($itm->is_active == 1) {
                 $activeCount++;
@@ -604,12 +619,53 @@ class ContractController extends Controller
                     $itm->endsell = $itm->beginsell->copy()->subDay();
                 }
             }
-
-            $itm->save();
         }
+
+        // foreach ($advance as $key => $itm) {
+        //     if ($itm->is_active == 1) {
+        //         $date3 = AdvancePurchase::where('numberactive', $itm->numberactive)
+        //             ->where('contract_id', $data->contract_id)
+        //             ->first();
+
+        //         $date3->beginsell = now()->addDays($date3->day);
+        //         $date3->endsell = Carbon::parse($contract->stayperiod_end);
+        //         $date3->save();
+
+        //         if ($itm->numberactive > 1) {
+        //             $up_endsell = AdvancePurchase::where('numberactive', $itm->numberactive - 1)
+        //                 ->where('contract_id', $data->contract_id)
+        //                 ->first();
+
+        //             $up_endsell->endsell = $date3->beginsell->subDay(1);
+        //             $up_endsell->save();
+        //         }
+        //     } else if ($itm->is_active == 2) {
+        //         for ($i = $itm->numberactive; $i >= 1; $i--) {
+        //             $date = AdvancePurchase::where('numberactive', $i)
+        //                 ->where('contract_id', $data->contract_id)
+        //                 ->first();
+
+        //             $date->beginsell = now()->addDays($date->day);
+        //             $date->endsell = Carbon::parse($contract->stayperiod_end);
+        //             $date->save();
+
+        //             if ($i < $itm->numberactive) {
+        //                 $up_endsell = AdvancePurchase::where('numberactive', $i + 1)
+        //                     ->where('contract_id', $data->contract_id)
+        //                     ->first();
+
+        //                 $up_endsell->endsell = $date->beginsell->subDay(1);
+        //                 $up_endsell->save();
+        //             }
+        //         }
+        //     }
+        // }
+
 
         return redirect()->back()->with('success', 'Advancepurchase status update');
     }
+
+
 
     public function destroyadvanceprice(string $id)
     {

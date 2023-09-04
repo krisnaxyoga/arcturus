@@ -117,6 +117,12 @@ Route::group(['middleware' => ['auth', 'checkrole:1']], function() {
     Route::post('/admin/storeslider/',[\App\Http\Controllers\Admin\Setting\SettingController::class,'storeslider'])->name('dashboard.setting.storeslider');
     Route::delete('/admin/destroyslider/{id}',[\App\Http\Controllers\Admin\Setting\SettingController::class,'destroyslider'])->name('dashboard.setting.destroyslider');
 
+    //payment admin to hotel
+    Route::get('/admin/paymenthotel', [\App\Http\Controllers\Admin\Hotel\PaymentController::class, 'index'])->name('dashboard.paymenttohotel.index');
+    Route::get('/admin/paymenthotel/edit/{id}', [\App\Http\Controllers\Admin\Hotel\PaymentController::class, 'edit'])->name('dashboard.paymenttohotel.edit');
+    Route::post('/admin/paymenthotel/update/{id}', [\App\Http\Controllers\Admin\Hotel\PaymentController::class, 'update'])->name('dashboard.paymenttohotel.update');
+    Route::get('/admin/paymenthotel/destroy/{id}', [\App\Http\Controllers\Admin\Hotel\PaymentController::class, 'destroy'])->name('dashboard.paymenttohotel.destroy');
+   
 });
 
 // untuk vendor
@@ -268,5 +274,7 @@ Route::group(['middleware' => ['auth', 'checkrole:3']], function() {
     Route::get('/notify',[\App\Http\Controllers\Agent\Booking\BookingController::class, 'notify'])->name('payment.notify');
 
     //transfer bank
+    Route::get('/paymentbookingpage/{id}',[\App\Http\Controllers\Agent\Booking\BookingController::class, 'paymentbookingpage'])->name('payment.paymentbookingpage');
+
     Route::post('/upbanktransfer',[\App\Http\Controllers\Agent\Booking\BookingController::class, 'upbanktransfer'])->name('payment.upbanktransfer');
 });

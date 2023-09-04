@@ -5,12 +5,14 @@ import React, { useState } from 'react';
 import Layout from '../../Layouts/Vendor';
 
 import Pagination from '../../Components/Pagination';
+
 import Bookings from '../../Pages/Vendor/BookingHistory/Bookings';
+import TransfFromAdmin from '../../Pages/Vendor/TransfFromAdmin/Index';
 //import Link
 import { Link, usePage } from '@inertiajs/inertia-react';
 import { Inertia } from '@inertiajs/inertia';
 
-export default function Index({ totalroom,income,vendor,success,pending,data }) {
+export default function Index({ totalroom,income,vendor,success,pending,data,widraw }) {
   const { url } = usePage();
   function formatRupiah(amount) {
       return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount).slice(0, -3);
@@ -18,9 +20,12 @@ export default function Index({ totalroom,income,vendor,success,pending,data }) 
   const [currentPage, setCurrentPage] = useState(1)
   const [postsPerPage, setPostsPerPage] = useState(10)
 
+  console.log(widraw,">>>>>DATA")
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = data.slice(indexOfFirstPost, indexOfLastPost);
+
+  const currentWidraw = widraw.slice(indexOfFirstPost, indexOfLastPost);
 
   const paginate = pageNum => setCurrentPage(pageNum);
 
@@ -120,7 +125,7 @@ export default function Index({ totalroom,income,vendor,success,pending,data }) 
                 </div>
               </div>
               <div className="row">
-                <div className="col-lg-12">
+                <div className="col-lg-8">
                   <div className="card">
                     <div className="card-header">
                       <h2>Booking</h2>
@@ -151,9 +156,29 @@ export default function Index({ totalroom,income,vendor,success,pending,data }) 
                     </div>
                   </div>
                 </div>
+                <div className="col-lg-4">
+                <div className="card">
+                    <div className="card-header">
+                      <h2>Evidence of transfer</h2>
+                    </div>
+                    <div className="card-body">
+                      <div className="table-responsive">
+                            <table className="table table-bordered" id="dataTable" width="100%" cellSpacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Check transfer</th>
+                                    </tr>
+                                </thead>
+                                <TransfFromAdmin TransfFromAdmin={currentWidraw} />
+                            </table>
+                            <Pagination postsPerPage={postsPerPage} totalPosts={widraw.length} paginate={paginate} nextPage={nextPage} prevPage={prevPage} crntPage={currentPage} />
+                        </div>
+                    </div>
+                  </div>
+                </div>
               </div>
               {/* <!-- Content Row --> */}
-
             </div>
             {/* <!-- End of Begin Page Content --> */}
           </div>

@@ -57,108 +57,81 @@
                                             <form action="{{ route('hotel.homepage') }}" method="get"
                                                 class="search-property-1">
                                                 @csrf
-                                                <div class="row no-gutters">
-                                                    <div class="col-md d-flex">
-                                                        <div class="form-group p-4 border-0">
-                                                            <label for="#">Country</label>
-                                                            <div class="form-field">
-                                                                <div class="select-wrap">
-                                                                    <div class="icon"><span
-                                                                            class="fa fa-chevron-down"></span></div>
-                                                                    <select name="country" id=""
-                                                                        class="form-control">
-                                                                        <option value="">{{ __('-- Select --') }}
-                                                                        </option>
-                                                                        @foreach (get_country_lists() as $id => $name)
-                                                                            <option
-                                                                                @if (($user->country ?? '') == $id) selected @endif
-                                                                                value="{{ $name }}">
-                                                                                {{ $name }}</option>
-                                                                        @endforeach
-                                                                    </select>
+                                                <div class="g-field-search">
+                                                    <div class="row">
+                                                        <div class="col-md d-flex">
+                                                            <div class="form-group border-0 mb-3 mt-2 mx-2">
+                                                                <label class="pl-3 mt-3" for="">country</label>
+                                                                <select name="country" id=""
+                                                                class="form-control ">
+                                                                <option value="">{{ __('-- Select --') }}
+                                                                </option>
+                                                                @foreach (get_country_lists() as $id => $name)
+                                                                    <option
+                                                                        @if (($user->country ?? '') == $id) selected @endif
+                                                                        value="{{ $name }}">
+                                                                        {{ $name }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md d-flex">
+                                                            <div class="form-group mb-3 mt-2 mx-2">
+                                                                <label class="pl-3 mt-3" for="#">State</label>
+                                                                <div class="form-field">
+                                                                    {{-- <div class="icon"><span class="fa fa-search"></span></div> --}}
+                                                                    <input type="text" name="state" class="form-control"
+                                                                        placeholder="state...">
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-md d-flex">
-                                                        <div class="form-group p-4 border-0">
-                                                            <label for="#">State</label>
-                                                            <div class="form-field">
-                                                                {{-- <div class="icon"><span class="fa fa-search"></span></div> --}}
-                                                                <input type="text" name="state" class="form-control"
-                                                                    placeholder="state...">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    {{-- <div class="col-md d-flex">
-                                                        <div class="form-group p-4 border-0">
-                                                            <label for="#">City</label>
-                                                            <div class="form-field"> --}}
-                                                    {{-- <div class="icon"><span class="fa fa-search"></span></div> --}}
-                                                    {{-- <input type="text" name="city" class="form-control"
-                                                                    placeholder="city...">
-                                                            </div>
-                                                        </div>
-                                                    </div> --}}
-                                                    <div class="col-md d-flex">
-                                                        {{-- <div class="form-group p-4">
-                                                            <label for="#">Check-in</label>
-                                                            <div class="form-field">
-                                                                <div class="icon"><span class="fa fa-calendar"></span>
+                                                        <div class="col-md d-flex">
+                                                            <div class="form-group mb-3 mt-2 mx-2">
+                                                                <label class="pl-3 mt-3" for="#">Check-in</label>
+                                                                <div class="form-field">
+
+                                                                    <input type="date" id="daterange" name="checkin" class="form-control checkindate"
+                                                                        placeholder="Check In Date">
                                                                 </div>
-                                                                <input type="date" name="checkin"
-                                                                    class="form-control checkindate"
-                                                                    placeholder="Check In Date">
-                                                            </div>
-                                                        </div> --}}
-                                                        <div class="form-group p-4">
-                                                            <label for="#">Check-in</label>
-                                                            <div class="form-field">
-                                                                <div class="icon"><span class="fa fa-calendar"></span>
-                                                                </div>
-                                                                <input type="date" id="daterange" name="checkin" class="form-control checkindate"
-                                                                    placeholder="Check In Date">
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-md d-flex">
-                                                        <div class="form-group p-4">
-                                                            <label for="#">Check-out</label>
-                                                            <div class="form-field">
-                                                                <div class="icon"><span class="fa fa-calendar"></span>
+                                                        <div class="col-md d-flex">
+                                                            <div class="form-group mb-3 mt-2 mx-2">
+                                                                <label class="pl-3 mt-3" for="#">Check-out</label>
+                                                                <div class="form-field">
+
+                                                                    <input type="date" name="checkout"
+                                                                        class="form-control checkoutdate"
+                                                                        placeholder="Check Out Date">
                                                                 </div>
-                                                                <input type="date" name="checkout"
-                                                                    class="form-control checkoutdate"
-                                                                    placeholder="Check Out Date">
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-md d-flex">
-                                                        <div class="form-group p-4">
-                                                            <label for="#">Person</label>
-                                                            <div class="form-field">
-                                                                <div class="select-wrap">
-                                                                    <div class="icon"><span
-                                                                            class="fa fa-chevron-down"></span></div>
-                                                                    <select name="person" id=""
+                                                        <div class="col-md d-flex">
+                                                            <div class="form-group mb-3 mt-2 mx-2">
+                                                                <label class="pl-3 mt-3" for="#">Person</label>
+                                                                <select name="person" id=""
                                                                         class="form-control">
                                                                         <option value="1">1</option>
                                                                         <option value="2">2</option>
                                                                         <option value="3">3</option>
                                                                         <option value="4">4</option>
+                                                                        <option value="5">5</option>
                                                                     </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md d-flex">
+                                                            {{-- <div class="form-group border-0">
+                                                                <div style="height: 7rem" class="form-field align-items-center">
+                                                                    <input type="submit" value="Search"
+                                                                    class="form-control btn btn-primary">
                                                                 </div>
-                                                            </div>
+                                                            </div> --}}
+                                                            <button class="btn btn-primary w-100" type="submit">
+                                                                search
+                                                            </button>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md d-flex">
-                                                        <div class="form-group d-flex w-100 border-0">
-                                                            <div class="form-field w-100 align-items-center d-flex">
-                                                                <input type="submit" value="Search"
-                                                                    class="align-self-stretch form-control btn btn-primary">
-                                                            </div>
-                                                        </div>
-                                                    </div>
+
                                                 </div>
                                             </form>
                                         </div>
@@ -772,7 +745,7 @@
         </div>
     </section> --}}
 
-    
+
   <section class="ftco-intro ftco-section ftco-no-pt mt-5">
     <div class="container">
         <div class="row justify-content-center">
@@ -786,7 +759,7 @@
             </div>
         </div>
     </div>
-</section> 
+</section>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Ambil elemen input tanggal check-in dan check-out
