@@ -111,7 +111,7 @@
                                     $checkout = date('m/d/Y', strtotime($datareq['checkout']));
                                     ?>
                                     <div class="form-group p-4">
-                                        <label class="pl-3 mt-3" for="">CheckIn - CheckOut</label>
+                                        <label for="">CheckIn - CheckOut</label>
                                         <input class="form-control checkindate" type="text" name="dates" value="{{ $checkin }} - {{ $checkout }}" />
                                     </div>
                                     <input value="{{ $datareq['checkin'] }}"  id="checkin" type="hidden" name="checkin"
