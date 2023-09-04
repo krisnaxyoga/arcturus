@@ -86,7 +86,7 @@
                                     </p>
                                 </div>
                                 <div class="col-lg-12">
-                                    <h3>HIGHLIGHTS</h3>
+                                    <h3>Highlights</h3>
                                     <p>
                                         {{ $vendordetail->highlight }}
                                     </p>
