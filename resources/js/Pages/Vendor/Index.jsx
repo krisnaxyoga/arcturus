@@ -8,7 +8,6 @@ import Pagination from '../../Components/Pagination';
 
 import Bookings from '../../Pages/Vendor/BookingHistory/Bookings';
 import TransfFromAdmin from '../../Pages/Vendor/TransfFromAdmin/Index';
-import Bookings from '../../Pages/Vendor/BookingHistory/Bookings';
 //import Link
 import { Link, usePage } from '@inertiajs/inertia-react';
 import { Inertia } from '@inertiajs/inertia';
