@@ -50,7 +50,7 @@
     <div class="overlay" style="height: 300px"></div>
     <div class="container">
         <div class="row no-gutters slider-text align-items-end justify-content-center" style="height:300px">
-            <div class="col-md-9 ftco-animate pb-5 text-center">
+            <div class="col-md-9  pb-5 text-center">
                 <p class="breadcrumbs"><span class="mr-2"><a href="/">Home <i
                                 class="fa fa-chevron-right"></i></a></span> <span>Hotel <i
                             class="fa fa-chevron-right"></i></span></p>
@@ -64,7 +64,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <div class="search-wrap-1 ftco-animate">
+                <div class="search-wrap-1 ">
                     <form action="{{ route('hotel.homepage') }}" method="get"
                     class="search-property-1">
                     @csrf
@@ -83,15 +83,15 @@
                                 </select>
                                 </div>
                             </div>
-                            <div class="col-md d-flex">
+                            {{-- <div class="col-md d-flex">
                                 <div class="form-group mb-3 mt-2 mx-2">
                                     <label class="pl-3 mt-3" for="#">State</label>
-                                    <div class="form-field">
+                                    <div class="form-field"> --}}
                                         {{-- <div class="icon"><span class="fa fa-search"></span></div> --}}
-                                        <input value="{{ $requestdata['state'] }}" type="text" name="state" class="form-control" placeholder="state...">
+                                        {{-- <input value="{{ $requestdata['state'] }}" type="text" name="state" class="form-control" placeholder="state...">
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="col-md d-flex">
                                 <?php
                                 $checkin = date('m/d/Y', strtotime($requestdata['checkin']));
@@ -172,7 +172,7 @@
         @else
         <div class="container">
             <div class="row">
-                <div class="col-lg-3">
+                <div class="col-lg-3 ">
                     <div class="card">
                         <div class="card-body">
                             <p class="m-0" style="color: #1a2b48;
@@ -223,7 +223,7 @@
                 </div>
                 <div class="col-lg-9">
                     <div class="row">
-                        <div class="col-lg-12 d-flex justify-content-between">
+                        <div class="col-lg-12 d-flex justify-content-between ">
                             <span class="price" style="color: #1a2b48;
                                         font-size: 20px;
                                         font-weight: 500;
@@ -245,29 +245,31 @@
                         </div>
 
                         @foreach ($data as $key=>$item)
-                        <div class="col-md-12 ftco-animate">
+                        
+                        <div class="col-md-12 "> 
+                            <hr>
                             <div class="mb-3">
-                                <div class="row border">
+                                <div class="row">
                                     <div class="col-lg-3 p-0">
                                         <a href="{{ route('hoteldetail.homepage', ['id' => $item->contract_id]) }}?{{ http_build_query($requestdata) }}">
-                                            <img src="{{$item->room->feature_image}}" class="img img-fluid rounded-start" alt="{{$item->room->feature_image}}">
+                                            <img style="object-fit: cover!important;" src="{{$item->room->feature_image}}" class="img img-fluid rounded-start" alt="{{$item->room->feature_image}}">
                                         </a>
                                     </div>
                                     <div class="col-lg-6">
-                                        <p class="star mb-2">
+                                        <p class="star mb-0">
                                             <span class="fa fa-star"></span>
                                             <span class="fa fa-star"></span>
                                             <span class="fa fa-star"></span>
                                             <span class="fa fa-star"></span>
                                             <span class="fa fa-star"></span>
                                         </p>
-                                        <h3><a href="{{ route('hoteldetail.homepage', ['id' => $item->contract_id]) }}?{{ http_build_query($requestdata) }}">{{$item->contractrate->vendors->vendor_name}}</a></h3>
+                                        <h3 class="m-0"><a href="{{ route('hoteldetail.homepage', ['id' => $item->contract_id]) }}?{{ http_build_query($requestdata) }}">{{$item->contractrate->vendors->vendor_name}}</a></h3>
 
-                                        <p class="location"><span class="fa fa-map-marker"></span> {{$item->contractrate->vendors->city}},{{$item->contractrate->vendors->state}}, {{$item->contractrate->vendors->country}}</p>
+                                        <p class="location mb-0"><span class="fa fa-map-marker"></span> {{$item->contractrate->vendors->city}},{{$item->contractrate->vendors->state}}, {{$item->contractrate->vendors->country}}</p>
                                         <div class="d-flex">
-                                           <p><span class="flaticon-381-user-7"><i class="fa fa-user"></i></span> {{$item->room->adults}}</p>
+                                           <p class="mb-0"><span class="flaticon-381-user-7"><i class="fa fa-user"></i></span> {{$item->room->adults}}</p>
                                             @if($item->room->extra_bed != 0)
-                                           <p class="mx-4"><span class="flaticon-king-size"></span> {{$item->room->extra_bed}}</p>
+                                           <p class="mx-4 mb-0"><span class="flaticon-king-size"></span> {{$item->room->extra_bed}}</p>
                                             @endif
 
                                         </div>

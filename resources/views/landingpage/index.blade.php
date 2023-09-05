@@ -39,7 +39,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="ftco-search d-flex justify-content-center">
+                        <div class="ftco-search justify-content-center">
                             <div class="row">
                                 <div class="col-md-12 nav-link-wrap">
                                     <div class="nav nav-pills text-center" id="v-pills-tab" role="tablist"
@@ -78,16 +78,16 @@
                                                             </select>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md d-flex">
+                                                        {{-- <div class="col-md d-flex">
                                                             <div class="form-group mb-3 mt-2 mx-2">
                                                                 <label class="pl-3 mt-3" for="#">State</label>
-                                                                <div class="form-field">
+                                                                <div class="form-field"> --}}
                                                                     {{-- <div class="icon"><span class="fa fa-search"></span></div> --}}
-                                                                    <input type="text" name="state" class="form-control"
+                                                                    {{-- <input type="text" name="state" class="form-control"
                                                                         placeholder="state...">
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </div> --}}
                                                         <div class="col-md d-flex">
                                                            
                                                             <div class="form-group mb-3 mt-2 mx-2">

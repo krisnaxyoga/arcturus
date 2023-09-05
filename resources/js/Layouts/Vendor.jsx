@@ -107,7 +107,7 @@ function Layout({ children, page, vendor }) {
                                         <Link className={`nav-link ${page === '/room/attribute' ? 'active' : ''}`} href="/room/attribute">Amenities</Link>
                                         <Link className={`nav-link ${page === '/room/index' ? 'active' : ''}`} href="/room/index">Room Types</Link>
                                         <Link className={`nav-link ${page === '/room/contract/index' ? 'active' : ''}`} href="/room/contract/index">Rates</Link>
-                                        <Link className={`nav-link ${page === '/room/surcharge/index' ? 'active' : ''}`} href="/room/surcharge/index">Surcharge</Link>
+                                        <Link className={`nav-link ${page === '/room/surcharge/index' ? 'active' : ''}`} href="/room/surcharge/index">Rate Calendar</Link>
                                     </div>}
                                 </div>
 

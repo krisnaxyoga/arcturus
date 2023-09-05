@@ -69,9 +69,9 @@
 
                                                 <div>
                                                     <p class="m-0" style="font-weight: 700;sont-size:14px">{{ $vendordetail->vendor_name }}</p>
-                                                    <p>Member since <br>
+                                                    {{-- <p>Member since <br>
                                                         {{ \Carbon\Carbon::parse($vendordetail->created_at)->format('F Y') }}
-                                                    </p>
+                                                    </p> --}}
 
                                                 </div>
                                         </div>
@@ -174,42 +174,48 @@
 
                                             </div>
                                             <div class="col-md-8">
-                                                <div class="card-body">
+                                                <div class="card-body pb-0">
                                                     <h3 class="card-title"><a
                                                             href="#">{{ $item->room->ratedesc }}</a></h3>
                                                     {{-- <span class="price">Rp. {{ number_format(($item->recom_price + $item->contractrate->vendors->system_markup + $surcharprice), 0, ',', '.')}}</span> --}}
                                                     {{-- surcharge : {{$surchargesVendorIds}} blackout : {{$blackoutVendorIds}} vendorid :{{$item->contractrate->vendor_id}} --}}
 
-                                                    <span class="price">Rp.
-                                                        {{ number_format($item->recom_price + $item->contractrate->vendors->system_markup, 0, ',', '.') }} / night</span>
-
-
-                                                    <p class="card-text"><small class="text-body-secondary"></small></p>
-                                                    {{-- @if ($item->room->room_allow <= 0 || $blackoutVendorIds->contains($item->contractrate->vendors->id)) --}}
-                                                    @if ($item->room->room_allow <= 0)
-                                                        <span class="badge badge-danger">Sold</span>
-                                                    @else
-                                                        <select class="form-control room-quantity" name="room_quantity"
-                                                            style="width:200px" onchange="calculateTotal()">
-                                                            <option data-price="0" value="0" data-pricenomarkup="0">
-                                                                0</option>
-                                                            @for ($i = 1; $i <= $item->room->room_allow; $i++)
-                                                                {{-- <option data-contprice={{$item->id}} data-contractid={{$item->contract_id}} data-roomid={{$item->room->id}} data-price="{{($i * ($item->recom_price + $item->contractrate->vendors->system_markup + $surcharprice)) }}" value="{{$i}}">{{$i}} @if ($i == 1) room @else rooms @endif </option> --}}
-                                                                <option data-contprice={{ $item->id }}
-                                                                    data-contractid={{ $item->contract_id }}
-                                                                    data-roomid={{ $item->room->id }}
-                                                                    data-price="{{ $i * ($item->recom_price + $item->contractrate->vendors->system_markup) }}"
-                                                                    data-pricenomarkup="{{ $i * $item->recom_price }}"
-                                                                    value="{{ $i }}">{{ $i }}
-                                                                    @if ($i == 1)
-                                                                        room
-                                                                    @else
-                                                                        rooms
-                                                                    @endif
-                                                                </option>
-                                                            @endfor
-                                                        </select>
-                                                    @endif
+                                                    <div class="row justify-content-between">
+                                                        <div class="col-lg">
+                                                            <span class="price">Rp.
+                                                                {{ number_format($item->recom_price + $item->contractrate->vendors->system_markup, 0, ',', '.') }} / night</span>
+        
+        
+                                                            {{-- <p class="card-text"><small class="text-body-secondary"></small></p> --}}
+                                                        </div>
+                                                        <div class="col-lg">
+                                                            {{-- @if ($item->room->room_allow <= 0 || $blackoutVendorIds->contains($item->contractrate->vendors->id)) --}}
+                                                                @if ($item->room->room_allow <= 0)
+                                                                    <span class="badge badge-danger">Sold</span>
+                                                                @else
+                                                                    <select class="form-control room-quantity" name="room_quantity"
+                                                                        style="width:200px" onchange="calculateTotal()">
+                                                                        <option data-price="0" value="0" data-pricenomarkup="0">
+                                                                            0</option>
+                                                                        @for ($i = 1; $i <= $item->room->room_allow; $i++)
+                                                                            {{-- <option data-contprice={{$item->id}} data-contractid={{$item->contract_id}} data-roomid={{$item->room->id}} data-price="{{($i * ($item->recom_price + $item->contractrate->vendors->system_markup + $surcharprice)) }}" value="{{$i}}">{{$i}} @if ($i == 1) room @else rooms @endif </option> --}}
+                                                                            <option data-contprice={{ $item->id }}
+                                                                                data-contractid={{ $item->contract_id }}
+                                                                                data-roomid={{ $item->room->id }}
+                                                                                data-price="{{ $i * ($item->recom_price + $item->contractrate->vendors->system_markup) }}"
+                                                                                data-pricenomarkup="{{ $i * $item->recom_price }}"
+                                                                                value="{{ $i }}">{{ $i }}
+                                                                                @if ($i == 1)
+                                                                                    room
+                                                                                @else
+                                                                                    rooms
+                                                                                @endif
+                                                                            </option>
+                                                                        @endfor
+                                                                    </select>
+                                                                @endif
+                                                        </div>
+                                                    </div>
 
                                                     {{-- <p>Facilities :  @foreach ($item->room->attribute as $facilities)
                                                     {{ $facilities }},
@@ -219,7 +225,7 @@
                                                         <span class="badge badge-success mr-2">{{$distribution}} </span>
                                                         @endforeach
                                                     @endif --}}
-                                                    <p>Benefits : {!! $item->contractrate->benefit_policy !!}</p>
+                                                    <p class="m-0">Benefits : {!! $item->contractrate->benefit_policy !!}</p>
                                                     {{-- {{$contractprice}} --}}
                                                     @if($contractprice->count() != 0)
                                                     <a class="text-primary" style="font-size:14px" data-toggle="collapse" href="#collapseExample{{$key}}" role="button" aria-expanded="false" aria-controls="collapseExample">
@@ -233,38 +239,54 @@
 
                                                                 <hr>
                                                                 <p style="font-size:20px;font-weight:700" class="m-0 p-0">{{$itemprice->contractrate->codedesc}}</p>
-                                                                @foreach ($itemprice->contractrate->distribute as $distribute)
-                                                                     <span class="badge badge-secondary mx-1">{{$distribute}}</span>
-                                                                @endforeach
-                                                                <p>Min Stay : {{$itemprice->contractrate->min_stay}} nights</p>
-                                                                <span class="price">Rp.
-                                                                    {{ number_format($itemprice->recom_price + $itemprice->contractrate->vendors->system_markup, 0, ',', '.') }} / night</span>
-                                                                    @if ($itemprice->room->room_allow <= 0)
-                                                                        <span class="badge badge-danger">Sold</span>
-                                                                    @else
-                                                                        @if($Nights >= $itemprice->contractrate->min_stay)
-                                                                            <select class="form-control room-quantity" name="room_quantity"
-                                                                                style="width:200px" onchange="calculateTotal()">
-                                                                                <option data-price="0" value="0" data-pricenomarkup="0">
-                                                                                    0</option>
-                                                                                @for ($i = 1; $i <= $itemprice->room->room_allow; $i++)
-                                                                                    {{-- <option data-contprice={{$itemprice->id}} data-contractid={{$itemprice->contract_id}} data-roomid={{$itemprice->room->id}} data-price="{{($i * ($itemprice->recom_price + $itemprice->contractrate->vendors->system_markup + $surcharprice)) }}" value="{{$i}}">{{$i}} @if ($i == 1) room @else rooms @endif </option> --}}
-                                                                                    <option data-contprice={{ $itemprice->id }}
-                                                                                        data-contractid={{ $itemprice->contract_id }}
-                                                                                        data-roomid={{ $itemprice->room->id }}
-                                                                                        data-price="{{ $i * ($itemprice->recom_price + $itemprice->contractrate->vendors->system_markup) }}"
-                                                                                        data-pricenomarkup="{{ $i * $itemprice->recom_price }}"
-                                                                                        value="{{ $i }}">{{ $i }}
-                                                                                        @if ($i == 1)
-                                                                                            room
-                                                                                        @else
-                                                                                            rooms
-                                                                                        @endif
-                                                                                    </option>
-                                                                                @endfor
-                                                                            </select>
-                                                                            @endif
-                                                                    @endif
+                                                                <hr>
+                                                                <div class="row justify-content-between">
+                                                                    <div class="col-lg">
+                                                                        <p>Min Stay : {{$itemprice->contractrate->min_stay}} nights</p>
+                                                                    </div>
+                                                                    <div class="col-lg">
+                                                                         @foreach ($itemprice->contractrate->distribute as $distribute)
+                                                                            <span class="badge badge-secondary mx-1">{{$distribute}}</span>
+                                                                        @endforeach
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row justify-content-between">
+                                                                    <div class="col-lg">
+                                                                        <span class="price">Rp.
+                                                                            {{ number_format($itemprice->recom_price + $itemprice->contractrate->vendors->system_markup, 0, ',', '.') }} / night
+                                                                        </span>
+                                                                        <p class="m-0">Benefit :</p>
+                                                                        <p>{!! $itemprice->contractrate->benefit_policy !!}</p>
+                                                                    </div>
+                                                                    <div class="col-lg">
+                                                                        @if ($itemprice->room->room_allow <= 0)
+                                                                            <span class="badge badge-danger">Sold</span>
+                                                                        @else
+                                                                            @if($Nights >= $itemprice->contractrate->min_stay)
+                                                                                <select class="form-control room-quantity" name="room_quantity"
+                                                                                    style="width:200px" onchange="calculateTotal()">
+                                                                                    <option data-price="0" value="0" data-pricenomarkup="0">
+                                                                                        0</option>
+                                                                                    @for ($i = 1; $i <= $itemprice->room->room_allow; $i++)
+                                                                                        {{-- <option data-contprice={{$itemprice->id}} data-contractid={{$itemprice->contract_id}} data-roomid={{$itemprice->room->id}} data-price="{{($i * ($itemprice->recom_price + $itemprice->contractrate->vendors->system_markup + $surcharprice)) }}" value="{{$i}}">{{$i}} @if ($i == 1) room @else rooms @endif </option> --}}
+                                                                                        <option data-contprice={{ $itemprice->id }}
+                                                                                            data-contractid={{ $itemprice->contract_id }}
+                                                                                            data-roomid={{ $itemprice->room->id }}
+                                                                                            data-price="{{ $i * ($itemprice->recom_price + $itemprice->contractrate->vendors->system_markup) }}"
+                                                                                            data-pricenomarkup="{{ $i * $itemprice->recom_price }}"
+                                                                                            value="{{ $i }}">{{ $i }}
+                                                                                            @if ($i == 1)
+                                                                                                room
+                                                                                            @else
+                                                                                                rooms
+                                                                                            @endif
+                                                                                        </option>
+                                                                                    @endfor
+                                                                                </select>
+                                                                                @endif
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
                                                                 @endif
                                                             @endforeach
                                                         </div>
@@ -327,10 +349,7 @@
                                    margin-bottom: 5px;">Hotel Policies</p>
                                 </div>
                                 <div class="col-lg-8">
-                                    <p style="font-size: 15px;
-                                    font-weight: 700;
-                                    margin-bottom: 5px;">Benefit</p>
-                                    {!!$data[0]->contractrate->benefit_policy!!}
+                                    
                                     <p style="font-size: 15px;
                                     font-weight: 700;
                                     margin-bottom: 5px;">Deposit</p>

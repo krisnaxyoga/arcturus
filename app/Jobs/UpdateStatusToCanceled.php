@@ -10,6 +10,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use App\Models\Booking;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 
 class UpdateStatusToCanceled implements ShouldQueue
@@ -29,10 +30,17 @@ class UpdateStatusToCanceled implements ShouldQueue
      */
     public function handle(): void
     {
-        $unpaidInvoices = Booking::where('booking_status', 'unpaid')
-            ->first();
-        $unpaidInvoices->booking_status = 'canceled';
-        $unpaidInvoices->save();
+        Booking::where('booking_status', 'unpaid')
+        ->update(['booking_status' => 'cancelled']);
+
+        
+        DB::table('hotel_room_bookings')
+        ->join('bookings', 'hotel_room_bookings.booking_id', '=', 'bookings.id')
+        ->where('bookings.booking_status', '-')
+        ->delete();
+
+        Booking::where('booking_status', '-')
+        ->delete();
         // foreach ($unpaidInvoices as $invoice) {
            
         // }

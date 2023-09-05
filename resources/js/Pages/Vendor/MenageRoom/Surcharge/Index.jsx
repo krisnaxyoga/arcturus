@@ -111,7 +111,7 @@ export default function Index({ errors, session, default_selected_hotel_room, ho
                         <div className="panel-body">
                             <div className="filter-div d-flex justify-content-between">
                                 <h2 className="title-bar no-border-bottom">
-                                    Surcharge Rooms
+                                Rate Calendar
                                 </h2>
                                 <div className="col-right">
                                     {hotel_rooms.length > 0 && (
