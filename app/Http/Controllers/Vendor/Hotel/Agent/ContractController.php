@@ -90,7 +90,7 @@ class ContractController extends Controller
     public function store(Request $request)
     {
         //dd($request->all());
-
+       
         $validator = Validator::make($request->all(), [
             'ratecode' => 'required',
         ]);
@@ -130,7 +130,14 @@ class ContractController extends Controller
                 $data->deposit_policy = $request->deposit_policy;
                 $data->benefit_policy = $request->benefit_policy;
                 $data->except = explode(",",$request->except);
-                $data->percentage = $request->percentage;
+                
+                if($request->percentage == null){
+                    $data->percentage = 0;
+                }else{
+                    $data->percentage = $request->percentage;
+                }
+                
+                
                 $data->save();
 
                 $interval = 7;
@@ -377,7 +384,7 @@ class ContractController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //dd($request);
+        
 
         $validator = Validator::make($request->all(), [
             'ratecode' => 'required',

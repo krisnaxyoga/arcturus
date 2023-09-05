@@ -146,10 +146,7 @@ export default function Detail({ session, data, agent, contract, setting, roombo
                                                                                                         )}
                                                                 </div>
 
-                                                                <div>
-                                                                    <span className="text-400 text-grey-m2 align-middle">Special Request: </span> <br />
-                                                                    <span className="text-400 text-110 text-blue align-middle"> {data.special_request}</span>
-                                                                </div>
+                                                               
 
                                                             </div>
 
@@ -164,6 +161,7 @@ export default function Detail({ session, data, agent, contract, setting, roombo
                                                                 <th>QTY</th>
                                                                 {/* <th>Room Rate</th> */}
                                                                 <th>Room Type</th>
+                                                                <th>#Pax</th>
                                                                 <th>#Night</th>
                                                                 {/* <th>Total Amount</th> */}
                                                             </tr>
@@ -180,6 +178,7 @@ export default function Detail({ session, data, agent, contract, setting, roombo
                                                                     <td>{item.total_room}</td>
                                                                     {/* <td>{formatRupiah(totalPrice)}</td> */}
                                                                     <td>{item.room.ratedesc}</td>
+                                                                    <td>{data.total_guests}</td>
                                                                     <td>{data.night}</td>
                                                                     {/* <td>{formatRupiah(data.price)}</td> */}
                                                                 </tr>
@@ -197,7 +196,10 @@ export default function Detail({ session, data, agent, contract, setting, roombo
                                                                     )}
                                                                 </p>
                                                             </div>
-                                                           
+                                                            <div>
+                                                                    <span className="text-400 text-grey-m2 align-middle">Special Request: </span> <br />
+                                                                    <span className="text-400 text-110 text-blue align-middle"> {data.special_request}</span>
+                                                                </div>
                                                             </div>
 
                                                             <div className="col-12 col-sm-5 text-grey text-90 order-first order-sm-last">

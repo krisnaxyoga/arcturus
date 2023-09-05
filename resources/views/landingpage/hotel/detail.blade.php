@@ -255,7 +255,7 @@
                                                                         <span class="price">Rp.
                                                                             {{ number_format($itemprice->recom_price + $itemprice->contractrate->vendors->system_markup, 0, ',', '.') }} / night
                                                                         </span>
-                                                                        <p class="m-0">Benefit :</p>
+                                                                        <p class="m-0">Benefits :</p>
                                                                         <p>{!! $itemprice->contractrate->benefit_policy !!}</p>
                                                                     </div>
                                                                     <div class="col-lg">
@@ -356,7 +356,7 @@
                                     {!!$data[0]->contractrate->deposit_policy!!}
                                     <p style="font-size: 15px;
                                     font-weight: 700;
-                                    margin-bottom: 5px;">Cencellation</p>
+                                    margin-bottom: 5px;">Cancellation</p>
                                     {!!$data[0]->contractrate->cencellation_policy!!}
                                 </div>
                             </div>

@@ -138,10 +138,7 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                                                                                         )}
                                                                                 </div>
 
-                                                                                <div>
-                                                                                    <span className="text-400 text-grey-m2 align-middle">Special Request: </span> <br />
-                                                                                    <span className="text-400 text-110 text-blue align-middle"> {data.special_request}</span>
-                                                                                </div>
+                                                                                
 
                                                                             </div>
 
@@ -155,6 +152,7 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                                             <tr className="justify-content-between">
                                                                                 <th>QTY</th>
                                                                                 <th>Room Type</th>
+                                                                                <th>#Pax</th>
                                                                                 <th>Room Rate</th>
                                                                                 <th>#Night</th>
                                                                                 <th>Total Amount</th>
@@ -165,6 +163,7 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                                                 <tr key={index} className="mb-2 mb-sm-0 py-25 justify-content-between">
                                                                                     <td>{item.total_room}</td>
                                                                                     <td>{item.room.ratedesc}</td>
+                                                                                    <td>{data.total_guests}</td>
                                                                                     <td>{formatRupiah(item.pricenomarkup)}</td>
                                                                                     <td>{data.night}</td>
                                                                                     <td>{formatRupiah(data.pricenomarkup)}</td>
@@ -182,7 +181,10 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                                                     )}
                                                                                 </p>
                                                                             </div>
-                                                                            
+                                                                            <div>
+                                                                                <span className="text-400 text-grey-m2 align-middle">Special Request: </span> <br />
+                                                                                <span className="text-400 text-110 text-blue align-middle"> {data.special_request}</span>
+                                                                            </div>
                                                                             
                                                                             </div>
 
