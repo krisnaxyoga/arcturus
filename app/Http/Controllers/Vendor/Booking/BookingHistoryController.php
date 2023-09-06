@@ -8,6 +8,7 @@ use App\Models\Vendor;
 use App\Models\Booking;
 use App\Models\ContractRate;
 use App\Models\HotelRoomBooking;
+use App\Models\Setting;
 
 class BookingHistoryController extends Controller
 {
@@ -51,16 +52,17 @@ class BookingHistoryController extends Controller
         $userid = auth()->user()->id;
         $vendor = Vendor::where('user_id',$userid)->with('users')->first();
         $data = Booking::where('id',$id)->whereNotIn('booking_status', ['-', ''])->with('vendor')->with('users')->first();
-        $hotelroombooking = HotelRoomBooking::where('booking_id',$id)->with('room')->with('contractprice')->get();
+        $hotelroombooking = HotelRoomBooking::where('booking_id',$id)->with('room')->with('contractprice')->with('contractrate')->get();
         $cont_id = HotelRoomBooking::where('booking_id',$id)->first();
         $conttract = ContractRate::where('id',$cont_id->contract_id)->first();
-
+        $setting = Setting::first();
 
         return inertia('Vendor/BookingHistory/Detail',[
             'data'=>$data,
             'roombooking'=>$hotelroombooking,
             'contract' => $conttract,
-            'vendor' =>$vendor
+            'vendor' =>$vendor,
+            'setting' => $setting,
         ]);
     }
 

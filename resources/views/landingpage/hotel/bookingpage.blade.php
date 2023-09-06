@@ -149,7 +149,7 @@
                         <hr>
                         <ul class="p-0">
                             @foreach ($hotelbooking as $item)
-                                <li class="d-flex justify-content-between"><span>{{$item->room->ratedesc}} * {{$item->total_room}}</span><span>Rp. {{ number_format($item->price, 0, ',', '.')}}</span> </li>
+                                <li class="d-flex justify-content-between"><span> {{Str::limit($item->room->ratedesc,15)}} * {{$item->total_room}}</span><span>Rp. {{ number_format($item->price, 0, ',', '.')}}</span> </li>
                             @endforeach
                         </ul>
                         <hr>

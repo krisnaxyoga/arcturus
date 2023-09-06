@@ -1,11 +1,14 @@
 @extends('layouts.landing')
 @section('title', 'Hotel')
 @section('contents')
-
+<!-- fotorama.css & fotorama.js. -->
+<link  href="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.css" rel="stylesheet"> <!-- 3 KB -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.js"></script> <!-- 16 KB -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    
     {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script> --}}
     {{-- <section class="hero-wrap hero-wrap-2" style="background-image: url('/landing/travel/images/bg_1.jpg'); height:300px">
         <div class="overlay" style="height: 300px"></div>
@@ -175,11 +178,11 @@
                                             </div>
                                             <div class="col-md-8">
                                                 <div class="card-body pb-0">
-                                                    <h3 class="card-title"><a
-                                                            href="#">{{ $item->room->ratedesc }}</a></h3>
+                                                    <h3 class="card-title">
+                                                        <button class="btn font-weight-bold font-weight-bold p-0 text-primary" style="font-size: 20px" type="button" data-toggle="modal" data-target="#exampleModal{{$key}}">{{ $item->room->ratedesc }}</button></h3>
                                                     {{-- <span class="price">Rp. {{ number_format(($item->recom_price + $item->contractrate->vendors->system_markup + $surcharprice), 0, ',', '.')}}</span> --}}
                                                     {{-- surcharge : {{$surchargesVendorIds}} blackout : {{$blackoutVendorIds}} vendorid :{{$item->contractrate->vendor_id}} --}}
-
+                                                            <!-- Modal -->
                                                     <div class="row justify-content-between">
                                                         <div class="col-lg">
                                                             <span class="price">Rp.
@@ -297,6 +300,35 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="modal" id="exampleModal{{$key}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                        <h5 class="modal-title font-weight-bold" id="exampleModalLabel">{{ $item->room->ratedesc }}</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-lg-12 col-12">
+                                                    <div class="fotorama mb-3" data-nav="thumbs" data-loop="true">
+                                                        @foreach ($item->room->gallery as $key => $gallery)
+                                                                <img src="{{$gallery}}" alt="{{$gallery}}" style="width:100%">
+                                                        @endforeach
+                                                      </div>
+                                                </div>
+                                                <div class="col-lg-12 col-12">
+                                                    <p class="font-weight-bold m-0">Room Amenities</p>
+                                                    @foreach ($item->room->attribute as $facilities)
+                                                    <span class="badge badge-success mr-2"> {{ $facilities }} </span>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </div>
                             @endforeach
                         </div>
                         <div class="row">
@@ -839,5 +871,83 @@
             /* Anda dapat menyesuaikan gaya lain sesuai kebutuhan */
         }
 
+        /* Hide the images by default */
+.mySlides {
+  display: none;
+}
+
+/* Add a pointer when hovering over the thumbnail images */
+.cursor {
+  cursor: pointer;
+}
+
+/* Next & previous buttons */
+.prev,
+.next {
+  cursor: pointer;
+  position: absolute;
+  top: 40%;
+  width: auto;
+  padding: 16px;
+  margin-top: -50px;
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Position the "next button" to the right */
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover,
+.next:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Number text (1/3 etc) */
+.numbertext {
+  color: #f2f2f2;
+  font-size: 12px;
+  padding: 8px 12px;
+  position: absolute;
+  top: 0;
+}
+
+/* Container for image text */
+.caption-container {
+  text-align: center;
+  background-color: #222;
+  padding: 2px 16px;
+  color: white;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Six columns side by side */
+.column {
+  float: left;
+  width: 16.66%;
+}
+
+/* Add a transparency effect for thumnbail images */
+.demo {
+  opacity: 0.6;
+}
+
+.active,
+.demo:hover {
+  opacity: 1;
+}
     </style>
+    
 @endsection
