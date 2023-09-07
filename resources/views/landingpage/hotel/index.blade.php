@@ -208,13 +208,20 @@
                               </a>
                               <div class="collapse show" id="collapseExample">
                                 <div>
-                                    <form action="/action_page.php">
+                                    <form action="{{ route('hotel.homepage') }}" method="get">
+                                        @csrf
                                         @foreach (type_property() as $id => $name)
-                                        <input type="checkbox" id="vehicle1{{ $id }}" name="vehicle1{{ $id }}" value="{{ $name }}">
+                                        <input value="{{ $requestdata['checkin'] }}" type="hidden" name="checkin"
+                                        class="form-control checkindate"
+                                        placeholder="Check In Date">
+                                        <input value="{{ $requestdata['checkout'] }}" type="hidden" name="checkout"
+                                        class="form-control checkoutdate"
+                                        placeholder="Check Out Date">
+                                        <input type="checkbox" id="vehicle1{{ $id }}" name="property{{ $id }}" value="{{ $name }}">
                                         <label for="vehicle1{{ $id }}"> {{ $name }}</label><br>
                                             {{-- <option @if (($requestdata['country'] ?? '') == $name) selected @endif value="{{ $name }}">{{ $name }}</option> --}}
                                         @endforeach
-                                        <input class="btn btn-secondary" type="submit" value="Submit">
+                                        <input class="btn btn-secondary" type="submit" value="Filter">
                                       </form>
                                 </div>
                               </div>
