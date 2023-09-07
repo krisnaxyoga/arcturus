@@ -164,7 +164,7 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                                                     <td>{item.total_room}</td>
                                                                                     <td>{item.room.ratedesc} {roombooking.length > 1 ? (<span className='badge badge-dark'>{item.contractrate.codedesc}</span>):(<></>)}</td>
                                                                                     <td>{data.total_guests}</td>
-                                                                                    <td>{formatRupiah(item.pricenomarkup)}</td>
+                                                                                    <td>{formatRupiah(item.contractprice.recom_price)}</td>
                                                                                     <td>{data.night}</td>
                                                                                     <td>{formatRupiah(data.pricenomarkup)}</td>
                                                                                 </tr>
