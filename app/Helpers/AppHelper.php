@@ -20,16 +20,16 @@ function type_vendor(){
 function type_property(){
     $type = array
     (
-        'AT' => 'Apartments',
+        // 'AT' => 'Apartments',
         'HT' =>'Hotels',
-        'HS' =>'Homestays',
+        // 'HS' =>'Homestays',
         'VS' =>'Villas',
-        'BT' =>'Boats',
-        'MT' =>'Motels',
+        // 'BT' =>'Boats',
+        // 'MT' =>'Motels',
         'RS' =>'Resorts',
-        'LG' =>'Lodges',
-        'HH' =>'Holiday homes',
-        'CZ' =>'Cruises',
+        // 'LG' =>'Lodges',
+        // 'HH' =>'Holiday homes',
+        // 'CZ' =>'Cruises',
     );
 
     return $type;

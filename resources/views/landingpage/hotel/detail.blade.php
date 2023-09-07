@@ -8,7 +8,7 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-    
+
     {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script> --}}
     {{-- <section class="hero-wrap hero-wrap-2" style="background-image: url('/landing/travel/images/bg_1.jpg'); height:300px">
         <div class="overlay" style="height: 300px"></div>
@@ -187,20 +187,47 @@
                                                         <div class="col-lg">
                                                             <span class="price">Rp.
                                                                 {{ number_format($item->recom_price + $item->contractrate->vendors->system_markup, 0, ',', '.') }} / night</span>
-        
-        
+
+
                                                             {{-- <p class="card-text"><small class="text-body-secondary"></small></p> --}}
                                                         </div>
                                                         <div class="col-lg">
+                                                            @php
+                                                                // if($HotelRoomBooking->count() != 0){
+                                                                //     foreach ($HotelRoomBooking as $key => $value) {
+                                                                //         if ($value->room_id == $item->room_id){
+                                                                //             $RoomAllowment = $item->room->room_allow - $value->total_room;
+                                                                //         }else{
+                                                                //             $RoomAllowment = $item->room->room_allow;
+                                                                //         }
+                                                                //     }
+                                                                // }else{
+                                                                //     $RoomAllowment = $item->room->room_allow;
+                                                                // }
+                                                                $totalRoomBooking = 0; // Variabel untuk mengumpulkan total total_room
+
+                                                                if ($HotelRoomBooking->count() != 0) {
+                                                                    foreach ($HotelRoomBooking as $key => $value) {
+                                                                        if ($value->room_id == $item->room_id) {
+                                                                            $totalRoomBooking += $value->total_room;
+                                                                        }
+                                                                    }
+                                                                }
+
+                                                                // Setel $RoomAllowment ke $item->room->room_allow dikurangi total total_room yang sesuai
+                                                                $RoomAllowment = $item->room->room_allow - $totalRoomBooking;
+
+                                                            @endphp
+                                                            {{-- {{ $RoomAllowment }} --}}
                                                             {{-- @if ($item->room->room_allow <= 0 || $blackoutVendorIds->contains($item->contractrate->vendors->id)) --}}
-                                                                @if ($item->room->room_allow <= 0)
+                                                                @if ($RoomAllowment <= 0)
                                                                     <span class="badge badge-danger">Sold</span>
                                                                 @else
                                                                     <select class="form-control room-quantity" name="room_quantity"
                                                                         style="width:200px" onchange="calculateTotal()">
                                                                         <option data-price="0" value="0" data-pricenomarkup="0">
                                                                             0</option>
-                                                                        @for ($i = 1; $i <= $item->room->room_allow; $i++)
+                                                                        @for ($i = 1; $i <= $RoomAllowment; $i++)
                                                                             {{-- <option data-contprice={{$item->id}} data-contractid={{$item->contract_id}} data-roomid={{$item->room->id}} data-price="{{($i * ($item->recom_price + $item->contractrate->vendors->system_markup + $surcharprice)) }}" value="{{$i}}">{{$i}} @if ($i == 1) room @else rooms @endif </option> --}}
                                                                             <option data-contprice={{ $item->id }}
                                                                                 data-contractid={{ $item->contract_id }}
@@ -381,7 +408,7 @@
                                    margin-bottom: 5px;">Hotel Policies</p>
                                 </div>
                                 <div class="col-lg-8">
-                                    
+
                                     <p style="font-size: 15px;
                                     font-weight: 700;
                                     margin-bottom: 5px;">Deposit</p>
@@ -949,5 +976,5 @@
   opacity: 1;
 }
     </style>
-    
+
 @endsection

@@ -181,7 +181,7 @@
                         ">Filter By</p>
                         </div>
                     </div>
-                    <div class="card">
+                    {{-- <div class="card">
                         <div class="card-body">
                             <a class="text-secondary" data-toggle="collapse" href="#collapseExample1" role="button" aria-expanded="false" aria-controls="collapseExample">
                                 Filter Price
@@ -200,7 +200,7 @@
                                 </div>
                               </div>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="card">
                         <div class="card-body">
                             <a class="text-secondary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
@@ -245,8 +245,8 @@
                         </div>
 
                         @foreach ($data as $key=>$item)
-                        
-                        <div class="col-md-12 "> 
+
+                        <div class="col-md-12 ">
                             <hr>
                             <div class="mb-3">
                                 <div class="row">

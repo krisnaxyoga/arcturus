@@ -54,11 +54,11 @@ class BookingController extends Controller
 
         $hotelbook = HotelRoomBooking::where('booking_id',$payment->booking_id)->get();
 
-            foreach($hotelbook as $item){
-                $room = RoomHotel::find($item->room_id);
-                $room->room_allow =  $room->room_allow - $item->total_room;
-                $room->save();
-            }
+            // foreach($hotelbook as $item){
+            //     $room = RoomHotel::find($item->room_id);
+            //     $room->room_allow =  $room->room_allow - $item->total_room;
+            //     $room->save();
+            // }
 
             $contract_id = HotelRoomBooking::where('booking_id',$payment->booking_id)->first();
             $contract = ContractRate::where('id',$contract_id->contract_id)->first();

@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Models\Slider;
 use App\Models\AgentMarkupDetail;
 use App\Models\AgentMarkupSetup;
+use App\Models\HotelRoomBooking;
 use Carbon\Carbon;
 
 
@@ -23,28 +24,27 @@ class HomeController extends Controller
     public function index()
     {
 
-        if(auth()->check()){
+        if (auth()->check()) {
 
-            $iduser= auth()->user()->id;
-            $user = User::where('id',$iduser)->first();
+            $iduser = auth()->user()->id;
+            $user = User::where('id', $iduser)->first();
 
-            if($user->role_id == 2){
+            if ($user->role_id == 2) {
 
-                $slider = Slider::where('user_id',$iduser)->get();
-            }else{
-                $slider = Slider::where('user_id',1)->get();
+                $slider = Slider::where('user_id', $iduser)->get();
+            } else {
+                $slider = Slider::where('user_id', 1)->get();
                 // $slider = Slider::all();
             }
-
-        }else{
-            $slider = Slider::where('user_id',1)->get();
+        } else {
+            $slider = Slider::where('user_id', 1)->get();
             // $slider = Slider::all();
         }
 
-        $hotel = Vendor::where('type_vendor','hotel')->count();
-        $agent = Vendor::where('type_vendor','agent')->count();
+        $hotel = Vendor::where('type_vendor', 'hotel')->count();
+        $agent = Vendor::where('type_vendor', 'agent')->count();
 
-        return view('landingpage.index',compact('slider','hotel','agent'));
+        return view('landingpage.index', compact('slider', 'hotel', 'agent'));
     }
 
     public function hotel(Request $request)
@@ -78,7 +78,7 @@ class HomeController extends Controller
         if ($contractrateMaxMinStay < $Nights) {
             // $totalNights = $contractrateMaxMinStay;
             $totalNights = 1;
-        }else{
+        } else {
             $totalNights = $Nights;
             // dd($totalNights);
         }
@@ -108,56 +108,53 @@ class HomeController extends Controller
                 });
             });
         })
-        ->whereHas('contractrate', function ($query) use ($totalNights) {
-            $query->where(function ($subquery) use ($totalNights) {
-                $subquery->where('min_stay', '=', 1);
-            });
-            
-        })
-        // ->whereHas('contractrate', function ($query) use ($totalNights) {
-        //     $minstay = ContractRate::where('min_stay', '<=', $totalNights)
-        //         ->orderBy('min_stay', 'desc')
-        //         ->first();
-
-        //     if ($minstay) {
-        //         $totalNights = $minstay->min_stay;
-        //     }
-
-        //     $query->where(function ($subquery) use ($totalNights) {
-        //         $subquery->where('min_stay', '>=', $totalNights);
-        //         // Tambahan: Kondisi stay period
-        //         $subquery->whereDate('stayperiod_begin', '<=', now())
-        //         ->whereDate('stayperiod_end', '>=', now());
-        //     });
-        //     // $query->where('rolerate', 1);
-        // })
-        // ->whereHas('room', function ($query) use ($request) {
-        //     $query->when($request->person, function ($q, $person) {
-        //         return $q->where('adults', '>=', $person);
-        //     });
-        // })
-        ->whereHas('room', function ($query) use ($request) {
-            $query->when($request->person, function ($q, $person) {
-                return $q->where(function ($qq) use ($person) {
-                    $qq->where('adults', '>=', $person)
-                       ->orWhere(function ($qqq) use ($person) {
-                           $qqq->where('adults', '>=', $person - 1)
-                                ->where('extra_bed', '>', 0);
-                       });
+            ->whereHas('contractrate', function ($query) use ($totalNights) {
+                $query->where(function ($subquery) use ($totalNights) {
+                    $subquery->where('min_stay', '=', 1);
                 });
-            });
-        })
-        ->with('contractrate.vendors')
-        ->with('room')
-        ->whereIn('contract_prices.id', function ($subquery) {
-            $subquery->select(\DB::raw('MIN(contract_prices.id)'))
-                ->from('contract_prices')
-                ->groupBy('contract_prices.contract_id');
-        })->paginate(6);
+            })
+            // ->whereHas('contractrate', function ($query) use ($totalNights) {
+            //     $minstay = ContractRate::where('min_stay', '<=', $totalNights)
+            //         ->orderBy('min_stay', 'desc')
+            //         ->first();
+
+            //     if ($minstay) {
+            //         $totalNights = $minstay->min_stay;
+            //     }
+
+            //     $query->where(function ($subquery) use ($totalNights) {
+            //         $subquery->where('min_stay', '>=', $totalNights);
+            //         // Tambahan: Kondisi stay period
+            //         $subquery->whereDate('stayperiod_begin', '<=', now())
+            //         ->whereDate('stayperiod_end', '>=', now());
+            //     });
+            //     // $query->where('rolerate', 1);
+            // })
+            // ->whereHas('room', function ($query) use ($request) {
+            //     $query->when($request->person, function ($q, $person) {
+            //         return $q->where('adults', '>=', $person);
+            //     });
+            // })
+            ->whereHas('room', function ($query) use ($request) {
+                $query->when($request->person, function ($q, $person) {
+                    return $q->where(function ($qq) use ($person) {
+                        $qq->where('adults', '>=', $person)
+                            ->orWhere(function ($qqq) use ($person) {
+                                $qqq->where('adults', '>=', $person - 1)
+                                    ->where('extra_bed', '>', 0);
+                            });
+                    });
+                });
+            })
+            ->with('contractrate.vendors')
+            ->with('room')
+            ->whereIn('contract_prices.id', function ($subquery) {
+                $subquery->select(\DB::raw('MIN(contract_prices.id)'))
+                    ->from('contract_prices')
+                    ->groupBy('contract_prices.contract_id');
+            })->paginate(6);
 
         // $vendorIds = $vendor->pluck('contractrate.vendor_id')->toArray();
-
-
         // $blackoutVendorIds = AgentMarkupDetail::where('vendor_id', $vendorIds)
         //         ->where('markup_cat_id', 'blackout')
         //         ->where(function ($q) use ($checkin, $checkout) {
@@ -240,41 +237,40 @@ class HomeController extends Controller
         //         $surchargesVendorIds = $surchargesDetail; // Mengisi koleksi dengan daftar vendor_id
         //         $surcharprice = $surchargesprice->surcharge_block_price;
 
-            // }else{
-            //     $surcharprice = 0;
-            // }
+        // }else{
+        //     $surcharprice = 0;
+        // }
 
         $data = $vendor;
 
         $requestdata = [
-            'country'=>$request->country,
-            'state'=>$request->state,
-            'person'=>$request->person,
-            'checkin'=>$request->checkin,
-            'checkout'=>$request->checkout
+            'country' => $request->country,
+            'state' => $request->state,
+            'person' => $request->person,
+            'checkin' => $request->checkin,
+            'checkout' => $request->checkout
         ];
 
         $data->appends($requestdata);
 
         // return view('landingpage.hotel.index',compact('data','requestdata','blackoutVendorIds','surchargesDetail','surcharprice'));
 
-        return view('landingpage.hotel.index',compact('data','requestdata'));
+        return view('landingpage.hotel.index', compact('data', 'requestdata'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function hoteldetail(Request $request,$id)
+    public function hoteldetail(Request $request, $id)
     {
-
         $category = $request->input('data.category');
         $datareq = $request->all();
-        // dd($datareq['checkin']);\
+        // dd($datareq['checkin']);
 
         if ($category) {
             $vendor = ContractPrice::whereHas('room', function ($query) use ($category) {
-                    $query->where('id', $category);
-                })
+                $query->where('id', $category);
+            })
                 ->where('contract_id', $id)
                 ->with('contractrate')
                 ->with('contractrate.vendors')
@@ -297,7 +293,7 @@ class HomeController extends Controller
             })
             ->get();
 
-        $slider = Slider::where('user_id',$vendor[0]->user_id)->get();
+        $slider = Slider::where('user_id', $vendor[0]->user_id)->get();
 
         $inputCheckin1 = $datareq['checkin'];
         $inputCheckout1 = $datareq['checkout'];
@@ -325,11 +321,11 @@ class HomeController extends Controller
             $datareq['checkout'] = $checkout->format('Y-m-d');
         }
 
-        $vendordetail = Vendor::where('id',$vendor[0]->contractrate->vendor_id)->first();
+        $vendordetail = Vendor::where('id', $vendor[0]->contractrate->vendor_id)->first();
 
-        $service = AgentMarkupDetail::where('vendor_id',$vendor[0]->contractrate->vendor_id)->get();
+        $service = AgentMarkupDetail::where('vendor_id', $vendor[0]->contractrate->vendor_id)->get();
 
-        $roomtype = RoomHotel::where('vendor_id',$vendor[0]->contractrate->vendor_id)->get();
+        $roomtype = RoomHotel::where('vendor_id', $vendor[0]->contractrate->vendor_id)->get();
 
         // $surcharprice = 0;
 
@@ -343,6 +339,63 @@ class HomeController extends Controller
             $checkout = $datareq['checkout'];
 
             $vendorIds = [$vendor[0]->contractrate->vendor_id];
+            // Ambil semua pemesanan yang sesuai dengan vendor ID
+            // $bookings = HotelRoomBooking::where('vendor_id', $vendorIds)->get();
+
+
+
+            // // Loop melalui setiap pemesanan
+            // foreach ($bookings as $booking) {
+            //     $checkinDate = $booking->checkin_date;
+            //     $checkoutDate = $booking->checkout_date;
+            //     $totalRoomBooked = $booking->total_room;
+
+            //     // Temukan kamar hotel yang sesuai berdasarkan 'room_id' dari pemesanan
+            //     $roomHotel = RoomHotel::find($booking->room_id);
+
+            //     // Periksa ketersediaan kamar untuk setiap hari dari checkin hingga checkout
+            //     $currentDate = $checkinDate;
+            //     while ($currentDate <= $checkoutDate) {
+            //         $roomAllowment = $roomHotel->room_allowment;
+
+            //         // Periksa apakah kamar tersedia pada tanggal ini
+            //         if ($roomAllowment >= $totalRoomBooked) {
+            //             // Jika kamar tersedia, kurangi jumlah kamar yang dipesan dari ketersediaan
+            //             $roomAllowment -= $totalRoomBooked;
+            //             $roomHotel->room_allowment = $roomAllowment;
+            //             $roomHotel->save();
+
+            //         } else {
+            //             // Jika kamar tidak tersedia, Anda dapat menangani sesuai kebutuhan Anda, misalnya, menolak pemesanan atau memberikan pesan kesalahan
+            //             // Di sini, kita hanya mencetak pesan kesalahan
+            //             // dd($roomHotel);
+            //         //    dd("Kamar tidak tersedia pada tanggal " . $currentDate . "\n");
+            //         }
+
+            //         // Pindah ke tanggal berikutnya
+            //         $currentDate = date('Y-m-d', strtotime($currentDate . ' +1 day'));
+            //     }
+            // }
+
+            $HotelRoomBooking = HotelRoomBooking::where('vendor_id', $vendorIds)
+            ->where(function ($q) use ($checkin, $checkout) {
+                $q->where(function ($qq) use ($checkin, $checkout) {
+                    $qq->where('checkin_date', '<=', Carbon::createFromFormat('Y-m-d', $checkout)->subDay())
+                        ->where('checkout_date', '>=', $checkin);
+                });
+            })
+            ->orWhere(function ($q) use ($checkin, $checkout) {
+                $q->where('checkin_date', '<=', $checkout)
+                    ->where('checkout_date', '>=', $checkout)
+                    ->whereNotIn('vendor_id', function ($query) use ($checkin, $checkout) {
+                        $query->select('vendor_id')
+                            ->from('hotel_room_bookings')
+                            ->where('checkin_date', '<=', $checkout)
+                            ->where('checkout_date', '>=', $checkin);
+                    });
+            })
+            ->get();
+            // dd($HotelRoomBooking);
             // $surchargesDetail = AgentMarkupDetail::where('vendor_id', $vendorIds)->get();
 
             // $surchargesDetail = AgentMarkupDetail::where('vendor_id', $vendorIds)
@@ -405,49 +458,49 @@ class HomeController extends Controller
             //         })
             //         ->first();
 
-                // dd($surchargesprice);
+            // dd($surchargesprice);
 
-                // $blackoutVendorIds = AgentMarkupDetail::where('vendor_id', $vendorIds)
-                //     ->where('markup_cat_id', 'blackout')
-                //     ->where(function ($q) use ($checkin, $checkout) {
-                //         $q->where(function ($qq) use ($checkin, $checkout) {
-                //             $qq->where('start_date', '<=', Carbon::createFromFormat('Y-m-d', $checkout)->subDay())
-                //                 ->where('end_date', '>=', $checkin)
-                //                 ->where('markup_cat_id', 'blackout');
-                //         });
-                //     })
-                //     ->orWhere(function ($q) use ($checkin, $checkout) {
-                //         $q->where('start_date', '<=', $checkout)
-                //             ->where('end_date', '>=', $checkout)
-                //             ->where('markup_cat_id', 'blackout')
-                //             ->whereNotIn('vendor_id', function ($query) use ($checkin, $checkout) {
-                //                 $query->select('vendor_id')
-                //                     ->from('agent_markup_details')
-                //                     ->where('markup_cat_id', 'blackout')
-                //                     ->where('start_date', '<=', $checkout)
-                //                     ->where('end_date', '>=', $checkin);
-                //             });
-                //     })
-                //     ->pluck('vendor_id');
-                    // dd($blackoutVendorIds);
+            // $blackoutVendorIds = AgentMarkupDetail::where('vendor_id', $vendorIds)
+            //     ->where('markup_cat_id', 'blackout')
+            //     ->where(function ($q) use ($checkin, $checkout) {
+            //         $q->where(function ($qq) use ($checkin, $checkout) {
+            //             $qq->where('start_date', '<=', Carbon::createFromFormat('Y-m-d', $checkout)->subDay())
+            //                 ->where('end_date', '>=', $checkin)
+            //                 ->where('markup_cat_id', 'blackout');
+            //         });
+            //     })
+            //     ->orWhere(function ($q) use ($checkin, $checkout) {
+            //         $q->where('start_date', '<=', $checkout)
+            //             ->where('end_date', '>=', $checkout)
+            //             ->where('markup_cat_id', 'blackout')
+            //             ->whereNotIn('vendor_id', function ($query) use ($checkin, $checkout) {
+            //                 $query->select('vendor_id')
+            //                     ->from('agent_markup_details')
+            //                     ->where('markup_cat_id', 'blackout')
+            //                     ->where('start_date', '<=', $checkout)
+            //                     ->where('end_date', '>=', $checkin);
+            //             });
+            //     })
+            //     ->pluck('vendor_id');
+            // dd($blackoutVendorIds);
 
-        //     if ($surchargesDetail->isNotEmpty() ) {
-        //         $surchargesVendorIds = $surchargesDetail; // Mengisi koleksi dengan daftar vendor_id
+            //     if ($surchargesDetail->isNotEmpty() ) {
+            //         $surchargesVendorIds = $surchargesDetail; // Mengisi koleksi dengan daftar vendor_id
 
-        //         $surcharprice = $surchargesprice->surcharge_block_price;
+            //         $surcharprice = $surchargesprice->surcharge_block_price;
 
-        //     }else{
-        //         $surcharprice = 0;
-        //     }
-        // } else {
-        //     $surchargesVendorIds = 0;
-        //     $blackoutVendorIds = 0;
+            //     }else{
+            //         $surcharprice = 0;
+            //     }
+            // } else {
+            //     $surchargesVendorIds = 0;
+            //     $blackoutVendorIds = 0;
         }
 
         $data = $vendor;
         // return view('landingpage.hotel.detail',compact('data','roomtype','service','vendordetail','datareq','surcharprice','surchargesVendorIds','blackoutVendorIds'));
 
-        return view('landingpage.hotel.detail',compact('data','slider','Nights','roomtype','service','vendordetail','datareq','contractprice'));
+        return view('landingpage.hotel.detail', compact('data', 'slider', 'Nights', 'roomtype', 'service', 'vendordetail', 'datareq', 'contractprice','HotelRoomBooking'));
     }
 
 
