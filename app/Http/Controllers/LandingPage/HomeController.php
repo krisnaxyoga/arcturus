@@ -49,6 +49,7 @@ class HomeController extends Controller
 
     public function hotel(Request $request)
     {
+        
         $checkin = Carbon::parse($request->checkin);
         $checkout = Carbon::parse($request->checkout);
         $Nights = $checkout->diffInDays($checkin);
@@ -83,7 +84,10 @@ class HomeController extends Controller
             // dd($totalNights);
         }
 
-        $vendor = ContractPrice::whereHas('contractrate.vendors', function ($query) use ($request) {
+        
+        $selectedProperties = $request->input('properties', []);
+
+        $vendor = ContractPrice::whereHas('contractrate.vendors', function ($query) use ($request,$selectedProperties) {
             $query->where('type_vendor', 'hotel')
                 ->where('is_active', 1);
 
@@ -99,60 +103,40 @@ class HomeController extends Controller
                 return $q->where('city', $city);
             });
 
+            $query->when(!empty($selectedProperties), function ($q) use ($selectedProperties) {
+                if (is_string($selectedProperties)) {
+                    // Ubah string menjadi array jika diperlukan
+                    $selectedProperties = explode(',', $selectedProperties);
+                }
+                return $q->whereIn('type_property', $selectedProperties);
+            });            
 
-            $query->when($request->country && $request->state && $request->city, function ($q) use ($request) {
+            $query->when($request->country && $request->state && $request->city && $selectedProperties, function ($q) use ($request,$selectedProperties) {
                 return $q->tap(function ($subquery) use ($request) {
                     $subquery->where('country', $request->country)
                         ->where('state', $request->state)
-                        ->where('city', $request->city);
+                        ->where('city', $request->city)
+                        ->whereIn('type_property', $selectedProperties);
                 });
             });
         })
-            ->whereHas('contractrate', function ($query) use ($totalNights) {
-                $query->where(function ($subquery) use ($totalNights) {
-                    $subquery->where('min_stay', '=', 1);
-                });
+        ->whereHas('contractrate', function ($query) {
+                $query->where('rolerate', 1);
             })
-            // ->whereHas('contractrate', function ($query) use ($totalNights) {
-            //     $minstay = ContractRate::where('min_stay', '<=', $totalNights)
-            //         ->orderBy('min_stay', 'desc')
-            //         ->first();
-
-            //     if ($minstay) {
-            //         $totalNights = $minstay->min_stay;
-            //     }
-
-            //     $query->where(function ($subquery) use ($totalNights) {
-            //         $subquery->where('min_stay', '>=', $totalNights);
-            //         // Tambahan: Kondisi stay period
-            //         $subquery->whereDate('stayperiod_begin', '<=', now())
-            //         ->whereDate('stayperiod_end', '>=', now());
-            //     });
-            //     // $query->where('rolerate', 1);
-            // })
-            // ->whereHas('room', function ($query) use ($request) {
-            //     $query->when($request->person, function ($q, $person) {
-            //         return $q->where('adults', '>=', $person);
-            //     });
-            // })
-            ->whereHas('room', function ($query) use ($request) {
-                $query->when($request->person, function ($q, $person) {
-                    return $q->where(function ($qq) use ($person) {
-                        $qq->where('adults', '>=', $person)
-                            ->orWhere(function ($qqq) use ($person) {
-                                $qqq->where('adults', '>=', $person - 1)
-                                    ->where('extra_bed', '>', 0);
-                            });
+        
+            ->whereHas('contractrate', function ($query) use ($checkin, $checkout) {
+                $query->where(function ($q) use ($checkin, $checkout) {
+                    $q->where(function ($qq) use ($checkin, $checkout) {
+                        $qq->where('stayperiod_begin', '<=', $checkin)
+                            ->where('stayperiod_end', '>=', $checkout);
+                    })->Where(function ($qq) use ($checkin, $checkout) {
+                        $qq->where('booking_begin', '<=', $checkin)
+                            ->where('booking_end', '>=', $checkout);
                     });
                 });
             })
             ->with('contractrate.vendors')
-            ->with('room')
-            ->whereIn('contract_prices.id', function ($subquery) {
-                $subquery->select(\DB::raw('MIN(contract_prices.id)'))
-                    ->from('contract_prices')
-                    ->groupBy('contract_prices.contract_id');
-            })->paginate(6);
+            ->with('room');
 
         // $vendorIds = $vendor->pluck('contractrate.vendor_id')->toArray();
         // $blackoutVendorIds = AgentMarkupDetail::where('vendor_id', $vendorIds)
@@ -240,17 +224,44 @@ class HomeController extends Controller
         // }else{
         //     $surcharprice = 0;
         // }
-
+        // Lakukan query ke database dan hasilkan builder query
         $data = $vendor;
 
+        if ($request->sort == 'low_to_high') {
+            $data = $data->whereIn('contract_prices.id', function ($subquery) {
+                $subquery->select(\DB::raw('MIN(contract_prices.id)'))
+                    ->from('contract_prices')
+                    ->groupBy('contract_prices.contract_id');
+            })->orderBy('contract_prices.recom_price', 'ASC');
+        } elseif ($request->sort == 'high_to_low') {
+            $data = $data->whereIn('contract_prices.id', function ($subquery) {
+                $subquery->select(\DB::raw('MIN(contract_prices.id)'))
+                    ->from('contract_prices')
+                    ->groupBy('contract_prices.contract_id');
+            })->orderBy('contract_prices.recom_price', 'DESC');
+        }else{
+            $data = $data->whereIn('contract_prices.id', function ($subquery) {
+                $subquery->select(\DB::raw('MIN(contract_prices.id)'))
+                    ->from('contract_prices')
+                    ->groupBy('contract_prices.contract_id');
+            });
+        }
+
+        // Eksekusi query dan terapkan paginasi
+        $data = $data->paginate(6);
+
+        // Buat array data request
         $requestdata = [
             'country' => $request->country,
             'state' => $request->state,
             'person' => $request->person,
             'checkin' => $request->checkin,
-            'checkout' => $request->checkout
+            'checkout' => $request->checkout,
+            'sort' => $request->sort,
+            'properties' =>$selectedProperties
         ];
 
+        // Terapkan append ke objek paginasi
         $data->appends($requestdata);
 
         // return view('landingpage.hotel.index',compact('data','requestdata','blackoutVendorIds','surchargesDetail','surcharprice'));

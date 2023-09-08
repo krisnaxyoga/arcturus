@@ -205,6 +205,10 @@
                         <div class="card-body">
                             <a class="text-secondary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
                                 Property type
+                                {{-- {{$requestdata['properties']}} --}}
+                                {{-- @foreach ($requestdata['properties'] as $av)
+                                    {{$av}}
+                                @endforeach --}}
                               </a>
                               <div class="collapse show" id="collapseExample">
                                 <div>
@@ -217,8 +221,10 @@
                                         <input value="{{ $requestdata['checkout'] }}" type="hidden" name="checkout"
                                         class="form-control checkoutdate"
                                         placeholder="Check Out Date">
-                                        <input type="checkbox" id="vehicle1{{ $id }}" name="property{{ $id }}" value="{{ $name }}">
-                                        <label for="vehicle1{{ $id }}"> {{ $name }}</label><br>
+                                        <input type="hidden" value="{{$requestdata['person']}}" name="person">
+                                        <input type="hidden" value="{{$requestdata['country']}}" name="country">
+                                        <input type="hidden" value="{{$requestdata['sort']}}" name="sort">
+                                        <input type="checkbox" id="property{{ $id }}" name="properties[]" value="{{ $name }}" @if(is_array($requestdata['properties']) && in_array($name, $requestdata['properties']) || $name == $requestdata['properties']) checked @endif><label for="vehicle1{{ $id }}"> &nbsp; {{ $name }}</label><br>
                                             {{-- <option @if (($requestdata['country'] ?? '') == $name) selected @endif value="{{ $name }}">{{ $name }}</option> --}}
                                         @endforeach
                                         <input class="btn btn-secondary" type="submit" value="Filter">
@@ -241,10 +247,10 @@
                                 <form action="">
                                     <p class="d-flex">
                                         <span>Show on the map | Sort by:</span>
-                                        <select type="text" class="form-control">
+                                        <select type="text" id="sort-select"  class="form-control">
                                             <option value="recomended">recomended</option>
-                                            <option value="recomended">Price (Low to Hight)</option>
-                                            <option value="recomended">Price (Hight to Low)</option>
+                                            <option @if (($requestdata['sort'] ?? '') == 'low_to_high') selected @endif  value="low_to_high">Price (Low to Hight)</option>
+                                            <option @if (($requestdata['sort'] ?? '') == 'high_to_low') selected @endif value="high_to_low">Price (Hight to Low)</option>
                                         </select>
                                     </p>
                                 </form>
@@ -447,4 +453,50 @@
             $(this).val(checkin + ' - ' + checkout);
         });
     </script>
+    <script>
+        $(document).ready(function() {
+            // Tangkap perubahan pada elemen select
+            $("#sort-select").change(function() {
+                var selectedValue = $(this).val(); // Nilai yang dipilih pada select
+                var url = "{{ route('hotel.homepage') }}"; // URL dasar
+
+                // Tambahkan parameter-parameter ke URL berdasarkan nilai yang dipilih
+                if (selectedValue === "low_to_high") {
+                    url += "?sort=low_to_high";
+                } else if (selectedValue === "high_to_low") {
+                    url += "?sort=high_to_low";
+                }else{
+                    url += "?sort=recomended";
+                }
+
+                // Cek apakah ada parameter-parameter pencarian, jika ada, tambahkan ke URL
+                if ("{{ $requestdata['country'] }}" !== "") {
+                    url += "&country={{ $requestdata['country'] }}";
+                }
+
+                if ("{{ $requestdata['person'] }}" !== "") {
+                    url += "&person={{ $requestdata['person'] }}";
+                }
+
+                if ("{{ $requestdata['checkin'] }}" !== "") {
+                    url += "&checkin={{ $requestdata['checkin'] }}";
+                }
+
+                if ("{{ $requestdata['checkout'] }}" !== "") {
+                    url += "&checkout={{ $requestdata['checkout'] }}";
+                }
+
+                 // Mengubah array properties menjadi string dengan koma sebagai pemisah
+                 var properties = @json($requestdata['properties'] ?? []);
+
+                    if (properties.length > 0) {
+                        var propertyString = properties.join(',');
+                        url += "&properties=" + propertyString;
+                    }
+
+                // Redirect ke URL yang telah dibentuk
+                window.location.href = url;
+            });
+        });
+        </script>
 @endsection

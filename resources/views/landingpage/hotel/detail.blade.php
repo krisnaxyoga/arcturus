@@ -207,7 +207,7 @@
                                                                 $totalRoomBooking = 0; // Variabel untuk mengumpulkan total total_room
 
                                                                 if ($HotelRoomBooking->count() != 0) {
-                                                                    foreach ($HotelRoomBooking as $key => $value) {
+                                                                    foreach ($HotelRoomBooking as $value) {
                                                                         if ($value->room_id == $item->room_id) {
                                                                             $totalRoomBooking += $value->total_room;
                                                                         }
@@ -289,7 +289,7 @@
                                                                         <p>{!! $itemprice->contractrate->benefit_policy !!}</p>
                                                                     </div>
                                                                     <div class="col-lg">
-                                                                        @if ($itemprice->room->room_allow <= 0)
+                                                                        @if ($RoomAllowment <= 0)
                                                                             <span class="badge badge-danger">Sold</span>
                                                                         @else
                                                                             @if($Nights >= $itemprice->contractrate->min_stay)
@@ -297,7 +297,7 @@
                                                                                     style="width:200px" onchange="calculateTotal()">
                                                                                     <option data-price="0" value="0" data-pricenomarkup="0">
                                                                                         0</option>
-                                                                                    @for ($i = 1; $i <= $itemprice->room->room_allow; $i++)
+                                                                                    @for ($i = 1; $i <= $RoomAllowment; $i++)
                                                                                         {{-- <option data-contprice={{$itemprice->id}} data-contractid={{$itemprice->contract_id}} data-roomid={{$itemprice->room->id}} data-price="{{($i * ($itemprice->recom_price + $itemprice->contractrate->vendors->system_markup + $surcharprice)) }}" value="{{$i}}">{{$i}} @if ($i == 1) room @else rooms @endif </option> --}}
                                                                                         <option data-contprice={{ $itemprice->id }}
                                                                                             data-contractid={{ $itemprice->contract_id }}
