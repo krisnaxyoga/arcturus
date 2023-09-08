@@ -210,7 +210,11 @@ class ContractController extends Controller
                     $data->recom_price = $baritem->price * ((100 - $contract->percentage)/100);
                 }else{
                     $contprice = ContractPrice::where('contract_id',$contractroleone->id)->where('barprice_id',$baritem->id)->where('room_id', $baritem->room_id)->first();
-                    $data->recom_price = $contprice->recom_price * ((100 - $contract->percentage)/100);
+                    if(!empty($contprice) && $contprice->exists()){
+                        $data->recom_price = $contprice->recom_price * ((100 - $contract->percentage)/100);
+                   }else{
+                       return redirect()->back()->with('success', 'Some rooms have not been filled in your main contract, please check again on the main contract');
+                   }
                 }
 
                 $data->price = 0;
@@ -280,7 +284,11 @@ class ContractController extends Controller
                 $data->recom_price = $barprice->price * ((100 - $contract->percentage)/100);
             }else{
                 $contprice = ContractPrice::where('contract_id',$contractroleone->id)->where('barprice_id',$barprice->id)->where('room_id', $barprice->room_id)->first();
-                $data->recom_price = $contprice->recom_price * ((100 - $contract->percentage)/100);
+                if(!empty($contprice) && $contprice->exists()){
+                     $data->recom_price = $contprice->recom_price * ((100 - $contract->percentage)/100);
+                }else{
+                    return redirect()->back()->with('success', 'room not found, you have not filled in the room type on your main contract');
+                }
             }
             $data->price = 0;
 
@@ -333,6 +341,12 @@ class ContractController extends Controller
     public function destroycontractprice($id){
         $data = ContractPrice::find($id);
         $data->delete();
+
+        $advprice = AdvancePurchasePrice::where('contract_id',$data->contract_id)->where('room_id',$data->room_id)->get();
+        foreach($advprice as $price){
+          $price->delete();
+        }
+        
 
         return redirect()->back()->with('message', 'Price destroy');
     }
@@ -512,6 +526,11 @@ class ContractController extends Controller
     {
         // Hapus ContractRate
             $data = ContractRate::find($id);
+
+            if($data->rolerate == 1){
+                return redirect()->back()->with('success', '!!! The main contract cannot be deleted !!!');
+            }
+
             if ($data) {
                 $data->delete();
             }

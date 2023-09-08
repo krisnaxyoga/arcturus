@@ -271,15 +271,25 @@ class IndexController extends Controller
     public function destroy(string $id)
     {
         $iduser = auth()->user()->id;
+
         $room = RoomHotel::find($id);
-        $room->delete();
 
-        $barprice = BarPrice::where('user_id',$iduser)->where('room_id',$id)->first();
-        $barprice->delete();
+        if ($room) {
+            $room->delete();
+        }
 
-        $contractprice = ContractPrice::where('user_id',$iduser)->where('room_id',$id)->first();
-        $contractprice->delete();
+        $barprice = BarPrice::where('user_id', $iduser)->where('room_id', $id)->first();
 
-        return redirect()->back()->with('message', 'data deleted!');
+        if ($barprice) {
+            $barprice->delete();
+        }
+
+        $contractprice = ContractPrice::where('user_id', $iduser)->where('room_id', $id)->first();
+
+        if ($contractprice) {
+            $contractprice->delete();
+        }
+
+        return redirect()->back()->with('message', 'Data deleted!');
     }
 }
