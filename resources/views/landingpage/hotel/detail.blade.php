@@ -1,6 +1,9 @@
 @extends('layouts.landing')
 @section('title', 'Hotel')
 @section('contents')
+@php
+    use Carbon\Carbon;
+@endphp
 <!-- fotorama.css & fotorama.js. -->
 <link  href="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.css" rel="stylesheet"> <!-- 3 KB -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.js"></script> <!-- 16 KB -->
@@ -169,19 +172,45 @@
                             @foreach ($data as $key=>$item)
                             @php
                             // ========================================================= START CALENDAR ====================================
-                            $status = 1;   
+
+                            $status = 1;
                             $TotalHotelCalendar = 0;
-                            
+                            $checkinDate = Carbon::parse($checkin);
+                            $checkoutDate = Carbon::parse($checkout);
+
                             if ($HotelCalendar->count() != 0) {
                                 foreach ($HotelCalendar as $calendar) {
                                     if ($calendar->room_hotel_id == $item->room_id) {
-                                        $TotalHotelCalendar += $calendar->recom_price;
-                                        $status = $calendar->active;
+                                        $startDate = Carbon::parse($calendar->start_date);
+                                        $endDate = Carbon::parse($calendar->end_date);
+
+                                        // Check apakah rentang tanggal kalender tumpang tindih dengan rentang check-in dan check-out
+                                        if ($startDate < $checkoutDate && $endDate >= $checkinDate) {
+                                            // Hitung jumlah malam yang termasuk dalam rentang tanggal
+                                            $nights = min($endDate, $checkoutDate)->diffInDays(max($startDate, $checkinDate)) + 1;
+                                            $TotalHotelCalendar += $calendar->recom_price * $nights;
+                                            $status = $calendar->active;
+                                        }
                                     }
                                 }
                             }
-                            
+
                             $Room_recomprice = ($TotalHotelCalendar <= 0) ? $item->recom_price : $TotalHotelCalendar;
+
+                            // $status = 1;   
+                            // $TotalHotelCalendar = 0;
+                            
+                            // if ($HotelCalendar->count() != 0) {
+                            //     foreach ($HotelCalendar as $calendar) {
+                            //         if ($calendar->room_hotel_id == $item->room_id) {
+                            //             $TotalHotelCalendar += $calendar->recom_price;
+                            //             $status = $calendar->active;
+                            //         }
+                            //     }
+                            // }
+                            
+                            // $Room_recomprice = ($TotalHotelCalendar <= 0) ? $item->recom_price : $TotalHotelCalendar;
+
                             // ========================================================= END CALENDAR ====================================
                         
                             // ========================================================= ROOM ALLOWMENT ====================================
