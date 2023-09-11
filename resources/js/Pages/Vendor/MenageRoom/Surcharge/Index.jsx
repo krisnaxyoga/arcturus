@@ -13,12 +13,13 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import axios from 'axios';
 import {Alert} from "react-bootstrap";
 
-export default function Index({ errors, session, default_selected_hotel_room, hotel_rooms, vendor }) {
+export default function Index({ errors, session,contractrate, default_selected_hotel_room, hotel_rooms, vendor }) {
     const { url } = usePage();
 
     const [loadDates, setLoadDates] = useState([])
     const [showModel, setShowModal] = useState(false)
-    const [activeHotelRoom, setActiveHotelRoom] = useState(default_selected_hotel_room.id)
+    const [activeHotelRoom, setActiveHotelRoom] = useState(default_selected_hotel_room.room_id)
+    const [activeContractRoom, setActiveContractRoom] = useState(default_selected_hotel_room.contract_id)
     const [activeStart, setActiveStart] = useState(null)
     const [activeEnd, setActiveEnd] = useState(null)
     const [alert, setAlert] = useState({
@@ -53,19 +54,20 @@ export default function Index({ errors, session, default_selected_hotel_room, ho
         setPrice(0)
         setShowModal(false)
     }
-    console.log(hotel_rooms,">>>>HOTELL ROOM");
-    
+    console.log(loadDates,">>>>HOTELL ROOM");
+
     useEffect(() => {
         // Fungsi yang ingin Anda jalankan saat halaman di-reload
         const fetchData = async () => {
           try {
-            const response = await axios.get(`/room/surcharge/${activeHotelRoom}/load-dates`, {
+            const response = await axios.get(`/room/surcharge/${activeHotelRoom}/${activeContractRoom}/load-dates`, {
               params: {
                 'start': activeStart,
                 'end': activeEnd
               }
             });
-      
+
+            setActiveContractRoom(activeContractRoom);
             setActiveHotelRoom(activeHotelRoom);
             setLoadDates(response.data);
           } catch (error) {
@@ -73,19 +75,40 @@ export default function Index({ errors, session, default_selected_hotel_room, ho
             console.error('Error fetching data:', error);
           }
         };
-      
+
         fetchData();
       }, [activeHotelRoom, activeStart, activeEnd]);
 
-    const handleNavRoomTypeSelect = useCallback(async (hotel_room_id) => {
+    const handleNavRoomTypeSelect = useCallback(async (hotel_room_id,contract_id) => {
         try {
-            const response = await axios.get(`/room/surcharge/${hotel_room_id}/load-dates`,{
+            const response = await axios.get(`/room/surcharge/${hotel_room_id}/${contract_id}/load-dates`,{
                 params: {
                     'start': activeStart,
                     'end': activeEnd
                 }
             })
+            setActiveContractRoom(contract_id);
             setActiveHotelRoom(hotel_room_id)
+            setLoadDates(response.data)
+        } catch (error) {
+            setAlert({
+                show: true,
+                type: 'danger',
+                message: error
+            })
+        }
+    }, [activeStart,activeEnd]);
+
+    const handleNavContractSelect = useCallback(async (hotel_room_id,contract_id) => {
+        try {
+            const response = await axios.get(`/room/surcharge/${hotel_room_id}/${contract_id}/load-dates`,{
+                params: {
+                    'start': activeStart,
+                    'end': activeEnd
+                }
+            })
+            setActiveContractRoom(contract_id);
+            sethotel_room_id(hotel_room_id)
             setLoadDates(response.data)
         } catch (error) {
             setAlert({
@@ -109,6 +132,7 @@ export default function Index({ errors, session, default_selected_hotel_room, ho
         }, {
             onSuccess: () => {
                 handleNavRoomTypeSelect(activeHotelRoom)
+                // handleNavContractSelect(activeContractRoom)
                 handleCloseModal()
             },
             onError: (errors) => {
@@ -154,12 +178,13 @@ export default function Index({ errors, session, default_selected_hotel_room, ho
                         <div className="panel-body no-padding" style={{ background: "#f4f6f8", padding: "0px 15px" }}>
                             <div className="row">
                                 <div className="col-md-3" style={{ borderRight: "1px solid #dee2e6" }}>
+                                    <p className='font-weight-700'>Room Type</p>
                                     <ul className="nav nav-tabs flex-column vertical-nav">
                                         {hotel_rooms.length > 0 && (
                                             <>
                                                 {hotel_rooms.map((item) =>
                                                     (
-                                                        <li key={item.id} className="nav-item event-name" onClick={() => handleNavRoomTypeSelect(item.id)}>
+                                                        <li key={item.id} className="nav-item event-name" onClick={() => handleNavRoomTypeSelect(item.id,item.contract_id)}>
                                                             <a className={`nav-link ${activeHotelRoom === item.id ? "active" : ""}`}>
                                                                 {item.ratedesc}
                                                             </a>
@@ -169,6 +194,20 @@ export default function Index({ errors, session, default_selected_hotel_room, ho
                                             </>
                                         )}
                                     </ul>
+                                    {/* <p className='font-weight-700'>Market</p>
+                                    <ul className="nav nav-tabs flex-column vertical-nav">
+                                        {contractrate.length > 0 && (
+                                            <>
+                                            {contractrate.map((item) => (
+                                                <li key={item.id} className='nav-item event-name' onClick={() => handleNavContractSelect(activeHotelRoom,item.id)}>
+                                                    <a className={`nav-link ${activeContractRoom === item.id ? "active" : ""}`}>
+                                                        {item.codedesc}
+                                                    </a>
+                                                </li>
+                                            ))}
+                                            </>
+                                        )}
+                                    </ul> */}
                                 </div>
                                 <div className="col-md-9" style={{ background: "white", padding: "15px"}}>
                                     <FullCalendar

@@ -26,27 +26,45 @@ class SurchargeController extends Controller
 
         $vendor = Vendor::query()->where('user_id',$userid)->with('users')->first();
 
-        // $ContractPrice = ContractPrice::query()->where('user_id',$userid)
-        //     ->with('contractrate')
-        //     ->with('room')
-        //     ->orderBy('recom_price', 'asc')
-        //     ->get();
 
-        // $ContractRate = ContractRate::query()->where('user_id',$userid)->get();
+        $ContractPrice = ContractPrice::where('contract_prices.user_id', $userid)
+            ->with('contractrate')
+            ->with('room')
+            ->orderBy('recom_price', 'asc')
+            ->join('room_hotels', 'contract_prices.room_id', '=', 'room_hotels.id')
+            ->get();
 
-        $room = RoomHotel::query()->where('user_id',$userid)->get();
+        $ContractRate1 = ContractRate::query()->where('user_id',$userid)->where('vendor_id',$vendor->id)->where('rolerate',1)->first();
+
+        $ContractRate = ContractRate::query()->where('user_id',$userid)->where('vendor_id',$vendor->id)->get();
+
+        // dd($ContractPrice);
+
+        if($ContractPrice->isEmpty()){
+            $room = RoomHotel::query()->where('user_id',$userid)->get();
+        }else{
+            $room = ContractPrice::where('contract_prices.user_id', $userid)
+            ->where('contract_prices.contract_id',$ContractRate1->id)
+            ->with('contractrate')
+            ->with('room')
+            ->orderBy('recom_price', 'asc')
+            ->join('room_hotels', 'contract_prices.room_id', '=', 'room_hotels.id')
+            ->get();
+        }
+
 
         $default_selected_hotel_room = collect($room)->first();
-        
+        // dd($room,$default_selected_hotel_room);
 
         return inertia('Vendor/MenageRoom/Surcharge/Index', [
             'default_selected_hotel_room' => $default_selected_hotel_room,
             'hotel_rooms' => $room,
-            'vendor' => $vendor
+            'vendor' => $vendor,
+            'contractrate' => $ContractRate
         ]);
     }
 
-    public function load_dates(Request $request, $hotel_room_id): JsonResponse
+    public function load_dates(Request $request, $hotel_room_id, $contract_id): JsonResponse
     {
         $from = date('Y-m-d', strtotime($request->start));
         $to = date('Y-m-d', strtotime($request->end));
@@ -61,9 +79,17 @@ class SurchargeController extends Controller
                 ->where('room_hotel_id', $hotel_room_id)
                 ->where('start_date', $date)
                 ->first();
-            
+
+            // $ContractPrice = ContractPrice::where('room_id', $hotel_room_id)
+            //     ->where('user_id', $userid)
+            //     ->first();
             $ContractPrice = ContractPrice::where('room_id', $hotel_room_id)
-                ->where('user_id', $userid)
+                ->where('contract_prices.contract_id',$contract_id)
+                ->where('contract_prices.user_id', $userid)
+                ->with('contractrate')
+                ->with('room')
+                ->orderBy('recom_price', 'asc')
+                ->join('room_hotels', 'contract_prices.room_id', '=', 'room_hotels.id')
                 ->first();
 
             if ($hotel_room_surcharge) {
@@ -125,7 +151,7 @@ class SurchargeController extends Controller
         $hotel_room_surcharge->recom_price = $request->price;
         $hotel_room_surcharge->active = $request->active;
         $hotel_room_surcharge->save();
-        
+
     }
 
     /**

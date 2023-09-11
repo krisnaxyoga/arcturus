@@ -188,7 +188,7 @@
                                         if ($startDate < $checkoutDate && $endDate >= $checkinDate) {
                                             // Hitung jumlah malam yang termasuk dalam rentang tanggal
                                             $nights = min($endDate, $checkoutDate)->diffInDays(max($startDate, $checkinDate)) + 1;
-                                            $TotalHotelCalendar += $calendar->recom_price * $nights;
+                                            $TotalHotelCalendar += $calendar->recom_price / $nights;
                                             $status = $calendar->active;
                                         }
                                     }
@@ -197,9 +197,9 @@
 
                             $Room_recomprice = ($TotalHotelCalendar <= 0) ? $item->recom_price : $TotalHotelCalendar;
 
-                            // $status = 1;   
+                            // $status = 1;
                             // $TotalHotelCalendar = 0;
-                            
+
                             // if ($HotelCalendar->count() != 0) {
                             //     foreach ($HotelCalendar as $calendar) {
                             //         if ($calendar->room_hotel_id == $item->room_id) {
@@ -208,18 +208,18 @@
                             //         }
                             //     }
                             // }
-                            
+
                             // $Room_recomprice = ($TotalHotelCalendar <= 0) ? $item->recom_price : $TotalHotelCalendar;
 
                             // ========================================================= END CALENDAR ====================================
-                        
+
                             // ========================================================= ROOM ALLOWMENT ====================================
                             $totalRoomBooking = 0; // Inisialisasi totalRoomBooking
-                        
+
                             if ($status != 1) {
                                 $totalRoomBooking = $item->room->room_allow;
                             }
-                        
+
                             if ($HotelRoomBooking->count() != 0) {
                                 foreach ($HotelRoomBooking as $value) {
                                     if ($value->room_id == $item->room_id) {
@@ -227,7 +227,7 @@
                                     }
                                 }
                             }
-                        
+
                             // Setel $RoomAllowment ke $item->room->room_allow dikurangi total total_room yang sesuai
                             $RoomAllowment = $item->room->room_allow - $totalRoomBooking;
                             // ========================================================= ROOM ALLOWMENT ====================================

@@ -122,7 +122,7 @@ Route::group(['middleware' => ['auth', 'checkrole:1']], function() {
     Route::get('/admin/paymenthotel/edit/{id}', [\App\Http\Controllers\Admin\Hotel\PaymentController::class, 'edit'])->name('dashboard.paymenttohotel.edit');
     Route::post('/admin/paymenthotel/update/{id}', [\App\Http\Controllers\Admin\Hotel\PaymentController::class, 'update'])->name('dashboard.paymenttohotel.update');
     Route::get('/admin/paymenthotel/destroy/{id}', [\App\Http\Controllers\Admin\Hotel\PaymentController::class, 'destroy'])->name('dashboard.paymenttohotel.destroy');
-   
+
 });
 
 // untuk vendor
@@ -213,7 +213,7 @@ Route::group(['middleware' => ['auth', 'checkrole:2']], function() {
 
     //surcharge controller
     Route::get('/room/surcharge/index',[\App\Http\Controllers\Vendor\Hotel\Agent\SurchargeController::class, 'index'])->name('surcharge.index');
-    Route::get('/room/surcharge/{hotel_room_id}/load-dates',[\App\Http\Controllers\Vendor\Hotel\Agent\SurchargeController::class, 'load_dates'])->name('surcharge.load_dates');
+    Route::get('/room/surcharge/{hotel_room_id}/{contract_id}/load-dates',[\App\Http\Controllers\Vendor\Hotel\Agent\SurchargeController::class, 'load_dates'])->name('surcharge.load_dates');
     Route::post('/room/surcharge/store',[\App\Http\Controllers\Vendor\Hotel\Agent\SurchargeController::class, 'store'])->name('surcharge.store');
 
     //advance purchase

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::table('hotel_room_surcharges', function (Blueprint $table) {
             $table->integer('recom_price')->after('price')->default(0);
+            $table->integer('room_allow')->after('price')->default(0);
         });
     }
 
