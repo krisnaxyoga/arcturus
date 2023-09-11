@@ -1,5 +1,5 @@
 //import React
-import React, {useCallback, useState} from 'react';
+import React, {useCallback,useEffect, useState} from 'react';
 
 //import layout
 import Layout from '../../../../Layouts/Vendor';
@@ -30,6 +30,7 @@ export default function Index({ errors, session, default_selected_hotel_room, ho
     // Define state for handleStore
     const [date, setDate] = useState('')
     const [startDate, setStartDate] = useState('')
+    const [endDate, setEndDate] = useState('')
     const [price, setPrice] = useState(0)
     const [active, setActive] = useState(true)
 
@@ -41,6 +42,7 @@ export default function Index({ errors, session, default_selected_hotel_room, ho
     const handleOpenModal = (arg) => {
         setDate(arg.event.start.toLocaleDateString('en-GB'))
         setStartDate(arg.event.startStr)
+        setEndDate(arg.event.endStr)
         setPrice(arg.event.extendedProps.price)
         setShowModal(true)
     }
@@ -51,6 +53,29 @@ export default function Index({ errors, session, default_selected_hotel_room, ho
         setPrice(0)
         setShowModal(false)
     }
+    console.log(hotel_rooms,">>>>HOTELL ROOM");
+    
+    useEffect(() => {
+        // Fungsi yang ingin Anda jalankan saat halaman di-reload
+        const fetchData = async () => {
+          try {
+            const response = await axios.get(`/room/surcharge/${activeHotelRoom}/load-dates`, {
+              params: {
+                'start': activeStart,
+                'end': activeEnd
+              }
+            });
+      
+            setActiveHotelRoom(activeHotelRoom);
+            setLoadDates(response.data);
+          } catch (error) {
+            // Tangani kesalahan jika permintaan gagal
+            console.error('Error fetching data:', error);
+          }
+        };
+      
+        fetchData();
+      }, [activeHotelRoom, activeStart, activeEnd]);
 
     const handleNavRoomTypeSelect = useCallback(async (hotel_room_id) => {
         try {
@@ -78,7 +103,7 @@ export default function Index({ errors, session, default_selected_hotel_room, ho
             vendor_id: vendor.id,
             room_hotel_id: activeHotelRoom,
             start_date: startDate,
-            end_date: startDate,
+            end_date: endDate,
             price: price,
             active: active
         }, {
@@ -125,7 +150,7 @@ export default function Index({ errors, session, default_selected_hotel_room, ho
                     </div>
 
                     <div className="user-panel">
-                        <div className="panel-title"><strong>Surcharge</strong></div>
+                        <div className="panel-title"><strong>Calendar</strong></div>
                         <div className="panel-body no-padding" style={{ background: "#f4f6f8", padding: "0px 15px" }}>
                             <div className="row">
                                 <div className="col-md-3" style={{ borderRight: "1px solid #dee2e6" }}>
@@ -136,7 +161,7 @@ export default function Index({ errors, session, default_selected_hotel_room, ho
                                                     (
                                                         <li key={item.id} className="nav-item event-name" onClick={() => handleNavRoomTypeSelect(item.id)}>
                                                             <a className={`nav-link ${activeHotelRoom === item.id ? "active" : ""}`}>
-                                                                {item.room.ratedesc}
+                                                                {item.ratedesc}
                                                             </a>
                                                         </li>
                                                     )
@@ -170,12 +195,16 @@ export default function Index({ errors, session, default_selected_hotel_room, ho
                             <form onSubmit={handleStore}>
 
                                 <div className="mb-3">
-                                    <label className="form-label fw-bold">Date</label>
+                                    <label className="form-label fw-bold">Start Date</label>
                                     <input type="text" className="form-control" value={date} readOnly={true} />
+                                </div>
+                                <div className="mb-3">
+                                    <label className="form-label fw-bold">End Date</label>
+                                    <input type="date" onChange={(e) =>setEndDate(e.target.value)} className="form-control" value={endDate} />
                                 </div>
 
                                 <div className="mb-3">
-                                    <label className="form-label fw-bold">Surcharge</label>
+                                    <label className="form-label fw-bold">Price</label>
                                     <input id="price" type="number" className="form-control" value={price} onChange={(e) => setPrice(e.target.value)} />
                                 </div>
                                 {errors.price && (

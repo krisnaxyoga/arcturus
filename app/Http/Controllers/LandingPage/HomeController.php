@@ -13,6 +13,7 @@ use App\Models\Slider;
 use App\Models\AgentMarkupDetail;
 use App\Models\AgentMarkupSetup;
 use App\Models\HotelRoomBooking;
+use App\Models\HotelRoomSurcharge;
 use Carbon\Carbon;
 
 
@@ -406,6 +407,42 @@ class HomeController extends Controller
                     });
             })
             ->get();
+
+            $HotelCalendar = HotelRoomSurcharge::where('vendor_id', $vendorIds)
+            ->where(function ($q) use ($checkin, $checkout) {
+                $q->where(function ($qq) use ($checkin, $checkout) {
+                    $qq->where('start_date', '>=', $checkin)
+                        ->where('start_date', '<', $checkout);
+                });
+            })
+            ->orWhere(function ($q) use ($checkin, $checkout) {
+                $q->where('end_date', '>', $checkin)
+                    ->where('end_date', '<=', $checkout);
+            })
+            ->get();
+
+            // $HotelCalendar = HotelRoomSurcharge::where('vendor_id', $vendorIds)
+            //     ->where(function ($q) use ($checkin, $checkout) {
+            //         $q->where(function ($qq) use ($checkin, $checkout) {
+            //             $qq->whereRaw("DATE(start_date) <= ?", [$checkout])
+            //                 ->whereRaw("DATE(end_date) >= ?", [$checkin]);
+            //         });
+            //     })
+            //     ->orWhere(function ($q) use ($checkin, $checkout) {
+            //         $q->whereRaw("DATE(start_date) <= ?", [$checkout])
+            //             ->whereRaw("DATE(end_date) >= ?", [$checkin])
+            //             ->whereNotIn('vendor_id', function ($query) use ($checkin, $checkout) {
+            //                 $query->select('vendor_id')
+            //                     ->from('hotel_room_surcharges')
+            //                     ->whereRaw("DATE(start_date) <= ?", [$checkout])
+            //                     ->whereRaw("DATE(end_date) >= ?", [$checkin]);
+            //             });
+            //     })
+            //     ->where(function ($q) use ($checkin, $checkout) {
+            //         $q->whereRaw("DATE(start_date) >= ?", [$checkin])
+            //             ->whereRaw("DATE(end_date) <= ?", [$checkout]);
+            //     })
+            //     ->get();
             // dd($HotelRoomBooking);
             // $surchargesDetail = AgentMarkupDetail::where('vendor_id', $vendorIds)->get();
 
@@ -511,7 +548,7 @@ class HomeController extends Controller
         $data = $vendor;
         // return view('landingpage.hotel.detail',compact('data','roomtype','service','vendordetail','datareq','surcharprice','surchargesVendorIds','blackoutVendorIds'));
 
-        return view('landingpage.hotel.detail', compact('data', 'slider', 'Nights', 'roomtype', 'service', 'vendordetail', 'datareq', 'contractprice','HotelRoomBooking'));
+        return view('landingpage.hotel.detail', compact('data','HotelCalendar', 'slider', 'Nights', 'roomtype', 'service', 'vendordetail', 'datareq', 'contractprice','HotelRoomBooking'));
     }
 
 

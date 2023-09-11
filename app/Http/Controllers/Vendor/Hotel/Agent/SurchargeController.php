@@ -8,6 +8,8 @@ use App\Models\BarRoom;
 use App\Models\HotelRoomSurcharge;
 use App\Models\RoomHotel;
 use App\Models\Vendor;
+use App\Models\ContractPrice;
+use App\Models\ContractRate;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -24,21 +26,18 @@ class SurchargeController extends Controller
 
         $vendor = Vendor::query()->where('user_id',$userid)->with('users')->first();
 
-        $bar_price = BarPrice::query()->where('user_id',$userid)
-            ->with('barroom')
-            ->with('room')
-            ->orderBy('price', 'asc')
-            ->get();
+        // $ContractPrice = ContractPrice::query()->where('user_id',$userid)
+        //     ->with('contractrate')
+        //     ->with('room')
+        //     ->orderBy('recom_price', 'asc')
+        //     ->get();
 
-        $bar_room = BarRoom::query()->where('user_id',$userid)->get();
+        // $ContractRate = ContractRate::query()->where('user_id',$userid)->get();
 
-        if ( $bar_room->isEmpty() ) {
-            $room = RoomHotel::query()->where('user_id',$userid)->get();
-        } else {
-            $room = $bar_price;
-        }
+        $room = RoomHotel::query()->where('user_id',$userid)->get();
 
         $default_selected_hotel_room = collect($room)->first();
+        
 
         return inertia('Vendor/MenageRoom/Surcharge/Index', [
             'default_selected_hotel_room' => $default_selected_hotel_room,
@@ -55,24 +54,39 @@ class SurchargeController extends Controller
         $period = CarbonPeriod::create($from, $to);
 
         $data = [];
+        $userid = Auth::id();
 
         foreach ($period as $date) {
             $hotel_room_surcharge = HotelRoomSurcharge::query()
                 ->where('room_hotel_id', $hotel_room_id)
                 ->where('start_date', $date)
                 ->first();
+            
+            $ContractPrice = ContractPrice::where('room_id', $hotel_room_id)
+                ->where('user_id', $userid)
+                ->first();
 
             if ($hotel_room_surcharge) {
+                // $price = $hotel_room_surcharge->price; // Ambil harga sebagai decimal
+                // $formattedPrice = number_format($price, 0, ',', '.'); // Format harga tanpa desimal nol
+
+                if($hotel_room_surcharge->active == 1){
+                    $color = 'green';
+                }else{
+                    $color = 'red';
+                }
                 $data[] = [
-                    'title' => '$'. $hotel_room_surcharge->price,
-                    'date' => date('Y-m-d', strtotime($date)),
-                    'price' => $hotel_room_surcharge->price
+                    'title' => 'Rp '. number_format($hotel_room_surcharge->recom_price, 0, ',', '.'),
+                    'start' => date('Y-m-d', strtotime($hotel_room_surcharge->start_date)),
+                    'end' => date('Y-m-d', strtotime($hotel_room_surcharge->end_date)),
+                    'price' => $hotel_room_surcharge->recom_price,
+                    'color'=> $color,
                 ];
             } else {
                 $data[] = [
-                    'title' => '$0',
+                    'title' => 'Rp '.number_format($ContractPrice->recom_price, 0, ',', '.'),
                     'date' => date('Y-m-d', strtotime($date)),
-                    'price' => 0
+                    'price' => $ContractPrice->recom_price
                 ];
             }
         }
@@ -108,9 +122,10 @@ class SurchargeController extends Controller
         $hotel_room_surcharge->room_hotel_id = $request->room_hotel_id;
         $hotel_room_surcharge->start_date = $start_date;
         $hotel_room_surcharge->end_date = $end_date;
-        $hotel_room_surcharge->price = $request->price;
+        $hotel_room_surcharge->recom_price = $request->price;
         $hotel_room_surcharge->active = $request->active;
         $hotel_room_surcharge->save();
+        
     }
 
     /**

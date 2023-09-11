@@ -167,6 +167,42 @@
 
                         <div class="row">
                             @foreach ($data as $key=>$item)
+                            @php
+                            // ========================================================= START CALENDAR ====================================
+                            $status = 1;   
+                            $TotalHotelCalendar = 0;
+                            
+                            if ($HotelCalendar->count() != 0) {
+                                foreach ($HotelCalendar as $calendar) {
+                                    if ($calendar->room_hotel_id == $item->room_id) {
+                                        $TotalHotelCalendar += $calendar->recom_price;
+                                        $status = $calendar->active;
+                                    }
+                                }
+                            }
+                            
+                            $Room_recomprice = ($TotalHotelCalendar <= 0) ? $item->recom_price : $TotalHotelCalendar;
+                            // ========================================================= END CALENDAR ====================================
+                        
+                            // ========================================================= ROOM ALLOWMENT ====================================
+                            $totalRoomBooking = 0; // Inisialisasi totalRoomBooking
+                        
+                            if ($status != 1) {
+                                $totalRoomBooking = $item->room->room_allow;
+                            }
+                        
+                            if ($HotelRoomBooking->count() != 0) {
+                                foreach ($HotelRoomBooking as $value) {
+                                    if ($value->room_id == $item->room_id) {
+                                        $totalRoomBooking += $value->total_room;
+                                    }
+                                }
+                            }
+                        
+                            // Setel $RoomAllowment ke $item->room->room_allow dikurangi total total_room yang sesuai
+                            $RoomAllowment = $item->room->room_allow - $totalRoomBooking;
+                            // ========================================================= ROOM ALLOWMENT ====================================
+                        @endphp
                                 <div class="col-md-12 ftco-animate">
                                     <div class="card mb-3">
                                         <div class="row g-0">
@@ -180,44 +216,18 @@
                                                 <div class="card-body pb-0">
                                                     <h3 class="card-title">
                                                         <button class="btn font-weight-bold font-weight-bold p-0 text-primary" style="font-size: 20px" type="button" data-toggle="modal" data-target="#exampleModal{{$key}}">{{ $item->room->ratedesc }}</button></h3>
-                                                    {{-- <span class="price">Rp. {{ number_format(($item->recom_price + $item->contractrate->vendors->system_markup + $surcharprice), 0, ',', '.')}}</span> --}}
+                                                    {{-- <span class="price">Rp. {{ number_format(($Room_recomprice + $item->contractrate->vendors->system_markup + $surcharprice), 0, ',', '.')}}</span> --}}
                                                     {{-- surcharge : {{$surchargesVendorIds}} blackout : {{$blackoutVendorIds}} vendorid :{{$item->contractrate->vendor_id}} --}}
                                                             <!-- Modal -->
                                                     <div class="row justify-content-between">
                                                         <div class="col-lg">
                                                             <span class="price">Rp.
-                                                                {{ number_format($item->recom_price + $item->contractrate->vendors->system_markup, 0, ',', '.') }} / night</span>
+                                                                {{ number_format($Room_recomprice + $item->contractrate->vendors->system_markup, 0, ',', '.') }} / night</span>
 
 
                                                             {{-- <p class="card-text"><small class="text-body-secondary"></small></p> --}}
                                                         </div>
                                                         <div class="col-lg">
-                                                            @php
-                                                                // if($HotelRoomBooking->count() != 0){
-                                                                //     foreach ($HotelRoomBooking as $key => $value) {
-                                                                //         if ($value->room_id == $item->room_id){
-                                                                //             $RoomAllowment = $item->room->room_allow - $value->total_room;
-                                                                //         }else{
-                                                                //             $RoomAllowment = $item->room->room_allow;
-                                                                //         }
-                                                                //     }
-                                                                // }else{
-                                                                //     $RoomAllowment = $item->room->room_allow;
-                                                                // }
-                                                                $totalRoomBooking = 0; // Variabel untuk mengumpulkan total total_room
-
-                                                                if ($HotelRoomBooking->count() != 0) {
-                                                                    foreach ($HotelRoomBooking as $value) {
-                                                                        if ($value->room_id == $item->room_id) {
-                                                                            $totalRoomBooking += $value->total_room;
-                                                                        }
-                                                                    }
-                                                                }
-
-                                                                // Setel $RoomAllowment ke $item->room->room_allow dikurangi total total_room yang sesuai
-                                                                $RoomAllowment = $item->room->room_allow - $totalRoomBooking;
-
-                                                            @endphp
                                                             {{-- {{ $RoomAllowment }} --}}
                                                             {{-- @if ($item->room->room_allow <= 0 || $blackoutVendorIds->contains($item->contractrate->vendors->id)) --}}
                                                                 @if ($RoomAllowment <= 0)
@@ -228,12 +238,12 @@
                                                                         <option data-price="0" value="0" data-pricenomarkup="0">
                                                                             0</option>
                                                                         @for ($i = 1; $i <= $RoomAllowment; $i++)
-                                                                            {{-- <option data-contprice={{$item->id}} data-contractid={{$item->contract_id}} data-roomid={{$item->room->id}} data-price="{{($i * ($item->recom_price + $item->contractrate->vendors->system_markup + $surcharprice)) }}" value="{{$i}}">{{$i}} @if ($i == 1) room @else rooms @endif </option> --}}
+                                                                            {{-- <option data-contprice={{$item->id}} data-contractid={{$item->contract_id}} data-roomid={{$item->room->id}} data-price="{{($i * ($Room_recomprice + $item->contractrate->vendors->system_markup + $surcharprice)) }}" value="{{$i}}">{{$i}} @if ($i == 1) room @else rooms @endif </option> --}}
                                                                             <option data-contprice={{ $item->id }}
                                                                                 data-contractid={{ $item->contract_id }}
                                                                                 data-roomid={{ $item->room->id }}
-                                                                                data-price="{{ $i * ($item->recom_price + $item->contractrate->vendors->system_markup) }}"
-                                                                                data-pricenomarkup="{{ $i * $item->recom_price }}"
+                                                                                data-price="{{ $i * ($Room_recomprice + $item->contractrate->vendors->system_markup) }}"
+                                                                                data-pricenomarkup="{{ $i * $Room_recomprice }}"
                                                                                 value="{{ $i }}">{{ $i }}
                                                                                 @if ($i == 1)
                                                                                     room
