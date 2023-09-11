@@ -204,7 +204,7 @@ export default function Index({ errors, session, default_selected_hotel_room, ho
                                 </div>
 
                                 <div className="mb-3">
-                                    <label className="form-label fw-bold">Price</label>
+                                    <label className="form-label fw-bold">Rate</label>
                                     <input id="price" type="number" className="form-control" value={price} onChange={(e) => setPrice(e.target.value)} />
                                 </div>
                                 {errors.price && (
