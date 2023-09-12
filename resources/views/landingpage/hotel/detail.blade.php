@@ -175,10 +175,15 @@
 
                             $status = 1;
                             $TotalHotelCalendar = 0;
+                            $TotalHotelCalendar1 = 0;
                             $checkinDate = Carbon::parse($checkin);
                             $checkoutDate = Carbon::parse($checkout);
 
+
                             if ($HotelCalendar->count() != 0) {
+                                $roomChangePrices = []; // Menyimpan perubahan harga kamar sesuai dengan ID kamar
+                                $roomNormalPrices = []; // Menyimpan harga normal kamar sesuai dengan ID kamar
+
                                 foreach ($HotelCalendar as $calendar) {
                                     if ($calendar->room_hotel_id == $item->room_id) {
                                         $startDate = Carbon::parse($calendar->start_date);
@@ -188,14 +193,51 @@
                                         if ($startDate < $checkoutDate && $endDate >= $checkinDate) {
                                             // Hitung jumlah malam yang termasuk dalam rentang tanggal
                                             $nights = min($endDate, $checkoutDate)->diffInDays(max($startDate, $checkinDate)) + 1;
-                                            $TotalHotelCalendar += $calendar->recom_price / $nights;
-                                            $status = $calendar->active;
+                                            $TotalHotelCalendar1 += $calendar->recom_price * $nights;
+
+                                            // Simpan perubahan harga untuk kamar ini
+                                            $roomChangePrices[] = $calendar->recom_price;
                                         }
                                     }
                                 }
+
+                                if (!empty($roomChangePrices)) {
+                                    // Jika ada perubahan harga, hitung rata-rata harga per malam
+                                    // $TotalHotelCalendar = (array_sum($roomChangePrices) + $item->recom_price) / $nights;
+
+                                    $TotalHotelCalendar = ($item->recom_price / $nights) + $TotalHotelCalendar1;
+
+                                } else {
+                                    // Tidak ada perubahan harga, gunakan harga normal dari $item->recom_price
+                                    $TotalHotelCalendar = $item->recom_price;
+                                }
+                            } else {
+                                // Tidak ada perubahan harga, gunakan harga normal dari $item->recom_price
+                                $TotalHotelCalendar = $item->recom_price;
                             }
 
-                            $Room_recomprice = ($TotalHotelCalendar <= 0) ? $item->recom_price : $TotalHotelCalendar;
+
+                            // if ($HotelCalendar->count() != 0) {
+                            //     foreach ($HotelCalendar as $calendar) {
+                            //         if ($calendar->room_hotel_id == $item->room_id) {
+                            //             $startDate = Carbon::parse($calendar->start_date);
+                            //             $endDate = Carbon::parse($calendar->end_date);
+
+                            //             // Check apakah rentang tanggal kalender tumpang tindih dengan rentang check-in dan check-out
+                            //             if ($startDate < $checkoutDate && $endDate >= $checkinDate) {
+                            //                 // Hitung jumlah malam yang termasuk dalam rentang tanggal
+                            //                 $nights = min($endDate, $checkoutDate)->diffInDays(max($startDate, $checkinDate)) + 1;
+                            //                 $TotalHotelCalendar1 += $calendar->recom_price * $nights;
+
+                            //                 // var_dump($nights);
+                            //                 $TotalHotelCalendar = ($TotalHotelCalendar1 + $item->recom_price)/$nights;
+                            //                 $status = $calendar->active;
+                            //             }
+                            //         }
+                            //     }
+                            // }
+
+                            // $Room_recomprice = ($TotalHotelCalendar <= 0) ? $item->recom_price : $TotalHotelCalendar;
 
                             // $status = 1;
                             // $TotalHotelCalendar = 0;
@@ -209,7 +251,7 @@
                             //     }
                             // }
 
-                            // $Room_recomprice = ($TotalHotelCalendar <= 0) ? $item->recom_price : $TotalHotelCalendar;
+                            $Room_recomprice = ($TotalHotelCalendar <= 0) ? $item->recom_price : $TotalHotelCalendar;
 
                             // ========================================================= END CALENDAR ====================================
 
@@ -232,6 +274,7 @@
                             $RoomAllowment = $item->room->room_allow - $totalRoomBooking;
                             // ========================================================= ROOM ALLOWMENT ====================================
                         @endphp
+                        {{ $TotalHotelCalendar1 }} {{ $TotalHotelCalendar }}
                                 <div class="col-md-12 ftco-animate">
                                     <div class="card mb-3">
                                         <div class="row g-0">
