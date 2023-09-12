@@ -43,8 +43,11 @@
                             @method('POST')
 
                             <div class="mb-3">
-                                <label for="">Upload bank transfer</label>
+                                <label for="image">Upload bank transfer</label>
                                 <input id="image-input" type="file" name="image" class="form-control">
+                                @error('image')
+                                <p style="font-weight: 700; font-size: 13px;" class="text-danger">{{ $message }}</p>
+                                @enderror
                                 <img id="image-preview" class="mt-3" style="width: 200px" src="#" alt="Preview">
                             </div>
                             <input type="hidden" value="{{$booking}}" name="idbooking">

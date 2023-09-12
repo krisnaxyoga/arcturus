@@ -60,7 +60,7 @@ export default function Index({ errors, session,contractrate, default_selected_h
         // Fungsi yang ingin Anda jalankan saat halaman di-reload
         const fetchData = async () => {
           try {
-            const response = await axios.get(`/room/surcharge/${activeHotelRoom}/${activeContractRoom}/load-dates`, {
+            const response = await axios.get(`/room/surcharge/${activeHotelRoom}/load-dates`, {
               params: {
                 'start': activeStart,
                 'end': activeEnd
@@ -81,13 +81,12 @@ export default function Index({ errors, session,contractrate, default_selected_h
 
     const handleNavRoomTypeSelect = useCallback(async (hotel_room_id,contract_id) => {
         try {
-            const response = await axios.get(`/room/surcharge/${hotel_room_id}/${contract_id}/load-dates`,{
+            const response = await axios.get(`/room/surcharge/${hotel_room_id}/load-dates`,{
                 params: {
                     'start': activeStart,
                     'end': activeEnd
                 }
             })
-            setActiveContractRoom(contract_id);
             setActiveHotelRoom(hotel_room_id)
             setLoadDates(response.data)
         } catch (error) {

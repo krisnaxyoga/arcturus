@@ -275,43 +275,66 @@ class HomeController extends Controller
      */
     public function hoteldetail(Request $request, $id)
     {
+        $iduser = auth()->user()->id;
+        $agent_country = Vendor::where('user_id', $iduser)->first();
+        $agentCountry = $agent_country->country;
         $category = $request->input('data.category');
         $datareq = $request->all();
         // dd($datareq['checkin']);
-
-        if ($category) {
-            $vendor = ContractPrice::whereHas('room', function ($query) use ($category) {
-                $query->where('id', $category);
-            })
-                ->where('contract_id', $id)
-                ->with('contractrate')
-                ->with('contractrate.vendors')
-                ->with('room')
-                ->get();
-        } else {
-            $vendor = ContractPrice::where('contract_id', $id)
-                ->with('contractrate')
-                ->with('contractrate.vendors')
-                ->with('room')
-                ->get();
-        }
-
-        $contractprice = ContractPrice::where('user_id', $vendor[0]->user_id)
-            ->with('contractrate')
-            ->with('contractrate.vendors')
-            ->with('room')
-            ->whereHas('contractrate', function ($query) {
-                $query->where('rolerate', '=', 2);
-            })
-            ->get();
-
-        $slider = Slider::where('user_id', $vendor[0]->user_id)->get();
 
         $inputCheckin1 = $datareq['checkin'];
         $inputCheckout1 = $datareq['checkout'];
         $checkin2 = Carbon::createFromFormat('Y-m-d', $inputCheckin1);
         $checkout2 = Carbon::createFromFormat('Y-m-d', $inputCheckout1);
         $Nights = $checkout2->diffInDays($checkin2);
+
+        $contract_hotel = ContractRate::where('id', $id)->first();
+        // dd($contract_hotel);
+
+        // if ($category) {
+        //     $vendor = ContractPrice::whereHas('room', function ($query) use ($category) {
+        //         $query->where('id', $category);
+        //     })
+        //         ->where('contract_id', $id)
+        //         ->with('contractrate')
+        //         ->with('contractrate.vendors')
+        //         ->with('room')
+        //         ->get();
+        // } else {
+            // $vendor = ContractPrice::where('contract_id', $id)
+            //     ->with('contractrate')
+            //     ->with('contractrate.vendors')
+            //     ->with('room')
+            //     ->get();
+            $vendor = ContractPrice::where('contract_id', $id)
+                ->with('contractrate')
+                ->with('contractrate.vendors')
+                ->with('room')
+                ->whereHas('contractrate', function ($query) use ($agentCountry,$Nights) {
+                    $query->where('distribute', 'LIKE', '%' . $agentCountry . '%')
+                        ->orWhere('distribute', 'LIKE', '%all%');
+
+                    $query->where('min_stay', $Nights)
+                    ->orWhere('min_stay', 1);
+                })
+                ->orderBy('recom_price', 'asc')
+                ->get();
+        // }
+
+    //    dd($vendor);
+
+        $contractprice = ContractPrice::where('user_id', $vendor[0]->user_id)
+            ->with('contractrate')
+            ->with('contractrate.vendors')
+            ->with('room')
+            ->whereHas('contractrate', function ($query) use ($agentCountry) {
+                $query->where('rolerate', '=', 2);
+                $query->where('distribute', 'LIKE', '%' . $agentCountry . '%');
+            })
+            ->orderBy('recom_price', 'asc')
+            ->get();
+
+        $slider = Slider::where('user_id', $vendor[0]->user_id)->get();
 
         if (isset($datareq['checkin']) && isset($datareq['checkout'])) {
             $inputCheckin = $datareq['checkin'];

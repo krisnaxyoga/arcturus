@@ -326,7 +326,7 @@ export default function Index({ session,data,country,vendor,markup,banner,proper
                                                         </div>
                                                         <div className="col-lg-4">
                                                             <div className="mb-3">
-                                                                <label htmlFor="">Swif code</label>
+                                                                <label htmlFor="">Swift code</label>
                                                                 <input defaultValue={data[0].swif_code} type="text" className='form-control' onChange={(e) => setSwifCode(e.target.value)}/>
                                                             </div>
                                                         </div>

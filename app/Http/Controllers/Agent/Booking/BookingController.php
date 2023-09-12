@@ -223,6 +223,9 @@ class BookingController extends Controller
     public function upbanktransfer(Request $request){
         $validator =  Validator::make($request->all(), [
             'image' => 'nullable|mimes:png,jpg,jpeg|max:2048',
+        ], [
+            'image.mimes' => 'The image must be in PNG, JPG, or JPEG format.',
+            'image.max' => 'The image size cannot exceed 2MB.',
         ]);
 
         if ($validator->fails()) {

@@ -312,7 +312,7 @@ export default function Index({ session, data, contacts, country }) {
 
                                                         <div className="col-lg-4">
                                                             <div className="mb-3">
-                                                                <label htmlFor="bank">Swif Code</label>
+                                                                <label htmlFor="bank">Swift Code</label>
                                                                 <input defaultValue={data.vendors.swif_code} onChange={(e) => setSwifCode(e.target.value)} type="text" className='form-control' name='swifcode' />
                                                             </div>
                                                             {/* <div className="mb-3">

@@ -64,7 +64,7 @@ class SurchargeController extends Controller
         ]);
     }
 
-    public function load_dates(Request $request, $hotel_room_id, $contract_id): JsonResponse
+    public function load_dates(Request $request, $hotel_room_id): JsonResponse
     {
         $from = date('Y-m-d', strtotime($request->start));
         $to = date('Y-m-d', strtotime($request->end));
@@ -84,10 +84,13 @@ class SurchargeController extends Controller
             //     ->where('user_id', $userid)
             //     ->first();
             $ContractPrice = ContractPrice::where('room_id', $hotel_room_id)
-                ->where('contract_prices.contract_id',$contract_id)
+                // ->where('contract_prices.contract_id',$contract_id)
                 ->where('contract_prices.user_id', $userid)
                 ->with('contractrate')
                 ->with('room')
+                ->whereHas('contractrate', function ($query) {
+                    $query->where('rolerate', 1); // Ganti 'your_column_name' dengan nama kolom yang sesuai
+                })
                 ->orderBy('recom_price', 'asc')
                 ->join('room_hotels', 'contract_prices.room_id', '=', 'room_hotels.id')
                 ->first();
@@ -119,6 +122,8 @@ class SurchargeController extends Controller
 
         return response()->json($data);
     }
+
+    
 
     /**
      * Store a newly created resource in storage.
