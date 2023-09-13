@@ -339,7 +339,26 @@ class ContractController extends Controller
     }
 
     public function destroycontractprice($id){
+
+        $userid = auth()->user()->id;
         $data = ContractPrice::find($id);
+
+        $contractRate = ContractRate::where('id',$data->contract_id)->first();
+
+        if($contractRate->rolerate == 1){
+            $conprice_role_rate2 = ContractPrice::whereHas('contractrate', function ($query) {
+                $query->where('rolerate', 2); // Ganti 'your_column_name' dengan nama kolom yang sesuai
+            })->where('user_id',$userid)->where('room_id',$data->room_id)->first();
+            if($conprice_role_rate2){
+                $advprice2 = AdvancePurchasePrice::where('contract_id',$conprice_role_rate2->contract_id)->where('room_id',$data->room_id)->get();
+                foreach($advprice2 as $price2){
+                  $price2->delete();
+                }
+
+               $conprice_role_rate2->delete();
+            }
+        }
+
         $data->delete();
 
         $advprice = AdvancePurchasePrice::where('contract_id',$data->contract_id)->where('room_id',$data->room_id)->get();
@@ -370,7 +389,6 @@ class ContractController extends Controller
                                         ->get();
 
         $contone = ContractRate::where('rolerate', 1)->where('user_id', $userid)->first();
-        $contractpriceroleone = ContractPrice::where('contract_id', $contone->id)->get();
 
         $contractprice = ContractPrice::where('user_id', $userid)
                   ->with('room')
@@ -379,6 +397,21 @@ class ContractController extends Controller
                   ->orderBy('recom_price', 'asc')
                   ->get();
 
+        $contractpriceroleone = [];
+
+        foreach ($contractprice as $item) {
+            $room_id = $item->room->id;
+        
+            $contractpriceroleone[] = ContractPrice::where('contract_id', $contone->id)
+                ->with('room')
+                ->where('room_id', $room_id)
+                ->get();
+        }
+
+        $contractpriceroleone = collect($contractpriceroleone)->sortBy(function ($item) {
+            return $item->first()->recom_price;
+        })->values()->all();
+        
         return inertia('Vendor/MenageRoom/ContractRate/Edit',[
             'data' => $barprice,
             'bardata' => $bardata,
@@ -420,20 +453,56 @@ class ContractController extends Controller
                     $contractpriceroleone = ContractPrice::where('contract_id', $contone->id)->get();
 
                     if ($data->rolerate == 1) {
-                        foreach ($barprice as $key => $baritem) {
-                            $cont = ContractPrice::find($contractprice[$key]->id);
-                            $cont->recom_price = $baritem->price * ((100 - $request->percentage) / 100);
-                            $cont->save();
-
-                            $cont2 = ContractPrice::where('rolerate', 2)->where('user_id', $userid)->first();
-                            $cont2->recom_price = $cont->recom_price * ((100 - $cont2->percentage) / 100);
-                            $cont2->save();
+                        if($barprice->count() == $contractpriceroleone->count()){
+                            foreach ($barprice as $key => $baritem) {
+                                $cont = ContractPrice::find($contractprice[$key]->id);
+                                $cont->recom_price = $baritem->price * ((100 - $request->percentage) / 100);
+                                $cont->save();
+    
+                                $cont2 = ContractPrice::whereHas('contractrate', function ($query) {
+                                    $query->where('rolerate', 2); // Ganti 'your_column_name' dengan nama kolom yang sesuai
+                                })->where('user_id', $userid)->first();
+                                $cont2->recom_price = $cont->recom_price * ((100 - $cont2->percentage) / 100);
+                                $cont2->save();
+                            }
+                        }else{
+                            $cont = ContractPrice::where('contract_id', $id)->whereHas('contractrate', function ($query) {
+                                $query->where('rolerate', 1); // Ganti 'your_column_name' dengan nama kolom yang sesuai
+                            })->where('user_id', $userid)->get();
+                            foreach($cont as $key=>$itemprice){
+                                $bar = BarPrice::where('room_id',$itemprice->room_id)->where('user_id', $userid)->first();
+                                $cont = ContractPrice::find($itemprice->id);
+                                $cont->recom_price = $bar->price * ((100 - $request->percentage) / 100);
+                                $cont->save();
+                                
+                                $cont2 = ContractPrice::whereHas('contractrate', function ($query) {
+                                    $query->where('rolerate', 2); // Ganti 'your_column_name' dengan nama kolom yang sesuai
+                                })->where('room_id',$itemprice->room_id)->where('user_id', $userid)->first();
+                                if($cont2){
+                                    $cont2->recom_price = $cont->recom_price * ((100 - $cont2->percentage) / 100);
+                                    $cont2->save();
+                                }
+                                
+                            }
                         }
                     } else {
-                        foreach ($contractpriceroleone as $key => $contractpriceroleones) {
-                            $cont = ContractPrice::find($contractprice[$key]->id);
-                            $cont->recom_price = $contractpriceroleones->recom_price * ((100 - $request->percentage) / 100);
-                            $cont->save();
+                        if($contractpriceroleone->count() == $contractprice->count()){
+                            foreach ($contractpriceroleone as $key => $contone) {
+                                $cont = ContractPrice::find($contractprice[$key]->id);
+                                $cont->recom_price = $contone->recom_price * ((100 - $request->percentage) / 100);
+                                $cont->save();
+                            }
+                        }else{
+                            $cont = ContractPrice::where('contract_id', $id)->where('user_id', $userid)->get();
+                            foreach($cont as $key=>$itemprice){
+                                $bar = ContractPrice::where('room_id',$itemprice->room_id)->whereHas('contractrate', function ($query) {
+                                    $query->where('rolerate', 1); // Ganti 'your_column_name' dengan nama kolom yang sesuai
+                                })->where('user_id', $userid)->first();
+                                // dd($bar);
+                                $cont = ContractPrice::find($itemprice->id);
+                                $cont->recom_price = $bar->recom_price * ((100 - $request->percentage) / 100);
+                                $cont->save();
+                            }
                         }
                     }
 

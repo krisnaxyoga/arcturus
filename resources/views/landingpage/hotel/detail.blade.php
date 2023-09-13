@@ -209,20 +209,6 @@
 
                             $Room_recomprice = ($TotalHotelCalendar <= 0) ? $item->recom_price : $TotalHotelCalendar;
 
-                            // $status = 1;
-                            // $TotalHotelCalendar = 0;
-
-                            // if ($HotelCalendar->count() != 0) {
-                            //     foreach ($HotelCalendar as $calendar) {
-                            //         if ($calendar->room_hotel_id == $item->room_id) {
-                            //             $TotalHotelCalendar += $calendar->recom_price;
-                            //             $status = $calendar->active;
-                            //         }
-                            //     }
-                            // }
-
-                            // $Room_recomprice = ($TotalHotelCalendar <= 0) ? $item->recom_price : $TotalHotelCalendar;
-
                             // ========================================================= END CALENDAR ====================================
 
                             // ========================================================= ROOM ALLOWMENT ====================================
@@ -255,32 +241,35 @@
 
                                             </div>
                                             <div class="col-md-8">
-                                                <div class="card-body pb-0">
-                                                    <h3 class="card-title">
+                                                <div class="card-body pb-3">
+                                                    <h3 class="card-title mb-0">
                                                         <button class="btn font-weight-bold font-weight-bold p-0 text-primary" style="font-size: 20px" type="button" data-toggle="modal" data-target="#exampleModal{{$key}}">{{ $item->room->ratedesc }}</button></h3>
                                                     {{-- <span class="price">Rp. {{ number_format(($Room_recomprice + $item->contractrate->vendors->system_markup + $surcharprice), 0, ',', '.')}}</span> --}}
                                                     {{-- surcharge : {{$surchargesVendorIds}} blackout : {{$blackoutVendorIds}} vendorid :{{$item->contractrate->vendor_id}} --}}
                                                             <!-- Modal -->
-                                                    <div class="row justify-content-between">
-                                                        <div class="col-lg">
-                                                            <span class="price">Rp. {{ number_format($Room_recomprice + $item->contractrate->vendors->system_markup, 0, ',', '.') }} / night</span>
+                                                    {{-- <div class="row justify-content-between">
+                                                        <div class="col-lg"> --}}
+                                                            {{-- <span class="price">Rp. {{ number_format($Room_recomprice + $item->contractrate->vendors->system_markup, 0, ',', '.') }} / night</span> --}}
 
 
                                                             {{-- <p class="card-text"><small class="text-body-secondary"></small></p> --}}
-                                                        </div>
+                                                        {{-- </div>
                                                         <div class="col-lg">
+                                                                @if ($RoomAllowment <= 0)
+                                                                    <span class="badge badge-danger">Sold</span>
+                                                                @endif --}}
                                                             {{-- {{ $RoomAllowment }} --}}
                                                             {{-- @if ($item->room->room_allow <= 0 || $blackoutVendorIds->contains($item->contractrate->vendors->id)) --}}
-                                                                @if ($RoomAllowment <= 0)
+                                                                {{-- @if ($RoomAllowment <= 0)
                                                                     <span class="badge badge-danger">Sold</span>
                                                                 @else
                                                                     <select class="form-control room-quantity" name="room_quantity"
                                                                         style="width:200px" onchange="calculateTotal()">
                                                                         <option data-price="0" value="0" data-pricenomarkup="0">
                                                                             0</option>
-                                                                        @for ($i = 1; $i <= $RoomAllowment; $i++)
+                                                                        @for ($i = 1; $i <= $RoomAllowment; $i++) --}}
                                                                             {{-- <option data-contprice={{$item->id}} data-contractid={{$item->contract_id}} data-roomid={{$item->room->id}} data-price="{{($i * ($Room_recomprice + $item->contractrate->vendors->system_markup + $surcharprice)) }}" value="{{$i}}">{{$i}} @if ($i == 1) room @else rooms @endif </option> --}}
-                                                                            <option data-contprice={{ $item->id }}
+                                                                            {{-- <option data-contprice={{ $item->id }}
                                                                                 data-contractid={{ $item->contract_id }}
                                                                                 data-roomid={{ $item->room->id }}
                                                                                 data-price="{{ $i * ($Room_recomprice + $item->contractrate->vendors->system_markup) }}"
@@ -294,10 +283,10 @@
                                                                             </option>
                                                                         @endfor
                                                                     </select>
-                                                                @endif
-                                                        </div>
-                                                    </div>
-
+                                                                @endif --}}
+                                                        {{-- </div>
+                                                    </div> --}}
+                                                    <p>{!! $item->room->content !!}</p>
                                                     {{-- <p>Facilities :  @foreach ($item->room->attribute as $facilities)
                                                     {{ $facilities }},
                                                     @endforeach</p>
@@ -306,10 +295,12 @@
                                                         <span class="badge badge-success mr-2">{{$distribution}} </span>
                                                         @endforeach
                                                     @endif --}}
-                                                    <p class="m-0">Benefits : {!! $item->contractrate->benefit_policy !!}</p>
+                                                    {{-- <p class="m-0">Benefits : {!! $item->contractrate->benefit_policy !!}</p> --}}
+                                                    {{-- <p style="font-weight: 500">Description : </p> --}}
+                                                    
                                                     {{-- {{$contractprice}} --}}
                                                     @if($contractprice->count() != 0)
-                                                    <a class="text-primary" style="font-size:14px" data-toggle="collapse" href="#collapseExample{{$key}}" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                                    <a class="text-primary" style="font-weight:500;font-size:14px" data-toggle="collapse" href="#collapseExample{{$key}}" role="button" aria-expanded="false" aria-controls="collapseExample">
                                                         View More Rate
                                                       </a>
                                                       <div class="collapse" id="collapseExample{{$key}}">
@@ -333,7 +324,7 @@
                                                                 </div>
                                                                 <div class="row justify-content-between">
                                                                     <div class="col-lg">
-                                                                        <span class="price">Rp.
+                                                                        <span class="price text-primary" style="font-weight: 600">Rp.
                                                                             {{ number_format($itemprice->recom_price + $itemprice->contractrate->vendors->system_markup, 0, ',', '.') }} / night
                                                                         </span>
                                                                         <p class="m-0">Benefits :</p>

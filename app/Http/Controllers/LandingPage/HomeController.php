@@ -323,17 +323,6 @@ class HomeController extends Controller
 
     //    dd($vendor);
 
-        $contractprice = ContractPrice::where('user_id', $vendor[0]->user_id)
-            ->with('contractrate')
-            ->with('contractrate.vendors')
-            ->with('room')
-            ->whereHas('contractrate', function ($query) use ($agentCountry) {
-                $query->where('rolerate', '=', 2);
-                $query->where('distribute', 'LIKE', '%' . $agentCountry . '%');
-            })
-            ->orderBy('recom_price', 'asc')
-            ->get();
-
         $slider = Slider::where('user_id', $vendor[0]->user_id)->get();
 
         if (isset($datareq['checkin']) && isset($datareq['checkout'])) {
@@ -342,6 +331,8 @@ class HomeController extends Controller
 
             $checkin = Carbon::createFromFormat('Y-m-d', $inputCheckin);
             $checkout = Carbon::createFromFormat('Y-m-d', $inputCheckout);
+
+            
 
             if ($checkout->lt($checkin)) {
                 // Menghitung selisih hari antara checkin dan checkout
@@ -411,6 +402,29 @@ class HomeController extends Controller
             //         $currentDate = date('Y-m-d', strtotime($currentDate . ' +1 day'));
             //     }
             // }
+
+            $contractprice = ContractPrice::where('user_id', $vendor[0]->user_id)
+                ->with('contractrate')
+                ->with('contractrate.vendors')
+                ->with('room')
+                ->whereHas('contractrate', function ($query) use ($agentCountry) {
+                    $query->where('distribute', 'LIKE', '%' . $agentCountry . '%')
+                    ->orWhere('distribute', 'LIKE', '%all%');
+                })
+                ->whereHas('contractrate', function ($query) use ($checkin, $checkout) {
+                    $query->where(function ($q) use ($checkin, $checkout) {
+                        $q->where(function ($qq) use ($checkin, $checkout) {
+                            $qq->where('stayperiod_begin', '<=', $checkin)
+                                ->where('stayperiod_end', '>=', $checkout);
+                        })->Where(function ($qq) use ($checkin, $checkout) {
+                            $qq->where('booking_begin', '<=', $checkin)
+                                ->where('booking_end', '>=', $checkout);
+                        });
+                    });
+                })
+                ->orderBy('recom_price', 'asc')
+                ->get();
+
 
             $HotelRoomBooking = HotelRoomBooking::where('vendor_id', $vendorIds)
             ->where(function ($q) use ($checkin, $checkout) {

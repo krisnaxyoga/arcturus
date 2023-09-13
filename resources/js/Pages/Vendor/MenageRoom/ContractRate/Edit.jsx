@@ -73,7 +73,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
         friday: false,
         saturday: false,
     });
-
+console.log(contpriceone,"one");
     // const [checkboxItems, setCheckboxItems] = useState(contract.pick_day.map((item) => ({ label: item, checked: false })));
 
 
@@ -650,10 +650,9 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                                     {contractprice.map((item, index) => (
                                                                                         <>
                                                                                             <tr key={index}>
-
-                                                                                                <td>{item.room.ratedesc}</td>
                                                                                                 {contract.rolerate == 1 ? (
                                                                                                     <>
+                                                                                                    <td>{item.room.ratedesc}</td>
                                                                                                     <td>
                                                                                                         {formatRupiah(item.barprice.price)}
                                                                                                     </td>
@@ -667,11 +666,12 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
 
                                                                                                 ):(
                                                                                                     <>
+                                                                                                     <td>{contpriceone[index][0].room.ratedesc}</td>
                                                                                                     {/* <td>{formatRupiah(contpriceone[index].recom_price)}</td> */}
                                                                                                     <td>
                                                                                                     {contract.percentage == percentage
-                                                                                                        ? formatRupiah(item.recom_price)
-                                                                                                        : formatRupiah(contpriceone[index].recom_price * ((100 - percentage) / 100))}
+                                                                                                        ? formatRupiah(contpriceone[index][0].recom_price * ((100 - percentage) / 100))
+                                                                                                        : formatRupiah(contpriceone[index][0].recom_price * ((100 - percentage) / 100))}
 
                                                                                                     </td>
                                                                                                     </>
