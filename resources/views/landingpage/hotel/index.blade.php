@@ -94,8 +94,9 @@
                             </div> --}}
                             <div class="col-md d-flex">
                                 <?php
-                                $checkin = date('m/d/Y', strtotime($requestdata['checkin']));
-                                $checkout = date('m/d/Y', strtotime($requestdata['checkout']));
+                                // Mendapatkan nilai checkin dan checkout dari requestdata
+                                    $checkin = isset($requestdata['checkin']) ? date('m/d/Y', strtotime($requestdata['checkin'])) : date('m/d/Y');
+                                    $checkout = isset($requestdata['checkout']) ? date('m/d/Y', strtotime($requestdata['checkout'])) : date('m/d/Y');
                                 ?>
                                 <div class="form-group mb-3 mt-2 mx-2">
                                     <label class="pl-3 mt-3" for="">CheckIn - CheckOut</label>
