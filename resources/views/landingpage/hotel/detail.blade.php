@@ -301,7 +301,7 @@
                                                     {{-- {{$contractprice}} --}}
                                                     @if($contractprice->count() != 0)
                                                     <a class="text-primary" style="font-weight:500;font-size:14px" data-toggle="collapse" href="#collapseExample{{$key}}" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                                        View More Rate
+                                                        View Rates:
                                                       </a>
                                                       <div class="collapse" id="collapseExample{{$key}}">
                                                         <div>

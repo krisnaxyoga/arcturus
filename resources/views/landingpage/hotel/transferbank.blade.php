@@ -48,6 +48,7 @@
                                 @error('image')
                                 <p style="font-weight: 700; font-size: 13px;" class="text-danger">{{ $message }}</p>
                                 @enderror
+                                <p class="text-danger" style="font-weight: 700; font-size: 13px;">The image must be in PNG, JPG, or JPEG format, The image size cannot exceed 2MB.</p>
                                 <img id="image-preview" class="mt-3" style="width: 200px" src="#" alt="Preview">
                             </div>
                             <input type="hidden" value="{{$booking}}" name="idbooking">
@@ -62,6 +63,38 @@
       </div>
 
     </section>
+    <script>
+        document.getElementById('image-input').addEventListener('change', function() {
+            const fileInput = this;
+            const imagePreview = document.getElementById('image-preview');
+    
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                const validExtensions = ['jpg', 'jpeg', 'png'];
+                const maxFileSize = 2 * 1024 * 1024; // 2MB
+    
+                const extension = file.name.split('.').pop().toLowerCase();
+                const fileSize = file.size;
+    
+                if (validExtensions.indexOf(extension) === -1) {
+                    alert('The image must be in PNG, JPG, or JPEG format.');
+                    fileInput.value = ''; // Clear the input
+                    imagePreview.src = ''; // Clear the preview
+                } else if (fileSize > maxFileSize) {
+                    alert('The image size cannot exceed 2MB.');
+                    fileInput.value = ''; // Clear the input
+                    imagePreview.src = ''; // Clear the preview
+                } else {
+                    // Valid file, display the preview
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        imagePreview.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+        });
+    </script>
     <script>
         function copyToClipboard() {
             const textToCopy = document.getElementById('textToCopy');
