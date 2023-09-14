@@ -666,11 +666,11 @@ console.log(contpriceone,"one");
 
                                                                                                 ):(
                                                                                                     <>
-                                                                                                     <td>{contpriceone[index][0].room.ratedesc}</td>
+                                                                                                     <td>{item.room.ratedesc}</td>
                                                                                                     {/* <td>{formatRupiah(contpriceone[index].recom_price)}</td> */}
                                                                                                     <td>
                                                                                                     {contract.percentage == percentage
-                                                                                                        ? formatRupiah(contpriceone[index][0].recom_price * ((100 - percentage) / 100))
+                                                                                                        ? formatRupiah(item.recom_price)
                                                                                                         : formatRupiah(contpriceone[index][0].recom_price * ((100 - percentage) / 100))}
 
                                                                                                     </td>
