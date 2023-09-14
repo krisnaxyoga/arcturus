@@ -107,7 +107,7 @@ class SurchargeController extends Controller
                 $data[] = [
                     'title' => 'Rp '. number_format($hotel_room_surcharge->recom_price, 0, ',', '.'),
                     'start' => date('Y-m-d', strtotime($hotel_room_surcharge->start_date)),
-                    'end' => date('Y-m-d', strtotime($hotel_room_surcharge->end_date)),
+                    'end' => date('Y-m-d', strtotime($hotel_room_surcharge->end_date) + 86400),
                     'price' => $hotel_room_surcharge->recom_price,
                     'color'=> $color,
                 ];

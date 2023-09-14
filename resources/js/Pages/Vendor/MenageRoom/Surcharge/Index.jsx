@@ -31,6 +31,7 @@ export default function Index({ errors, session,contractrate, default_selected_h
     // Define state for handleStore
     const [date, setDate] = useState('')
     const [startDate, setStartDate] = useState('')
+    
     const [endDate, setEndDate] = useState('')
     const [price, setPrice] = useState(0)
     const [active, setActive] = useState(true)
@@ -41,12 +42,25 @@ export default function Index({ errors, session,contractrate, default_selected_h
     };
 
     const handleOpenModal = (arg) => {
-        setDate(arg.event.start.toLocaleDateString('en-GB'))
-        setStartDate(arg.event.startStr)
-        setEndDate(arg.event.endStr)
-        setPrice(arg.event.extendedProps.price)
-        setShowModal(true)
-    }
+        setDate(arg.event.start.toLocaleDateString('en-GB'));
+        setStartDate(arg.event.startStr);
+
+        let endDateStr = arg.event.endStr || new Date(arg.event.startStr).getTime() + 86400 * 1000;
+        
+        // Konversi endDateStr ke format tanggal yang diinginkan
+        const endDateTimestamp = new Date(endDateStr).getTime() - 86400 * 1000;
+        const endDate2 = new Date(endDateTimestamp).toLocaleDateString('en-GB');
+
+        // Split tanggal menjadi bagian-bagian
+        const parts = endDate2.split('/');
+        
+        // Buat format tanggal 'yyyy-mm-dd'
+        const formattedDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
+        
+        setEndDate(formattedDate);
+        setPrice(arg.event.extendedProps.price);
+        setShowModal(true);
+    };
 
     const handleCloseModal = () => {
         setDate('')

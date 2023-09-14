@@ -107,6 +107,8 @@ Route::group(['middleware' => ['auth', 'checkrole:1']], function() {
     //booking
     Route::get('/admin/booking', [\App\Http\Controllers\Admin\Report\BookingController::class, 'index'])->name('dashboard.admin.booking');
     Route::get('/admin/booking/confirmation/{id}', [\App\Http\Controllers\Admin\Report\BookingController::class, 'confirmation'])->name('admin.booking.confirmation');
+    Route::get('/admin/booking/sendconfirmationtohotel/{id}', [\App\Http\Controllers\Admin\Report\BookingController::class, 'sendconfirmationtohotel'])->name('admin.booking.sendconfirmationtohotel');
+    Route::get('/admin/booking/sendconfirmationtoagent/{id}', [\App\Http\Controllers\Admin\Report\BookingController::class, 'sendconfirmationtoagent'])->name('admin.booking.sendconfirmationtoagent');
 
 
     // setting

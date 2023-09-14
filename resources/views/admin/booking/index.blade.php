@@ -67,10 +67,16 @@
                                                         </div>
                                                     </div>
                                                     @else
-                                                    <span class=" btn-icon btn-transparent-dark mr-2">
-                                                        <i data-feather="check"></i>
-                                                    </span>
-                                                    <a href="{{route('admin.booking.confirmation',$item->id)}}" class="badge badge-warning">send email</a>
+                                                    <ul>
+                                                        <li style="list-style: none;"> 
+                                                            <span class=" btn-icon btn-transparent-dark mr-2">
+                                                                <i data-feather="check"></i>
+                                                            </span>
+                                                        </li>
+                                                        <li style="list-style: none;"><a href="{{route('admin.booking.confirmation',$item->id)}}" class="badge badge-warning">send email all</a></li>
+                                                        <li style="list-style: none;"><a href="{{route('admin.booking.sendconfirmationtoagent',$item->id)}}" class="badge badge-primary">send email to agent</a></li>
+                                                        <li style="list-style: none;"><a href="{{route('admin.booking.sendconfirmationtohotel',$item->id)}}" class="badge badge-secondary">send email to hotel</a></li>
+                                                    </ul>
                                                 @endif
                                                
                                             </td>
