@@ -138,94 +138,56 @@ class HomeController extends Controller
             })
             ->with('contractrate.vendors')
             ->with('room');
+            
+            $contractprice = ContractPrice::whereHas('contractrate.vendors', function ($query) use ($request, $selectedProperties) {
+                $query->where('type_vendor', 'hotel')
+                    ->where('is_active', 1);
+            
+                $query->when($request->country, function ($q, $country) {
+                    return $q->where('country', $country);
+                });
+            
+                $query->when($request->state, function ($q, $state) {
+                    return $q->where('state', $state);
+                });
+            
+                $query->when($request->city, function ($q, $city) {
+                    return $q->where('city', $city);
+                });
+            
+                $query->when(!empty($selectedProperties), function ($q) use ($selectedProperties) {
+                    if (is_string($selectedProperties)) {
+                        // Convert string to an array if needed
+                        $selectedProperties = explode(',', $selectedProperties);
+                    }
+                    return $q->whereIn('type_property', $selectedProperties);
+                });
+            
+                $query->when($request->country && $request->state && $request->city && $selectedProperties, function ($q) use ($request, $selectedProperties) {
+                    return $q->tap(function ($subquery) use ($request) {
+                        $subquery->where('country', $request->country)
+                            ->where('state', $request->state)
+                            ->where('city', $request->city)
+                            ->whereIn('type_property', $selectedProperties);
+                    });
+                });
+            })
+            ->whereHas('contractrate', function ($query) use ($checkin, $checkout) {
+                $query->where(function ($q) use ($checkin, $checkout) {
+                    $q->where(function ($qq) use ($checkin, $checkout) {
+                        $qq->where('stayperiod_begin', '<=', $checkin)
+                            ->where('stayperiod_end', '>=', $checkout);
+                    })->orWhere(function ($qq) use ($checkin, $checkout) {
+                        $qq->where('booking_begin', '<=', $checkin)
+                            ->where('booking_end', '>=', $checkout);
+                    });
+                });
+            })
+            ->with('contractrate.vendors')
+            ->with('room')
+            // ->groupBy('contract_prices.id', 'contract_id','user_id') // Tambahkan semua kolom yang tidak diagregat
+            ->get();
 
-        // $vendorIds = $vendor->pluck('contractrate.vendor_id')->toArray();
-        // $blackoutVendorIds = AgentMarkupDetail::where('vendor_id', $vendorIds)
-        //         ->where('markup_cat_id', 'blackout')
-        //         ->where(function ($q) use ($checkin, $checkout) {
-        //             $q->where(function ($qq) use ($checkin, $checkout) {
-        //                 $qq->where('start_date', '<=', $checkout)
-        //                     ->where('end_date', '>=', $checkin)
-        //                     ->where('markup_cat_id', 'blackout');
-        //             });
-        //         })
-        //         ->orWhere(function ($q) use ($checkin, $checkout,$vendorIds) {
-        //             $q->where('start_date', '<=', $checkout)
-        //                 ->where('end_date', '>=', $checkout)
-        //                 ->where('markup_cat_id', 'blackout')
-        //                 ->whereNotIn('vendor_id', function ($query) use ($checkin, $checkout,$vendorIds) {
-        //                     $query->select('vendor_id')
-        //                         ->from('agent_markup_details')
-        //                         ->where('vendor_id', $vendorIds)
-        //                         ->where('markup_cat_id', 'blackout')
-        //                         ->where('start_date', '<=', $checkout)
-        //                         ->where('end_date', '>=', $checkin);
-        //                 });
-        //         })
-        //     ->pluck('vendor_id');
-
-        // $surchargesDetail = AgentMarkupDetail::where('vendor_id', $vendorIds)
-        //     ->where('markup_cat_id', 'surcharges')
-        //     ->where(function ($q) use ($checkin, $checkout) {
-        //         $q->where(function ($qq) use ($checkin) {
-        //             $qq->where('start_date', '<=', $checkin)
-        //                 ->where('end_date', '>=', $checkin);
-        //         });
-        //     })
-        //     ->orWhere(function ($q) use ($checkin, $checkout,$vendorIds) {
-        //         $q->where(function ($qq) use ($checkin, $checkout,$vendorIds) {
-        //             $qq->where('start_date', '<=', $checkout->subDay())
-        //                 ->where('end_date', '>=', $checkout->subDay())
-        //                 ->where('vendor_id', $vendorIds)
-        //                 ->whereNotIn('vendor_id', function ($query) use ($checkin) {
-        //                     $query->select('vendor_id')
-        //                         ->from('agent_markup_details')
-        //                         ->where('markup_cat_id', 'surcharges')
-        //                         ->where('start_date', '<=', $checkin)
-        //                         ->where('end_date', '>=', $checkin);
-        //                 });
-        //         })->orWhere(function ($qq) use ($checkin, $checkout) {
-        //             $qq->where('start_date', '<=', $checkout)
-        //                 ->where('end_date', '>=', $checkout)
-        //                 ->whereNotIn('vendor_id', function ($query) use ($checkin, $checkout) {
-        //                     $query->select('vendor_id')
-        //                         ->from('agent_markup_details')
-        //                         ->where('markup_cat_id','=', 'surcharges')
-        //                         ->where('start_date', '<=', $checkout)
-        //                         ->where('end_date', '>=', $checkin);
-        //                 });
-        //         });
-        //     })
-        //     ->pluck('vendor_id');
-
-        //     if ($surchargesDetail->isNotEmpty()) {
-        //             $surchargesprice = AgentMarkupDetail::where('vendor_id', $vendorIds)
-        //                 ->where('markup_cat_id', 'surcharges')
-        //                 ->where(function ($q) use ($checkin, $checkout) {
-        //                     $q->where(function ($qq) use ($checkin, $checkout) {
-        //                         $qq->where('start_date', '<=', $checkout->subDay())
-        //                             ->where('end_date', '>=', $checkin);
-        //                     });
-        //                 })
-        //                 ->orWhere(function ($q) use ($checkin, $checkout) {
-        //                     $q->where('start_date', '<=', $checkout)
-        //                         ->where('end_date', '>=', $checkout)
-        //                         ->whereNotIn('vendor_id', function ($query) use ($checkin, $checkout) {
-        //                             $query->select('vendor_id')
-        //                                 ->from('agent_markup_details')
-        //                                 ->where('markup_cat_id', 'surcharges')
-        //                                 ->where('start_date', '<=', $checkout)
-        //                                 ->where('end_date', '>=', $checkin);
-        //                         });
-        //                 })
-        //                 ->first();
-        //         $surchargesVendorIds = $surchargesDetail; // Mengisi koleksi dengan daftar vendor_id
-        //         $surcharprice = $surchargesprice->surcharge_block_price;
-
-        // }else{
-        //     $surcharprice = 0;
-        // }
-        // Lakukan query ke database dan hasilkan builder query
         $data = $vendor;
 
         if ($request->sort == 'low_to_high') {
@@ -267,7 +229,7 @@ class HomeController extends Controller
 
         // return view('landingpage.hotel.index',compact('data','requestdata','blackoutVendorIds','surchargesDetail','surcharprice'));
 
-        return view('landingpage.hotel.index', compact('data', 'requestdata'));
+        return view('landingpage.hotel.index', compact('data', 'requestdata','contractprice'));
     }
 
     /**
@@ -427,6 +389,9 @@ class HomeController extends Controller
 
 
             $HotelRoomBooking = HotelRoomBooking::where('vendor_id', $vendorIds)
+            ->whereHas('booking', function ($query) {
+                $query->where('booking_status', 'paid');
+            })
             ->where(function ($q) use ($checkin, $checkout) {
                 $q->where(function ($qq) use ($checkin, $checkout) {
                     $qq->where('checkin_date', '<=', Carbon::createFromFormat('Y-m-d', $checkout)->subDay())

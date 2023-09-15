@@ -118,25 +118,65 @@ export default function Index({ session, props, attr, room,roomtype,vendor }) {
     };
 
     const handleFileChange = (e) => {
+
         const file = e.target.files[0];
-        setImage(file);
+
         if (file) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setSelectedImage(reader.result);
-        };
-        reader.readAsDataURL(file);
+            const fileNameParts = file.name.split('.');
+            const fileExtension = fileNameParts[fileNameParts.length - 1].toLowerCase();
+            const allowedExtensions = ['jpg', 'jpeg', 'png'];
+            const maxFileSizeInBytes = 5 * 1024 * 1024; // 5 MB
+
+            if (!allowedExtensions.includes(fileExtension)) {
+                alert('Only image files with formats png, jpg, or jpeg are allowed!');
+                e.target.value = ''; // Mengosongkan input file
+            } else if (file.size > maxFileSizeInBytes) {
+                alert('File size must not exceed 5 MB!');
+                e.target.value = ''; // Mengosongkan input file
+            } else {
+                setImage(file);
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                        setSelectedImage(reader.result);
+                    };
+                    reader.readAsDataURL(file);
+                    }
+            }
         }
+
     };
+    
     const handleImageUpload = (e) => {
         const selectedImages = Array.from(e.target.files);
-        setImages(selectedImages);
-
-        const files = e.target.files;
-        if (files && files.length > 0) {
-          const imagesArray = Array.from(files).map(file => URL.createObjectURL(file));
-          setSelectedImages(imagesArray);
+    
+        // Periksa format dan ukuran file sebelum membuat URL
+        const invalidFiles = selectedImages.filter((file) => {
+            if (!file.type.match('image/(png|jpg|jpeg)')) {
+                alert('Only image files with formats png, jpg, or jpeg are allowed!');
+                return true; // File ini tidak valid
+            }
+    
+            if (file.size > 5 * 1024 * 1024) {
+                alert('File size must not exceed 5 MB!');
+                return true; // File ini tidak valid
+            }
+    
+            return false; // File ini valid
+        });
+    
+        // Jika ada file yang tidak valid, hentikan pemrosesan
+        if (invalidFiles.length > 0) {
+            return;
         }
+    
+        // Buat URL hanya untuk file yang memenuhi syarat
+        const imagesArray = selectedImages.map((file) => {
+            return URL.createObjectURL(file);
+        });
+    
+        setImages(selectedImages);
+        setSelectedImages(imagesArray);
     };
 
     const handleImageDelete = (index) => {

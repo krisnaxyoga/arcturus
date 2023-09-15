@@ -32,7 +32,7 @@
             <div class="carousel-inner">
                 @foreach ($slider as $index => $item)
                     <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
-                        <img src="{{ $item->image }}" alt="{{ $item->image }}"
+                        <img onerror="this.onerror=null; this.src='https://semantic-ui.com/images/wireframe/white-image.png';" src="{{ $item->image }}" alt="{{ $item->image }}"
                             style="width:100%;height:600px; object-fit: cover;">
                     </div>
                 @endforeach
@@ -69,7 +69,7 @@
                                     <div class="card mb-3">
                                         <div class="card-body">
 
-                                                <img class="img-fluid" style="max-width: 80px; max-height:80px;"
+                                                <img onerror="this.onerror=null; this.src='https://semantic-ui.com/images/wireframe/white-image.png';" class="img-fluid" style="max-width: 80px; max-height:80px;"
                                                     src="{{ $vendordetail->logo_img ?? asset('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjCX5TOKkOk3MBt8V-f8PbmGrdLHCi4BoUOs_yuZ1pekOp8U_yWcf40t66JZ4_e_JYpRTOVCl0m8ozEpLrs9Ip2Cm7kQz4fUnUFh8Jcv8fMFfPbfbyWEEKne0S9e_U6fWEmcz0oihuJM6sP1cGFqdJZbLjaEQnGdgJvcxctqhMbNw632OKuAMBMwL86/s414/pp%20kosong%20wa%20default.jpg') }}"
                                                     alt="Profile Image">
 
@@ -174,10 +174,13 @@
                             // ========================================================= START CALENDAR ====================================
 
                             $status = 1;
+                            $no_checkout = 0;
+                            $no_checkin = 0;
                             $TotalHotelCalendar = 0;
                             $TotalHotelCalendar1 = 0;
                             $checkinDate = Carbon::parse($checkin);
                             $checkoutDate = Carbon::parse($checkout);
+                                    
 
                             $totalNights = $checkinDate->diffInDays($checkoutDate);
                             // var_dump($totalNights);
@@ -187,6 +190,7 @@
                                         $startDate = Carbon::parse($calendar->start_date);
                                         $endDate = Carbon::parse($calendar->end_date);
 
+                                        // var_dump($checkoutDate);
                                         // Check apakah rentang tanggal kalender tumpang tindih dengan rentang check-in dan check-out
                                         if ($startDate < $checkoutDate && $endDate >= $checkinDate) {
                                             // Hitung jumlah malam yang termasuk dalam rentang tanggal
@@ -200,8 +204,16 @@
                                                 $TotalHotelCalendar = $TotalHotelCalendar1;
                                             }
                                             // var_dump($TotalHotelCalendar);
-                                            
+
                                             $status = $calendar->active;
+                                        }
+
+                                        if($checkoutDate == $endDate){
+                                            $no_checkout = $calendar->no_checkout;
+                                        }
+
+                                        if($checkinDate == $startDate){
+                                            $no_checkin = $calendar->no_checkin;
                                         }
                                     }
                                 }
@@ -214,9 +226,13 @@
                             // ========================================================= ROOM ALLOWMENT ====================================
                             $totalRoomBooking = 0; // Inisialisasi totalRoomBooking
 
-                            if ($status != 1) {
+                            // var_dump($no_checkout);
+                            if ($status != 1 || $no_checkout != 0 || $no_checkin != 0) {
                                 $totalRoomBooking = $item->room->room_allow;
                             }
+                            // if($no_checkout != 1) {
+                            //     $totalRoomBooking = $item->room->room_allow;
+                            // }
 
                             if ($HotelRoomBooking->count() != 0) {
                                 foreach ($HotelRoomBooking as $value) {
@@ -235,7 +251,7 @@
                                     <div class="card mb-3">
                                         <div class="row g-0">
                                             <div class="col-md-4">
-                                                <img src="{{ $item->room->feature_image }}"
+                                                <img onerror="this.onerror=null; this.src='https://semantic-ui.com/images/wireframe/white-image.png';" src="{{ $item->room->feature_image }}"
                                                     class="img img-fluid rounded-start"
                                                     alt="{{ $item->room->feature_image }}">
 
@@ -383,7 +399,7 @@
                                                 <div class="col-lg-12 col-12">
                                                     <div class="fotorama mb-3" data-nav="thumbs" data-loop="true">
                                                         @foreach ($item->room->gallery as $key => $gallery)
-                                                                <img src="{{$gallery}}" alt="{{$gallery}}" style="width:100%">
+                                                                <img onerror="this.onerror=null; this.src='https://semantic-ui.com/images/wireframe/white-image.png';" src="{{$gallery}}" alt="{{$gallery}}" style="width:100%">
                                                         @endforeach
                                                       </div>
                                                 </div>

@@ -12,12 +12,12 @@
             <div class="carousel-inner">
                 @foreach ($slider as $index => $item)
                     <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
-                        <img src="{{ $item->image }}" alt="{{ $item->image }}"
+                        <img onerror="this.onerror=null; this.src='https://semantic-ui.com/images/wireframe/white-image.png';" src="{{ $item->image }}" alt="{{ $item->image }}"
                             style="width:100%;height:600px; object-fit: cover;">
                     </div>
                 @endforeach
                 {{-- <div class="carousel-item">
-                    <img src="/landing/travel/images/bg_2.jpg" alt="Chicago" style="width:100%;height:600px; object-fit: cover;">
+                    <img onerror="this.onerror=null; this.src='https://semantic-ui.com/images/wireframe/white-image.png';" src="/landing/travel/images/bg_2.jpg" alt="Chicago" style="width:100%;height:600px; object-fit: cover;">
                     {{-- <div class="carousel-caption">
                         <h3>Chicago</h3>
                         <p>Thank you, Chicago!</p>

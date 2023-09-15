@@ -95,17 +95,17 @@
                             <div class="col-md d-flex">
                                 <?php
                                 // Mendapatkan nilai checkin dan checkout dari requestdata
-                                    $checkin = isset($requestdata['checkin']) ? date('m/d/Y', strtotime($requestdata['checkin'])) : date('m/d/Y');
-                                    $checkout = isset($requestdata['checkout']) ? date('m/d/Y', strtotime($requestdata['checkout'])) : date('m/d/Y');
+                                $checkin = isset($requestdata['checkin']) ? date('m/d/Y', strtotime($requestdata['checkin'])) : date('m/d/Y');
+                                $checkout = isset($requestdata['checkout']) ? date('m/d/Y', strtotime($requestdata['checkout'])) : date('m/d/Y', strtotime('+1 day'));
                                 ?>
                                 <div class="form-group mb-3 mt-2 mx-2">
                                     <label class="pl-3 mt-3" for="">CheckIn - CheckOut</label>
                                     <input class="form-control checkindate" type="text" name="dates" value="{{ $checkin }} - {{ $checkout }}" />
                                 </div>
-                                <input value="{{ $requestdata['checkin'] }}" type="hidden" name="checkin"
+                                <input value="{{ isset($requestdata['checkin']) ? date('Y-m-d', strtotime($requestdata['checkin'])) : date('Y-m-d') }}" type="hidden" name="checkin"
                                 class="form-control checkindate"
                                 placeholder="Check In Date">
-                                <input value="{{ $requestdata['checkout'] }}" type="hidden" name="checkout"
+                                <input value="{{ isset($requestdata['checkout']) ? date('Y-m-d', strtotime($requestdata['checkout'])) : date('Y-m-d', strtotime('+1 day')); }}" type="hidden" name="checkout"
                                 class="form-control checkoutdate"
                                 placeholder="Check Out Date">
                             </div>
@@ -247,7 +247,7 @@
                             <span>
                                 <form action="">
                                     <p class="d-flex">
-                                        <span>Show on the map | Sort by:</span>
+                                        <span>Sort by:</span>
                                         <select type="text" id="sort-select"  class="form-control">
                                             <option value="recomended">recomended</option>
                                             <option @if (($requestdata['sort'] ?? '') == 'low_to_high') selected @endif  value="low_to_high">Price (Low to Hight)</option>
@@ -257,7 +257,6 @@
                                 </form>
                             </span>
                         </div>
-
                         @foreach ($data as $key=>$item)
 
                         <div class="col-md-12 ">
@@ -266,7 +265,7 @@
                                 <div class="row">
                                     <div class="col-lg-3 p-0">
                                         <a href="{{ route('hoteldetail.homepage', ['id' => $item->contract_id]) }}?{{ http_build_query($requestdata) }}">
-                                            <img style="object-fit: cover!important;" src="{{$item->room->feature_image}}" class="img img-fluid rounded-start" alt="{{$item->room->feature_image}}">
+                                            <img onerror="this.onerror=null; this.src='https://semantic-ui.com/images/wireframe/white-image.png';" style="object-fit: cover!important;" src="{{ $item->room->feature_image }}" class="img img-fluid rounded-start" alt="{{ $item->room->feature_image }}">
                                         </a>
                                     </div>
                                     <div class="col-lg-6">
@@ -294,22 +293,27 @@
                                         </p>
                                     </div>
                                     <div class="col-lg-3 border-left">
-                                        <span class="price" style="color: #1a2b48;
-                                        font-size: 18px;
-                                        font-weight: 500;
-                                    ">
-                                        <span style="color: #5e6d77;
-                                        font-size: 14px;
-                                        font-weight: 400;">
-                                            From
-                                        </span> <br>
-                                        Rp. {{ number_format(($item->recom_price + $item->contractrate->vendors->system_markup), 0, ',', '.')}}</span>
-
-                                        <span style="color: #5e6d77;
-                                        font-size: 10px;
-                                        font-weight: 400;">
-                                            /Night
-                                        </span>
+                                        @php
+                                        $lowestPrice = null; // Inisialisasi variabel untuk harga terendah
+                                    @endphp
+                                    
+                                    @foreach ($contractprice as $contprice)
+                                        @if ($contprice->user_id == $item->user_id)
+                                            @php
+                                                $price = $contprice->recom_price + $item->contractrate->vendors->system_markup;
+                                                if ($lowestPrice === null || $price < $lowestPrice) {
+                                                    $lowestPrice = $price; // Simpan harga terendah
+                                                }
+                                            @endphp
+                                        @endif
+                                    @endforeach
+                                    
+                                    @if ($lowestPrice !== null)
+                                        <div class="price" style="color: #1a2b48; font-size: 18px; font-weight: 500;">
+                                            <span style="color: #5e6d77; font-size: 14px; font-weight: 400;">From</span> <br>
+                                            Rp. {{ number_format($lowestPrice, 0, ',', '.') }}</div>
+                                        <span style="color: #5e6d77; font-size: 10px; font-weight: 400;">/Night</span>
+                                    @endif
 
                                     </div>
                                 </div>

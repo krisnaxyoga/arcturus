@@ -35,6 +35,8 @@ export default function Index({ errors, session,contractrate, default_selected_h
     const [endDate, setEndDate] = useState('')
     const [price, setPrice] = useState(0)
     const [active, setActive] = useState(true)
+    const [nocheckin, setNoCheckin] = useState(false)
+    const [nocheckout, setNoCheckout] = useState(false)
 
     const handleDatesRender = (arg) => {
         setActiveStart(arg.start)
@@ -141,7 +143,9 @@ export default function Index({ errors, session,contractrate, default_selected_h
             start_date: startDate,
             end_date: endDate,
             price: price,
-            active: active
+            active: active,
+            nocheckin: nocheckin,
+            nocheckout: nocheckout
         }, {
             onSuccess: () => {
                 handleNavRoomTypeSelect(activeHotelRoom)
@@ -265,6 +269,7 @@ export default function Index({ errors, session,contractrate, default_selected_h
                                     </div>
                                 )}
 
+                                
                                 <div className="mb-3">
                                     <label className="form-label fw-bold">Status</label>
                                     <p><input id="active" type="checkbox" defaultChecked={active} onChange={(e) => setActive(e.target.checked)} /> Available for booking?</p>
@@ -274,7 +279,29 @@ export default function Index({ errors, session,contractrate, default_selected_h
                                         {errors.price}
                                     </div>
                                 )}
+                                <div className="d-flex justify-content-between">
+                                    <div className="mb-3">
+                                        {/* <label className="form-label fw-bold">No Checkin</label> */}
+                                        <p><input id="active" type="checkbox" defaultChecked={nocheckin} onChange={(e) => setNoCheckin(e.target.checked)} /> no Check-in?</p>
+                                    </div>
+                                    {errors.price && (
+                                        <div className="alert alert-danger">
+                                            {errors.price}
+                                        </div>
+                                    )}
 
+                                    <div className="mb-3">
+                                        {/* <label className="form-label fw-bold">No Checkout</label> */}
+                                        <p><input id="active" type="checkbox" defaultChecked={nocheckout} onChange={(e) => setNoCheckout(e.target.checked)} /> no Check-out?</p>
+                                    </div>
+                                    {errors.price && (
+                                        <div className="alert alert-danger">
+                                            {errors.price}
+                                        </div>
+                                    )}
+
+                                </div>
+                                
                                 <div className="mb-3">
                                     <button className="btn btn-primary" type="submit">
                                         <i className="fa fa-save mr-1"></i> Save

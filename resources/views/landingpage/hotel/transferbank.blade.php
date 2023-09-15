@@ -49,7 +49,7 @@
                                 <p style="font-weight: 700; font-size: 13px;" class="text-danger">{{ $message }}</p>
                                 @enderror
                                 <p class="text-danger" style="font-weight: 700; font-size: 13px;">The image must be in PNG, JPG, or JPEG format, The image size cannot exceed 2MB.</p>
-                                <img id="image-preview" class="mt-3" style="width: 200px" src="#" alt="Preview">
+                                <img onerror="this.onerror=null; this.src='https://semantic-ui.com/images/wireframe/white-image.png';" id="image-preview" class="mt-3" style="width: 200px" src="#" alt="Preview">
                             </div>
                             <input type="hidden" value="{{$booking}}" name="idbooking">
                             <div class="mb-3">

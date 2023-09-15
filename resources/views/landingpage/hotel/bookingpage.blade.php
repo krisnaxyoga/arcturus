@@ -138,7 +138,7 @@
                     <div class="card-body">
                         <h3>{{$data->vendor->vendor_name}}</h3>
                         <p><i class="fa fa-map-marker"></i> {{$data->vendor->country}}</p>
-                        <img class="img-fluid" style="width:100px" src="{{$data->vendor->logo_img}}" alt="">
+                        <img onerror="this.onerror=null; this.src='https://semantic-ui.com/images/wireframe/white-image.png';" onerror="this.onerror=null; this.src='https://semantic-ui.com/images/wireframe/white-image.png';" class="img-fluid" style="width:100px" src="{{$data->vendor->logo_img}}" alt="">
                         <hr>
                         <ul class="p-0">
                             <li class="d-flex justify-content-between"><span>Check in :</span> <span>{{$data->checkin_date}}</span></li>

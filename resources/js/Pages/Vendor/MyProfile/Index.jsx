@@ -22,7 +22,7 @@ export default function Index({ session,data,country,vendor,markup,banner,proper
  const [firstname,setFirstName] = useState('');
  const [lastname,setLasttName] = useState('');
  const [phone,setPhone] = useState('');
- const [logo,setlogo] = useState(null);
+ const [logo,setLogo] = useState(null);
  const [address,setAddress] = useState('');
  const [address2,setAddress2] = useState('');
  const [city,setCity] = useState('');
@@ -44,13 +44,50 @@ export default function Index({ session,data,country,vendor,markup,banner,proper
  const [descbanner,setDescbanner] = useState('');
 
 
-    const handleFileChange = (e) => {
-        setlogo(e.target.files[0]);
-    };
+        const handleFileChange = (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const fileNameParts = file.name.split('.');
+                const fileExtension = fileNameParts[fileNameParts.length - 1].toLowerCase();
+                const allowedExtensions = ['jpg', 'jpeg', 'png'];
+                const maxFileSizeInBytes = 5 * 1024 * 1024; // 5 MB
 
-    const handleBanner = (e) =>{
-        setBanner(e.target.files[0]);
-    };
+                if (!allowedExtensions.includes(fileExtension)) {
+                    alert('Only image files with formats png, jpg, or jpeg are allowed!');
+                    e.target.value = ''; // Mengosongkan input file
+                } else if (file.size > maxFileSizeInBytes) {
+                    alert('File size must not exceed 5 MB!');
+                    e.target.value = ''; // Mengosongkan input file
+                } else {
+                    setLogo(file);
+                }
+            }
+        };
+
+        const handleBanner = (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const fileNameParts = file.name.split('.');
+                const fileExtension = fileNameParts[fileNameParts.length - 1].toLowerCase();
+                const allowedExtensions = ['jpg', 'jpeg', 'png'];
+                const maxFileSizeInBytes = 5 * 1024 * 1024; // 5 MB
+
+                if (!allowedExtensions.includes(fileExtension)) {
+                    alert('Only image files with formats png, jpg, or jpeg are allowed!');
+                    e.target.value = ''; // Mengosongkan input file
+                } else if (file.size > maxFileSizeInBytes) {
+                    alert('File size must not exceed 5 MB!');
+                    e.target.value = ''; // Mengosongkan input file
+                } else {
+                    setBanner(file);
+                }
+            }
+        };
+            
+
+        // Tampilkan gambar pratinjau jika gambar ada
+        const logoPreview = logo ? URL.createObjectURL(logo) : null;
+        const bannerPreview = imgbanner ? URL.createObjectURL(imgbanner) : null;
 
     const storePost = async (e) => {
         e.preventDefault();
@@ -179,12 +216,21 @@ export default function Index({ session,data,country,vendor,markup,banner,proper
                                                             <input type="date" className="form-control" placeholder="Birthday" aria-label="Username" aria-describedby="basic-addon1"/>
                                                         </div>
                                                     </div> */}
+                                                    
                                                     <div className="mb-3">
                                                         <label for="formFile" className="form-label">Logo</label>
                                                         <input className="form-control" onChange={handleFileChange} type="file" id="formFile"/>
                                                     </div>
                                                     <div className="mb-3">
+                                                    {logoPreview ? (
+                                                        <>
+                                                        {logoPreview && <img src={logoPreview} alt="Logo Preview" style={{width:'100px'}}/>}
+                                                        </>
+                                                    ):(
+                                                        <>
                                                         <img style={{width:"100px"}} src={data[0].logo_img||'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Image_not_available.png/640px-Image_not_available.png'} alt="" />
+                                                        </>
+                                                    )}
                                                     </div>
 
 
@@ -355,6 +401,7 @@ export default function Index({ session,data,country,vendor,markup,banner,proper
                                                                         <input onChange={(e)=>setTitle(e.target.value)} type="text" className='form-control' />
                                                                     </div>
                                                                     <div className="mb-3">
+                                                                    {bannerPreview && <img className='mb-3' src={bannerPreview} alt="Banner Preview" style={{width:'200px'}}/>}
                                                                         <label htmlFor="">image</label>
                                                                         <input onChange={handleBanner} type="file" className='form-control' />
                                                                     </div>

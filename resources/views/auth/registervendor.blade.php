@@ -33,7 +33,7 @@
               ">
              
                 <div class="card-body p-5 shadow-5 text-center">
-                    <img style="width: 40px" src="{{ $settings->logo_image ?? '/images/pms-sistem-1.png' }}" alt="Logo">
+                    <img onerror="this.onerror=null; this.src='https://semantic-ui.com/images/wireframe/white-image.png';" style="width: 40px" src="{{ $settings->logo_image ?? '/images/pms-sistem-1.png' }}" alt="Logo">
                 <h2 class="fw-bold mb-5">Sign up for Hotel</h2>
                     @if (session()->has('message'))
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -182,7 +182,7 @@
             </div>
           </div>
           <div class="col-lg-6 mb-5 mb-lg-0 d-none d-lg-block">
-            <img style="border-radius: 1rem;" src="https://w0.peakpx.com/wallpaper/269/841/HD-wallpaper-nusa-penida-nusa-penida-stock-nusa-penida-island.jpg" class="w-100 rounded-5 shadow-4"
+            <img onerror="this.onerror=null; this.src='https://semantic-ui.com/images/wireframe/white-image.png';" style="border-radius: 1rem;" src="https://w0.peakpx.com/wallpaper/269/841/HD-wallpaper-nusa-penida-nusa-penida-stock-nusa-penida-island.jpg" class="w-100 rounded-5 shadow-4"
             alt="" />
         </div>
         </div>

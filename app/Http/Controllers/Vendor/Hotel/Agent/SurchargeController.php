@@ -155,6 +155,8 @@ class SurchargeController extends Controller
         $hotel_room_surcharge->end_date = $end_date;
         $hotel_room_surcharge->recom_price = $request->price;
         $hotel_room_surcharge->active = $request->active;
+        $hotel_room_surcharge->no_checkin = $request->nocheckin;
+        $hotel_room_surcharge->no_checkout = $request->nocheckout;
         $hotel_room_surcharge->save();
 
     }
