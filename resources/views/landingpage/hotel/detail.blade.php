@@ -323,8 +323,19 @@
                                                         <div>
 
                                                             @foreach ($contractprice as $itemprice)
-                                                                @if($itemprice->room_id == $item->room->id)
-
+                                                            @php
+                                                                $price = $itemprice->recom_price;
+                                                        
+                                                                if ($advancepurchase->count() > 0) {
+                                                                    foreach ($advancepurchase as $advancevalue) {
+                                                                        if ($advancevalue->contract_id == $itemprice->contract_id && $advancevalue->room_id == $itemprice->room_id) {
+                                                                            $price = $advancevalue->price;
+                                                                            
+                                                                        }
+                                                                    }
+                                                                }
+                                                            @endphp
+                                                            @if ($itemprice->room_id == $item->room->id)
                                                                 <hr>
                                                                 <p style="font-size:20px;font-weight:700" class="m-0 p-0">{{$itemprice->contractrate->codedesc}}</p>
                                                                 <hr>
@@ -333,7 +344,7 @@
                                                                         <p>Min Stay : {{$itemprice->contractrate->min_stay}} nights</p>
                                                                     </div>
                                                                     <div class="col-lg">
-                                                                         @foreach ($itemprice->contractrate->distribute as $distribute)
+                                                                        @foreach ($itemprice->contractrate->distribute as $distribute)
                                                                             <span class="badge badge-secondary mx-1">{{$distribute}}</span>
                                                                         @endforeach
                                                                     </div>
@@ -341,7 +352,7 @@
                                                                 <div class="row justify-content-between">
                                                                     <div class="col-lg">
                                                                         <span class="price text-primary" style="font-weight: 600">Rp.
-                                                                            {{ number_format($itemprice->recom_price + $itemprice->contractrate->vendors->system_markup, 0, ',', '.') }} / night
+                                                                            {{ number_format($price + $itemprice->contractrate->vendors->system_markup, 0, ',', '.') }} / night
                                                                         </span>
                                                                         <p class="m-0">Benefits :</p>
                                                                         <p>{!! $itemprice->contractrate->benefit_policy !!}</p>
@@ -350,19 +361,17 @@
                                                                         @if ($RoomAllowment <= 0)
                                                                             <span class="badge badge-danger">Sold</span>
                                                                         @else
-                                                                            @if($Nights >= $itemprice->contractrate->min_stay)
-                                                                                <select class="form-control room-quantity" name="room_quantity"
-                                                                                    style="width:200px" onchange="calculateTotal()">
+                                                                            @if ($Nights >= $itemprice->contractrate->min_stay)
+                                                                                <select class="form-control room-quantity" name="room_quantity" style="width:200px"
+                                                                                    onchange="calculateTotal()">
                                                                                     <option data-price="0" value="0" data-pricenomarkup="0">
                                                                                         0</option>
                                                                                     @for ($i = 1; $i <= $RoomAllowment; $i++)
-                                                                                        {{-- <option data-contprice={{$itemprice->id}} data-contractid={{$itemprice->contract_id}} data-roomid={{$itemprice->room->id}} data-price="{{($i * ($itemprice->recom_price + $itemprice->contractrate->vendors->system_markup + $surcharprice)) }}" value="{{$i}}">{{$i}} @if ($i == 1) room @else rooms @endif </option> --}}
                                                                                         <option data-contprice={{ $itemprice->id }}
                                                                                             data-contractid={{ $itemprice->contract_id }}
                                                                                             data-roomid={{ $itemprice->room->id }}
-                                                                                            data-price="{{ $i * ($itemprice->recom_price + $itemprice->contractrate->vendors->system_markup) }}"
-                                                                                            data-pricenomarkup="{{ $i * $itemprice->recom_price }}"
-                                                                                            value="{{ $i }}">{{ $i }}
+                                                                                            data-price="{{ $i * ($price + $itemprice->contractrate->vendors->system_markup) }}"
+                                                                                            data-pricenomarkup="{{ $i * $price }}" value="{{ $i }}">{{ $i }}
                                                                                             @if ($i == 1)
                                                                                                 room
                                                                                             @else
@@ -371,12 +380,13 @@
                                                                                         </option>
                                                                                     @endfor
                                                                                 </select>
-                                                                                @endif
+                                                                            @endif
                                                                         @endif
                                                                     </div>
                                                                 </div>
-                                                                @endif
-                                                            @endforeach
+                                                            @endif
+                                                        @endforeach
+                                                        
                                                         </div>
                                                       </div>
                                                     @endif

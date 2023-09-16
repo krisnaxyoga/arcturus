@@ -58,4 +58,12 @@ class User extends Authenticatable
     public function vendors() {
         return $this->belongsTo(Vendor::class, 'vendor_id');
     }
+
+    public function advancepurchaseprice() {
+        return $this->hasMany(AdvancePurchasePrice::class);
+    }
+
+    public function advancepurchase() {
+        return $this->hasMany(AdvancePurchase::class);
+    }
 }

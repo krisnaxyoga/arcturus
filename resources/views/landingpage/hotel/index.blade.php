@@ -298,9 +298,21 @@
                                     @endphp
                                     
                                     @foreach ($contractprice as $contprice)
+                                        @php
+                                            $advprice = $contprice->recom_price;
+                                                            
+                                            if ($advancepurchase->count() > 0) {
+                                                foreach ($advancepurchase as $advancevalue) {
+                                                    if ($advancevalue->contract_id == $contprice->contract_id && $advancevalue->room_id == $contprice->room_id) {
+                                                        $advprice = $advancevalue->price;
+                                                        
+                                                    }
+                                                }
+                                            }
+                                        @endphp
                                         @if ($contprice->user_id == $item->user_id)
                                             @php
-                                                $price = $contprice->recom_price + $item->contractrate->vendors->system_markup;
+                                                $price = $advprice + $item->contractrate->vendors->system_markup;
                                                 if ($lowestPrice === null || $price < $lowestPrice) {
                                                     $lowestPrice = $price; // Simpan harga terendah
                                                 }

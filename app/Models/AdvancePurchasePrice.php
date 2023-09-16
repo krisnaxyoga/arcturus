@@ -17,4 +17,11 @@ class AdvancePurchasePrice extends Model
         return $this->belongsTo(ContractRate::class, 'contract_id');
     }
 
+    public function users() {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function advancepurchase() {
+        return $this->belongsTo(AdvancePurchase::class, 'advance_id');
+    }
 }

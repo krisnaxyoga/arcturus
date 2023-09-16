@@ -28,4 +28,8 @@ class Vendor extends Model
     public function hotelroombooking() {
         return $this->hasMany(HotelRoomBooking::class);
     }
+
+    public function advancepurchase() {
+        return $this->hasMany(AdvancePurchase::class);
+    }
 }
