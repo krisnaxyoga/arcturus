@@ -116,7 +116,7 @@ class ContractController extends Controller
                 $data->booking_end = $request->booking_end;
                 if($contract == false){
                     $data->min_stay = 1;
-                    $data->distribute = ["all"];
+                    $data->distribute = ["WORLDWIDE"];
                     $data->rolerate = 1;
 
                 }else{
@@ -650,13 +650,14 @@ class ContractController extends Controller
             $data = AdvancePurchase::find($id);
             $data->day = $request->day;
 
-            $beginsell = Carbon::parse($data->beginsell); // Convert beginsell to Carbon object
-            $interval = $request->day - 1; // Calculate the interval based on input day
+            // $beginsell = Carbon::parse($data->beginsell); // Convert beginsell to Carbon object
+            $today = Carbon::now(); // Tanggal hari ini
+            $interval = $request->day; // Calculate the interval based on input day
 
             // Calculate new endsell based on input day and original beginsell
-            $newEndsell = $beginsell->copy()->addDays($interval); // Calculate endsell based on new beginsell
+            $newbeginsell = $today->copy()->addDays($interval); // Calculate endsell based on new beginsell
 
-            $data->endsell = $newEndsell; // Set the new endsell value
+            $data->beginsell = $newbeginsell; // Set the new endsell value
             $data->save();
 
             return redirect()->back()->with('success', 'Advance Purchase Updated!');
@@ -701,7 +702,8 @@ class ContractController extends Controller
                         ->where('contract_id', $data->contract_id)
                         ->first();
     
-                    $up_endsell->endsell = $date3->beginsell->subDay(1);
+                    // $up_endsell->endsell = $date3->beginsell->subDay(1);
+                    $up_endsell->endsell = Carbon::parse($contract->stayperiod_end);
                     $up_endsell->save();
                 }
             }

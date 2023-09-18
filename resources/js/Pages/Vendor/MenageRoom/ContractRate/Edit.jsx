@@ -419,7 +419,7 @@ console.log(contpriceone,"one");
                                                                         {contract.rolerate == 1 ? (
                                                                                             <>
                                                                                              <label style={{ marginTop:'2rem' }} htmlFor="">Market</label>
-                                                                                            <input type="text" value={'all'} className='form-control' readOnly/>
+                                                                                            <input type="text" value={'WORLDWIDE'} className='form-control' readOnly/>
                                                                                             </>
                                                                                         ):(
                                                                                             <>
@@ -431,7 +431,7 @@ console.log(contpriceone,"one");
                                                                                                     onChange={handleSelectDistribute}
                                                                                                     multiple
                                                                                                 >
-                                                                                                    <option value="all">all</option>
+                                                                                                    <option value="WORLDWIDE">WORLDWIDE</option>
                                                                                                     {Object.keys(country).map((key) => (
                                                                                                     <option key={key} value={country[key]}>
                                                                                                         {country[key]}
@@ -461,7 +461,7 @@ console.log(contpriceone,"one");
                                                                                 <input
                                                                                     type="checkbox"
                                                                                     className='form-check-input'
-                                                                                    name="all"
+                                                                                    name="WORLDWIDE"
                                                                                     checked={Object.values(checkboxes).every(val => val)}
                                                                                     onChange={handleCheckboxChangeAll}
                                                                                 />

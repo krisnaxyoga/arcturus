@@ -191,16 +191,24 @@ class HomeController extends Controller
             // ->groupBy('contract_prices.id', 'contract_id','user_id') // Tambahkan semua kolom yang tidak diagregat
             ->get();
 
-            $day = $today->diffInDays($checkin);
-            
-            $advancepurchase = AdvancePurchasePrice::whereHas('advancepurchase', function ($query) use ($day, $checkin,$checkout) {
-                $query->where('is_active', 1);
-                $query->whereDate('beginsell', '<=', $checkin)
-                      ->whereDate('endsell', '>=', $checkin);
-                $query->where('day','>=', $day);
+            // dd($checkin);
+            $interval = $today->diffInDays($checkin);
+            $day = $interval + 1;
+            // dd($day);
+            $advancepurchase = AdvancePurchasePrice::whereHas('advancepurchase', function ($query) use ($day, $checkin, $checkout) {
+                $query->where('is_active', 1)
+                    ->where(function ($query) use ($checkin,$checkout) {
+                        $query->whereDate('beginsell', '<=', $checkin)
+                              ->whereDate('endsell', '>=', $checkin);
+                    })
+                    ->where(function ($query) use ($day) {
+                        $query->where('day', '<=', $day)
+                              ->orWhereNull('day');
+                    });
             })
             ->with('room')
             ->with('users')
+            ->with('advancepurchase')
             ->get();
 
         $data = $vendor;
@@ -273,7 +281,8 @@ class HomeController extends Controller
                 ->with('room')
                 ->whereHas('contractrate', function ($query) use ($agentCountry,$Nights) {
                     $query->where('distribute', 'LIKE', '%' . $agentCountry . '%')
-                        ->orWhere('distribute', 'LIKE', '%all%');
+                        ->orWhere('distribute', 'LIKE', '%all%')
+                        ->orWhere('distribute', 'LIKE', '%WORLDWIDE%');
 
                     $query->where('min_stay', $Nights)
                     ->orWhere('min_stay', 1);
@@ -333,7 +342,8 @@ class HomeController extends Controller
                 ->with('room')
                 ->whereHas('contractrate', function ($query) use ($agentCountry) {
                     $query->where('distribute', 'LIKE', '%' . $agentCountry . '%')
-                    ->orWhere('distribute', 'LIKE', '%all%');
+                    ->orWhere('distribute', 'LIKE', '%all%')
+                    ->orWhere('distribute', 'LIKE', '%WORLDWIDE%');
                 })
                 ->whereHas('contractrate', function ($query) use ($checkin, $checkout) {
                     $query->where(function ($q) use ($checkin, $checkout) {
@@ -386,23 +396,27 @@ class HomeController extends Controller
             ->get();
 
             // dd($checkin);
-            $day = $today->diffInDays($checkin);
+            $interval = $today->diffInDays($checkin);
+            $day = $interval + 1;
             // dd($day);
             $advancepurchase = AdvancePurchasePrice::whereHas('advancepurchase', function ($query) use ($day, $checkin, $checkout) {
                 $query->where('is_active', 1)
-                    ->where(function ($query) use ($checkin) {
+                    ->where(function ($query) use ($checkin,$checkout) {
                         $query->whereDate('beginsell', '<=', $checkin)
                               ->whereDate('endsell', '>=', $checkin);
                     })
                     ->where(function ($query) use ($day) {
-                        $query->where('day', '>=', $day)
+                        $query->where('day', '<=', $day)
                               ->orWhereNull('day');
                     });
             })
+            ->where('vendor_id',$vendorIds)
             ->with('room')
             ->with('users')
+            ->with('advancepurchase')
             ->get();
            
+            // dd($day,$advancepurchase);
         }
 
         $data = $vendor;

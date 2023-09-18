@@ -323,21 +323,21 @@
                                                         <div>
 
                                                             @foreach ($contractprice as $itemprice)
-                                                            @php
-                                                                $price = $itemprice->recom_price;
-                                                        
-                                                                if ($advancepurchase->count() > 0) {
-                                                                    foreach ($advancepurchase as $advancevalue) {
-                                                                        if ($advancevalue->contract_id == $itemprice->contract_id && $advancevalue->room_id == $itemprice->room_id) {
-                                                                            $price = $advancevalue->price;
-                                                                            
+                                                           
+                                                            @if ($itemprice->room_id == $item->room->id)
+                                                                @php
+                                                                    $price = $itemprice->recom_price;
+                                                            
+                                                                    if ($advancepurchase->count() > 0) {
+                                                                        foreach ($advancepurchase as $advancevalue) {
+                                                                            if ($advancevalue->contract_id == $itemprice->contract_id && $advancevalue->room_id == $itemprice->room_id && $advancevalue->room_id == $item->room->id) {
+                                                                                $price = $advancevalue->price;
+                                                                            }
                                                                         }
                                                                     }
-                                                                }
-                                                            @endphp
-                                                            @if ($itemprice->room_id == $item->room->id)
-                                                                <hr>
-                                                                <p style="font-size:20px;font-weight:700" class="m-0 p-0">{{$itemprice->contractrate->codedesc}}</p>
+                                                                @endphp
+                                                                {{-- <hr>
+                                                                <p style="font-size:20px;font-weight:700" class="m-0 p-0">{{$itemprice->contractrate->codedesc}}</p> --}}
                                                                 <hr>
                                                                 <div class="row justify-content-between">
                                                                     <div class="col-lg">

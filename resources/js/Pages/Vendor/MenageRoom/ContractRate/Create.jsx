@@ -341,7 +341,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                                  onChange={handleSelectDistribute}
                                                                                  multiple
                                                                              >
-                                                                                 <option value="all">all</option>
+                                                                                 <option value="WORLDWIDE">WORLDWIDE</option>
                                                                                  {Object.keys(country).map((key) => (
                                                                                  <option key={key} value={country[key]}>
                                                                                      {country[key]}
@@ -364,7 +364,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                         ) : (
                                                                             <>
                                                                             <label htmlFor="" style={{marginTop:'2rem'}}> Market</label>
-                                                                            <input type="text" readOnly value={'all'} className='form-control'/>
+                                                                            <input type="text" readOnly value={'WORLDWIDE'} className='form-control'/>
                                                                             </>
                                                                         )
                                                                         }
