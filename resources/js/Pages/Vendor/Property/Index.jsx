@@ -35,6 +35,7 @@ export default function Index({ props, vendor, data }) {
                                         <thead>
                                             <tr>
                                                 <th>No</th>
+                                                <th>Hotel Name</th>
                                                 <th>email</th>
                                                
                                                 <th>Action</th>
@@ -45,6 +46,9 @@ export default function Index({ props, vendor, data }) {
                                                 <>
                                                     <tr key={index}>
                                                         <td>{index + 1}</td>
+                                                        <td>
+                                                            {item.vendors.vendor_name}
+                                                        </td>
                                                         <td>
                                                             {item.vendors.email}
                                                         </td>
