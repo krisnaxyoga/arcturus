@@ -31,7 +31,11 @@
                                                 <td>{{ $item->address_line1 }}</td>
                                                 <td>{{ $item->phone }}</td>
                                                 <td>{{ $item->email }}</td>
-                                                <td><a href="{{ route('dashboard.hotel.edit', $item->id) }}"
+                                                <td>
+                                                    <a href="{{route('dashboard.loginhotel',$item->user_id)}}" class="btn btn-datatable btn-icon btn-transparent-dark mr-2">
+                                                    <i data-feather="key"></i>
+                                                    </a>
+                                                    <a href="{{ route('dashboard.hotel.edit', $item->id) }}"
                                                         class="btn btn-datatable btn-icon btn-transparent-dark mr-2"><i
                                                             data-feather="edit"></i></a>
 

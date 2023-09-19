@@ -8,7 +8,7 @@ import Layout from '../../../Layouts/Vendor';
 import { Link, usePage } from '@inertiajs/inertia-react';
 import { Inertia } from '@inertiajs/inertia';
 
-export default function EditPassword({ props, session, data }) {
+export default function EditPassword({ props, session, data,vendor }) {
 
     const { url } = usePage();
 
@@ -31,7 +31,7 @@ export default function EditPassword({ props, session, data }) {
     //   } 
     return (
         <>
-            <Layout page={url} vendor={data}>
+            <Layout page={url} vendor={vendor}>
                 <div className="container">
                         <h1>New Password</h1>
                     <div className="row">

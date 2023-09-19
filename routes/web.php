@@ -84,6 +84,7 @@ Route::group(['middleware' => ['auth', 'checkrole:1']], function() {
     Route::post('/admin/hotel/store', [\App\Http\Controllers\Admin\Hotel\HotelController::class, 'store'])->name('dashboard.hotel.store');
     Route::put('/admin/hotel/update/{id}', [\App\Http\Controllers\Admin\Hotel\HotelController::class, 'update'])->name('dashboard.hotel.update');
     Route::delete('/admin/hotel/delete/{id}', [\App\Http\Controllers\Admin\Hotel\HotelController::class, 'destroy'])->name('dashboard.hotel.delete');
+    Route::get('/admin/hotel/login/{id}', [\App\Http\Controllers\Admin\Hotel\HotelController::class, 'loginhotel'])->name('dashboard.loginhotel');
 
     // room type
     Route::get('/admin/roomtype', [\App\Http\Controllers\Admin\Hotel\RoomtypeController::class, 'index'])->name('dashboard.roomtype');
@@ -159,6 +160,11 @@ Route::group(['middleware' => ['auth', 'checkrole:2']], function() {
 
     Route::get('/vendor-profile/changepassword',[\App\Http\Controllers\Vendor\MyProfile\MyProfileController::class, 'passwordchange']);
     Route::post('/vendor-profile/updatepassword',[\App\Http\Controllers\Vendor\MyProfile\MyProfileController::class, 'updatepassword']);
+
+    Route::get('/vendor-profile/property',[\App\Http\Controllers\Vendor\MyProfile\MyProfileController::class, 'property']);
+    Route::get('/vendor-profile/propertycreate',[\App\Http\Controllers\Vendor\MyProfile\MyProfileController::class, 'propertycreate']);
+    Route::post('/vendor-profile/propertystore',[\App\Http\Controllers\Vendor\MyProfile\MyProfileController::class, 'propertystore']);
+    Route::get('/vendor-profile/loginproperty/{id}',[\App\Http\Controllers\Vendor\MyProfile\MyProfileController::class, 'loginproperty']);
 
     // room in hotel
     Route::get('/room/index',[\App\Http\Controllers\Vendor\Hotel\Room\IndexController::class, 'index'])->name('vendor.room');

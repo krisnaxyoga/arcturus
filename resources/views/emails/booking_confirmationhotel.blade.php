@@ -53,7 +53,7 @@
           <td colspan="2" style="padding:15px;">
             <?php foreach ($hotelbook as $key => $item) { ?>
                 <p style="font-size:14px;margin:0;padding:10px;border:solid 1px #ddd;font-weight:bold;">
-                    <span style="display:block;font-size:13px;font-weight:normal;">{{ $item->room->ratedesc}}</span> Rp. {{ number_format($item->pricenomarkup, 0, ',', '.')}} / Night <b style="font-size:12px;font-weight:300;"> </b>
+                  <span style="display:block;font-size:13px;font-weight:normal;"> qty : {{ $item->total_room}}</span> | <span style="display:block;font-size:13px;font-weight:normal;">{{ $item->room->ratedesc}}</span> Rp. {{ number_format($item->pricenomarkup, 0, ',', '.')}} / Night <b style="font-size:12px;font-weight:300;"> </b>
                   </p>
             <?php } ?>
 

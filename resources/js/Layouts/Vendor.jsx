@@ -131,6 +131,10 @@ function Layout({ children, page, vendor }) {
                                     <div className="nav-link-icon"><i className="fa fa-credit-card" aria-hidden="true"></i></div>
                                     Payouts
                                 </Link> */}
+                                <Link className={`nav-link ${page === '/vendor-profile/property' ? 'active' : ''}`} href="/vendor-profile/property">
+                                    <div className="nav-link-icon"><i className="fa fa-building" aria-hidden="true"></i></div>
+                                    Property
+                                </Link>
                                 <Link className={`nav-link ${page === '/vendor-profile/changepassword' ? 'active' : ''}`} href="/vendor-profile/changepassword">
                                     <div className="nav-link-icon">  <i className="fas fa-fw fa-key"></i></div>
                                     password

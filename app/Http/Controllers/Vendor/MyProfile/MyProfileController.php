@@ -10,6 +10,7 @@ use App\Models\AgentMarkupSetup;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Slider;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class MyProfileController extends Controller
@@ -206,5 +207,87 @@ class MyProfileController extends Controller
         return redirect()->back()->with('success', 'Password Change');
         }
 
+    }
+
+    public function property(){
+        $iduser = auth()->user()->id;
+        $title = auth()->user()->title;
+        $data = User::with('vendors')->where('title',$title)->get();
+        $vendor = Vendor::with('users')->where('user_id',$iduser)->first();
+        return inertia('Vendor/Property/Index',[
+            'data' => $data,
+            'vendor' => $vendor
+        ]);
+    }
+    public function propertycreate(Request $request){
+        $country = get_country_lists();
+        $iduser = auth()->user()->id;
+        $vendor = Vendor::with('users')->where('user_id',$iduser)->first();
+        return inertia('Vendor/Property/Create',[
+            'vendor' => $vendor,
+            'country'=>$country
+        ]);
+    }
+
+    public function propertystore(Request $request){
+        $iduser = auth()->user()->id;
+        $title = auth()->user()->title;
+        $data = User::with('vendors')->where('title',$title)->get();
+        $vendor = Vendor::with('users')->where('user_id',$iduser)->first();
+        $validator = Validator::make($request->all(), [
+            'email' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator->errors())
+                ->withInput($request->all());
+        } else {
+            $data = new User();
+            $data->first_name = $request->firstname;
+            $data->last_name = '-';
+            $data->email = $request->email;
+            $data->mobile_phone = $request->phone;
+            $data->password = Hash::make('password123');
+            $data->departement = '-';
+            $data->position = '-';
+            $data->title = $title;
+            $data->role_id = 2;
+            $data->is_active = 1;
+            $data->save();
+
+            $member = new Vendor();
+            $member->user_id = $data->id;
+            $member->vendor_name = $request->firstname;
+            $member->vendor_legal_name = '-';
+            $member->address_line1 = '-';
+            $member->city = '-';
+            $member->state = '-';
+            $member->country = $request->country;
+            $member->email = $request->email;
+            $member->phone = $request->phone;
+            $member->type_vendor = 'hotel';
+            $member->is_active = 1;
+            $member->save();
+
+            $user = User::find($data->id);
+            $user->vendor_id = $member->id;
+            $user->save();
+
+            return redirect()->back()->with('success', 'Property Add success');
+        }
+    }
+
+    public function loginproperty($id){
+        if (Auth::check() && Auth::user()->role_id == 2) {
+            // Logout admin
+            Auth::logout();
+
+            // Lakukan otentikasi sebagai akun hotel
+            Auth::loginUsingId($id);
+
+            // Redirect ke halaman hotel
+            return redirect('/vendordashboard');
+        }
     }
 }

@@ -9,6 +9,8 @@ use App\Models\Vendor;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+
 
 class HotelController extends Controller
 {
@@ -196,5 +198,18 @@ class HotelController extends Controller
         return redirect()
             ->route('dashboard.hotel')
             ->with('message', 'Data Hotel berhasil dihapus.');
+    }
+
+    public function loginhotel($id){
+        if (Auth::check() && Auth::user()->role_id == 1) {
+            // Logout admin
+            Auth::logout();
+
+            // Lakukan otentikasi sebagai akun hotel
+            Auth::loginUsingId($id);
+
+            // Redirect ke halaman hotel
+            return redirect('/vendordashboard');
+        }
     }
 }

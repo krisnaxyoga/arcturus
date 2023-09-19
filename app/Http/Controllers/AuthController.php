@@ -140,6 +140,7 @@ class AuthController extends Controller
             $data->password = Hash::make($request->password);
             $data->departement = '-';
             $data->position = '-';
+            $data->title = Str::random(8);
             $data->role_id = 2;
             $data->save();
 
