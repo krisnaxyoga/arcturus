@@ -232,7 +232,7 @@ class MyProfileController extends Controller
     public function propertystore(Request $request){
         $iduser = auth()->user()->id;
         $title = auth()->user()->title;
-        $data = User::with('vendors')->where('title',$title)->get();
+        $data = User::with('vendors')->where('title',$title)->where('role_id',2)->where('position','sub-master')->get();
         $vendor = Vendor::with('users')->where('user_id',$iduser)->first();
         $validator = Validator::make($request->all(), [
             'email' => 'required'
@@ -250,7 +250,7 @@ class MyProfileController extends Controller
             $data->mobile_phone = $request->phone;
             $data->password = Hash::make('password123');
             $data->departement = '-';
-            $data->position = '-';
+            $data->position = 'sub-master';
             $data->title = $title;
             $data->role_id = 2;
             $data->is_active = 1;

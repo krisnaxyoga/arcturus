@@ -174,8 +174,10 @@
                             // ========================================================= START CALENDAR ====================================
 
                             $status = 1;
+                            $room_allow = 0;
                             $no_checkout = 0;
                             $no_checkin = 0;
+                            $hotelroomid = 0;
                             $TotalHotelCalendar = 0;
                             $TotalHotelCalendar1 = 0;
                             $checkinDate = Carbon::parse($checkin);
@@ -206,6 +208,11 @@
                                             // var_dump($TotalHotelCalendar);
 
                                             $status = $calendar->active;
+                                            $room_allow = $calendar->room_allow;
+                                            if($room_allow == 0){
+                                                $status = 2;
+                                            }
+                                            $hotelroomid = $calendar->room_hotel_id;
                                         }
 
                                         if($checkoutDate == $endDate){
@@ -241,9 +248,11 @@
                                     }
                                 }
                             }
-
                             // Setel $RoomAllowment ke $item->room->room_allow dikurangi total total_room yang sesuai
+                            
                             $RoomAllowment = $item->room->room_allow - $totalRoomBooking;
+
+
                             // ========================================================= ROOM ALLOWMENT ====================================
                         @endphp
                         {{-- {{ $TotalHotelCalendar1 }} {{ $TotalHotelCalendar }} {{$item->recom_price}} --}}
@@ -358,6 +367,13 @@
                                                                         <p>{!! $itemprice->contractrate->benefit_policy !!}</p>
                                                                     </div>
                                                                     <div class="col-lg">
+                                                                        @php
+                                                                            if($room_allow >= 0 && $hotelroomid == $itemprice->room_id){
+                                                                                $RoomAllowment = $room_allow;
+                                                                            }else{
+                                                                                $RoomAllowment = $RoomAllowment;
+                                                                            }
+                                                                        @endphp
                                                                         @if ($RoomAllowment <= 0)
                                                                             <span class="badge badge-danger">Sold</span>
                                                                         @else

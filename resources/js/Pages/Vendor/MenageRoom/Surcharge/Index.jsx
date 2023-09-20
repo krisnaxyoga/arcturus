@@ -34,6 +34,7 @@ export default function Index({ errors, session,contractrate, default_selected_h
     
     const [endDate, setEndDate] = useState('')
     const [price, setPrice] = useState(0)
+    const [allow, setAllow] = useState('')
     const [active, setActive] = useState(true)
     const [nocheckin, setNoCheckin] = useState(false)
     const [nocheckout, setNoCheckout] = useState(false)
@@ -61,6 +62,7 @@ export default function Index({ errors, session,contractrate, default_selected_h
         
         setEndDate(formattedDate);
         setPrice(arg.event.extendedProps.price);
+        setAllow(arg.event.allow);
         setShowModal(true);
     };
 
@@ -145,7 +147,8 @@ export default function Index({ errors, session,contractrate, default_selected_h
             price: price,
             active: active,
             nocheckin: nocheckin,
-            nocheckout: nocheckout
+            nocheckout: nocheckout,
+            room_allow: allow
         }, {
             onSuccess: () => {
                 handleNavRoomTypeSelect(activeHotelRoom)
@@ -268,17 +271,26 @@ export default function Index({ errors, session,contractrate, default_selected_h
                                         {errors.price}
                                     </div>
                                 )}
+                                <div className="mb-3">
+                                    <label className="form-label fw-bold">Room Allotment</label>
+                                    <input id="allow" type="number" className="form-control" value={allow ? allow : 0} onChange={(e) => setAllow(e.target.value)} />
+                                </div>
+                                {errors.allow && (
+                                    <div className="alert alert-danger">
+                                        {errors.allow}
+                                    </div>
+                                )}
 
                                 
                                 <div className="mb-3">
                                     <label className="form-label fw-bold">Status</label>
-                                    <p><input id="active" type="checkbox" defaultChecked={active} onChange={(e) => setActive(e.target.checked)} /> Available for booking?</p>
+                                    {/* <p><input id="active" type="checkbox" defaultChecked={active} onChange={(e) => setActive(e.target.checked)} /> Available for booking?</p> */}
                                 </div>
-                                {errors.price && (
+                                {/* {errors.price && (
                                     <div className="alert alert-danger">
                                         {errors.price}
                                     </div>
-                                )}
+                                )} */}
                                 <div className="d-flex justify-content-between">
                                     <div className="mb-3">
                                         {/* <label className="form-label fw-bold">No Checkin</label> */}

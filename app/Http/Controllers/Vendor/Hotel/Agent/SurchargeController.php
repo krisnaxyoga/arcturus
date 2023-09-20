@@ -11,6 +11,7 @@ use App\Models\Vendor;
 use App\Models\ContractPrice;
 use App\Models\ContractRate;
 use Carbon\CarbonPeriod;
+use App\Models\HotelRoomBooking;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -74,12 +75,41 @@ class SurchargeController extends Controller
         $data = [];
         $userid = Auth::id();
 
+        $vendorIds = Vendor::where('user_id',$userid)->first();
+       
+
         foreach ($period as $date) {
             $hotel_room_surcharge = HotelRoomSurcharge::query()
                 ->where('room_hotel_id', $hotel_room_id)
                 ->where('start_date', $date)
                 ->first();
 
+            $HotelRoomBooking = HotelRoomBooking::where('vendor_id', $vendorIds->id)
+                ->where('room_id', $hotel_room_id)
+                ->whereHas('booking', function ($query) {
+                    $query->where('booking_status', 'paid');
+                })
+                ->where(function ($query) use ($date) {
+                    // Checkin date before or equal to $date AND checkout date after or equal to $date
+                    $query->where('checkin_date', '<=', $date)
+                        ->where('checkout_date', '>=', $date);
+                })
+                ->orWhere(function ($query) use ($date) {
+                    // Checkin date before or equal to $date AND checkout date after or equal to $date
+                    $query->where('checkin_date', '<=', $date)
+                        ->where('checkout_date', '>=', $date);
+            
+                    // Vendor ID is NOT IN the list of vendor IDs that have a booking on the same date
+                    $query->whereNotIn('vendor_id', function ($query) use ($date) {
+                        $query->select('vendor_id')
+                            ->from('hotel_room_bookings')
+                            ->where('checkin_date', '<=', $date)
+                            ->where('checkout_date', '>=', $date);
+                    });
+                })
+                ->first();
+
+              
             // $ContractPrice = ContractPrice::where('room_id', $hotel_room_id)
             //     ->where('user_id', $userid)
             //     ->first();
@@ -95,11 +125,19 @@ class SurchargeController extends Controller
                 ->join('room_hotels', 'contract_prices.room_id', '=', 'room_hotels.id')
                 ->first();
 
+                if($HotelRoomBooking){
+                    $roomallow = $ContractPrice->room->room_allow - $HotelRoomBooking->total_room;
+                }else{
+                    $roomallow = $ContractPrice->room->room_allow;
+                }
+
             if ($hotel_room_surcharge) {
                 // $price = $hotel_room_surcharge->price; // Ambil harga sebagai decimal
                 // $formattedPrice = number_format($price, 0, ',', '.'); // Format harga tanpa desimal nol
 
-                if($hotel_room_surcharge->active == 1){
+                $roomallow = $hotel_room_surcharge->room_allow;
+
+                if($hotel_room_surcharge->active == 1 && $roomallow != 0){
                     $color = 'green';
                 }else{
                     $color = 'red';
@@ -110,12 +148,14 @@ class SurchargeController extends Controller
                     'end' => date('Y-m-d', strtotime($hotel_room_surcharge->end_date) + 86400),
                     'price' => $hotel_room_surcharge->recom_price,
                     'color'=> $color,
+                    'allow'=> $roomallow,
                 ];
             } else {
                 $data[] = [
                     'title' => 'Rp '.number_format($ContractPrice->recom_price, 0, ',', '.'),
                     'date' => date('Y-m-d', strtotime($date)),
-                    'price' => $ContractPrice->recom_price
+                    'price' => $ContractPrice->recom_price,
+                    'allow' => $roomallow,
                 ];
             }
         }
@@ -157,6 +197,11 @@ class SurchargeController extends Controller
         $hotel_room_surcharge->active = $request->active;
         $hotel_room_surcharge->no_checkin = $request->nocheckin;
         $hotel_room_surcharge->no_checkout = $request->nocheckout;
+        if($request->room_allow == null || $request->room_allow == 0){
+            $hotel_room_surcharge->room_allow = 0;
+        }else{
+            $hotel_room_surcharge->room_allow = $request->room_allow;
+        }
         $hotel_room_surcharge->save();
 
     }
