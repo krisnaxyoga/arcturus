@@ -25,7 +25,7 @@ class AttributeController extends Controller
         }
 
 
-        $data = AttributeRoom::all();
+        $data = AttributeRoom::where('user_id',1)->get();
         return view('admin.attribute.index',compact('data','setting'));
     }
 

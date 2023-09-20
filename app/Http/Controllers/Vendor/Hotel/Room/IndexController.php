@@ -42,7 +42,7 @@ class IndexController extends Controller
     public function create()
     {
         $id = auth()->user()->id;
-        $attr = AttributeRoom::where('user_id',$id)->get();
+        $attr = AttributeRoom::where('user_id',1)->get();
         $roomtype = Roomtype::all();
         $vendor = Vendor::where('user_id',$id)->with('users')->first();
         return inertia('Vendor/MenageRoom/CreateRoom',[
@@ -168,7 +168,7 @@ class IndexController extends Controller
     {
         $iduser = auth()->user()->id;
         $vendor = Vendor::where('user_id',$iduser)->with('users')->first();
-        $attr = AttributeRoom::where('user_id',$iduser)->get();
+        $attr = AttributeRoom::where('user_id',1)->get();
         $room = RoomHotel::query()->where('user_id',$iduser)->where('id',$id)->get();
         $roomtype = Roomtype::all();
         return inertia('Vendor/MenageRoom/EditRoom',[

@@ -104,7 +104,7 @@ function Layout({ children, page, vendor }) {
                                     </a>
                                     {isOpen2 && <div className="bg-white py-2 px-4 colapse-inner rounded">
                                         <Link className={`nav-link ${page === '/myprofile' ? 'active' : ''}`} href="/myprofile">Hotel Info</Link>
-                                        <Link className={`nav-link ${page === '/room/attribute' ? 'active' : ''}`} href="/room/attribute">Amenities</Link>
+                                        {/* <Link className={`nav-link ${page === '/room/attribute' ? 'active' : ''}`} href="/room/attribute">Amenities</Link> */}
                                         <Link className={`nav-link ${page === '/room/index' ? 'active' : ''}`} href="/room/index">Room Types</Link>
                                         <Link className={`nav-link ${page === '/room/contract/index' ? 'active' : ''}`} href="/room/contract/index">Rates</Link>
                                         <Link className={`nav-link ${page === '/room/surcharge/index' ? 'active' : ''}`} href="/room/surcharge/index">Rate Calendar</Link>
