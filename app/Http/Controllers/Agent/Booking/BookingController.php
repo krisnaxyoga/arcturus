@@ -8,6 +8,7 @@ use App\Models\Booking;
 use App\Models\RoomHotel;
 use App\Models\HotelRoomBooking;
 use App\Models\PaymentGetwayTransaction;
+use App\Models\ContractPrice;
 use App\Models\Vendor;
 use App\Models\User;
 use App\Models\Setting;
@@ -93,6 +94,8 @@ class BookingController extends Controller
 
                 $pricenomarkupint = (int) $pString;
 
+                $contractprice = ContractPrice::where('id',$item['contpriceid'])->first();
+
                 $hotelbook = new HotelRoomBooking();
                 $hotelbook->room_id = $item['roomId'];
                 $hotelbook->booking_id = $data->id;
@@ -103,6 +106,8 @@ class BookingController extends Controller
                 $hotelbook->checkin_date = $request->checkin;
                 $hotelbook->checkout_date = $request->checkout;
                 $hotelbook->price = $priceint;
+                $hotelbook->rate_price = $contractprice->recom_price;
+                $hotelbook->total_ammount = (($contractprice->recom_price * $totalNights) * $item['quantity']);
                 $hotelbook->pricenomarkup = $pricenomarkupint;
                 $hotelbook->save();
 
