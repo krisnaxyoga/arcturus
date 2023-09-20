@@ -380,7 +380,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                             <p className='mt-2'>Selected: <span className='text-secondary'>{selectedExclude.join(', ')}</span></p>
 
                                                                         </div> */}
-                                                                        <label htmlFor="pickdays" className='fw-bold'>valid day</label>
+                                                                        {/* <label htmlFor="pickdays" className='fw-bold'>valid day</label>
                                                                         <label className="form-label mx-5">
                                                                                 <input
                                                                                     type="checkbox"
@@ -390,8 +390,8 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                                     onChange={handleCheckboxChangeAll}
                                                                                 />
                                                                                 All
-                                                                            </label>
-                                                                        <div className="mb-1">
+                                                                            </label> */}
+                                                                        {/* <div className="mb-1">
                                                                             <label className="form-label mx-3">
                                                                                 <input
                                                                                     type="checkbox"
@@ -463,7 +463,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                                 Sat
                                                                             </label>
 
-                                                                        </div>
+                                                                        </div> */}
 
                                                                     </div>
                                                                 </div>

@@ -456,7 +456,7 @@ console.log(contpriceone,"one");
 
                                                                             </div>
 
-                                                                        <label htmlFor="pickdays" className='fw-bold'>Pick valid day</label>
+                                                                        {/* <label htmlFor="pickdays" className='fw-bold'>Pick valid day</label>
                                                                         <label className="form-label mx-5">
                                                                                 <input
                                                                                     type="checkbox"
@@ -539,7 +539,7 @@ console.log(contpriceone,"one");
                                                                                 Sat
                                                                             </label>
 
-                                                                        </div>
+                                                                        </div> */}
 
                                                                         {/* <div className="mb-3">
                                                                             <label htmlFor="">exclude</label>
