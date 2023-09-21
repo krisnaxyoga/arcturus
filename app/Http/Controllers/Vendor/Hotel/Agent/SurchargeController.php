@@ -138,16 +138,18 @@ class SurchargeController extends Controller
                 $roomallow = $hotel_room_surcharge->room_allow;
 
                 if($hotel_room_surcharge->active == 1 && $roomallow != 0){
-                    if($hotel_room_surcharge->no_checkout){
-                        $color = 'brown'; 
-                    }elseif($hotel_room_surcharge->no_checkin){
-                        $color = 'pink'; 
+                    if($hotel_room_surcharge->no_checkout == 1 && $hotel_room_surcharge->no_checkin == 0){
+                        $color = '#941b0c'; 
+                    }elseif($hotel_room_surcharge->no_checkout == 0 && $hotel_room_surcharge->no_checkin == 1){
+                        $color = '#bc3908'; 
+                    }elseif($hotel_room_surcharge->no_checkout == 1 && $hotel_room_surcharge->no_checkin == 1){
+                        $color = '#621708'; 
                     }else{
-                       $color = 'green';  
+                       $color = '#2a9134';  
                     }
                    
                 }else{
-                    $color = 'red';
+                    $color = '#e63946';
                 }
                 $data[] = [
                     'title' => 'Rp '. number_format($hotel_room_surcharge->recom_price, 0, ',', '.'),
@@ -165,6 +167,7 @@ class SurchargeController extends Controller
                     'date' => date('Y-m-d', strtotime($date)),
                     'price' => $ContractPrice->recom_price,
                     'allow' => $roomallow,
+                    'color' => '#0077b6',
                     'nocheckin' => 0,
                     'nocheckout' => 0
                 ];

@@ -154,17 +154,26 @@ export default function Index({ session, props, attr, room,roomtype,vendor }) {
         const invalidFiles = selectedImages.filter((file) => {
             if (!file.type.match('image/(png|jpg|jpeg)')) {
                 alert('Only image files with formats png, jpg, or jpeg are allowed!');
+                e.target.value = '';
                 return true; // File ini tidak valid
             }
     
             if (file.size > 5 * 1024 * 1024) {
                 alert('File size must not exceed 5 MB!');
+                e.target.value = '';
                 return true; // File ini tidak valid
             }
     
             return false; // File ini valid
         });
     
+           // Jika ada file yang tidak valid, hentikan pemrosesan
+       if (selectedImages.length > 3) {
+            alert('You can only upload a maximum of 3 images.');
+            e.target.value = '';
+            return true;
+        }
+
         // Jika ada file yang tidak valid, hentikan pemrosesan
         if (invalidFiles.length > 0) {
             return;

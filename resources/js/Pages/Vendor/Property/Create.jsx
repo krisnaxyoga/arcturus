@@ -39,8 +39,8 @@ export default function Create({ props, vendor, session,country }) {
                             <form onSubmit={storePost}>
                                 <div className="card">
                                     <div className="card-body">
-                                        {session.success && (
-                                            <div className="alert alert-success border-0 shadow-sm rounded-3">
+                                    {session.success && (
+                                            <div className={`alert ${session.success === 'Sorry!, the email you entered already exists' ? 'alert-danger' : 'alert-success'} border-0 shadow-sm rounded-3`}>
                                                 {session.success}
                                             </div>
                                         )}
@@ -90,6 +90,7 @@ export default function Create({ props, vendor, session,country }) {
                                                         type="text"
                                                         className="form-control"
                                                         name="email"
+                                                        required
                                                     />
                                                 </div>
                                                 <div className="mb-3">

@@ -150,12 +150,17 @@ class MyProfileController extends Controller
 
             $iduser = auth()->user()->id;
 
-            $data =  new Slider();
-            $data->user_id = $iduser;
-            $data->title = $request->title;
-            $data->description = $request->description;
-            $data->image = $feature;
-            $data->save();
+            $slider = Slider::where('user_id',$iduser)->count();
+            if($slider >= 3){
+                return redirect()->back()->with('success', 'sorry your picture exceeds 3 pictures!, please delete one of them to upload again');
+            }else{
+                $data =  new Slider();
+                $data->user_id = $iduser;
+                $data->title = $request->title;
+                $data->description = $request->description;
+                $data->image = $feature;
+                $data->save();
+            }
 
             return redirect()->back()->with('success', 'data saved!');
 
@@ -235,13 +240,10 @@ class MyProfileController extends Controller
         $data = User::with('vendors')->where('title',$title)->where('role_id',2)->where('position','sub-master')->get();
         $vendor = Vendor::with('users')->where('user_id',$iduser)->first();
         $validator = Validator::make($request->all(), [
-            'email' => 'required'
+            'email' => 'required|email|unique:users,email'
         ]);
         if ($validator->fails()) {
-            return redirect()
-                ->back()
-                ->withErrors($validator->errors())
-                ->withInput($request->all());
+            return redirect()->back()->with('success', 'Sorry!, the email you entered already exists');
         } else {
             $data = new User();
             $data->first_name = $request->firstname;

@@ -64,15 +64,13 @@ export default function Index({ errors, session,contractrate, default_selected_h
         setPrice(arg.event.extendedProps.price);
         setAllow(arg.event.allow);
 
-        console.log(arg.event.nocheckout,">>>>>>>chekcout");
-        console.log(arg.event.nocheckin, ">>>>>>>>>>>>>>>>>chekin")
-        if(arg.event.nocheckout != 0){
+        if(arg.event.extendedProps.nocheckout != 0){
             setNoCheckout(true);
         }else{
             setNoCheckout(false);
         }
 
-        if(arg.event.nocheckin != 0){
+        if(arg.event.extendedProps.nocheckin != 0){
             setNoCheckin(true);
         }else{
             setNoCheckin(false);
