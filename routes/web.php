@@ -139,9 +139,6 @@ Route::group(['middleware' => ['auth', 'checkrole:2']], function() {
     //booking report
     Route::get('/bookingreport',[\App\Http\Controllers\Vendor\Booking\BookingReportController::class, 'index']);
 
-    //enquiry report
-    Route::get('/enquiryreport',[\App\Http\Controllers\Vendor\Enquiry\EnquiryReportController::class, 'index']);
-
     //manage news
     Route::get('/managenews',[\App\Http\Controllers\Vendor\News\NewsController::class, 'index']);
 

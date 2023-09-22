@@ -10,11 +10,7 @@ import Rates from '../../../Vendor/MenageRoom/ContractRate/Rates';
 import { Link, usePage } from '@inertiajs/inertia-react';
 import { Inertia } from '@inertiajs/inertia';
 
-import Tab from 'react-bootstrap/Tab';
-import Tabs from 'react-bootstrap/Tabs';
 import Modal from 'react-bootstrap/Modal';
-import FullCalendar from "@fullcalendar/react";
-import dayGridPlugin from "@fullcalendar/daygrid";
 
 export default function Index({ session,data,roomtype,form,barroom,surcharge,black,vendor }) {
     const { url } = usePage();

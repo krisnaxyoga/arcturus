@@ -110,27 +110,10 @@ function Layout({ children, page, vendor }) {
                                         <Link className={`nav-link ${page === '/room/surcharge/index' ? 'active' : ''}`} href="/room/surcharge/index">Rate Calendar</Link>
                                     </div>}
                                 </div>
-
-                                {/* <Link className={`nav-link ${page === '/managenews' ? 'active' : ''}`} href="/managenews">
-                                    <div className="nav-link-icon"><i className="fa fa-bookmark" aria-hidden="true"></i></div>
-                                    Manage News
-                                </Link> */}
                                 <Link className={`nav-link ${page === '/bookingreport' ? 'active' : ''}`} href="/bookingreport">
                                     <div className="nav-link-icon">  <i className="fas fa-fw fa-chart-area"></i></div>
                                     Booking Report
                                 </Link>
-                                {/* <Link className={`nav-link ${page === '/enquiryreport' ? 'active' : ''}`} href="/enquiryreport">
-                                    <div className="nav-link-icon"><i className="fa fa-book" aria-hidden="true"></i></div>
-                                    Enquiry Report
-                                </Link> */}
-                                {/* <Link className={`nav-link ${page === '/verifications' ? 'active' : ''}`} href="/verifications">
-                                    <div className="nav-link-icon"><i className="fa fa-address-card" aria-hidden="true"></i></div>
-                                    Verifications
-                                </Link> */}
-                                {/* <Link className={`nav-link ${page === '/payouts' ? 'active' : ''}`} href="/payouts">
-                                    <div className="nav-link-icon"><i className="fa fa-credit-card" aria-hidden="true"></i></div>
-                                    Payouts
-                                </Link> */}
                                 {vendor.users.position == 'master' && (
                                     <>
                                      <Link className={`nav-link ${page === '/vendor-profile/property' ? 'active' : ''}`} href="/vendor-profile/property">

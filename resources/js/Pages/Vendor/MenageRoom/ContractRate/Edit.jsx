@@ -153,9 +153,6 @@ console.log(contpriceone,"one");
         setShowModal(true)
     };
 
-    const buttonSendValuemarkup = () => {
-        setShowModalMarkup(true);
-    };
 
     const handleCloseModal = () => {
         setShowModal(false);
@@ -163,10 +160,6 @@ console.log(contpriceone,"one");
 
     const handleCloseModalAdvance = () => {
         setShowModalAdvance(false);
-    };
-
-    const handleCloseModalMarkup = () => {
-        setShowModalMarkup(false);
     };
 
 
@@ -677,23 +670,6 @@ console.log(contpriceone,"one");
                                                                                                     </>
                                                                                                 )}
 
-
-                                                                                                {/* <td>
-                                                                                                    {markup[0].markup_price == 0 ? (
-                                                                                                        formatRupiah(parseInt(item.barprice.price) - parseInt(item.recom_price + 15000))
-                                                                                                    ) : (
-                                                                                                        formatRupiah(markup[0].markup_price)
-                                                                                                    )}
-                                                                                                </td> */}
-
-                                                                                                {/* <td >
-                                                                                                    {markup[0].markup_price == 0 ? (
-                                                                                                        formatRupiah(parseInt(item.recom_price) + (parseInt(item.barprice.price) - parseInt(item.recom_price + 15000)))
-                                                                                                    ) : (
-                                                                                                        formatRupiah(parseInt(item.recom_price) + parseInt(markup[0].markup_price))
-                                                                                                    )
-                                                                                                    }
-                                                                                                </td> */}
                                                                                                 <td>
                                                                                                     <a href='#' className='btn btn-datatable btn-icon btn-transparent-dark mr-2' onClick={() => buttonSendValue(item)}>
                                                                                                         <i className='fa fa-edit'></i>
@@ -759,36 +735,6 @@ console.log(contpriceone,"one");
                                                                         onChange={handleRateMinChange}
                                                                     />
                                                                 </Form.Group>
-                                                                {/* <Form.Group controlId="formMarkup">
-                                                                    <Form.Label>Markup</Form.Label>
-                                                                    <Form.Control
-                                                                        type="text"
-                                                                        name="markup"
-                                                                        defaultValue={markup[0].markup_price == 0 ? (
-                                                                            modalData?.barprice.price - ((modalData?.barprice.price * 0.8) + 15000)
-                                                                        ) : (
-                                                                            markup[0].markup_price
-                                                                        )}
-                                                                        disabled
-                                                                    />
-                                                                </Form.Group> */}
-                                                                {/* <Form.Group controlId="formSelling">
-                                                                    <Form.Label>Selling</Form.Label>
-                                                                    {sellingPrice > modalData?.barprice.price ? (
-                                                                        <>
-                                                                            <p className='text-danger'>the selling price exceeds the price on the website</p>
-                                                                        </>
-                                                                    ) : (
-                                                                        <>
-                                                                        </>
-                                                                    )}
-                                                                    <Form.Control
-                                                                        type="text"
-                                                                        name="selling"
-                                                                        value={sellingPrice}
-                                                                        disabled
-                                                                    />
-                                                                </Form.Group> */}
                                                                 <a href={`/room/contract/updatecontractprice/${modalData?.id}/${minPrice ? minPrice : modalData?.recom_price}/${sellingPrice}`} className='btn btn-primary mt-4'>
                                                                     Save Changes
                                                                 </a>
@@ -851,25 +797,7 @@ console.log(contpriceone,"one");
                                                         </Modal.Footer>
                                                     </Modal>
 
-                                                    {/* <Modal show={showModalMarkup} onHide={handleCloseModalMarkup}>
-                                                        <Modal.Header>
-                                                            <Modal.Title>Edit Select RoomType</Modal.Title>
-                                                        </Modal.Header>
-                                                        <Modal.Body>
-                                                           <form action="">
-                                                            <label htmlFor="">Min Markup</label>
-                                                            <input type="text" className='form-conshowModalMarkuptrol' defaultValue={contract.percentage} onChange={(e) =>setPercentage(e.target.value)}/>
-                                                           </form>
-                                                        </Modal.Body>
-                                                        <Modal.Footer>
-                                                            <a href={`/room/markup/updateprice/${contract.percentage}`} className='btn btn-primary'>
-                                                                <i className='fa fa-plus'></i> save
-                                                            </a>
-                                                            <Button variant="secondary" onClick={handleCloseModalMarkup}>
-                                                                Close
-                                                            </Button>
-                                                        </Modal.Footer>
-                                                    </Modal> */}
+                                                   
                                                 </div>
                                                 <hr />
                                                 <div className="row justify-content-between"> {/* Use justify-content-between to move the buttons to both ends */}

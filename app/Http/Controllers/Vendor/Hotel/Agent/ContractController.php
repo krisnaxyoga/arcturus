@@ -126,9 +126,37 @@ class ContractController extends Controller
                 }
 
                 $data->pick_day = explode(",", $request->pick_day);
-                $data->cencellation_policy = $request->cencellation_policy;
-                $data->deposit_policy = $request->deposit_policy;
-                $data->benefit_policy = $request->benefit_policy;
+                if($request->cencellation_policy == null){
+                    $data->cencellation_policy = "
+                    <p>
+                    <ul>
+                    <li>HIGH season from 01-31 August: 14 days prior to arrival</li>
+                    <li>PEAK season from 27Dec - 05Jan: 45 days prior to arrival</li>
+                    <li>Except above periods: 72 hours prior to arrvial</li>
+                    <ul>
+                    <li>If cancellation/amendment is made NORMAL/HIGH/PEAK days prior to your arrival date, no fee will be charged</li>
+                    <li>If cancellation/amendment is made within NORMAL/HIGH/PEAK days, including reservations made within 72 hours of your arrival, 1st night’s room rate and tax will be charged
+                    </li>
+                    <li>In case of no-show, 100% room rate and tax will be charged</li>
+                    </ul>
+                    <li>Early Bird/Long Stay/Package Rates are Non - changeable & Non - refundable</li>
+                    </ul>
+                    </p>
+                    ";
+                }else{
+                    $data->cencellation_policy = $request->cencellation_policy;
+                }
+                if ($request->deposit_policy == null){
+                    $data->deposit_policy = "<li>Full payment is required upon booking received</li>";
+                }else{
+                    $data->deposit_policy = $request->deposit_policy;
+                }
+                if ($request->benefit_policy == null){
+                    $data->benefit_policy = "<li>Include daily breakfast for 2 pax</li>";
+                }else{
+                    $data->benefit_policy = $request->benefit_policy;
+                }
+                
                 $data->except = explode(",",$request->except);
                 
                 if($request->percentage == null){
