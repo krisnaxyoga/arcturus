@@ -1,5 +1,5 @@
 //import React
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 //import Link
 import { Link } from '@inertiajs/inertia-react';
 import Dropdown from 'react-bootstrap/Dropdown';
@@ -34,7 +34,8 @@ function Layout({ children, page, agent }) {
     const toggleAccordion = () => {
         setIsOpen(!isOpen);
     };
-
+  
+    
     return (
         <>
             <nav className="topnav navbar navbar-expand shadow navbar-light bg-white" id="sidenavAccordion">
@@ -71,7 +72,7 @@ function Layout({ children, page, agent }) {
                                 <div className="sidenav-menu">
                                     <div className="nav accordion" id="accordionSidenav">
                                         <div className="sidenav-menu-heading">Main</div>
-                                        <a href="/" className='nav-link'>
+                                        <a href="/" className='nav-link intro-step-1'>
                                             <div className="nav-link-icon"><i className="fa fa-home" aria-hidden="true"></i></div>
                                             Home
                                         </a>
@@ -83,7 +84,7 @@ function Layout({ children, page, agent }) {
                                             <div className="nav-link-icon"><i className="fa fa-clock" aria-hidden="true"></i></div>
                                             Booking History
                                         </Link>
-                                        <Link className={`nav-link ${page === '/agent-profile' ? 'active' : ''}`} href="/agent-profile">
+                                        <Link className={`nav-link intro-step-2 ${page === '/agent-profile' ? 'active' : ''}`} href="/agent-profile">
                                             <div className="nav-link-icon"><i className="fa fa-cogs" aria-hidden="true"></i></div>
                                             My Profile
                                         </Link>

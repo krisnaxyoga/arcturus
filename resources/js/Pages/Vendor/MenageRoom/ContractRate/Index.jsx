@@ -190,6 +190,76 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
 
     const prevPage = () => setCurrentPage(currentPage - 1);
 
+    const [introDisabled, setIntroDisabled] = useState(false);
+    let intro = null;
+    useEffect(() => {
+        // Memeriksa status "tidak ingin ditampilkan lagi" dari penyimpanan lokal
+        const isDisabled = localStorage.getItem('introDisabled');
+        if (isDisabled === 'true' || form != 'add') {
+          setIntroDisabled(true);
+        } else {
+          // Inisialisasi Intro.js jika tidak dinonaktifkan
+          intro = introJs();
+          intro.setOptions({
+            steps: [
+              {
+                element: '.intro-step-1',
+                intro: 'step 1',
+              },
+              {
+                element: '.intro-step-2',
+                intro: 'step 2',
+              }, 
+              {
+                element: '.intro-step-3',
+                intro: 'step 3',
+              },
+              {
+                element: '.intro-step-4',
+                intro: 'step 4',
+              },
+              {
+                element: '.intro-step-5',
+                intro: 'step 5',
+              },
+              {
+                element: '.intro-step-6',
+                intro: 'step 6',
+              },
+              // Tambahkan langkah-langkah sesuai kebutuhan Anda
+            ],
+          });
+    
+          // Mulai tutorial saat komponen di-mount
+          intro.start();
+        }
+      }, []);
+    
+      // Fungsi untuk menonaktifkan tampilan tutorial
+      function disableIntro() {
+        // Menyimpan status "tidak ingin ditampilkan lagi" di penyimpanan lokal
+        localStorage.setItem('introDisabled', 'true');
+        setIntroDisabled(true);
+    
+        // Keluar dari tutorial jika sedang berjalan
+        if (intro) {
+          intro.exit();
+        }
+      }
+    
+      // Event handler saat tutorial selesai
+      useEffect(() => {
+        if (intro) {
+          intro.oncomplete(() => {
+            disableIntro();
+          });
+    
+          intro.onexit(() => {
+            disableIntro();
+          });
+        }
+      }, [intro]);
+
     return (
         <>
         <Layout page={url} vendor={vendor}>
@@ -202,7 +272,7 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
                                     <div className="card">
                                         <div className="card-body">
                                             {session.success && (
-                                                <div className="alert alert-success border-0 shadow-sm rounded-3">
+                                                <div className={`alert ${session.success === 'Please first fill in your Room Type on the room types menu.' ? 'alert-danger' : 'alert-success'} border-0 shadow-sm rounded-3`}>
                                                     {session.success}
                                                 </div>
                                             )}
@@ -210,13 +280,13 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
                                                 <div className="col-lg-12">
                                                     <div className="row">
                                                         <div className="col-lg-6">
-                                                            <div className="mb-3">
+                                                            <div className="mb-3 intro-step-1">
                                                                 <label htmlFor="" className='fw-bold'>Bar code</label>
                                                                 <input onChange={(e) => setBarcode(e.target.value)} type="text" className='form-control' />
                                                             </div>
 
-                                                            <div className="mb-3">
-                                                                <label htmlFor="" className='fw-bold'>Begin Sell date</label>
+                                                            <div className="mb-3 intro-step-2">
+                                                                <label htmlFor="" className='fw-bold'>Begin Stay date</label>
                                                                 <input  value={begin} onChange={(e) => setBegin(e.target.value)} type="date" className='form-control' />
                                                             </div>
                                                         </div>
@@ -225,15 +295,15 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
                                                                 <label htmlFor="" className='fw-bold'>Bar description</label>
                                                                 <input onChange={(e) => setBarDesc(e.target.value)} type="text" className='form-control form-control-solid' placeholder='HOTEL BEST AVAILABLE RATE'/>
                                                             </div>
-                                                            <div className="mb-3">
-                                                                <label htmlFor="" className='fw-bold'>End Sell date</label>
+                                                            <div className="mb-3 intro-step-3">
+                                                                <label htmlFor="" className='fw-bold'>End Stay date</label>
                                                                 <input value={end} onChange={(e) => setEnd(e.target.value)} type="date" className='form-control' />
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div className="row">
                                                         <div className="col-lg-12">
-                                                            <div className="card">
+                                                            <div className="card intro-step-4">
                                                                 <div className="card-body">
                                                                     <div className="table-responsive">
                                                                         <table id="dataTable" width="100%" cellSpacing="0">
@@ -280,7 +350,7 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
                                             <hr />
                                             <div className="row justify-content-between"> {/* Use justify-content-between to move the buttons to both ends */}
                                                 <div className="col-lg-auto">
-                                                    <button type="submit" className="btn btn-primary">
+                                                    <button type="submit" className="btn btn-primary intro-step-5">
                                                         <i className="fa fa-save"></i> Save
                                                     </button>
                                                 </div>
@@ -297,7 +367,7 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
                                     <div className="card">
                                         <div className="card-body">
                                             {session.success && (
-                                                <div className="alert alert-success border-0 shadow-sm rounded-3">
+                                                 <div className={`alert ${session.success === 'Please first fill in your Room Type on the room types menu.' ? 'alert-danger' : 'alert-success'} border-0 shadow-sm rounded-3`}>
                                                     {session.success}
                                                 </div>
                                             )}
@@ -311,7 +381,7 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
                                                             </div>
 
                                                             <div className="mb-3">
-                                                                <label htmlFor="" className='fw-bold'>Begin Sell date</label>
+                                                                <label htmlFor="" className='fw-bold'>Begin Stay date</label>
                                                                 <input defaultValue={barroom.begindate} onChange={(e) => setBegin(e.target.value)} type="date" className='form-control' />
                                                             </div>
                                                         </div>
@@ -321,7 +391,7 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
                                                                 <input defaultValue={barroom.bardesc} onChange={(e) => setBarDesc(e.target.value)} type="text" className='form-control form-control-solid' />
                                                             </div>
                                                             <div className="mb-3">
-                                                                <label htmlFor="" className='fw-bold'>End Sell date</label>
+                                                                <label htmlFor="" className='fw-bold'>End Stay date</label>
                                                                 <input defaultValue={barroom.enddate} onChange={(e) => setEnd(e.target.value)} type="date" className='form-control' />
                                                             </div>
                                                         </div>
@@ -355,9 +425,9 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
                                                                                                 <a href='#' className='btn btn-datatable btn-icon btn-transparent-dark mr-2' onClick={() => buttonSendValue(item)}>
                                                                                                     <i className='fa fa-edit'></i>
                                                                                                 </a>
-                                                                                                <Link href={`/room/barcodeprice/destroy/${item.id}`} className='btn btn-datatable btn-icon btn-transparent-dark mr-2'>
+                                                                                                {/* <Link href={`/room/barcodeprice/destroy/${item.id}`} className='btn btn-datatable btn-icon btn-transparent-dark mr-2'>
                                                                                                     <i className='fa fa-trash'></i>
-                                                                                                </Link>
+                                                                                                </Link> */}
                                                                                             </td>
                                                                                         </tr>
                                                                                     ))
@@ -426,7 +496,7 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
                                 </div>
                             )}
                             <div className="card-body">
-                                <Link href="/room/contract/create" className="btn btn-primary mb-2">Add</Link>
+                                <Link href="/room/contract/create" className="btn btn-primary mb-2 intro-step-6">Add</Link>
                                 <div className="table-responsive">
                                     <table className="table table-bordered" id="dataTable" width="100%" cellSpacing="0">
                                         <thead>

@@ -104,7 +104,7 @@ export default function Index({ session,data,country,vendor,markup,banner,proper
         formData.append('address2', address2 ? address2 : data[0].address_line2);
         formData.append('city', city ? city : data[0].city);
         formData.append('state', state ? state : data[0].state);
-        formData.append('description', description ? description : data[0].description);
+        // formData.append('description', description ? description : data[0].description);
         formData.append('highlight', highlight ? highlight : data[0].highlight);
         formData.append('type_property', type_property ? type_property : data[0].type_property);
 
@@ -128,7 +128,7 @@ export default function Index({ session,data,country,vendor,markup,banner,proper
 
         const formData = new FormData();
         formData.append('title', title);
-        formData.append('description', descbanner);
+        // formData.append('description', descbanner);
         formData.append('banner', imgbanner);
 
         Inertia.post('/myprofile/slider/store', formData, {
@@ -173,7 +173,7 @@ export default function Index({ session,data,country,vendor,markup,banner,proper
                                                         </div>
                                                     </div>
                                                 <div>
-                                                <label for="Email" className="form-label">Email</label>
+                                                <label for="Email" className="form-label">Email Sales</label>
                                                     <div className="input-group mb-3">
                                                     <span className="input-group-text rounded-0" id="basic-addon1"><i className="fa fa-envelope" aria-hidden="true"></i></span>
                                                         <input defaultValue={data[0].users.email} onChange={(e)=>setEmail(e.target.value)} type="email" inputMode="email" className="form-control" placeholder="E-mail" aria-label="email" aria-describedby="basic-addon1"/>
@@ -291,12 +291,12 @@ export default function Index({ session,data,country,vendor,markup,banner,proper
                                                     </div>
                                                     <div className="mb-3">
                                                         <div className="row">
-                                                            <div className="col-lg-12">
+                                                            {/* <div className="col-lg-12">
                                                                 <div htmlFor="" className='text-info d-flex'><p>* all rates are inclusive of </p>
-                                                                    <input required style={{width: '3rem'}} defaultValue={markup && markup.tax} type="text" className='form-control' placeholder='...%' onChange={(e)=>setTaxValue(e.target.value)} /> <span className='ml-2 text-warning'>% </span>
+                                                                    <input style={{width: '3rem'}} defaultValue={markup && markup.tax} type="text" className='form-control' placeholder='...%' onChange={(e)=>setTaxValue(e.target.value)} /> <span className='ml-2 text-warning'>% </span>
                                                             <p> goverment tax & service charge</p></div>
 
-                                                            </div>
+                                                            </div> */}
                                                             </div>
                                                         {/* <div className="row justify-content-center">
 
@@ -322,10 +322,10 @@ export default function Index({ session,data,country,vendor,markup,banner,proper
                                                         <label htmlFor="">Highlight</label>
                                                         <textarea onChange={(e)=>setHight(e.target.value)} className='form-control' cols="30" rows="10">{data[0].highlight}</textarea>
                                                     </div>
-                                                    <div className="mb-3">
+                                                    {/* <div className="mb-3">
                                                         <label htmlFor="">Description</label>
                                                         <textarea onChange={(e)=>setDesc(e.target.value)} className='form-control' cols="30" rows="10">{data[0].description}</textarea>
-                                                    </div>
+                                                    </div> */}
                                                 </div>
                                             </div>
                                             <hr />
@@ -390,12 +390,12 @@ export default function Index({ session,data,country,vendor,markup,banner,proper
                                 </Tab>
                                 <Tab eventKey="slider" title="Banner">
                                         <div className="row">
-                                            <div className="col-lg-12">
+                                            <div className="col-lg-6">
                                                 <div className="card mb-3">
                                                     <div className="card-body">
                                                         <form onSubmit={storeBanner}>
                                                             <div className="row">
-                                                                <div className="col-lg-6">
+                                                                <div className="col-lg-12">
                                                                     <div className="mb-3">
                                                                         <label htmlFor="">title</label>
                                                                         <input onChange={(e)=>setTitle(e.target.value)} type="text" className='form-control' />
@@ -406,12 +406,12 @@ export default function Index({ session,data,country,vendor,markup,banner,proper
                                                                         <input onChange={handleBanner} type="file" className='form-control' />
                                                                     </div>
                                                                 </div>
-                                                                <div className="col-lg-6">
+                                                                {/* <div className="col-lg-6">
                                                                     <div className="mb-3">
                                                                         <label htmlFor="">description</label>
                                                                         <input onChange={(e)=>setDescbanner(e.target.value)} type="text" className='form-control' />
                                                                     </div>
-                                                                </div>
+                                                                </div> */}
                                                             </div>
                                                             <div className="row">
                                                                 <div className="col-lg-12">
@@ -426,7 +426,7 @@ export default function Index({ session,data,country,vendor,markup,banner,proper
                                             </div>
                                         </div>
                                         <div className="row">
-                                            <div className="col-lg-12">
+                                            <div className="col-lg-6">
                                                 <div className="card">
                                                     <div className="card-body">
                                                         <div className="table-responsive">
@@ -435,7 +435,7 @@ export default function Index({ session,data,country,vendor,markup,banner,proper
                                                                     <tr>
                                                                         <th>image</th>
                                                                         <th>title</th>
-                                                                        <th>description</th>
+                                                                        {/* <th>description</th> */}
                                                                         <th>action</th>
                                                                     </tr>
                                                                 </thead>
@@ -445,7 +445,7 @@ export default function Index({ session,data,country,vendor,markup,banner,proper
                                                                         <tr key={item.id}>
                                                                             <td><img src={item.image} alt={item.image} style={{ width:'200px' }} /></td>
                                                                             <td>{item.title}</td>
-                                                                            <td>{item.description}</td>
+                                                                            {/* <td>{item.description}</td> */}
                                                                             <td>
                                                                             <Link className='btn btn-datatable btn-icon btn-transparent-dark mr-2' href={`/myprofile/slider/delete/${item.id}`}>
                                                                                 <i className='fa fa-trash'></i>

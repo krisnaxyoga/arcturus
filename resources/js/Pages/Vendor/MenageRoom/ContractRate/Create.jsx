@@ -215,10 +215,10 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                 <h1>Contract Rate</h1>
                     <div className="row">
 
-                        {(!data || Object.keys(data).length === 0) || (!markup || Object.keys(markup).length === 0) || (!bardata || Object.keys(bardata).length === 0) ? (
+                        {(!data || Object.keys(data).length === 0) || (!bardata || Object.keys(bardata).length === 0) ? (
                             <div className="col-lg-6">
                                 <div className="alert alert-danger border-0 shadow-sm rounded-3">
-                                    <p>Please check again the information bar and your profile hotel is it complete?</p>
+                                    <p>Please check again the information bar?</p>
                                 </div>
                             </div>
 

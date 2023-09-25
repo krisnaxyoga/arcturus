@@ -215,7 +215,7 @@ export default function Index({ session, props, attr,roomtype,vendor }) {
                                             <div className="card">
                                                 <div className="card-body">
                                                     <div className="row">
-                                                        <div className="col-lg-3">
+                                                        {/* <div className="col-lg-3">
                                                             <div className="mb-3 ">
                                                                 <label htmlFor="">Category</label>
                                                                 <select required className='form-control' name="" id="" onChange={(e) => setRoomType(e.target.value)}>
@@ -227,20 +227,20 @@ export default function Index({ session, props, attr,roomtype,vendor }) {
                                                                     ))}
                                                                 </select>
                                                             </div>
-                                                        </div>
-                                                        <div className="col-lg-2">
-                                                            <div className="mb-3 mx-2">
+                                                        </div> */}
+                                                        <div className="col-lg-3">
+                                                            <div className="mb-3">
                                                                 <label htmlFor="exampleFormControlInput1" className="form-label">Code</label>
                                                                 <input required onChange={(e) => setRagecode(e.target.value)} type="text" className="form-control" id="exampleFormControlInput1" placeholder="Room Code" />
                                                             </div>
                                                         </div>
-                                                        <div className="col-lg-4">
+                                                        <div className="col-lg-5">
                                                             <div className="mb-3">
                                                                 <label htmlFor="exampleFormControlInput1" className="form-label">Room Type Description</label>
                                                                 <input required onChange={(e) => setRateDesc(e.target.value)} type="text" className="form-control" id="exampleFormControlInput1" placeholder="Room Description" />
                                                             </div>
                                                         </div>
-                                                        <div className="col-lg-3">
+                                                        <div className="col-lg-4">
                                                             <div className="mb-3">
                                                                 <label htmlFor="exampleFormControlInput1" className="form-label">Room allotment</label>
                                                                 <input required onChange={(e) => setAllowed(e.target.value)} type="number" className="form-control" id="exampleFormControlInput1" placeholder="Room allotment" />
@@ -391,7 +391,7 @@ export default function Index({ session, props, attr,roomtype,vendor }) {
                                                             />
                                                         </div>
 
-                                                        <div className="mb-3">
+                                                        {/* <div className="mb-3">
                                                             <label htmlFor="">Service Information</label>
                                                             <CKEditor
                                                                 editor={ClassicEditor}
@@ -426,7 +426,7 @@ export default function Index({ session, props, attr,roomtype,vendor }) {
                                                                     console.log('Focus.', editor);
                                                                 }}
                                                             />
-                                                        </div>
+                                                        </div> */}
                                                         <hr />
                                                         <div className="row justify-content-between"> {/* Use justify-content-between to move the buttons to both ends */}
                                                             <div className="col-lg-auto">

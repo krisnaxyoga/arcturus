@@ -83,18 +83,21 @@ class BarController extends Controller
                 $data->enddate = $request->end;
                 $data->save();
 
-                foreach($request->price as $item){
-                    $bar =  new BarPrice();
-                    $bar->user_id = $id;
-                    $bar->bar_id = $data->id;
-                    $bar->room_id = $item['room_id'];
-                    $bar->price = $item['price'];
-                    $bar->save();
+                if(!$request->price){
+                    return redirect()->back()->with('success', 'Please first fill in your Room Type on the room types menu.');
+                }else{
+                    foreach($request->price as $item){
+                        $bar =  new BarPrice();
+                        $bar->user_id = $id;
+                        $bar->bar_id = $data->id;
+                        $bar->room_id = $item['room_id'];
+                        $bar->price = $item['price'];
+                        $bar->save();
+                    }
+                    return redirect()
+                    ->route('contract.index')
+                    ->with('success', 'Data saved!');
                 }
-
-            return redirect()
-            ->route('contract.index')
-            ->with('success', 'Data saved!');
         }
     }
 
