@@ -85,12 +85,12 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-lg-12">
+                                {{-- <div class="col-lg-12">
                                     <h3>Description</h3>
                                     <p>
                                         {{ $vendordetail->description }}
                                     </p>
-                                </div>
+                                </div> --}}
                                 <div class="col-lg-12">
                                     <h3>Highlights</h3>
                                     <p>
