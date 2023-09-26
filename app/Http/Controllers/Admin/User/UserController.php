@@ -166,4 +166,34 @@ class UserController extends Controller
             ->route('dashboard.user')
             ->with('message', 'Data User berhasil dihapus.');
     }
+
+    public function passwordchange()
+    {
+        $iduser = auth()->user()->id;
+        $data = User::where('id',$iduser)->with('vendors')->first();
+
+        return inertia('Agent/MyProfile/Contact/PasswordChange',[
+            'data' => $data
+        ]);
+    }
+
+    public function updatepassword(Request $request){
+        $iduser = auth()->user()->id;
+        $validator = Validator::make($request->all(), [
+            'password' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator->errors())
+                ->withInput($request->all());
+        } else {
+                $data = User::find($iduser);
+                $data->password = Hash::make($request->password);
+                $data->update();
+
+        return redirect()->back()->with('success', 'Password Change');
+        }
+
+    }
 }

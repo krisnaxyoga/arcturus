@@ -35,6 +35,7 @@ Route::group(['middleware' => 'guest'], function() {
     Route::post('/regitervendor/store', [AuthController::class, 'vendorstore'])->name('vendorregist.store');
     Route::post('/login', [AuthController::class, 'dologin']);
     Route::post('/forgotpassword', [AuthController::class, 'sendEmail'])->name('forgotpassword');
+    Route::get('/auth/verifaccount/{id}',[AuthController::class, 'verifaccount'])->name('verifaccount');
 });
 
 Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {

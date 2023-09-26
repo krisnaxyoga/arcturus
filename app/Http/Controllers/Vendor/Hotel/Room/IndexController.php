@@ -15,7 +15,9 @@ use App\Models\ContractPrice;
 use App\Models\Roomtype;
 use App\Models\BarRoom;
 use App\Models\AttributeRoom;
+use Intervention\Image\Facades\Image;
 
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
 class IndexController extends Controller
@@ -74,7 +76,10 @@ class IndexController extends Controller
                 if($request->hasFile('gallery')){
                     foreach ($request->file('gallery') as $gallery) {
                         $filename = uniqid().'.'.$gallery->getClientOriginalExtension();
-                        $gallery->move(public_path('room'), $filename);
+                        // $gallery->move(public_path('room'), $filename);
+                        $compressedImage = Image::make($gallery->getRealPath());
+                        $compressedImage->resize(1500, 1000)->save(public_path('room/' . $filename), 90); // 90 adalah kualitas kompresi yang lebih baik
+                        // Lakukan hal lain yang diperlukan, seperti menyimpan nama file dalam database
 
                         $galleryPaths[] = "/room/".$filename;
                     }
@@ -85,8 +90,8 @@ class IndexController extends Controller
                 if ($request->hasFile('feature_image')) {
                     $feature_image = $request->file('feature_image');
                     $filename = time() . '.' . $feature_image->getClientOriginalExtension();
-                    $feature_image->move(public_path('feature/room'), $filename);
-
+                    $compressedImage = Image::make($feature_image->getRealPath());
+                    $compressedImage->resize(1500, 1000)->save(public_path('feature/room/' . $filename), 90); // 90 adalah kualitas kompresi yang lebih baik
                     // Lakukan hal lain yang diperlukan, seperti menyimpan nama file dalam database
                 }else{
                     $filename= "";
@@ -101,7 +106,7 @@ class IndexController extends Controller
                 // dd($vendor[0]->id);
                 $room = new RoomHotel();
                 $room->user_id = $iduser;
-                $room->roomtype_id = $request->roomtypeid;
+                $room->roomtype_id = 0;//$request->roomtypeid;
                 $room->vendor_id = $vendor[0]->id;
                 $room->title = $request->roomname;
                 // $room->video = $request->video;
@@ -203,7 +208,10 @@ class IndexController extends Controller
                 if($request->hasFile('gallery')){
                     foreach ($request->file('gallery') as $gallery) {
                         $filename = uniqid().'.'.$gallery->getClientOriginalExtension();
-                        $gallery->move(public_path('room'), $filename);
+                        // $gallery->move(public_path('room'), $filename);
+                        $compressedImage = Image::make($gallery->getRealPath());
+                        $compressedImage->resize(1500, 1000)->save(public_path('room/' . $filename), 90); // 90 adalah kualitas kompresi yang lebih baik
+                        // Lakukan hal lain yang diperlukan, seperti menyimpan nama file dalam database
 
                         $galleryPaths[] = "/room/".$filename;
                     }
@@ -214,7 +222,10 @@ class IndexController extends Controller
                 if ($request->hasFile('feature_image')) {
                     $feature_image = $request->file('feature_image');
                     $filename = time() . '.' . $feature_image->getClientOriginalExtension();
-                    $feature_image->move(public_path('feature/room'), $filename);
+                    // $feature_image->move(public_path('feature/room'), $filename);
+                    $compressedImage = Image::make($feature_image->getRealPath());
+                    $compressedImage->resize(1500, 1000)->save(public_path('feature/room/' . $filename), 90); // 90 adalah kualitas kompresi yang lebih baik
+                    // Lakukan hal lain yang diperlukan, seperti menyimpan nama file dalam database
 
                     $feature = "/feature/room/".$filename;
                 }else{
@@ -222,7 +233,7 @@ class IndexController extends Controller
                 }
                 $iduser = auth()->user()->id;
                 
-                $room->roomtype_id = $request->roomtypeid;
+                $room->roomtype_id = 0;//$request->roomtypeid;
                 $room->title = $request->roomname;
                 // $room->video = $request->video;
                 $room->room_allow = $request->allowed;
@@ -275,6 +286,16 @@ class IndexController extends Controller
         $room = RoomHotel::find($id);
 
         if ($room) {
+            if (File::exists(public_path($room->feature_image))) 
+            {
+                File::delete(public_path($room->feature_image));
+            }
+            foreach($room->gallery as $gallery){
+                if (File::exists(public_path($gallery))) 
+                {
+                    File::delete(public_path($gallery));
+                }
+            }
             $room->delete();
         }
 

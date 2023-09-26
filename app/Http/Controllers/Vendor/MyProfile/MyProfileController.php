@@ -10,6 +10,8 @@ use App\Models\AgentMarkupSetup;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Slider;
 
+use Illuminate\Support\Facades\File;
+use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -62,7 +64,9 @@ class MyProfileController extends Controller
             if ($request->hasFile('logo')) {
                 $logo = $request->file('logo');
                 $filename = time() . '.' . $logo->getClientOriginalExtension();
-                $logo->move(public_path('hotel/logo'), $filename);
+                // $logo->move(public_path('hotel/logo'), $filename);
+                $compressedImage = Image::make($logo->getRealPath());
+                $compressedImage->resize(300, 200)->save(public_path('hotel/logo/' . $filename), 90); // 90 adalah kualitas kompresi yang lebih baik
 
                 // Lakukan hal lain yang diperlukan, seperti menyimpan nama file dalam database
                 $logo = "/hotel/logo/".$filename;
@@ -139,7 +143,9 @@ class MyProfileController extends Controller
             if ($request->hasFile('banner')) {
                 $banner = $request->file('banner');
                 $filename = time() . '.' . $banner->getClientOriginalExtension();
-                $banner->move(public_path('slider'), $filename);
+                // $banner->move(public_path('slider'), $filename);
+                $compressedImage = Image::make($banner->getRealPath());
+                $compressedImage->resize(1500, 1000)->save(public_path('slider/' . $filename), 90); // 90 adalah kualitas kompresi yang lebih baik
 
                 // Lakukan hal lain yang diperlukan, seperti menyimpan nama file dalam database
             }else{
@@ -173,6 +179,10 @@ class MyProfileController extends Controller
      public function destroybanner(string $id)
      {
         $data =  Slider::find($id);
+        if (File::exists(public_path($data->image))) 
+        {
+            File::delete(public_path($data->image));
+        }
         $data->delete();
 
         return redirect()->back()->with('success', 'data deleted!');

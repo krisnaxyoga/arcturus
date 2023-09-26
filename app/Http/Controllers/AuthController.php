@@ -15,6 +15,8 @@ use Illuminate\Support\Str;
 
 use App\Mail\ForgotPassword;
 use App\Mail\RegisterNotif;
+use App\Mail\AgentVerifification;
+use App\Mail\HotelVerifification;
 
 class AuthController extends Controller
 {
@@ -107,6 +109,8 @@ class AuthController extends Controller
 
             $Setting = Setting::where('id',1)->first();
             Mail::to($Setting->email)->send(new RegisterNotif($data, $member));
+            
+            Mail::to($request->email)->send(new AgentVerifification($data, $member));
 
             // update vendor_id in tabel users where id = $data->id
             $user = User::find($data->id);
@@ -115,7 +119,7 @@ class AuthController extends Controller
 
             return redirect()
                 ->route('login')
-                ->with('message', 'register success');;
+                ->with('message', 'please check your email to activate your account.');;
         }
     }
 
@@ -165,10 +169,11 @@ class AuthController extends Controller
 
             $Setting = Setting::where('id',1)->first();
             Mail::to($Setting->email)->send(new RegisterNotif($data, $member));
+            Mail::to($request->email)->send(new HotelVerifification($data, $member));
             
             return redirect()
                 ->route('login')
-                ->with('message', 'register success');
+                ->with('message', 'please check your email to activate your account.');
         }
     }
     public function forgetpassword(){
@@ -199,5 +204,20 @@ class AuthController extends Controller
         return redirect()
                 ->route('login')
                 ->with('message', 'The password has been updated successfully, you can check your email for a new password');
+    }
+
+    public function verifaccount($id){
+
+        $data = User::find($id);
+        $data->is_active = 1;
+        $data->save();
+
+        $vendor = Vendor::where('user_id',$data->id)->first();
+        $vendor->is_active = 1;
+        $vendor->save();
+
+        return redirect()
+                ->route('login')
+                ->with('message', 'Thank you, your account has now been verified, please login here.');
     }
 }
