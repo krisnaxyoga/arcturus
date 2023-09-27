@@ -182,7 +182,7 @@
                             $TotalHotelCalendar1 = 0;
                             $checkinDate = Carbon::parse($checkin);
                             $checkoutDate = Carbon::parse($checkout);
-                                    
+
 
                             $totalNights = $checkinDate->diffInDays($checkoutDate);
                             // var_dump($totalNights);
@@ -228,6 +228,7 @@
 
                             $Room_recomprice = ($TotalHotelCalendar <= 0) ? $item->recom_price : $TotalHotelCalendar;
 
+
                             // ========================================================= END CALENDAR ====================================
 
                             // ========================================================= ROOM ALLOWMENT ====================================
@@ -249,7 +250,7 @@
                                 }
                             }
                             // Setel $RoomAllowment ke $item->room->room_allow dikurangi total total_room yang sesuai
-                            
+
                             $RoomAllowment = $item->room->room_allow - $totalRoomBooking;
 
 
@@ -322,7 +323,7 @@
                                                     @endif --}}
                                                     {{-- <p class="m-0">Benefits : {!! $item->contractrate->benefit_policy !!}</p> --}}
                                                     {{-- <p style="font-weight: 500">Description : </p> --}}
-                                                    
+
                                                     {{-- {{$contractprice}} --}}
                                                     @if($contractprice->count() != 0)
                                                     <a class="text-primary" style="font-weight:500;font-size:14px" data-toggle="collapse" href="#collapseExample{{$key}}" role="button" aria-expanded="false" aria-controls="collapseExample">
@@ -332,15 +333,23 @@
                                                         <div>
 
                                                             @foreach ($contractprice as $itemprice)
-                                                           
+
                                                             @if ($itemprice->room_id == $item->room->id)
                                                                 @php
+                                                                if($itemprice->contractrate->rolerate == 1){
+                                                                    $price = ($TotalHotelCalendar <= 0) ? $itemprice->recom_price : $TotalHotelCalendar;
+                                                                }else{
                                                                     $price = $itemprice->recom_price;
-                                                            
+                                                                }
+
                                                                     if ($advancepurchase->count() > 0) {
                                                                         foreach ($advancepurchase as $advancevalue) {
                                                                             if ($advancevalue->contract_id == $itemprice->contract_id && $advancevalue->room_id == $itemprice->room_id && $advancevalue->room_id == $item->room->id) {
-                                                                                $price = $advancevalue->price;
+                                                                                if($itemprice->contractrate->rolerate == 1){
+                                                                                    $price = ($TotalHotelCalendar <= 0) ? $itemprice->recom_price : $TotalHotelCalendar;
+                                                                                }else{
+                                                                                    $price = $advancevalue->price;
+                                                                                }
                                                                             }
                                                                         }
                                                                     }
@@ -402,7 +411,7 @@
                                                                 </div>
                                                             @endif
                                                         @endforeach
-                                                        
+
                                                         </div>
                                                       </div>
                                                     @endif
