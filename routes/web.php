@@ -216,6 +216,7 @@ Route::group(['middleware' => ['auth', 'checkrole:2']], function() {
     Route::get('/room/contract/updatecontractprice/{id}/{price}/{recom}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'updatecontractprice'])->name('contract.updatecontractprice');
     Route::get('/room/contract/destroycontractprice/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'destroycontractprice'])->name('contract.destroycontractprice');
     Route::get('/room/contract/addallcontractprice/{cont}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'addallcontractprice'])->name('contract.addallcontractprice');
+    Route::get('/room/contract/sync_advance_purchase/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'sync_advance_purchase'])->name('contract.sync_advance_purchase');
 
     //surcharge controller
     Route::get('/room/surcharge/index',[\App\Http\Controllers\Vendor\Hotel\Agent\SurchargeController::class, 'index'])->name('surcharge.index');

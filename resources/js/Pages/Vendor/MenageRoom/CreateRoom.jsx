@@ -33,6 +33,19 @@ export default function Index({ session, props, attr,roomtype,vendor }) {
     const [selectAll, setSelectAll] = useState(false);
 
     const [selectedValues, setSelectedValues] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+        // Anda dapat menambahkan logika tambahan jika diperlukan
+        // Contoh: Memuat data dari server
+
+        // Misalnya, ini adalah simulasi pengambilan data yang memakan waktu
+        setTimeout(() => {
+            setIsLoading(false); // Langkah 2: Setel isLoading menjadi false setelah halaman selesai dimuat
+        }, 1000); // Menggunakan setTimeout untuk simulasi saja (2 detik).
+
+        // Jika Anda ingin melakukan pengambilan data dari server, Anda dapat melakukannya di sini dan kemudian mengatur isLoading menjadi false setelah data berhasil dimuat.
+    }, []); // Kosongkan array dependencies untuk menjalankan efek ini hanya sekali saat komponen dimuat.
 
 
     const [checkboxItems, setCheckboxItems] = useState(attr.map((item) => ({ label: item.name, checked: false })));
@@ -162,6 +175,8 @@ export default function Index({ session, props, attr,roomtype,vendor }) {
     const storePost = async (e) => {
         e.preventDefault();
 
+        setIsLoading(true);
+
         const formData = new FormData();
         formData.append('ratecode', ratecode);
         formData.append('ratedesc', ratedesc);
@@ -194,6 +209,16 @@ export default function Index({ session, props, attr,roomtype,vendor }) {
     return (
         <>
             <Layout page={'/room/index'} vendor={vendor}>
+            {isLoading ? (
+                <div className="container">
+                    <div className="loading-container">
+                        <div className="loading-spinner"></div>
+                        <div className="loading-text">Loading...</div>
+                    </div>
+                </div>// Langkah 3: Tampilkan pesan "Loading..." saat isLoading true
+            ) : (
+                // Tampilan halaman Anda yang sebenarnya
+                <>
                 <div className="container">
                     <div className="row">
                         <h1>Create Room Type</h1>
@@ -450,6 +475,9 @@ export default function Index({ session, props, attr,roomtype,vendor }) {
                         </div>
                     </div>
                 </div>
+                </>
+            )}
+                
             </Layout>
         </>
     )

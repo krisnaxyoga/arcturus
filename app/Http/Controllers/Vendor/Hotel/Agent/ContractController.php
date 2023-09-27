@@ -160,7 +160,7 @@ class ContractController extends Controller
                 $data->except = explode(",",$request->except);
                 
                 if($request->percentage == null){
-                    $data->percentage = 0;
+                    $data->percentage = 20;
                 }else{
                     $data->percentage = $request->percentage;
                 }
@@ -168,7 +168,7 @@ class ContractController extends Controller
                 
                 $data->save();
 
-                $interval = 7;
+                $interval = 14;
                 $startDate = now()->addDays($interval); // Mulai dari 7 hari kemudian
                 // $firstTime = true; // Variabel untuk melacak input pertama
 
@@ -489,9 +489,26 @@ class ContractController extends Controller
     
                                 $cont2 = ContractPrice::whereHas('contractrate', function ($query) {
                                     $query->where('rolerate', 2); // Ganti 'your_column_name' dengan nama kolom yang sesuai
-                                })->where('user_id', $userid)->first();
-                                $cont2->recom_price = $cont->recom_price * ((100 - $cont2->percentage) / 100);
-                                $cont2->save();
+                                })->with('contractrate')
+                                ->where('user_id', $userid)->get();
+                                // dd($cont2);
+                                foreach($cont2 as $contractpricetwo){
+                                    if($contractpricetwo->room_id == $cont->room_id){
+                                        $contractpricetwo->recom_price = $cont->recom_price * ((100 - $contractpricetwo->contractrate->percentage) / 100);
+                                        $contractpricetwo->save();
+                                    }
+                                    // $advancePurchase = AdvancePurchase::where('contract_id', $contractpricetwo->contract_id)->first();
+                                    // if ($advancePurchase) {
+                                    //     $adv = AdvancePurchase::where('contract_id', $contractpricetwo->contract_id)->get();
+                                    //     foreach($adv as $advitem){
+                                    //         $advancePurchasePrices = AdvancePurchasePrice::where('advance_id', $advitem->id)->get();
+                                    //         foreach ($advancePurchasePrices as $advancePurchasePrice) {
+                                    //             $advaPrice = AdvancePurchasePrice::find($advancePurchasePrice->id);
+                                    //             $advaPrice->delete();
+                                    //         }
+                                    //     }
+                                    // }
+                                 }
                             }
                         }else{
                             $cont = ContractPrice::where('contract_id', $id)->whereHas('contractrate', function ($query) {
@@ -505,10 +522,12 @@ class ContractController extends Controller
                                 
                                 $cont2 = ContractPrice::whereHas('contractrate', function ($query) {
                                     $query->where('rolerate', 2); // Ganti 'your_column_name' dengan nama kolom yang sesuai
-                                })->where('room_id',$itemprice->room_id)->where('user_id', $userid)->first();
-                                if($cont2){
-                                    $cont2->recom_price = $cont->recom_price * ((100 - $cont2->percentage) / 100);
-                                    $cont2->save();
+                                })->with('contractrate')->where('user_id', $userid)->get();
+                                foreach($cont2 as $contractpricetwo){
+                                    if($contractpricetwo->room_id == $itemprice->room_id){
+                                        $contractpricetwo->recom_price = $cont->recom_price * ((100 - $contractpricetwo->contractrate->percentage) / 100);
+                                        $contractpricetwo->save();
+                                    }
                                 }
                                 
                             }
@@ -616,6 +635,59 @@ class ContractController extends Controller
         }
     }
 
+    public function sync_advance_purchase($id){
+        $userid = auth()->user()->id;
+        $advancePurchase = AdvancePurchase::where('contract_id', $id)->first();
+            if ($advancePurchase) {
+                $adv = AdvancePurchase::where('contract_id', $id)->get();
+                foreach($adv as $item){
+                    $advancePurchasePrices = AdvancePurchasePrice::where('advance_id', $item->id)->get();
+                    foreach ($advancePurchasePrices as $advancePurchasePrice) {
+                        $advaPrice = AdvancePurchasePrice::find($advancePurchasePrice->id);
+                        $advaPrice->delete();
+                    }
+                }
+            }
+            
+        // Mengumpulkan data yang dibutuhkan sebelumnya
+        $contprice = ContractPrice::where('contract_id', $id)->get();
+        $advancepurchase = AdvancePurchase::where('contract_id',$id)->get();
+        foreach($advancepurchase as $key=>$item){
+            $nilai = [
+                0 => 0.962,
+                1 => 0.925444,
+                2 => 0.890277128,
+                3 => 0.856446597136,
+                4 => 0.823901626444832,
+                5 => 0.792593364639928,
+            ];
+
+            foreach($contprice as $denden){
+                $advanceprice = new AdvancePurchasePrice;
+                $advanceprice->room_id = $denden->room_id;
+                $advanceprice->user_id = $userid;
+                $advanceprice->vendor_id = $item->vendor_id;
+                $advanceprice->contract_id = $id;
+                $advanceprice->advance_id = $item->id;
+                $advanceprice->price = $denden->recom_price * $nilai[$key];
+                $advanceprice->rolerate = 2;
+                $advanceprice->is_active = $item->is_active;
+
+                $existingPrice = AdvancePurchasePrice::where('room_id', $advanceprice->room_id)
+                    ->where('user_id', $advanceprice->user_id)
+                    ->where('vendor_id', $advanceprice->vendor_id)
+                    ->where('contract_id', $advanceprice->contract_id)
+                    ->where('advance_id', $advanceprice->advance_id)
+                    ->first();
+
+                if (!$existingPrice) {
+                    $advanceprice->save();
+                }
+            }
+        }
+        return redirect()->back()->with('success', 'advance purchase price has refresh');
+    }
+
     /**
      * Remove the specified resource from storage.
      */
@@ -676,12 +748,13 @@ class ContractController extends Controller
                 ->withInput($request->all());
         } else {
             $data = AdvancePurchase::find($id);
+            
             $data->day = $request->day;
 
             // $beginsell = Carbon::parse($data->beginsell); // Convert beginsell to Carbon object
             $today = Carbon::now(); // Tanggal hari ini
-            $interval = $request->day; // Calculate the interval based on input day
 
+            $interval = $request->day ? intval($request->day) : $data->day; // Calculate the interval based on input day
             // Calculate new endsell based on input day and original beginsell
             $newbeginsell = $today->copy()->addDays($interval); // Calculate endsell based on new beginsell
 

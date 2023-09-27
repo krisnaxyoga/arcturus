@@ -41,6 +41,19 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
 
     const [selectedDistribute, setSelectedDistribute] = useState([]);
     const [selectedExclude, setSelectedExclude] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        // Anda dapat menambahkan logika tambahan jika diperlukan
+        // Contoh: Memuat data dari server
+
+        // Misalnya, ini adalah simulasi pengambilan data yang memakan waktu
+        setTimeout(() => {
+            setIsLoading(false); // Langkah 2: Setel isLoading menjadi false setelah halaman selesai dimuat
+        }, 1000); // Menggunakan setTimeout untuk simulasi saja (2 detik).
+
+        // Jika Anda ingin melakukan pengambilan data dari server, Anda dapat melakukannya di sini dan kemudian mengatur isLoading menjadi false setelah data berhasil dimuat.
+    }, []); // Kosongkan array dependencies untuk menjalankan efek ini hanya sekali saat komponen dimuat.
 
 
     const handleSelectDistribute = (event) => {
@@ -202,6 +215,8 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
         formData.append('except',selectedExclude);
         formData.append('percentage',percentage);
 
+        setIsLoading(true);
+
         Inertia.post('/room/contract/store', formData, {
             onSuccess: () => {
 
@@ -211,7 +226,16 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
     return (
         <>
             <Layout page='/room/contract/index' vendor={vendor}>
+            {isLoading ? (
                 <div className="container">
+                    <div className="loading-container">
+                        <div className="loading-spinner"></div>
+                        <div className="loading-text">Loading...</div>
+                    </div>
+                </div>// Langkah 3: Tampilkan pesan "Loading..." saat isLoading true
+            ) : (
+                <>
+                 <div className="container">
                 <h1>Contract Rate</h1>
                     <div className="row">
 
@@ -313,7 +337,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                         </div>
                                                                         <div className="mb-3">
                                                                             <div className="d-flex mt-3">
-                                                                            <input style={{width: '4rem'}} onChange={(e) => setPercentage(e.target.value)} type="number" defaultValue={0} className='form-control'/> <p style={{marginTop: '8px',marginLeft: '7px'}}>
+                                                                            <input style={{width: '5rem'}} onChange={(e) => setPercentage(e.target.value)} type="number" defaultValue={20} className='form-control'/> <p style={{marginTop: '8px',marginLeft: '7px'}}>
                                                                             {cont === true ? (
                                                                                 <>
 
@@ -578,6 +602,9 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                         )}
                     </div>
                 </div>
+                </>
+            )}
+               
             </Layout>
         </>
     )

@@ -49,6 +49,20 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
     const [price, setPrice] = useState('');
     const [beginselladvance, setBeginselladvance] = useState('');
     const [endselladvance, setEndselladvance] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        // Anda dapat menambahkan logika tambahan jika diperlukan
+        // Contoh: Memuat data dari server
+
+        // Misalnya, ini adalah simulasi pengambilan data yang memakan waktu
+        setTimeout(() => {
+            setIsLoading(false); // Langkah 2: Setel isLoading menjadi false setelah halaman selesai dimuat
+        }, 1000); // Menggunakan setTimeout untuk simulasi saja (2 detik).
+
+        // Jika Anda ingin melakukan pengambilan data dari server, Anda dapat melakukannya di sini dan kemudian mengatur isLoading menjadi false setelah data berhasil dimuat.
+    }, []); // Kosongkan array dependencies untuk menjalankan efek ini hanya sekali saat komponen dimuat.
+
 
     const handleDayChange = (e, beginsell, endsell, day) => {
         const inputDay = parseInt(e.target.value, 10);
@@ -73,7 +87,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
         friday: false,
         saturday: false,
     });
-console.log(contpriceone,"one");
+// console.log(contpriceone,"one");
     // const [checkboxItems, setCheckboxItems] = useState(contract.pick_day.map((item) => ({ label: item, checked: false })));
 
 
@@ -264,6 +278,8 @@ console.log(contpriceone,"one");
         formData.append('distribute', selectedDistribute);
         formData.append('except', selectedExclude);
 
+        setIsLoading(true);
+
         Inertia.post(`/room/contract/update/${contract.id}`, formData, {
             onSuccess: () => {
                 // Lakukan aksi setelah gambar berhasil diunggah
@@ -273,11 +289,14 @@ console.log(contpriceone,"one");
 
     const storeAdvance = async (e,itemId,itemDay) => {
         e.preventDefault();
+
+        console.log(itemDay,">>>>>DAY");
         const formData = new FormData();
 
         formData.append('day', day ? day : itemDay);
         // formData.append('beginsell',beginselladvance ? beginselladvance : itemBeginsell);
         // formData.append('endsell',endselladvance ? endselladvance : itemEndsell);
+        setIsLoading(true);
 
         Inertia.post(`/contract/advancepurchase/${itemId}`, formData, {
             onSuccess: () => {
@@ -289,6 +308,16 @@ console.log(contpriceone,"one");
     return (
         <>
             <Layout page='/room/contract/index' vendor={vendor}>
+            {isLoading ? (
+                <div className="container">
+                    <div className="loading-container">
+                        <div className="loading-spinner"></div>
+                        <div className="loading-text">Loading...</div>
+                    </div>
+                </div>// Langkah 3: Tampilkan pesan "Loading..." saat isLoading true
+            ) : (
+                // Tampilan halaman Anda yang sebenarnya
+                <>
                 <div className="container">
                     <div className="row">
                         <h1>Contract Rate</h1>
@@ -829,7 +858,7 @@ console.log(contpriceone,"one");
                                     <>
                                     <div className="row" key={index}>
                                         <div className="col-lg-12">
-                                            <form onSubmit={(e) => storeAdvance(e, item.id,item.beginsell,item.endsell,item.day)}>
+                                            <form onSubmit={(e) => storeAdvance(e, item.id,item.day,item.beginsell,item.endsell)}>
                                             <div className="card mt-3">
                                                 <div className="card-header">
                                                     <div className="d-flex justify-content-between">
@@ -974,6 +1003,9 @@ console.log(contpriceone,"one");
                     </Modal.Body>
 
                 </Modal>
+                </>
+            )}
+                
             </Layout>
         </>
     )

@@ -1,5 +1,5 @@
 //import React
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 
 //import layout
 import Layout from '../../Layouts/Vendor';
@@ -19,8 +19,20 @@ export default function Index({ totalroom,income,vendor,success,pending,data,wid
   }
   const [currentPage, setCurrentPage] = useState(1)
   const [postsPerPage, setPostsPerPage] = useState(10)
+  const [isLoading, setIsLoading] = useState(true);
 
-  console.log(widraw,">>>>>DATA")
+  useEffect(() => {
+      // Anda dapat menambahkan logika tambahan jika diperlukan
+      // Contoh: Memuat data dari server
+
+      // Misalnya, ini adalah simulasi pengambilan data yang memakan waktu
+      setTimeout(() => {
+          setIsLoading(false); // Langkah 2: Setel isLoading menjadi false setelah halaman selesai dimuat
+      }, 1000); // Menggunakan setTimeout untuk simulasi saja (2 detik).
+
+      // Jika Anda ingin melakukan pengambilan data dari server, Anda dapat melakukannya di sini dan kemudian mengatur isLoading menjadi false setelah data berhasil dimuat.
+  }, []); // Kosongkan array dependencies untuk menjalankan efek ini hanya sekali saat komponen dimuat.
+
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = data.slice(indexOfFirstPost, indexOfLastPost);
@@ -36,7 +48,17 @@ export default function Index({ totalroom,income,vendor,success,pending,data,wid
   return (
     <>
       <Layout page={url} vendor={vendor}>
-        {/* <!-- Content Wrapper --> */}
+      {isLoading ? (
+                <div className="container">
+                    <div className="loading-container">
+                        <div className="loading-spinner"></div>
+                        <div className="loading-text">Loading...</div>
+                    </div>
+                </div>// Langkah 3: Tampilkan pesan "Loading..." saat isLoading true
+            ) : (
+                // Tampilan halaman Anda yang sebenarnya
+                <>
+                   {/* <!-- Content Wrapper --> */}
         <div id="content-wrapper" className="d-flex flex-column">
           {/* <!-- Main Content --> */}
           <div id="content">
@@ -196,6 +218,9 @@ export default function Index({ totalroom,income,vendor,success,pending,data,wid
             </div>
           </div>
         </div> */}
+                </>
+                )}
+     
       </Layout>
     </>
   )
