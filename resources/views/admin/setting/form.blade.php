@@ -27,6 +27,9 @@
                         <li class="nav-item">
                           <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">slider</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="passwordchange-tab" data-toggle="tab" href="#passwordchange" role="tab" aria-controls="passwordchange" aria-selected="false">change password</a>
+                          </li>
                       </ul>
                       <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
@@ -248,6 +251,33 @@
                                                 @endforeach
                                             </tbody>
                                         </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" role="tabpanel" aria-labelledby="passwordchange-tab" id="passwordchange">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <form action="{{route('dashboard.setting.storeslider')}}" method="post" enctype="multipart/form-data">
+                                                @csrf
+                                                @method('POST')
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                             <div class="mb-3">
+                                                                <label for="">new password</label>
+                                                                <input type="text" class="form-control" name="title" placeholder="title">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <button type="submit" class="btn btn-primary"> <i class="fa fa-save"></i>save</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

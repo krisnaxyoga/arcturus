@@ -58,7 +58,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
         // Misalnya, ini adalah simulasi pengambilan data yang memakan waktu
         setTimeout(() => {
             setIsLoading(false); // Langkah 2: Setel isLoading menjadi false setelah halaman selesai dimuat
-        }, 1000); // Menggunakan setTimeout untuk simulasi saja (2 detik).
+        }, 900); // Menggunakan setTimeout untuk simulasi saja (2 detik).
 
         // Jika Anda ingin melakukan pengambilan data dari server, Anda dapat melakukannya di sini dan kemudian mengatur isLoading menjadi false setelah data berhasil dimuat.
     }, []); // Kosongkan array dependencies untuk menjalankan efek ini hanya sekali saat komponen dimuat.
@@ -251,6 +251,9 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
     const storePost = async (e) => {
         e.preventDefault();
 
+        
+        setIsLoading(true);
+
         const formData = new FormData();
 
         formData.append('ratecode', ratecode ? ratecode : contract.ratecode);
@@ -278,11 +281,10 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
         formData.append('distribute', selectedDistribute);
         formData.append('except', selectedExclude);
 
-        setIsLoading(true);
-
         Inertia.post(`/room/contract/update/${contract.id}`, formData, {
             onSuccess: () => {
                 // Lakukan aksi setelah gambar berhasil diunggah
+                setIsLoading(false);
             },
         });
     }
@@ -290,7 +292,6 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
     const storeAdvance = async (e,itemId,itemDay) => {
         e.preventDefault();
 
-        console.log(itemDay,">>>>>DAY");
         const formData = new FormData();
 
         formData.append('day', day ? day : itemDay);
@@ -429,8 +430,6 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                                 % discount of contract rate
                                                                                 </>
                                                                                )}
-
-
                                                                             </p>
                                                                             </div>
                                                                         </div>
@@ -703,9 +702,10 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                                                     <a href='#' className='btn btn-datatable btn-icon btn-transparent-dark mr-2' onClick={() => buttonSendValue(item)}>
                                                                                                         <i className='fa fa-edit'></i>
                                                                                                     </a>
-                                                                                                    <a href={`/room/contract/destroycontractprice/${item.id}`} className='btn btn-datatable btn-icon btn-transparent-dark mr-2'>
+                                                                                                    {/* <a href={`/room/contract/destroycontractprice/${item.id}`} className='btn btn-datatable btn-icon btn-transparent-dark mr-2'>
                                                                                                         <i className='fa fa-trash'></i>
-                                                                                                    </a>
+                                                                                                    </a> */}
+                                                                                                    <a href={`/room/contract/contract_price_is_active/${item.id}/${item.is_active == 1 ? 0 : 1}`} className='btn btn-datatable btn-icon btn-transparent-dark mr-2'>{item.is_active == 1 ? <><i class="fa fa-toggle-on" aria-hidden="true"></i> on</> : <><i class="fa fa-toggle-off" aria-hidden="true"></i> off</>} </a>
                                                                                                 </td>
                                                                                             </tr>
                                                                                         </>

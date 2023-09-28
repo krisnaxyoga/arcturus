@@ -246,6 +246,7 @@ class ContractController extends Controller
                 }
 
                 $data->price = 0;
+                $data->is_active = 1;
                 $data->barprice_id = $baritem->id;
                 $data->save();
 
@@ -320,7 +321,7 @@ class ContractController extends Controller
             }
             $data->price = 0;
 
-
+            $data->is_active = 1;
             $data->barprice_id = $id;
             $data->save();
 
@@ -396,6 +397,15 @@ class ContractController extends Controller
         
 
         return redirect()->back()->with('message', 'Price destroy');
+    }
+
+    public function contract_price_is_active($id,$is_active){
+
+        $data = ContractPrice::find($id);
+        $data->is_active = $is_active;
+        $data->save();
+
+        return redirect()->back()->with('success', 'contract price update status');
     }
     /**
      * Show the form for editing the specified resource.
@@ -694,10 +704,11 @@ class ContractController extends Controller
     public function destroy(string $id)
     {
         // Hapus ContractRate
+            $userid = auth()->user()->id;
             $data = ContractRate::find($id);
 
             if($data->rolerate == 1){
-                return redirect()->back()->with('success', '!!! The main contract cannot be deleted !!!');
+               ContractRate::where('user_id',$userid)->delete();
             }
 
             if ($data) {

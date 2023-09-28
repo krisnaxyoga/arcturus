@@ -139,6 +139,7 @@ class HomeController extends Controller
                     });
                 });
             })
+            ->where('is_active',1)
             ->with('contractrate.vendors')
             ->with('room');
             
@@ -186,6 +187,7 @@ class HomeController extends Controller
                     });
                 });
             })
+            ->where('is_active',1)
             ->with('contractrate.vendors')
             ->with('room')
             // ->groupBy('contract_prices.id', 'contract_id','user_id') // Tambahkan semua kolom yang tidak diagregat
@@ -276,6 +278,7 @@ class HomeController extends Controller
         $contract_hotel = ContractRate::where('id', $id)->first();
 
             $vendor = ContractPrice::where('contract_id', $id)
+                ->where('is_active',1)
                 ->with('contractrate')
                 ->with('contractrate.vendors')
                 ->with('room')
@@ -337,6 +340,7 @@ class HomeController extends Controller
             $vendorIds = [$vendor[0]->contractrate->vendor_id];
          
             $contractprice = ContractPrice::where('user_id', $vendor[0]->user_id)
+                ->where('is_active',1)
                 ->with('contractrate')
                 ->with('contractrate.vendors')
                 ->with('room')
@@ -384,16 +388,24 @@ class HomeController extends Controller
 
             $HotelCalendar = HotelRoomSurcharge::where('vendor_id', $vendorIds)
             ->where(function ($q) use ($checkin, $checkout) {
-                $q->where(function ($qq) use ($checkin, $checkout) {
-                    $qq->where('start_date', '>=', $checkin)
-                        ->where('start_date', '<', $checkout);
+                $checkinDate = date('Y-m-d', strtotime($checkin));
+                $checkoutDate = date('Y-m-d', strtotime($checkout));
+        
+                $q->where(function ($qq) use ($checkinDate, $checkoutDate) {
+                    $qq->whereRaw('DATE(start_date) >= ?', [$checkinDate])
+                        ->whereRaw('DATE(start_date) < ?', [$checkoutDate]);
+                })
+                ->orWhere(function ($qq) use ($checkinDate, $checkoutDate) {
+                    $qq->whereRaw('DATE(end_date) > ?', [$checkinDate])
+                        ->whereRaw('DATE(end_date) <= ?', [$checkoutDate]);
+                })
+                ->orWhere(function ($qq) use ($checkinDate, $checkoutDate) {
+                    $qq->whereRaw('DATE(start_date) <= ?', [$checkinDate])
+                        ->whereRaw('DATE(end_date) >= ?', [$checkoutDate]);
                 });
             })
-            ->orWhere(function ($q) use ($checkin, $checkout) {
-                $q->where('end_date', '>', $checkin)
-                    ->where('end_date', '<=', $checkout);
-            })
             ->get();
+            
 
             // dd($checkin);
             $interval = $today->diffInDays($checkin);

@@ -246,6 +246,7 @@ export default function Index({ session, props, attr, room,roomtype,vendor }) {
         Inertia.post(`/room/update/${room[0].id}`, formData, {
             onSuccess: () => {
                 // Lakukan aksi setelah gambar berhasil diunggah
+                setIsLoading(false);
             },
         });
     }

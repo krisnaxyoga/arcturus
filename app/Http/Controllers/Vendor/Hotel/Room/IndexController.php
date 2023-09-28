@@ -305,10 +305,12 @@ class IndexController extends Controller
             $barprice->delete();
         }
 
-        $contractprice = ContractPrice::where('user_id', $iduser)->where('room_id', $id)->first();
+        $contractprice = ContractPrice::where('user_id', $iduser)->where('room_id', $id)->get();
 
         if ($contractprice) {
-            $contractprice->delete();
+            foreach($contractprice as $contprice){
+                $contprice->delete();
+            }
         }
 
         return redirect()->back()->with('message', 'Data deleted!');

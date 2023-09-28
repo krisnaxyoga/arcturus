@@ -91,11 +91,29 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
         const today = new Date();
         const todayFormatted = today.toISOString().split('T')[0];
         setBeginDate(todayFormatted);
+      
+         // Menghitung tanggal akhir (30 hari dari hari ini)
+        // const endDate = new Date(today.getTime() + 31 * 24 * 60 * 60 * 1000);
 
-        // Menghitung tanggal akhir (30 hari dari hari ini)
-        const endDate = new Date(today.getTime() + 31 * 24 * 60 * 60 * 1000);
-        const endDateFormatted = endDate.toISOString().split('T')[0];
-        setEndDate(endDateFormatted);
+        // Menghitung tanggal akhir (satu tahun dari hari ini)
+        // const oneYearLater = new Date(today);
+        // oneYearLater.setFullYear(today.getFullYear() + 1);
+      
+        // // Pastikan menangani tahun kabisat dengan benar
+        // if (today.getMonth() === 1 && today.getDate() === 29) {
+        //   // Hari ini adalah 29 Februari, kita perlu memeriksa apakah tahun berikutnya kabisat
+        //   const nextYear = today.getFullYear() + 1;
+        //   if ((nextYear % 4 === 0 && nextYear % 100 !== 0) || (nextYear % 400 === 0)) {
+        //     oneYearLater.setMonth(1); // Mengatur bulan ke Februari
+        //     oneYearLater.setDate(29); // Mengatur tanggal ke 29
+        //   } else {
+        //     oneYearLater.setMonth(2); // Mengatur bulan ke Maret
+        //     oneYearLater.setDate(1); // Mengatur tanggal ke 1
+        //   }
+        // }
+      
+        // const endDateFormatted = oneYearLater.toISOString().split('T')[0];
+        setEndDate(bardata[0].enddate);
       }, []);
 
     const handleCheckboxChangeAll = (event) => {
@@ -191,6 +209,8 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
     const storePost = async (e) => {
         e.preventDefault();
 
+        setIsLoading(true);
+        
         const formData = new FormData();
 
         formData.append('ratecode', ratecode);
@@ -219,7 +239,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
 
         Inertia.post('/room/contract/store', formData, {
             onSuccess: () => {
-
+                setIsLoading(false);
             },
         });
     }
@@ -309,7 +329,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                             <div className="col-lg-6">
                                                                                 <div className="mb-3">
                                                                                     <label htmlFor="" className='fw-bold'>Begin Sell date</label>
-                                                                                    <input style={{backgroundColor: '#e3e6ec'}} defaultValue={bardata[0] .begindate} onChange={(e) => setBeginSell(e.target.value)} type="date" className='form-control' />
+                                                                                    <input style={{backgroundColor: '#e3e6ec'}} defaultValue={bardata[0].begindate} onChange={(e) => setBeginSell(e.target.value)} type="date" className='form-control' />
                                                                                 </div>
                                                                             </div>
                                                                             <div className="col-lg-6">

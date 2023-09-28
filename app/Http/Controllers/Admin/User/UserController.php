@@ -167,16 +167,6 @@ class UserController extends Controller
             ->with('message', 'Data User berhasil dihapus.');
     }
 
-    public function passwordchange()
-    {
-        $iduser = auth()->user()->id;
-        $data = User::where('id',$iduser)->with('vendors')->first();
-
-        return inertia('Agent/MyProfile/Contact/PasswordChange',[
-            'data' => $data
-        ]);
-    }
-
     public function updatepassword(Request $request){
         $iduser = auth()->user()->id;
         $validator = Validator::make($request->all(), [

@@ -202,6 +202,7 @@ export default function Index({ session, props, attr,roomtype,vendor }) {
         Inertia.post('/room/store', formData, {
             onSuccess: () => {
                 // Lakukan aksi setelah gambar berhasil diunggah
+                setIsLoading(false);
             },
         });
     }
