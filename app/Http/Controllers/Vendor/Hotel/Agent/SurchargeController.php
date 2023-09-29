@@ -25,7 +25,7 @@ class SurchargeController extends Controller
     {
         $userid = Auth::id();
 
-        $vendor = Vendor::query()->where('user_id',$userid)->with('users')->first();
+        $vendor = Vendor::query()->where('user_id', $userid)->with('users')->first();
 
 
         $ContractPrice = ContractPrice::where('contract_prices.user_id', $userid)
@@ -35,22 +35,22 @@ class SurchargeController extends Controller
             ->join('room_hotels', 'contract_prices.room_id', '=', 'room_hotels.id')
             ->get();
 
-        $ContractRate1 = ContractRate::query()->where('user_id',$userid)->where('vendor_id',$vendor->id)->where('rolerate',1)->first();
+        $ContractRate1 = ContractRate::query()->where('user_id', $userid)->where('vendor_id', $vendor->id)->where('rolerate', 1)->first();
 
-        $ContractRate = ContractRate::query()->where('user_id',$userid)->where('vendor_id',$vendor->id)->get();
+        $ContractRate = ContractRate::query()->where('user_id', $userid)->where('vendor_id', $vendor->id)->get();
 
         // dd($ContractPrice);
 
-        if($ContractPrice->isEmpty()){
-            $room = RoomHotel::query()->where('user_id',$userid)->get();
-        }else{
+        if ($ContractPrice->isEmpty()) {
+            $room = RoomHotel::query()->where('user_id', $userid)->get();
+        } else {
             $room = ContractPrice::where('contract_prices.user_id', $userid)
-            ->where('contract_prices.contract_id',$ContractRate1->id)
-            ->with('contractrate')
-            ->with('room')
-            ->orderBy('recom_price', 'asc')
-            ->join('room_hotels', 'contract_prices.room_id', '=', 'room_hotels.id')
-            ->get();
+                ->where('contract_prices.contract_id', $ContractRate1->id)
+                ->with('contractrate')
+                ->with('room')
+                ->orderBy('recom_price', 'asc')
+                ->join('room_hotels', 'contract_prices.room_id', '=', 'room_hotels.id')
+                ->get();
         }
 
 
@@ -75,8 +75,8 @@ class SurchargeController extends Controller
         $data = [];
         $userid = Auth::id();
 
-        $vendorIds = Vendor::where('user_id',$userid)->first();
-       
+        $vendorIds = Vendor::where('user_id', $userid)->first();
+
 
         foreach ($period as $date) {
             $hotel_room_surcharge = HotelRoomSurcharge::query()
@@ -98,7 +98,7 @@ class SurchargeController extends Controller
                     // Checkin date before or equal to $date AND checkout date after or equal to $date
                     $query->where('checkin_date', '<=', $date)
                         ->where('checkout_date', '>=', $date);
-            
+
                     // Vendor ID is NOT IN the list of vendor IDs that have a booking on the same date
                     $query->whereNotIn('vendor_id', function ($query) use ($date) {
                         $query->select('vendor_id')
@@ -109,7 +109,7 @@ class SurchargeController extends Controller
                 })
                 ->first();
 
-              
+
             // $ContractPrice = ContractPrice::where('room_id', $hotel_room_id)
             //     ->where('user_id', $userid)
             //     ->first();
@@ -125,11 +125,11 @@ class SurchargeController extends Controller
                 ->join('room_hotels', 'contract_prices.room_id', '=', 'room_hotels.id')
                 ->first();
 
-                if($HotelRoomBooking){
-                    $roomallow = $ContractPrice->room->room_allow - $HotelRoomBooking->total_room;
-                }else{
-                    $roomallow = $ContractPrice->room->room_allow;
-                }
+            if ($HotelRoomBooking) {
+                $roomallow = $ContractPrice->room->room_allow - $HotelRoomBooking->total_room;
+            } else {
+                $roomallow = $ContractPrice->room->room_allow;
+            }
 
             if ($hotel_room_surcharge) {
                 // $price = $hotel_room_surcharge->price; // Ambil harga sebagai decimal
@@ -137,33 +137,32 @@ class SurchargeController extends Controller
 
                 $roomallow = $hotel_room_surcharge->room_allow;
 
-                if($hotel_room_surcharge->active == 1 && $roomallow != 0){
-                    if($hotel_room_surcharge->no_checkout == 1 && $hotel_room_surcharge->no_checkin == 0){
-                        $color = '#941b0c'; 
-                    }elseif($hotel_room_surcharge->no_checkout == 0 && $hotel_room_surcharge->no_checkin == 1){
-                        $color = '#bc3908'; 
-                    }elseif($hotel_room_surcharge->no_checkout == 1 && $hotel_room_surcharge->no_checkin == 1){
-                        $color = '#621708'; 
-                    }else{
-                       $color = '#2a9134';  
+                if ($hotel_room_surcharge->active == 1 && $roomallow != 0) {
+                    if ($hotel_room_surcharge->no_checkout == 1 && $hotel_room_surcharge->no_checkin == 0) {
+                        $color = '#941b0c';
+                    } elseif ($hotel_room_surcharge->no_checkout == 0 && $hotel_room_surcharge->no_checkin == 1) {
+                        $color = '#bc3908';
+                    } elseif ($hotel_room_surcharge->no_checkout == 1 && $hotel_room_surcharge->no_checkin == 1) {
+                        $color = '#621708';
+                    } else {
+                        $color = '#2a9134';
                     }
-                   
-                }else{
+                } else {
                     $color = '#e63946';
                 }
                 $data[] = [
-                    'title' => 'Rp '. number_format($hotel_room_surcharge->recom_price, 0, ',', '.'),
+                    'title' => 'Rp ' . number_format($hotel_room_surcharge->recom_price, 0, ',', '.'),
                     'start' => date('Y-m-d', strtotime($hotel_room_surcharge->start_date)),
                     'end' => date('Y-m-d', strtotime($hotel_room_surcharge->end_date) + 86400),
                     'price' => $hotel_room_surcharge->recom_price,
-                    'color'=> $color,
-                    'allow'=> $roomallow,
+                    'color' => $color,
+                    'allow' => $roomallow,
                     'nocheckin' => $hotel_room_surcharge->no_checkin,
                     'nocheckout' => $hotel_room_surcharge->no_checkout
                 ];
             } else {
                 $data[] = [
-                    'title' => 'Rp '.number_format($ContractPrice->recom_price, 0, ',', '.'),
+                    'title' => 'Rp ' . number_format($ContractPrice->recom_price, 0, ',', '.'),
                     'date' => date('Y-m-d', strtotime($date)),
                     'price' => $ContractPrice->recom_price,
                     'allow' => $roomallow,
@@ -177,7 +176,7 @@ class SurchargeController extends Controller
         return response()->json($data);
     }
 
-    
+
 
     /**
      * Store a newly created resource in storage.
@@ -194,45 +193,102 @@ class SurchargeController extends Controller
         $start_date = date('Y-m-d', strtotime($request->start_date));
         $end_date = date('Y-m-d', strtotime($request->end_date));
 
-        // Cek jika ada entri sebelumnya dengan harga yang sama
-        $previousSurcharge = HotelRoomSurcharge::where('vendor_id', $request->vendor_id)
+        $hotel_room_surcharge = HotelRoomSurcharge::query()->where('vendor_id', $request->vendor_id)
             ->where('room_hotel_id', $request->room_hotel_id)
-            ->where('recom_price', $request->price)
-            ->orderBy('end_date', 'desc')
+            ->where('start_date', $start_date)
             ->first();
 
-        if ($previousSurcharge) {
-            // Jika ada entri sebelumnya, periksa jika ada kesenjangan atau gap
-            if (date('Y-m-d', strtotime('+1 day', strtotime($previousSurcharge->end_date))) === $start_date) {
-                // Tidak ada kesenjangan, gabungkan atau edit rentang yang ada
-                $start_date = $previousSurcharge->start_date;
-                $previousSurcharge->end_date = $end_date;
-                $previousSurcharge->save();
-                return;
+        if (!$hotel_room_surcharge) {
+            // Cek jika ada entri sebelumnya dengan harga yang sama
+            $previousSurcharge = HotelRoomSurcharge::where('vendor_id', $request->vendor_id)
+                ->where('room_hotel_id', $request->room_hotel_id)
+                ->where('recom_price', $request->price)
+                ->orderBy('end_date', 'desc')
+                ->first();
+
+            if ($previousSurcharge) {
+                // Jika ada entri sebelumnya, periksa jika ada kesenjangan atau gap
+                if (date('Y-m-d', strtotime('+1 day', strtotime($previousSurcharge->end_date))) == $start_date) {
+                    // Tidak ada kesenjangan, gabungkan atau edit rentang yang ada
+                    $start_date = $previousSurcharge->start_date;
+                    $previousSurcharge->end_date = $end_date;
+                    $previousSurcharge->save();
+                    return;
+                }
             }
-        }
 
-        // Jika tidak ada entri sebelumnya atau ada kesenjangan, buat entri baru
-        $newSurcharge = new HotelRoomSurcharge();
-        $newSurcharge->vendor_id = $request->vendor_id;
-        $newSurcharge->room_hotel_id = $request->room_hotel_id;
-        $newSurcharge->start_date = $start_date;
-        $newSurcharge->end_date = $end_date;
-        $newSurcharge->recom_price = $request->price;
-        $newSurcharge->active = $request->active;
-        $newSurcharge->no_checkin = $request->nocheckin;
-        $newSurcharge->no_checkout = $request->nocheckout;
+            // Jika tidak ada entri sebelumnya atau ada kesenjangan, buat entri baru
+            $newSurcharge = new HotelRoomSurcharge();
+            $newSurcharge->vendor_id = $request->vendor_id;
+            $newSurcharge->room_hotel_id = $request->room_hotel_id;
+            $newSurcharge->start_date = $start_date;
+            $newSurcharge->end_date = $end_date;
+            $newSurcharge->recom_price = $request->price;
+            $newSurcharge->active = $request->active;
+            $newSurcharge->no_checkin = $request->nocheckin;
+            $newSurcharge->no_checkout = $request->nocheckout;
 
-        if ($request->room_allow == null || $request->room_allow == 0) {
-            $newSurcharge->room_allow = 0;
+            if ($request->room_allow == null || $request->room_allow == 0) {
+                $newSurcharge->room_allow = 0;
+            } else {
+                $newSurcharge->room_allow = $request->room_allow;
+            }
+
+            $newSurcharge->save();
         } else {
-            $newSurcharge->room_allow = $request->room_allow;
-        }
+            // Mencari semua entri yang memiliki harga yang sama dengan yang baru
+            $surchargeEntries = HotelRoomSurcharge::query()
+                ->where('vendor_id', $request->vendor_id)
+                ->where('room_hotel_id', $request->room_hotel_id)
+                ->where('recom_price', $request->price)
+                ->orderBy('start_date')
+                ->get();
+            if (!$surchargeEntries->isEmpty()) {
+                foreach ($surchargeEntries as $entry) {
+                    if ($entry->id == $hotel_room_surcharge->id) {
+                        // Skip entri yang sedang diperbarui
+                        continue;
+                    }
 
-        $newSurcharge->save();
+                    if ($start_date <= $entry->end_date && $end_date >= $entry->start_date) {
+                        // Tanggal yang akan diedit tumpang tindih dengan entri yang ada
+                        if ($start_date <= $entry->start_date && $end_date > $entry->end_date) {
+                            // Tanggal yang akan diedit mencakup entri yang ada sepenuhnya, hapus entri yang ada
+
+                            $entry->delete();
+                        } elseif ($start_date <= $entry->start_date && $end_date < $entry->end_date) {
+                            // Tanggal yang akan diedit dimulai dari entri yang ada,
+                            // perbarui tanggal awal entri yang ada
+                            $entry->start_date = $end_date;
+                            $entry->save();
+                        } elseif ($start_date > $entry->start_date && $end_date >= $entry->end_date) {
+                            // Tanggal yang akan diedit mengakhiri entri yang ada,
+                            // perbarui tanggal akhir entri yang ada
+                            $entry->end_date = $start_date;
+                            $entry->save();
+                        }
+                    }
+                }
+            }
+
+            $hotel_room_surcharge->vendor_id = $request->vendor_id;
+            $hotel_room_surcharge->room_hotel_id = $request->room_hotel_id;
+            $hotel_room_surcharge->start_date = $start_date;
+            $hotel_room_surcharge->end_date = $end_date;
+            $hotel_room_surcharge->recom_price = $request->price;
+            $hotel_room_surcharge->active = $request->active;
+            $hotel_room_surcharge->no_checkin = $request->nocheckin;
+            $hotel_room_surcharge->no_checkout = $request->nocheckout;
+            if ($request->room_allow == null || $request->room_allow == 0) {
+                $hotel_room_surcharge->room_allow = 0;
+            } else {
+                $hotel_room_surcharge->room_allow = $request->room_allow;
+            }
+            $hotel_room_surcharge->save();
+        }
     }
 
-    
+
 
 
     // public function store(Request $request): void
