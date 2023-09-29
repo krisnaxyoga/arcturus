@@ -31,7 +31,7 @@ export default function Index({ errors, session,contractrate, default_selected_h
     // Define state for handleStore
     const [date, setDate] = useState('')
     const [startDate, setStartDate] = useState('')
-    
+
     const [endDate, setEndDate] = useState('')
     const [price, setPrice] = useState(0)
     const [allow, setAllow] = useState('')
@@ -45,21 +45,29 @@ export default function Index({ errors, session,contractrate, default_selected_h
     };
 
     const handleOpenModal = (arg) => {
-        setDate(arg.event.start.toLocaleDateString('en-GB'));
+        let startDateStr = arg.event.start.toLocaleDateString('en-GB');
+
+        // Split tanggal menjadi bagian-bagian
+        const startDateParts = startDateStr.split('/');
+
+        // Buat format tanggal 'yyyy-mm-dd'
+        const formattedStartDate = `${startDateParts[2]}-${startDateParts[1]}-${startDateParts[0]}`;
+
+        setDate(formattedStartDate);
         setStartDate(arg.event.startStr);
 
         let endDateStr = arg.event.endStr || new Date(arg.event.startStr).getTime() + 86400 * 1000;
-        
+
         // Konversi endDateStr ke format tanggal yang diinginkan
         const endDateTimestamp = new Date(endDateStr).getTime() - 86400 * 1000;
         const endDate2 = new Date(endDateTimestamp).toLocaleDateString('en-GB');
 
         // Split tanggal menjadi bagian-bagian
         const parts = endDate2.split('/');
-        
+
         // Buat format tanggal 'yyyy-mm-dd'
         const formattedDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
-        
+
         setEndDate(formattedDate);
         setPrice(arg.event.extendedProps.price);
         setAllow(arg.event.allow);
@@ -75,8 +83,8 @@ export default function Index({ errors, session,contractrate, default_selected_h
         }else{
             setNoCheckin(false);
         }
-        
-        
+
+
         setShowModal(true);
     };
 
@@ -250,6 +258,8 @@ export default function Index({ errors, session,contractrate, default_selected_h
                                         datesSet={handleDatesRender}
                                         events={loadDates}
                                         eventClick={handleOpenModal}
+                                        rerenderDelay={1000} // Sesuaikan waktu penundaan sesuai kebutuhan Anda
+
                                     />
                                 </div>
                             </div>
@@ -269,7 +279,7 @@ export default function Index({ errors, session,contractrate, default_selected_h
 
                                 <div className="mb-3">
                                     <label className="form-label fw-bold">Start Date</label>
-                                    <input type="text" className="form-control" value={date} readOnly={true} />
+                                    <input type="date" className="form-control" value={date} readOnly={true} />
                                 </div>
                                 <div className="mb-3">
                                     <label className="form-label fw-bold">End Date</label>
@@ -295,7 +305,7 @@ export default function Index({ errors, session,contractrate, default_selected_h
                                     </div>
                                 )}
 
-                                
+
                                 <div className="mb-3">
                                     <label className="form-label fw-bold">Status</label>
                                     {/* <p><input id="active" type="checkbox" defaultChecked={active} onChange={(e) => setActive(e.target.checked)} /> Available for booking?</p> */}
@@ -327,7 +337,7 @@ export default function Index({ errors, session,contractrate, default_selected_h
                                     )}
 
                                 </div>
-                                
+
                                 <div className="mb-3">
                                     <button className="btn btn-primary" type="submit">
                                         <i className="fa fa-save mr-1"></i> Save
