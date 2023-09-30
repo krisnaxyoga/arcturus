@@ -5,7 +5,7 @@ import React, {useCallback,useEffect, useState} from 'react';
 import Layout from '../../../../Layouts/Vendor';
 
 //import Link
-import { usePage } from '@inertiajs/inertia-react';
+import { Link,usePage } from '@inertiajs/inertia-react';
 import { Inertia } from '@inertiajs/inertia';
 import Modal from 'react-bootstrap/Modal';
 import FullCalendar from "@fullcalendar/react";
@@ -94,7 +94,6 @@ export default function Index({ errors, session,contractrate, default_selected_h
         setPrice(0)
         setShowModal(false)
     }
-    console.log(loadDates,">>>>HOTELL ROOM");
 
     useEffect(() => {
         // Fungsi yang ingin Anda jalankan saat halaman di-reload
@@ -258,7 +257,7 @@ export default function Index({ errors, session,contractrate, default_selected_h
                                         datesSet={handleDatesRender}
                                         events={loadDates}
                                         eventClick={handleOpenModal}
-                                        rerenderDelay={1000} // Sesuaikan waktu penundaan sesuai kebutuhan Anda
+                                        // rerenderDelay={1000} // Sesuaikan waktu penundaan sesuai kebutuhan Anda
 
                                     />
                                 </div>
@@ -272,6 +271,24 @@ export default function Index({ errors, session,contractrate, default_selected_h
                         <Modal.Title>
                             Surcharge Hotel Room
                         </Modal.Title>
+                        <Link href={`/room/surcharge/destroy/${vendor.id}/${activeHotelRoom}/${startDate}`} className='btn btn-datatable btn-icon btn-transparent-dark mr-2'>
+                        <svg
+                                    xmlns="http://www.w3.org/1000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="feather feather-refresh-cw"
+                                >
+                                    <polyline points="23 4 23 10 17 10"></polyline>
+                                    <polyline points="1 20 1 14 7 14"></polyline>
+                                    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                                </svg>
+                        </Link>
                     </Modal.Header>
                     <Modal.Body>
                         <div className="container">

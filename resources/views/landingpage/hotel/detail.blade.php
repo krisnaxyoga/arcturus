@@ -1,12 +1,12 @@
 @extends('layouts.landing')
 @section('title', 'Hotel')
 @section('contents')
-@php
-    use Carbon\Carbon;
-@endphp
-<!-- fotorama.css & fotorama.js. -->
-<link  href="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.css" rel="stylesheet"> <!-- 3 KB -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.js"></script> <!-- 16 KB -->
+    @php
+        use Carbon\Carbon;
+    @endphp
+    <!-- fotorama.css & fotorama.js. -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.css" rel="stylesheet"> <!-- 3 KB -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.js"></script> <!-- 16 KB -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
@@ -32,7 +32,8 @@
             <div class="carousel-inner">
                 @foreach ($slider as $index => $item)
                     <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
-                        <img onerror="this.onerror=null; this.src='https://semantic-ui.com/images/wireframe/white-image.png';" src="{{ $item->image }}" alt="{{ $item->image }}"
+                        <img onerror="this.onerror=null; this.src='https://semantic-ui.com/images/wireframe/white-image.png';"
+                            src="{{ $item->image }}" alt="{{ $item->image }}"
                             style="width:100%;height:600px; object-fit: cover;">
                     </div>
                 @endforeach
@@ -69,17 +70,19 @@
                                     <div class="card mb-3">
                                         <div class="card-body">
 
-                                                <img onerror="this.onerror=null; this.src='https://semantic-ui.com/images/wireframe/white-image.png';" class="img-fluid" style="max-width: 80px; max-height:80px;"
-                                                    src="{{ $vendordetail->logo_img ?? asset('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjCX5TOKkOk3MBt8V-f8PbmGrdLHCi4BoUOs_yuZ1pekOp8U_yWcf40t66JZ4_e_JYpRTOVCl0m8ozEpLrs9Ip2Cm7kQz4fUnUFh8Jcv8fMFfPbfbyWEEKne0S9e_U6fWEmcz0oihuJM6sP1cGFqdJZbLjaEQnGdgJvcxctqhMbNw632OKuAMBMwL86/s414/pp%20kosong%20wa%20default.jpg') }}"
-                                                    alt="Profile Image">
+                                            <img onerror="this.onerror=null; this.src='https://semantic-ui.com/images/wireframe/white-image.png';"
+                                                class="img-fluid" style="max-width: 80px; max-height:80px;"
+                                                src="{{ $vendordetail->logo_img ?? asset('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjCX5TOKkOk3MBt8V-f8PbmGrdLHCi4BoUOs_yuZ1pekOp8U_yWcf40t66JZ4_e_JYpRTOVCl0m8ozEpLrs9Ip2Cm7kQz4fUnUFh8Jcv8fMFfPbfbyWEEKne0S9e_U6fWEmcz0oihuJM6sP1cGFqdJZbLjaEQnGdgJvcxctqhMbNw632OKuAMBMwL86/s414/pp%20kosong%20wa%20default.jpg') }}"
+                                                alt="Profile Image">
 
-                                                <div>
-                                                    <p class="m-0" style="font-weight: 700;sont-size:14px">{{ $vendordetail->vendor_name }}</p>
-                                                    {{-- <p>Member since <br>
+                                            <div>
+                                                <p class="m-0" style="font-weight: 700;sont-size:14px">
+                                                    {{ $vendordetail->vendor_name }}</p>
+                                                {{-- <p>Member since <br>
                                                         {{ \Carbon\Carbon::parse($vendordetail->created_at)->format('F Y') }}
                                                     </p> --}}
 
-                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -102,7 +105,7 @@
                     </div>
                 </div>
                 <div class="col-lg-12">
-                    <h3>  Available Rooms</h3>
+                    <h3> Available Rooms</h3>
                 </div>
             </div>
             <div class="row">
@@ -118,14 +121,13 @@
                                     ?>
                                     <div class="form-group p-4">
                                         <label for="">CheckIn - CheckOut</label>
-                                        <input class="form-control checkindate" type="text" name="dates" value="{{ $checkin }} - {{ $checkout }}" />
+                                        <input class="form-control checkindate" type="text" name="dates"
+                                            value="{{ $checkin }} - {{ $checkout }}" />
                                     </div>
-                                    <input value="{{ $datareq['checkin'] }}"  id="checkin" type="hidden" name="checkin"
-                                    class="form-control checkindate"
-                                    placeholder="Check In Date">
+                                    <input value="{{ $datareq['checkin'] }}" id="checkin" type="hidden" name="checkin"
+                                        class="form-control checkindate" placeholder="Check In Date">
                                     <input value="{{ $datareq['checkout'] }}" id="checkout" type="hidden" name="checkout"
-                                    class="form-control checkoutdate"
-                                    placeholder="Check Out Date">
+                                        class="form-control checkoutdate" placeholder="Check Out Date">
                                 </div>
                                 {{-- <div class="col-md d-flex">
                                     <div class="form-group p-4">
@@ -151,16 +153,16 @@
                                     <div class="form-group p-4" style="    border-right: 1px solid rgba(0, 0, 0, 0.1);">
                                         <label for="#">Person</label>
                                         <div class="">
-                                                <select name="person" id="person" class="form-control" required>
-                                                    <option @if (($datareq['person'] ?? '') == 1) selected @endif
-                                                        value="1">1</option>
-                                                    <option @if (($datareq['person'] ?? '') == 2) selected @endif
-                                                        value="2">2</option>
-                                                    <option @if (($datareq['person'] ?? '') == 3) selected @endif
-                                                        value="3">3</option>
-                                                    <option @if (($datareq['person'] ?? '') == 4) selected @endif
-                                                        value="4">4</option>
-                                                </select>
+                                            <select name="person" id="person" class="form-control" required>
+                                                <option @if (($datareq['person'] ?? '') == 1) selected @endif value="1">1
+                                                </option>
+                                                <option @if (($datareq['person'] ?? '') == 2) selected @endif value="2">2
+                                                </option>
+                                                <option @if (($datareq['person'] ?? '') == 3) selected @endif value="3">3
+                                                </option>
+                                                <option @if (($datareq['person'] ?? '') == 4) selected @endif value="4">4
+                                                </option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -169,13 +171,14 @@
                         </div>
 
                         <div class="row">
-                            @foreach ($data as $key=>$item)
-                        {{-- {{ $TotalHotelCalendar1 }} {{ $TotalHotelCalendar }} {{$item->recom_price}} --}}
+                            @foreach ($data as $key => $item)
+                                {{-- {{ $TotalHotelCalendar1 }} {{ $TotalHotelCalendar }} {{$item->recom_price}} --}}
                                 <div class="col-md-12 ftco-animate">
                                     <div class="card mb-3">
                                         <div class="row g-0">
                                             <div class="col-md-4">
-                                                <img onerror="this.onerror=null; this.src='https://semantic-ui.com/images/wireframe/white-image.png';" src="{{ $item->room->feature_image }}"
+                                                <img onerror="this.onerror=null; this.src='https://semantic-ui.com/images/wireframe/white-image.png';"
+                                                    src="{{ $item->room->feature_image }}"
                                                     class="img img-fluid rounded-start"
                                                     alt="{{ $item->room->feature_image }}">
 
@@ -183,24 +186,28 @@
                                             <div class="col-md-8">
                                                 <div class="card-body pb-3">
                                                     <h3 class="card-title mb-0">
-                                                        <button class="btn font-weight-bold font-weight-bold p-0 text-primary" style="font-size: 20px" type="button" data-toggle="modal" data-target="#exampleModal{{$key}}">{{ $item->room->ratedesc }}</button></h3>
+                                                        <button
+                                                            class="btn font-weight-bold font-weight-bold p-0 text-primary"
+                                                            style="font-size: 20px" type="button" data-toggle="modal"
+                                                            data-target="#exampleModal{{ $key }}">{{ $item->room->ratedesc }}</button>
+                                                    </h3>
                                                     {{-- <span class="price">Rp. {{ number_format(($Room_recomprice + $item->contractrate->vendors->system_markup + $surcharprice), 0, ',', '.')}}</span> --}}
                                                     {{-- surcharge : {{$surchargesVendorIds}} blackout : {{$blackoutVendorIds}} vendorid :{{$item->contractrate->vendor_id}} --}}
-                                                            <!-- Modal -->
+                                                    <!-- Modal -->
                                                     {{-- <div class="row justify-content-between">
                                                         <div class="col-lg"> --}}
-                                                            {{-- <span class="price">Rp. {{ number_format($Room_recomprice + $item->contractrate->vendors->system_markup, 0, ',', '.') }} / night</span> --}}
+                                                    {{-- <span class="price">Rp. {{ number_format($Room_recomprice + $item->contractrate->vendors->system_markup, 0, ',', '.') }} / night</span> --}}
 
 
-                                                            {{-- <p class="card-text"><small class="text-body-secondary"></small></p> --}}
-                                                        {{-- </div>
+                                                    {{-- <p class="card-text"><small class="text-body-secondary"></small></p> --}}
+                                                    {{-- </div>
                                                         <div class="col-lg">
                                                                 @if ($RoomAllowment <= 0)
                                                                     <span class="badge badge-danger">Sold</span>
                                                                 @endif --}}
-                                                            {{-- {{ $RoomAllowment }} --}}
-                                                            {{-- @if ($item->room->room_allow <= 0 || $blackoutVendorIds->contains($item->contractrate->vendors->id)) --}}
-                                                                {{-- @if ($RoomAllowment <= 0)
+                                                    {{-- {{ $RoomAllowment }} --}}
+                                                    {{-- @if ($item->room->room_allow <= 0 || $blackoutVendorIds->contains($item->contractrate->vendors->id)) --}}
+                                                    {{-- @if ($RoomAllowment <= 0)
                                                                     <span class="badge badge-danger">Sold</span>
                                                                 @else
                                                                     <select class="form-control room-quantity" name="room_quantity"
@@ -208,8 +215,8 @@
                                                                         <option data-price="0" value="0" data-pricenomarkup="0">
                                                                             0</option>
                                                                         @for ($i = 1; $i <= $RoomAllowment; $i++) --}}
-                                                                            {{-- <option data-contprice={{$item->id}} data-contractid={{$item->contract_id}} data-roomid={{$item->room->id}} data-price="{{($i * ($Room_recomprice + $item->contractrate->vendors->system_markup + $surcharprice)) }}" value="{{$i}}">{{$i}} @if ($i == 1) room @else rooms @endif </option> --}}
-                                                                            {{-- <option data-contprice={{ $item->id }}
+                                                    {{-- <option data-contprice={{$item->id}} data-contractid={{$item->contract_id}} data-roomid={{$item->room->id}} data-price="{{($i * ($Room_recomprice + $item->contractrate->vendors->system_markup + $surcharprice)) }}" value="{{$i}}">{{$i}} @if ($i == 1) room @else rooms @endif </option> --}}
+                                                    {{-- <option data-contprice={{ $item->id }}
                                                                                 data-contractid={{ $item->contract_id }}
                                                                                 data-roomid={{ $item->room->id }}
                                                                                 data-price="{{ $i * ($Room_recomprice + $item->contractrate->vendors->system_markup) }}"
@@ -224,7 +231,7 @@
                                                                         @endfor
                                                                     </select>
                                                                 @endif --}}
-                                                        {{-- </div>
+                                                    {{-- </div>
                                                     </div> --}}
                                                     <p>{!! $item->room->content !!}</p>
                                                     {{-- <p>Facilities :  @foreach ($item->room->attribute as $facilities)
@@ -239,255 +246,308 @@
                                                     {{-- <p style="font-weight: 500">Description : </p> --}}
 
                                                     {{-- {{$contractprice}} --}}
-                                                    @if($contractprice->count() != 0)
-                                                    <a class="text-primary" style="font-weight:500;font-size:14px" data-toggle="collapse" href="#collapseExample{{$key}}" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                                        View Rates:
-                                                      </a>
-                                                      <div class="collapse" id="collapseExample{{$key}}">
-                                                        <div>
+                                                    @if ($contractprice->count() != 0)
+                                                        <a class="text-primary" style="font-weight:500;font-size:14px"
+                                                            data-toggle="collapse"
+                                                            href="#collapseExample{{ $key }}" role="button"
+                                                            aria-expanded="false" aria-controls="collapseExample">
+                                                            View Rates:
+                                                        </a>
+                                                        <div class="collapse" id="collapseExample{{ $key }}">
+                                                            <div>
 
-                                                            @foreach ($contractprice as $itemprice)
-
-                                                            @if ($itemprice->room_id == $item->room->id)
-                                                                    @php
-                                                                    // ========================================================= START CALENDAR ====================================
-
-                                                                    $status = 1;
-                                                                    $room_allow = 0;
-                                                                    $no_checkout = 0;
-                                                                    $no_checkin = 0;
-                                                                    $hotelroomid = 0;
-                                                                    $TotalHotelCalendar = 0;
-                                                                    $TotalHotelCalendar1 = 0;
-                                                                    $checkinDate = Carbon::parse($checkin);
-                                                                    $checkoutDate = Carbon::parse($checkout);
-                                                                    $totalpricecalendar = 0;
-
-                                                                    $totalNights = $checkinDate->diffInDays($checkoutDate);
-                                                                    // var_dump($totalNights);
-                                                                    if ($HotelCalendar->count() != 0) {
-
-                                                                        foreach ($HotelCalendar as $key=>$calendar) {
-                                                                            // var_dump($calendar->room_hotel_id,$item->room_id);
-                                                                            if ($calendar->room_hotel_id == $itemprice->room_id) {
-                                                                                $startDate = Carbon::parse($calendar->start_date);
-                                                                                $endDate = Carbon::parse($calendar->end_date);
-
-                                                                                // var_dump($checkoutDate);
-                                                                                // Check apakah rentang tanggal kalender tumpang tindih dengan rentang check-in dan check-out
-                                                                                if ($startDate < $checkoutDate && $endDate >= $checkinDate) {
-                                                                                    // Hitung jumlah malam yang termasuk dalam rentang tanggal
-                                                                                    $nights = min($endDate, $checkoutDate)->diffInDays(max($startDate, $checkinDate));
-
-                                                                                      // Jika Anda ingin menghitung jumlah hari tanpa memasukkan hari terakhir, gunakan kode ini:
-                                                                                    // $nights = min($endDate, $checkoutDate)->diffInDays(max($startDate, $checkinDate));
-                                                                                    $TotalHotelCalendar1 += $calendar->recom_price;
-
-                                                                                    if ($nights != $totalNights) {
-                                                                                        $countNights1 = $totalNights - $nights;
-                                                                                        $totalpricecalendar = ($TotalHotelCalendar1 / $countNights1);
-                                                                                        if($TotalHotelCalendar1 != $itemprice->recom_price){
-                                                                                            if($nights == 0){
-                                                                                                $countNights = $totalNights - 1;
-                                                                                                $TotalHotelCalendar = (($TotalHotelCalendar1 * 1) + ($itemprice->recom_price * $countNights)) / $totalNights;
-
-                                                                                            }else{
-                                                                                                $day = $nights + 1;
-                                                                                                $countNights = $totalNights - $day;
-                                                                                                $TotalHotelCalendar = (($TotalHotelCalendar1 * $day) + ($itemprice->recom_price * $countNights)) / $totalNights;
-                                                                                                // dd($TotalHotelCalendar,$day,$totalNights,$TotalHotelCalendar1,$countNights,($TotalHotelCalendar1 * $day) + ($itemprice->recom_price * $countNights));
-                                                                                            }
-
-                                                                                        }
-                                                                                    }elseif($nights == $totalNights) {
-                                                                                        $TotalHotelCalendar = $calendar->recom_price;
-                                                                                    }
-                                                                                    // var_dump($TotalHotelCalendar);
-
-                                                                                    $status = $calendar->active;
-                                                                                    $room_allow = $calendar->room_allow;
-                                                                                    if($room_allow == 0){
-                                                                                        $status = 2;
-                                                                                    }
-                                                                                    $hotelroomid = $calendar->room_hotel_id;
-                                                                                }
-
-                                                                                if($checkoutDate == $endDate){
-                                                                                    $no_checkout = $calendar->no_checkout;
-                                                                                }
-
-                                                                                if($checkinDate == $startDate){
-                                                                                    $no_checkin = $calendar->no_checkin;
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-
-
-                                                                    // $Room_recomprice = ($TotalHotelCalendar <= 0) ? $itemprice->recom_price : $TotalHotelCalendar;
-                                                                    if($TotalHotelCalendar <= 0){
-                                                                        $Room_recomprice = $itemprice->recom_price;
-                                                                    }else{
-                                                                        if($itemprice->recom_price == $TotalHotelCalendar){
-                                                                            $Room_recomprice = $totalpricecalendar;
-
-                                                                        }else{
-                                                                            $Room_recomprice = $TotalHotelCalendar;
-                                                                        }
-                                                                    }
-
-
-                                                                    // ========================================================= END CALENDAR ====================================
-
-                                                                    // ========================================================= ROOM ALLOWMENT ====================================
-                                                                    $totalRoomBooking = 0; // Inisialisasi totalRoomBooking
-
-                                                                    // var_dump($no_checkout);
-                                                                    if ($status != 1 || $no_checkout != 0 || $no_checkin != 0) {
-                                                                        $totalRoomBooking = $itemprice->room->room_allow;
-                                                                    }
-                                                                    // if($no_checkout != 1) {
-                                                                    //     $totalRoomBooking = $itemprice->room->room_allow;
-                                                                    // }
-
-                                                                    if ($HotelRoomBooking->count() != 0) {
-                                                                        foreach ($HotelRoomBooking as $value) {
-                                                                            if ($value->room_id == $itemprice->room_id) {
-                                                                                $totalRoomBooking += $value->total_room;
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                    // Setel $RoomAllowment ke $itemprice->room->room_allow dikurangi total total_room yang sesuai
-
-                                                                    $RoomAllowment = $itemprice->room->room_allow - $totalRoomBooking;
-                                                                    // var_dump($Room_recomprice,$TotalHotelCalendar);
-
-                                                                    // ========================================================= ROOM ALLOWMENT ====================================
-                                                                @endphp
-                                                                @php
-                                                                // var_dump($Room_recomprice);
-                                                                $price = $itemprice->recom_price;
-                                                                    if($Room_recomprice){
-                                                                        if($itemprice->contractrate->rolerate == 1){
-                                                                            $price = $Room_recomprice;
-                                                                        }else{
-                                                                            $price = $itemprice->recom_price;
-                                                                        }
-                                                                    }
-
-                                                                    if ($advancepurchase->count() > 0) {
-                                                                        foreach ($advancepurchase as $advancevalue) {
-                                                                            if ($advancevalue->contract_id == $itemprice->contract_id && $advancevalue->room_id == $itemprice->room_id && $advancevalue->room_id == $item->room->id) {
-                                                                                if($Room_recomprice != $itemprice->recom_price){
-                                                                                    $price = (($advancevalue->price / $itemprice->recom_price) * $Room_recomprice);
-                                                                                }else{
-                                                                                  $price = $advancevalue->price;
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }else{
-                                                                        if($itemprice->contractrate->rolerate == 1){
-                                                                            $price = $Room_recomprice;
-                                                                        }else{
-                                                                            $price = $itemprice->recom_price;
-                                                                        }
-                                                                    }
-                                                                @endphp
-                                                                {{-- <hr>
-                                                                <p style="font-size:20px;font-weight:700" class="m-0 p-0">{{$itemprice->contractrate->codedesc}}</p> --}}
-                                                                <hr>
-                                                                <div class="row justify-content-between">
-                                                                    <div class="col-lg">
-                                                                        <p>Min Stay : {{$itemprice->contractrate->min_stay}} nights</p>
-                                                                    </div>
-                                                                    <div class="col-lg">
-                                                                        @foreach ($itemprice->contractrate->distribute as $distribute)
-                                                                            <span class="badge badge-secondary mx-1">{{$distribute}}</span>
-                                                                        @endforeach
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row justify-content-between">
-                                                                    <div class="col-lg">
-                                                                        <span class="price text-primary" style="font-weight: 600">Rp.
-                                                                            {{ number_format($price + $itemprice->contractrate->vendors->system_markup, 0, ',', '.') }} / night
-                                                                        </span>
-                                                                        <p class="m-0">Benefits :</p>
-                                                                        <p>{!! $itemprice->contractrate->benefit_policy !!}</p>
-                                                                    </div>
-                                                                    <div class="col-lg">
+                                                                @foreach ($contractprice as $itemprice)
+                                                                    @if ($itemprice->room_id == $item->room->id)
                                                                         @php
-                                                                            if($room_allow >= 0 && $hotelroomid == $itemprice->room_id){
-                                                                                $RoomAllowment = $room_allow;
-                                                                            }else{
-                                                                                $RoomAllowment = $RoomAllowment;
+                                                                            // ========================================================= START CALENDAR ====================================
+                                                                            
+                                                                            $status = 1;
+                                                                            $room_allow = 0;
+                                                                            $no_checkout = 0;
+                                                                            $no_checkin = 0;
+                                                                            $hotelroomid = 0;
+                                                                            $TotalHotelCalendar = 0;
+                                                                            $TotalHotelCalendar1 = 0;
+                                                                            $checkinDate = Carbon::parse($checkin);
+                                                                            $checkoutDate = Carbon::parse($checkout);
+                                                                            $totalpricecalendar = 0;
+                                                                            $foundZero = false;
+                                                                            $totalNights = $checkinDate->diffInDays($checkoutDate);
+                                                                            // var_dump($totalNights);
+                                                                            if ($HotelCalendar->count() != 0) {
+                                                                                foreach ($HotelCalendar as $key => $calendar) {
+                                                                                    
+                                                                                    // var_dump($calendar->room_hotel_id,$item->room_id);
+                                                                                    if ($calendar->room_hotel_id == $itemprice->room_id && $calendar->active == 1) {
+
+                                                                                        $startDate = Carbon::parse($calendar->start_date);
+                                                                                        $endDate = Carbon::parse($calendar->end_date);
+                                                                            
+                                                                                        if ($calendar->room_allow === 0 || $calendar->active === 0) {
+                                                                                                $status = 0;
+                                                                                                $foundZero = true; // Setel foundZero menjadi true jika nilai 0 ditemukan
+                                                                                            } else {
+                                                                                                // Jika tidak, gunakan nilai room_allow dari $calendar
+                                                                                                $room_allow = $calendar->room_allow;
+                                                                                            }
+                                                                            
+                                                                                        // var_dump($checkoutDate);
+                                                                                        // Check apakah rentang tanggal kalender tumpang tindih dengan rentang check-in dan check-out
+                                                                                        if ($startDate < $checkoutDate && $endDate >= $checkinDate && $foundZero === false) {
+                                                                                            // Hitung jumlah malam yang termasuk dalam rentang tanggal
+                                                                                            $nights = min($endDate, $checkoutDate)->diffInDays(max($startDate, $checkinDate));
+                                                                                            
+                                                                                            $day = min($endDate, $checkoutDate)->diffInDays(max($startDate, $checkinDate)) + 1;
+                                                                                            $gap = ($totalNights + 1) - $day;
+
+                                                                                            $TotalHotelCalendar1 += $calendar->recom_price;
+                                                                            
+                                                                                            if ($nights != $totalNights) {
+                                                                                                $countNights1 = $totalNights - $nights;
+                                                                                                $totalpricecalendar = $TotalHotelCalendar1 / $countNights1;
+                                                                                                if ($TotalHotelCalendar1 != $itemprice->recom_price) {
+                                                                                                    if ($nights == 0) {
+                                                                                                        $countNights = $totalNights - 1;
+                                                                                                        $TotalHotelCalendar = (($TotalHotelCalendar1 * 1) + ($itemprice->recom_price * $countNights)) / $totalNights;
+                                                                                                    } else {
+                                                                                                        if($gap <= 1){
+                                                                                                            $countNights = $totalNights - $day;
+                                                                                                            $TotalHotelCalendar = ($TotalHotelCalendar1 * $day) / $totalNights;
+                                                                                                        
+                                                                                                        }else{
+                                                                                                            $countNights = $totalNights - $day;
+                                                                                                            $TotalHotelCalendar = (($TotalHotelCalendar1 * $day) + ($itemprice->recom_price * $countNights)) / $totalNights;
+                                                                                                        
+                                                                                                        }
+                                                                                                       
+                                                                                                    }
+                                                                                                }
+                                                                                            } else if ($nights == $totalNights) {
+                                                                                                $TotalHotelCalendar = $calendar->recom_price;
+                                                                                            } 
+                                                                                            // var_dump($TotalHotelCalendar);
+                                                                            
+                                                                                            $status = $calendar->active;
+                                                                                            $room_allow = $calendar->room_allow;
+                                                                                            if ($room_allow == 0) {
+                                                                                                $status = 2;
+                                                                                            }
+                                                                                            $hotelroomid = $calendar->room_hotel_id;
+                                                                                        }
+                                                                            
+                                                                                        if ($checkoutDate == $endDate) {
+                                                                                            $no_checkout = $calendar->no_checkout;
+                                                                                        }
+                                                                            
+                                                                                        if ($checkinDate == $startDate) {
+                                                                                            $no_checkin = $calendar->no_checkin;
+                                                                                        }
+                                                                                    } else {
+                                                                                        if ($calendar->room_hotel_id == $itemprice->room_id) {
+                                                                                            $status = $calendar->active;
+                                                                            
+                                                                                            // Periksa apakah room_allow sama dengan 0 atau active sama dengan 0
+                                                                                            if ($calendar->room_allow === 0 || $calendar->active === 0) {
+                                                                                                $status = 0;
+                                                                                                $foundZero = true; // Setel foundZero menjadi true jika nilai 0 ditemukan
+                                                                                            } else {
+                                                                                                // Jika tidak, gunakan nilai room_allow dari $calendar
+                                                                                                $room_allow = $calendar->room_allow;
+                                                                                            }
+                                                                            
+                                                                                            $hotelroomid = $calendar->room_hotel_id;
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                            
+                                                                            // $Room_recomprice = ($TotalHotelCalendar <= 0) ? $itemprice->recom_price : $TotalHotelCalendar;
+                                                                            if ($TotalHotelCalendar <= 0) {
+                                                                                $Room_recomprice = $itemprice->recom_price;
+                                                                            } else {
+                                                                                if ($itemprice->recom_price == $TotalHotelCalendar) {
+                                                                                    $Room_recomprice = $totalpricecalendar;
+                                                                                } else {
+                                                                                    $Room_recomprice = $TotalHotelCalendar;
+                                                                                }
+                                                                            }
+                                                                            
+                                                                            // ========================================================= END CALENDAR ====================================
+                                                                            
+                                                                            // ========================================================= ROOM ALLOWMENT ====================================
+                                                                            $totalRoomBooking = 0; // Inisialisasi totalRoomBooking
+                                                                            
+                                                                            if ($foundZero) {
+                                                                                $room_allow = 0;
+                                                                            }
+                                                                            
+                                                                            // var_dump($no_checkout);
+                                                                            if ($status != 1 || $no_checkout != 0 || $no_checkin != 0) {
+                                                                                $totalRoomBooking = $itemprice->room->room_allow;
+                                                                            }
+                                                                            // if($no_checkout != 1) {
+                                                                            //     $totalRoomBooking = $itemprice->room->room_allow;
+                                                                            // }
+                                                                            
+                                                                            if ($HotelRoomBooking->count() != 0) {
+                                                                                foreach ($HotelRoomBooking as $key => $value) {
+                                                                                    if ($value->room_id == $itemprice->room_id) {
+                                                                                        $totalRoomBooking += $value->total_room;
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                            // Setel $RoomAllowment ke $itemprice->room->room_allow dikurangi total total_room yang sesuai
+                                                                            
+                                                                            $RoomAllowment = $itemprice->room->room_allow - $totalRoomBooking;
+                                                                            // var_dump($RoomAllowment);
+                                                                            
+                                                                            // ========================================================= ROOM ALLOWMENT ====================================
+                                                                            
+                                                                        @endphp
+                                                                        @php
+                                                                            // var_dump($Room_recomprice);
+                                                                            $price = $itemprice->recom_price;
+                                                                            if ($Room_recomprice) {
+                                                                                if ($itemprice->contractrate->rolerate == 1) {
+                                                                                    $price = $Room_recomprice;
+                                                                                } else {
+                                                                                    $price = $itemprice->recom_price;
+                                                                                }
+                                                                            }
+                                                                            
+                                                                            if ($advancepurchase->count() > 0) {
+                                                                                foreach ($advancepurchase as $advancevalue) {
+                                                                                    if ($advancevalue->contract_id == $itemprice->contract_id && $advancevalue->room_id == $itemprice->room_id && $advancevalue->room_id == $item->room->id) {
+                                                                                        if ($Room_recomprice != $itemprice->recom_price) {
+                                                                                            $price = ($advancevalue->price / $itemprice->recom_price) * $Room_recomprice;
+                                                                                        } else {
+                                                                                            $price = $advancevalue->price;
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            } else {
+                                                                                if ($itemprice->contractrate->rolerate == 1) {
+                                                                                    $price = $Room_recomprice;
+                                                                                } else {
+                                                                                    $price = $itemprice->recom_price;
+                                                                                }
                                                                             }
                                                                         @endphp
-                                                                        @if ($RoomAllowment <= 0)
-                                                                            <span class="badge badge-danger">Sold</span>
-                                                                        @else
-                                                                            @if ($Nights >= $itemprice->contractrate->min_stay)
-                                                                                <select class="form-control room-quantity" name="room_quantity" style="width:200px"
-                                                                                    onchange="calculateTotal()">
-                                                                                    <option data-price="0" value="0" data-pricenomarkup="0">
-                                                                                        0</option>
-                                                                                    @for ($i = 1; $i <= $RoomAllowment; $i++)
-                                                                                        <option data-contprice={{ $itemprice->id }}
-                                                                                            data-contractid={{ $itemprice->contract_id }}
-                                                                                            data-roomid={{ $itemprice->room->id }}
-                                                                                            data-price="{{ $i * ($price + $itemprice->contractrate->vendors->system_markup) }}"
-                                                                                            data-pricenomarkup="{{ $i * $price }}" value="{{ $i }}">{{ $i }}
-                                                                                            @if ($i == 1)
-                                                                                                room
-                                                                                            @else
-                                                                                                rooms
-                                                                                            @endif
-                                                                                        </option>
-                                                                                    @endfor
-                                                                                </select>
-                                                                            @endif
-                                                                        @endif
-                                                                    </div>
-                                                                </div>
-                                                            @endif
-                                                        @endforeach
+                                                                        {{-- <hr>
+                                                                <p style="font-size:20px;font-weight:700" class="m-0 p-0">{{$itemprice->contractrate->codedesc}}</p> --}}
+                                                                        <hr>
+                                                                        <div class="row justify-content-between">
+                                                                            <div class="col-lg">
+                                                                                <p>Min Stay :
+                                                                                    {{ $itemprice->contractrate->min_stay }}
+                                                                                    nights</p>
+                                                                            </div>
+                                                                            <div class="col-lg">
+                                                                                @foreach ($itemprice->contractrate->distribute as $distribute)
+                                                                                    <span
+                                                                                        class="badge badge-secondary mx-1">{{ $distribute }}</span>
+                                                                                @endforeach
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row justify-content-between">
+                                                                            <div class="col-lg">
+                                                                                <span class="price text-primary"
+                                                                                    style="font-weight: 600">Rp.
+                                                                                    {{ number_format($price + $itemprice->contractrate->vendors->system_markup, 0, ',', '.') }}
+                                                                                    / night
+                                                                                </span>
+                                                                                <p class="m-0">Benefits :</p>
+                                                                                <p>{!! $itemprice->contractrate->benefit_policy !!}</p>
+                                                                            </div>
+                                                                            <div class="col-lg">
+                                                                                @php
+                                                                                    if ($room_allow >= 0 && $hotelroomid == $itemprice->room_id) {
+                                                                                        $RoomAllowment = $room_allow;
+                                                                                    } else {
+                                                                                        $RoomAllowment = $RoomAllowment;
+                                                                                    }
+                                                                                @endphp
+                                                                                @if ($RoomAllowment <= 0)
+                                                                                    <span
+                                                                                        class="badge badge-danger">Sold</span>
+                                                                                @else
+                                                                                    @if ($Nights >= $itemprice->contractrate->min_stay)
+                                                                                        <select
+                                                                                            class="form-control room-quantity"
+                                                                                            name="room_quantity"
+                                                                                            style="width:200px"
+                                                                                            onchange="calculateTotal()">
+                                                                                            <option data-price="0"
+                                                                                                value="0"
+                                                                                                data-pricenomarkup="0">
+                                                                                                0</option>
+                                                                                            @for ($i = 1; $i <= $RoomAllowment; $i++)
+                                                                                                <option
+                                                                                                    data-contprice={{ $itemprice->id }}
+                                                                                                    data-contractid={{ $itemprice->contract_id }}
+                                                                                                    data-roomid={{ $itemprice->room->id }}
+                                                                                                    data-price="{{ $i * ($price + $itemprice->contractrate->vendors->system_markup) }}"
+                                                                                                    data-pricenomarkup="{{ $i * $price }}"
+                                                                                                    value="{{ $i }}">
+                                                                                                    {{ $i }}
+                                                                                                    @if ($i == 1)
+                                                                                                        room
+                                                                                                    @else
+                                                                                                        rooms
+                                                                                                    @endif
+                                                                                                </option>
+                                                                                            @endfor
+                                                                                        </select>
+                                                                                    @endif
+                                                                                @endif
+                                                                            </div>
+                                                                        </div>
+                                                                    @endif
+                                                                @endforeach
 
+                                                            </div>
                                                         </div>
-                                                      </div>
                                                     @endif
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="modal" id="exampleModal{{$key}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal" id="exampleModal{{ $key }}" tabindex="-1"
+                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                        <h5 class="modal-title font-weight-bold" id="exampleModalLabel">{{ $item->room->ratedesc }}</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="row">
-                                                <div class="col-lg-12 col-12">
-                                                    <div class="fotorama mb-3" data-nav="thumbs" data-loop="true">
-                                                        @foreach ($item->room->gallery as $key => $gallery)
-                                                                <img onerror="this.onerror=null; this.src='https://semantic-ui.com/images/wireframe/white-image.png';" src="{{$gallery}}" alt="{{$gallery}}" style="width:100%">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title font-weight-bold" id="exampleModalLabel">
+                                                    {{ $item->room->ratedesc }}</h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="row">
+                                                    <div class="col-lg-12 col-12">
+                                                        <div class="fotorama mb-3" data-nav="thumbs" data-loop="true">
+                                                            @foreach ($item->room->gallery as $key => $gallery)
+                                                                <img onerror="this.onerror=null; this.src='https://semantic-ui.com/images/wireframe/white-image.png';"
+                                                                    src="{{ $gallery }}" alt="{{ $gallery }}"
+                                                                    style="width:100%">
+                                                            @endforeach
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-12 col-12">
+                                                        <p class="font-weight-bold m-0">Room Amenities</p>
+                                                        @foreach ($item->room->attribute as $facilities)
+                                                            <span class="badge badge-success mr-2"> {{ $facilities }}
+                                                            </span>
                                                         @endforeach
-                                                      </div>
-                                                </div>
-                                                <div class="col-lg-12 col-12">
-                                                    <p class="font-weight-bold m-0">Room Amenities</p>
-                                                    @foreach ($item->room->attribute as $facilities)
-                                                    <span class="badge badge-success mr-2"> {{ $facilities }} </span>
-                                                    @endforeach
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        </div>
                                     </div>
-                                    </div>
+                                </div>
                             @endforeach
                         </div>
                         <div class="row">
@@ -536,19 +596,24 @@
 
                             <div class="row">
                                 <div class="col-lg-4">
-                                   <p style="font-size: 20px;
-                                   margin-bottom: 5px;">Hotel Policies</p>
+                                    <p style="font-size: 20px;
+                                   margin-bottom: 5px;">
+                                        Hotel Policies</p>
                                 </div>
                                 <div class="col-lg-8">
 
-                                    <p style="font-size: 15px;
+                                    <p
+                                        style="font-size: 15px;
                                     font-weight: 700;
-                                    margin-bottom: 5px;">Deposit</p>
-                                    {!!$data[0]->contractrate->deposit_policy!!}
-                                    <p style="font-size: 15px;
+                                    margin-bottom: 5px;">
+                                        Deposit</p>
+                                    {!! $data[0]->contractrate->deposit_policy !!}
+                                    <p
+                                        style="font-size: 15px;
                                     font-weight: 700;
-                                    margin-bottom: 5px;">Cancellation</p>
-                                    {!!$data[0]->contractrate->cencellation_policy!!}
+                                    margin-bottom: 5px;">
+                                        Cancellation</p>
+                                    {!! $data[0]->contractrate->cencellation_policy !!}
                                 </div>
                             </div>
                         </div>
@@ -965,7 +1030,7 @@
     <script>
         $('input[name="dates"]').daterangepicker();
 
-            // Tambahkan event listener untuk deteksi klik tombol "Apply"
+        // Tambahkan event listener untuk deteksi klik tombol "Apply"
         $('input[name="dates"]').on('apply.daterangepicker', function(ev, picker) {
             // Mengambil tanggal checkin dan checkout dari Date Range Picker
             const checkin = picker.startDate.format('YYYY-MM-DD');
@@ -1014,99 +1079,102 @@
             }
         }
 
-                /* Gaya untuk input tanggal */
+        /* Gaya untuk input tanggal */
         .date-input-wrapper input[type="date"] {
             /* Menghilangkan tombol kalender */
             appearance: none;
             -webkit-appearance: none;
             -moz-appearance: none;
-            cursor: pointer; /* Mengubah kursor menjadi tangan saat mengarah ke input */
+            cursor: pointer;
+            /* Mengubah kursor menjadi tangan saat mengarah ke input */
         }
 
         /* Gaya saat input tanggal dalam keadaan fokus */
         .date-input-wrapper input[type="date"]:focus {
-            outline: none; /* Menghilangkan garis pinggir saat fokus */
-            border: 1px solid #ced4da; /* Menambahkan garis tepi */
+            outline: none;
+            /* Menghilangkan garis pinggir saat fokus */
+            border: 1px solid #ced4da;
+            /* Menambahkan garis tepi */
             /* Anda dapat menyesuaikan gaya lain sesuai kebutuhan */
         }
 
         /* Hide the images by default */
-.mySlides {
-  display: none;
-}
+        .mySlides {
+            display: none;
+        }
 
-/* Add a pointer when hovering over the thumbnail images */
-.cursor {
-  cursor: pointer;
-}
+        /* Add a pointer when hovering over the thumbnail images */
+        .cursor {
+            cursor: pointer;
+        }
 
-/* Next & previous buttons */
-.prev,
-.next {
-  cursor: pointer;
-  position: absolute;
-  top: 40%;
-  width: auto;
-  padding: 16px;
-  margin-top: -50px;
-  color: white;
-  font-weight: bold;
-  font-size: 20px;
-  border-radius: 0 3px 3px 0;
-  user-select: none;
-  -webkit-user-select: none;
-}
+        /* Next & previous buttons */
+        .prev,
+        .next {
+            cursor: pointer;
+            position: absolute;
+            top: 40%;
+            width: auto;
+            padding: 16px;
+            margin-top: -50px;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            border-radius: 0 3px 3px 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
 
-/* Position the "next button" to the right */
-.next {
-  right: 0;
-  border-radius: 3px 0 0 3px;
-}
+        /* Position the "next button" to the right */
+        .next {
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
 
-/* On hover, add a black background color with a little bit see-through */
-.prev:hover,
-.next:hover {
-  background-color: rgba(0, 0, 0, 0.8);
-}
+        /* On hover, add a black background color with a little bit see-through */
+        .prev:hover,
+        .next:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
 
-/* Number text (1/3 etc) */
-.numbertext {
-  color: #f2f2f2;
-  font-size: 12px;
-  padding: 8px 12px;
-  position: absolute;
-  top: 0;
-}
+        /* Number text (1/3 etc) */
+        .numbertext {
+            color: #f2f2f2;
+            font-size: 12px;
+            padding: 8px 12px;
+            position: absolute;
+            top: 0;
+        }
 
-/* Container for image text */
-.caption-container {
-  text-align: center;
-  background-color: #222;
-  padding: 2px 16px;
-  color: white;
-}
+        /* Container for image text */
+        .caption-container {
+            text-align: center;
+            background-color: #222;
+            padding: 2px 16px;
+            color: white;
+        }
 
-.row:after {
-  content: "";
-  display: table;
-  clear: both;
-}
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
 
-/* Six columns side by side */
-.column {
-  float: left;
-  width: 16.66%;
-}
+        /* Six columns side by side */
+        .column {
+            float: left;
+            width: 16.66%;
+        }
 
-/* Add a transparency effect for thumnbail images */
-.demo {
-  opacity: 0.6;
-}
+        /* Add a transparency effect for thumnbail images */
+        .demo {
+            opacity: 0.6;
+        }
 
-.active,
-.demo:hover {
-  opacity: 1;
-}
+        .active,
+        .demo:hover {
+            opacity: 1;
+        }
     </style>
 
 @endsection

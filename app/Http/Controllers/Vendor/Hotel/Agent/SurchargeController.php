@@ -203,6 +203,7 @@ class SurchargeController extends Controller
             $previousSurcharge = HotelRoomSurcharge::where('vendor_id', $request->vendor_id)
                 ->where('room_hotel_id', $request->room_hotel_id)
                 ->where('recom_price', $request->price)
+                ->where('room_allow', $request->room_allow)
                 ->orderBy('end_date', 'desc')
                 ->first();
 
@@ -224,14 +225,16 @@ class SurchargeController extends Controller
             $newSurcharge->start_date = $start_date;
             $newSurcharge->end_date = $end_date;
             $newSurcharge->recom_price = $request->price;
-            $newSurcharge->active = $request->active;
+            // $newSurcharge->active = $request->active;
             $newSurcharge->no_checkin = $request->nocheckin;
             $newSurcharge->no_checkout = $request->nocheckout;
 
             if ($request->room_allow == null || $request->room_allow == 0) {
                 $newSurcharge->room_allow = 0;
+                $newSurcharge->active = 0;
             } else {
                 $newSurcharge->room_allow = $request->room_allow;
+                $newSurcharge->active = 1;
             }
 
             $newSurcharge->save();
@@ -281,8 +284,10 @@ class SurchargeController extends Controller
             $hotel_room_surcharge->no_checkout = $request->nocheckout;
             if ($request->room_allow == null || $request->room_allow == 0) {
                 $hotel_room_surcharge->room_allow = 0;
+                $hotel_room_surcharge->active = 0;
             } else {
                 $hotel_room_surcharge->room_allow = $request->room_allow;
+                $hotel_room_surcharge->active = 1;
             }
             $hotel_room_surcharge->save();
         }
@@ -356,8 +361,17 @@ class SurchargeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($vendorid,$roomid,$startdate)
     {
-        //
+        $hotel_room_surcharge = HotelRoomSurcharge::query()->where('vendor_id', $vendorid)
+            ->where('room_hotel_id', $roomid)
+            ->where('start_date', $startdate)
+            ->first();
+        if($hotel_room_surcharge){
+                $hotel_room_surcharge->delete();
+        }
+       
+
+        return redirect()->back()->with('success', 'rate deleted');
     }
 }
