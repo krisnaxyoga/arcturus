@@ -283,6 +283,7 @@
                                                                                         $startDate = Carbon::parse($calendar->start_date);
                                                                                         $endDate = Carbon::parse($calendar->end_date);
                                                                             
+                                                                                        
                                                                                         if ($calendar->room_allow === 0 || $calendar->active === 0) {
                                                                                                 $status = 0;
                                                                                                 $foundZero = true; // Setel foundZero menjadi true jika nilai 0 ditemukan
@@ -329,6 +330,8 @@
                                                                             
                                                                                             $status = $calendar->active;
                                                                                             $room_allow = $calendar->room_allow;
+                                                                                            
+                                                                                            // var_dump($room_allow);
                                                                                             if ($room_allow == 0) {
                                                                                                 $status = 2;
                                                                                             }
@@ -345,7 +348,6 @@
                                                                                     } else {
                                                                                         if ($calendar->room_hotel_id == $itemprice->room_id) {
                                                                                             $status = $calendar->active;
-                                                                            
                                                                                             // Periksa apakah room_allow sama dengan 0 atau active sama dengan 0
                                                                                             if ($calendar->room_allow === 0 || $calendar->active === 0) {
                                                                                                 $status = 0;
