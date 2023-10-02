@@ -393,15 +393,15 @@ class HomeController extends Controller
         
                 $q->where(function ($qq) use ($checkinDate, $checkoutDate) {
                     $qq->whereRaw('DATE(start_date) >= ?', [$checkinDate])
-                        ->whereRaw('DATE(start_date) < ?', [$checkoutDate]);
+                        ->whereRaw('DATE(start_date) <= ?', [$checkoutDate]);
                 })
                 ->orWhere(function ($qq) use ($checkinDate, $checkoutDate) {
-                    $qq->whereRaw('DATE(end_date) > ?', [$checkinDate])
+                    $qq->whereRaw('DATE(end_date) >= ?', [$checkinDate])
                         ->whereRaw('DATE(end_date) <= ?', [$checkoutDate]);
                 })
                 ->orWhere(function ($qq) use ($checkinDate, $checkoutDate) {
                     $qq->whereRaw('DATE(start_date) <= ?', [$checkinDate])
-                        ->whereRaw('DATE(end_date) >= ?', [$checkoutDate]);
+                        ->whereRaw('DATE(end_date) >= ?', [date('Y-m-d', strtotime($checkoutDate . ' +1 day'))]);
                 });
             })
             ->get();

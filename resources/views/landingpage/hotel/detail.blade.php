@@ -171,7 +171,9 @@
                         </div>
 
                         <div class="row">
-                            @foreach ($data as $key => $item)
+                            @foreach ($data as $keyup => $item)
+                            
+                            
                                 {{-- {{ $TotalHotelCalendar1 }} {{ $TotalHotelCalendar }} {{$item->recom_price}} --}}
                                 <div class="col-md-12 ftco-animate">
                                     <div class="card mb-3">
@@ -189,7 +191,7 @@
                                                         <button
                                                             class="btn font-weight-bold font-weight-bold p-0 text-primary"
                                                             style="font-size: 20px" type="button" data-toggle="modal"
-                                                            data-target="#exampleModal{{ $key }}">{{ $item->room->ratedesc }}</button>
+                                                            data-target="#exampleModalx1234{{ $keyup }}">{{ $item->room->ratedesc }}</button>
                                                     </h3>
                                                     {{-- <span class="price">Rp. {{ number_format(($Room_recomprice + $item->contractrate->vendors->system_markup + $surcharprice), 0, ',', '.')}}</span> --}}
                                                     {{-- surcharge : {{$surchargesVendorIds}} blackout : {{$blackoutVendorIds}} vendorid :{{$item->contractrate->vendor_id}} --}}
@@ -249,16 +251,17 @@
                                                     @if ($contractprice->count() != 0)
                                                         <a class="text-primary" style="font-weight:500;font-size:14px"
                                                             data-toggle="collapse"
-                                                            href="#collapseExample{{ $key }}" role="button"
+                                                            href="#collapseExample{{ $keyup }}" role="button"
                                                             aria-expanded="false" aria-controls="collapseExample">
                                                             View Rates:
                                                         </a>
-                                                        <div class="collapse" id="collapseExample{{ $key }}">
+                                                        <div class="collapse" id="collapseExample{{ $keyup }}">
                                                             <div>
 
                                                                 @foreach ($contractprice as $itemprice)
                                                                     @if ($itemprice->room_id == $item->room->id)
-                                                                        @php
+                                                                            @php
+                                                                            // var_dump('item recom price ='.$item->recom_price.'');
                                                                             // ========================================================= START CALENDAR ====================================
                                                                             
                                                                             $status = 1;
@@ -273,13 +276,14 @@
                                                                             $totalpricecalendar = 0;
                                                                             $foundZero = false;
                                                                             $totalNights = $checkinDate->diffInDays($checkoutDate);
+                                                                            $recomprice = $itemprice->recom_price;
                                                                             // var_dump($totalNights);
                                                                             if ($HotelCalendar->count() != 0) {
                                                                                 foreach ($HotelCalendar as $key => $calendar) {
                                                                                     
-                                                                                    // var_dump($calendar->room_hotel_id,$item->room_id);
+                                                                                    // var_dump($calendar->room_hotel_id,$itemprice->room_id);
                                                                                     if ($calendar->room_hotel_id == $itemprice->room_id && $calendar->active == 1) {
-
+                                                
                                                                                         $startDate = Carbon::parse($calendar->start_date);
                                                                                         $endDate = Carbon::parse($calendar->end_date);
                                                                             
@@ -300,9 +304,11 @@
                                                                                             
                                                                                             $day = min($endDate, $checkoutDate)->diffInDays(max($startDate, $checkinDate)) + 1;
                                                                                             $gap = ($totalNights + 1) - $day;
-
+                                                
                                                                                             $TotalHotelCalendar1 += $calendar->recom_price;
                                                                             
+                                                                                            // var_dump($itemprice->recom_price);
+                                                                                            
                                                                                             if ($nights != $totalNights) {
                                                                                                 $countNights1 = $totalNights - $nights;
                                                                                                 $totalpricecalendar = $TotalHotelCalendar1 / $countNights1;
@@ -312,15 +318,22 @@
                                                                                                         $TotalHotelCalendar = (($TotalHotelCalendar1 * 1) + ($itemprice->recom_price * $countNights)) / $totalNights;
                                                                                                     } else {
                                                                                                         if($gap <= 1){
-                                                                                                            $countNights = $totalNights - $day;
-                                                                                                            $TotalHotelCalendar = ($TotalHotelCalendar1 * $day) / $totalNights;
-                                                                                                        
+                                                                                                            $countNights = $totalNights - $nights;
+                                                                                                            $TotalHotelCalendar = (($TotalHotelCalendar1 * $nights) + ($recomprice * $countNights)) / $totalNights;
+                                                                                                            var_dump('gap - price ='.$TotalHotelCalendar);
                                                                                                         }else{
-                                                                                                            $countNights = $totalNights - $day;
-                                                                                                            $TotalHotelCalendar = (($TotalHotelCalendar1 * $day) + ($itemprice->recom_price * $countNights)) / $totalNights;
-                                                                                                        
+                                                                                                            // var_dump($calendar->end_date);
+                                                                                                            if($endDate == $checkoutDate){
+                                                                                                                $countNights = $totalNights - $day;
+                                                                                                                $TotalHotelCalendar = (($TotalHotelCalendar1 * $day) + ($itemprice->recom_price * $countNights)) / $totalNights;
+                                                                                                                var_dump('no gap enddate checkoutdate price  = '.$TotalHotelCalendar.'');
+                                                                                                            }else{
+                                                                                                                $countNights = $totalNights - $nights;
+                                                                                                                $TotalHotelCalendar = (($TotalHotelCalendar1 * $nights) + ($itemprice->recom_price * $countNights)) / $totalNights;
+                                                                                                                var_dump('no gap hight price = '.$TotalHotelCalendar.'');
+                                                                                                            }
                                                                                                         }
-                                                                                                       
+                                                                                                    
                                                                                                     }
                                                                                                 }
                                                                                             } else if ($nights == $totalNights) {
@@ -351,7 +364,12 @@
                                                                                             // Periksa apakah room_allow sama dengan 0 atau active sama dengan 0
                                                                                             if ($calendar->room_allow === 0 || $calendar->active === 0) {
                                                                                                 $status = 0;
-                                                                                                $foundZero = true; // Setel foundZero menjadi true jika nilai 0 ditemukan
+                                                                                                $endDate1 = Carbon::parse($calendar->end_date);
+                                                                                                if($calendar->start_date == $calendar->end_date && $calendar->room_allow === 0 && $calendar->active === 0 && $endDate1 == $checkoutDate){
+                                                                                                    $room_allow = $itemprice->room->room_allow;
+                                                                                                }else{
+                                                                                                    $foundZero = true; // Setel foundZero menjadi true jika nilai 0 ditemukan
+                                                                                                }
                                                                                             } else {
                                                                                                 // Jika tidak, gunakan nilai room_allow dari $calendar
                                                                                                 $room_allow = $calendar->room_allow;
@@ -515,12 +533,12 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="modal" id="exampleModal{{ $key }}" tabindex="-1"
-                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal" id="exampleModalx1234{{ $keyup }}" tabindex="-1"
+                                    aria-labelledby="exampleModalx1234Label" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title font-weight-bold" id="exampleModalLabel">
+                                                <h5 class="modal-title font-weight-bold" id="exampleModalx1234Label">
                                                     {{ $item->room->ratedesc }}</h5>
                                                 <button type="button" class="close" data-dismiss="modal"
                                                     aria-label="Close">
