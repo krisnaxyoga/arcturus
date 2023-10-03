@@ -290,7 +290,11 @@
                                                                                         
                                                                                         if ($calendar->room_allow === 0 || $calendar->active === 0) {
                                                                                                 $status = 0;
-                                                                                                $foundZero = true; // Setel foundZero menjadi true jika nilai 0 ditemukan
+                                                                                                if($calendar->start_date == $calendar->end_date && $calendar->room_allow === 0 && $calendar->active === 0 && $endDate == $checkoutDate){
+                                                                                                    $room_allow = $itemprice->room->room_allow;
+                                                                                                }else{
+                                                                                                    $foundZero = true; // Setel foundZero menjadi true jika nilai 0 ditemukan
+                                                                                                }
                                                                                             } else {
                                                                                                 // Jika tidak, gunakan nilai room_allow dari $calendar
                                                                                                 $room_allow = $calendar->room_allow;
@@ -300,12 +304,24 @@
                                                                                         // Check apakah rentang tanggal kalender tumpang tindih dengan rentang check-in dan check-out
                                                                                         if ($startDate < $checkoutDate && $endDate >= $checkinDate && $foundZero === false) {
                                                                                             // Hitung jumlah malam yang termasuk dalam rentang tanggal
-                                                                                            $nights = min($endDate, $checkoutDate)->diffInDays(max($startDate, $checkinDate));
+                                                                                            if ($checkoutDate > $endDate) {
+                                                                                                $nights = min($endDate, $checkoutDate)->diffInDays(max($startDate, $checkinDate)) + 1;
+                                                                                                // var_dump('melebihi malam di kalender night = '.$nights.' cek ='.$HotelCalendar->count());
+                                                                                            }else{
+                                                                                                $nights = min($endDate, $checkoutDate)->diffInDays(max($startDate, $checkinDate));
+                                                                                                // var_dump('kurang dari malam di kalender night = '.$nights);
+                                                                                            }
+                                                                                            
                                                                                             
                                                                                             $day = min($endDate, $checkoutDate)->diffInDays(max($startDate, $checkinDate)) + 1;
                                                                                             $gap = ($totalNights + 1) - $day;
                                                 
-                                                                                            $TotalHotelCalendar1 += $calendar->recom_price;
+                                                                                            if($itemprice->contractrate->rolerate == 2){
+                                                                                               $TotalHotelCalendar1 += $calendar->recom_price * ((100 - $itemprice->contractrate->percentage)/100);
+                                                                                            }else{
+                                                                                               $TotalHotelCalendar1 += $calendar->recom_price; 
+                                                                                            }
+                                                                                            
                                                                             
                                                                                             // var_dump($itemprice->recom_price);
                                                                                             
@@ -320,17 +336,17 @@
                                                                                                         if($gap <= 1){
                                                                                                             $countNights = $totalNights - $nights;
                                                                                                             $TotalHotelCalendar = (($TotalHotelCalendar1 * $nights) + ($recomprice * $countNights)) / $totalNights;
-                                                                                                            var_dump('gap - price ='.$TotalHotelCalendar);
+                                                                                                            // var_dump('gap - price ='.$TotalHotelCalendar.' gap ='.$gap);
                                                                                                         }else{
                                                                                                             // var_dump($calendar->end_date);
                                                                                                             if($endDate == $checkoutDate){
-                                                                                                                $countNights = $totalNights - $day;
-                                                                                                                $TotalHotelCalendar = (($TotalHotelCalendar1 * $day) + ($itemprice->recom_price * $countNights)) / $totalNights;
-                                                                                                                var_dump('no gap enddate checkoutdate price  = '.$TotalHotelCalendar.'');
+                                                                                                                $countNights = $totalNights - $nights;
+                                                                                                                $TotalHotelCalendar = (($TotalHotelCalendar1 * $nights) + ($itemprice->recom_price * $countNights)) / $totalNights;
+                                                                                                                // var_dump('no gap enddate checkoutdate price  = '.$TotalHotelCalendar.'');
                                                                                                             }else{
                                                                                                                 $countNights = $totalNights - $nights;
                                                                                                                 $TotalHotelCalendar = (($TotalHotelCalendar1 * $nights) + ($itemprice->recom_price * $countNights)) / $totalNights;
-                                                                                                                var_dump('no gap hight price = '.$TotalHotelCalendar.'');
+                                                                                                                // var_dump('no gap hight price = '.$countNights.' cek = '.$TotalHotelCalendar);
                                                                                                             }
                                                                                                         }
                                                                                                     
@@ -350,6 +366,10 @@
                                                                                             }
                                                                                             $hotelroomid = $calendar->room_hotel_id;
                                                                                         }
+                                                                                        // else{
+                                                                                        //     // $total = sum($calendar->recom_price);
+                                                                                        //     var_dump('calender sama nilai dari rate ='.$calendar->recom_price.' total calendar = ');
+                                                                                        // }
                                                                             
                                                                                         if ($checkoutDate == $endDate) {
                                                                                             $no_checkout = $calendar->no_checkout;
@@ -381,14 +401,26 @@
                                                                                 }
                                                                             }
                                                                             
+                                                                            
+
                                                                             // $Room_recomprice = ($TotalHotelCalendar <= 0) ? $itemprice->recom_price : $TotalHotelCalendar;
                                                                             if ($TotalHotelCalendar <= 0) {
                                                                                 $Room_recomprice = $itemprice->recom_price;
                                                                             } else {
                                                                                 if ($itemprice->recom_price == $TotalHotelCalendar) {
-                                                                                    $Room_recomprice = $totalpricecalendar;
+                                                                                    if($itemprice->contractrate->rolerate == 2){
+                                                                                        $Room_recomprice = $totalpricecalendar * ((100 - $itemprice->contractrate->percentage)/100);
+                                                                                    }else{
+                                                                                        $Room_recomprice = $totalpricecalendar; 
+                                                                                    }
+                                                                                    // $Room_recomprice = $totalpricecalendar;
                                                                                 } else {
-                                                                                    $Room_recomprice = $TotalHotelCalendar;
+                                                                                    if($itemprice->contractrate->rolerate == 2){
+                                                                                        $Room_recomprice = $TotalHotelCalendar * ((100 - $itemprice->contractrate->percentage)/100);
+                                                                                    }else{
+                                                                                        $Room_recomprice = $TotalHotelCalendar; 
+                                                                                    }
+                                                                                    // $Room_recomprice = $TotalHotelCalendar;
                                                                                 }
                                                                             }
                                                                             
@@ -428,11 +460,11 @@
                                                                             // var_dump($Room_recomprice);
                                                                             $price = $itemprice->recom_price;
                                                                             if ($Room_recomprice) {
-                                                                                if ($itemprice->contractrate->rolerate == 1) {
+                                                                                // if ($itemprice->contractrate->rolerate == 1) {
                                                                                     $price = $Room_recomprice;
-                                                                                } else {
-                                                                                    $price = $itemprice->recom_price;
-                                                                                }
+                                                                                // } else {
+                                                                                //     $price = $itemprice->recom_price;
+                                                                                // }
                                                                             }
                                                                             
                                                                             if ($advancepurchase->count() > 0) {
@@ -446,11 +478,11 @@
                                                                                     }
                                                                                 }
                                                                             } else {
-                                                                                if ($itemprice->contractrate->rolerate == 1) {
+                                                                                // if ($itemprice->contractrate->rolerate == 1) {
                                                                                     $price = $Room_recomprice;
-                                                                                } else {
-                                                                                    $price = $itemprice->recom_price;
-                                                                                }
+                                                                                // } else {
+                                                                                //     $price = $itemprice->recom_price;
+                                                                                // }
                                                                             }
                                                                         @endphp
                                                                         {{-- <hr>
