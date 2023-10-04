@@ -288,11 +288,11 @@
                                                                                         $endDate = Carbon::parse($calendar->end_date);
                                                                             
                                                                                         
-                                                                                        if ($calendar->room_allow === 0 || $calendar->active === 0) {
+                                                                                        if ($calendar->room_allow == 0 || $calendar->active == 0) {
                                                                                                 $status = 0;
-                                                                                                if($calendar->start_date == $calendar->end_date && $calendar->room_allow === 0 && $calendar->active === 0 && $endDate == $checkoutDate){
+                                                                                                if($calendar->start_date == $calendar->end_date && $calendar->room_allow == 0 && $calendar->active == 0 && $endDate == $checkoutDate){
                                                                                                     $room_allow = $itemprice->room->room_allow;
-                                                                                                }elseif ($checkoutDate == $calendar->start_date && $calendar->room_allow === 0) {
+                                                                                                }elseif ($checkoutDate == $calendar->start_date && $calendar->room_allow == 0) {
                                                                                                     // var_dump('signatur laggon = ');
                                                                                                     $room_allow = $itemprice->room->room_allow;
                                                                                                 }else{
@@ -305,7 +305,7 @@
                                                                             
                                                                                         // var_dump($checkoutDate);
                                                                                         // Check apakah rentang tanggal kalender tumpang tindih dengan rentang check-in dan check-out
-                                                                                        if ($startDate < $checkoutDate && $endDate >= $checkinDate && $foundZero === false) {
+                                                                                        if ($startDate < $checkoutDate && $endDate >= $checkinDate && $foundZero == false && $startDate != $endDate) {
                                                                                             // Hitung jumlah malam yang termasuk dalam rentang tanggal
                                                                                             if ($checkoutDate > $endDate) {
                                                                                                 $nights = min($endDate, $checkoutDate)->diffInDays(max($startDate, $checkinDate)) + 1;
@@ -369,10 +369,12 @@
                                                                                             }
                                                                                             $hotelroomid = $calendar->room_hotel_id;
                                                                                         }
-                                                                                        // else{
-                                                                                        //     // $total = sum($calendar->recom_price);
-                                                                                        //     var_dump('calender sama nilai dari rate ='.$calendar->recom_price.' total calendar = ');
-                                                                                        // }
+                                                                                        else{
+                                                                                            $totalx = 0;
+                                                                                            $totalx += $calendar->recom_price;
+                                                                                            
+                                                                                            var_dump('calender sama nilai dari rate ='.$calendar->recom_price.' total calendar = '.$totalx);
+                                                                                        }
                                                                             
                                                                                         if ($checkoutDate == $endDate) {
                                                                                             $no_checkout = $calendar->no_checkout;
@@ -386,13 +388,13 @@
                                                                                             $status = $calendar->active; 
                                                                                            
                                                                                             // Periksa apakah room_allow sama dengan 0 atau active sama dengan 0
-                                                                                            if ($calendar->room_allow === 0 || $calendar->active === 0) {
+                                                                                            if ($calendar->room_allow == 0 || $calendar->active == 0) {
                                                                                                 $status = 0;
-                                                                                                // var_dump('ini berfungsi = '.$calendar->room_allow);
+                                                                                                // var_dump('ini berfungsi = ');
                                                                                                 $endDate1 = Carbon::parse($calendar->end_date);
-                                                                                                if($calendar->start_date == $calendar->end_date && $calendar->room_allow === 0 && $calendar->active === 0 && $endDate1 == $checkoutDate){
+                                                                                                if($calendar->start_date == $calendar->end_date && $calendar->room_allow == 0 && $calendar->active == 0 && $endDate1 == $checkoutDate){
                                                                                                     $room_allow = $itemprice->room->room_allow;
-                                                                                                }elseif ($checkoutDate == $calendar->start_date && $calendar->room_allow === 0) {
+                                                                                                }elseif ($checkoutDate == $calendar->start_date && $calendar->room_allow == 0) {
                                                                                                     $room_allow = $itemprice->room->room_allow;
                                                                                                 } else{
                                                                                                     $foundZero = true; // Setel foundZero menjadi true jika nilai 0 ditemukan
