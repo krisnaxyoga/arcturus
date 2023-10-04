@@ -292,6 +292,9 @@
                                                                                                 $status = 0;
                                                                                                 if($calendar->start_date == $calendar->end_date && $calendar->room_allow === 0 && $calendar->active === 0 && $endDate == $checkoutDate){
                                                                                                     $room_allow = $itemprice->room->room_allow;
+                                                                                                }elseif ($checkoutDate == $calendar->start_date && $calendar->room_allow === 0) {
+                                                                                                    // var_dump('signatur laggon = ');
+                                                                                                    $room_allow = $itemprice->room->room_allow;
                                                                                                 }else{
                                                                                                     $foundZero = true; // Setel foundZero menjadi true jika nilai 0 ditemukan
                                                                                                 }
@@ -380,14 +383,18 @@
                                                                                         }
                                                                                     } else {
                                                                                         if ($calendar->room_hotel_id == $itemprice->room_id) {
-                                                                                            $status = $calendar->active;
+                                                                                            $status = $calendar->active; 
+                                                                                           
                                                                                             // Periksa apakah room_allow sama dengan 0 atau active sama dengan 0
                                                                                             if ($calendar->room_allow === 0 || $calendar->active === 0) {
                                                                                                 $status = 0;
+                                                                                                // var_dump('ini berfungsi = '.$calendar->room_allow);
                                                                                                 $endDate1 = Carbon::parse($calendar->end_date);
                                                                                                 if($calendar->start_date == $calendar->end_date && $calendar->room_allow === 0 && $calendar->active === 0 && $endDate1 == $checkoutDate){
                                                                                                     $room_allow = $itemprice->room->room_allow;
-                                                                                                }else{
+                                                                                                }elseif ($checkoutDate == $calendar->start_date && $calendar->room_allow === 0) {
+                                                                                                    $room_allow = $itemprice->room->room_allow;
+                                                                                                } else{
                                                                                                     $foundZero = true; // Setel foundZero menjadi true jika nilai 0 ditemukan
                                                                                                 }
                                                                                             } else {
