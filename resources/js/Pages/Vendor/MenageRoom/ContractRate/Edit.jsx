@@ -49,6 +49,20 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
     const [price, setPrice] = useState('');
     const [beginselladvance, setBeginselladvance] = useState('');
     const [endselladvance, setEndselladvance] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        // Anda dapat menambahkan logika tambahan jika diperlukan
+        // Contoh: Memuat data dari server
+
+        // Misalnya, ini adalah simulasi pengambilan data yang memakan waktu
+        setTimeout(() => {
+            setIsLoading(false); // Langkah 2: Setel isLoading menjadi false setelah halaman selesai dimuat
+        }, 900); // Menggunakan setTimeout untuk simulasi saja (2 detik).
+
+        // Jika Anda ingin melakukan pengambilan data dari server, Anda dapat melakukannya di sini dan kemudian mengatur isLoading menjadi false setelah data berhasil dimuat.
+    }, []); // Kosongkan array dependencies untuk menjalankan efek ini hanya sekali saat komponen dimuat.
+
 
     const handleDayChange = (e, beginsell, endsell, day) => {
         const inputDay = parseInt(e.target.value, 10);
@@ -73,7 +87,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
         friday: false,
         saturday: false,
     });
-
+// console.log(contpriceone,"one");
     // const [checkboxItems, setCheckboxItems] = useState(contract.pick_day.map((item) => ({ label: item, checked: false })));
 
 
@@ -150,13 +164,9 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
 
         setSellingPrice(sellprice)
 
-
-        setShowModal(true);
+        setShowModal(true)
     };
 
-    const buttonSendValuemarkup = () => {
-        setShowModalMarkup(true);
-    };
 
     const handleCloseModal = () => {
         setShowModal(false);
@@ -164,10 +174,6 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
 
     const handleCloseModalAdvance = () => {
         setShowModalAdvance(false);
-    };
-
-    const handleCloseModalMarkup = () => {
-        setShowModalMarkup(false);
     };
 
 
@@ -189,9 +195,6 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
         });
     };
 
-    console.log(checkboxes, ">>>>>>>>>>>> ISI ARRAY SEKARANG>>>>>>>>>>>>>")
-
-
     const handleRateMinChange = (e) => {
         const value = e.target.value;
 
@@ -204,10 +207,8 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
         }
 
         setMinPrice(value)
-
-
-
     }
+
     const handleCheckboxChangeAll = (event) => {
         const { checked } = event.target;
         if (checked) {
@@ -247,9 +248,11 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
         setBenefitPolicy(editor.getData());
     };
 
-console.log(contpriceone,">>>PERCENTONE")
     const storePost = async (e) => {
         e.preventDefault();
+
+        
+        setIsLoading(true);
 
         const formData = new FormData();
 
@@ -281,17 +284,20 @@ console.log(contpriceone,">>>PERCENTONE")
         Inertia.post(`/room/contract/update/${contract.id}`, formData, {
             onSuccess: () => {
                 // Lakukan aksi setelah gambar berhasil diunggah
+                setIsLoading(false);
             },
         });
     }
 
     const storeAdvance = async (e,itemId,itemDay) => {
         e.preventDefault();
+
         const formData = new FormData();
 
         formData.append('day', day ? day : itemDay);
         // formData.append('beginsell',beginselladvance ? beginselladvance : itemBeginsell);
         // formData.append('endsell',endselladvance ? endselladvance : itemEndsell);
+        setIsLoading(true);
 
         Inertia.post(`/contract/advancepurchase/${itemId}`, formData, {
             onSuccess: () => {
@@ -303,6 +309,16 @@ console.log(contpriceone,">>>PERCENTONE")
     return (
         <>
             <Layout page='/room/contract/index' vendor={vendor}>
+            {isLoading ? (
+                <div className="container">
+                    <div className="loading-container">
+                        <div className="loading-spinner"></div>
+                        <div className="loading-text">Loading...</div>
+                    </div>
+                </div>// Langkah 3: Tampilkan pesan "Loading..." saat isLoading true
+            ) : (
+                // Tampilan halaman Anda yang sebenarnya
+                <>
                 <div className="container">
                     <div className="row">
                         <h1>Contract Rate</h1>
@@ -414,8 +430,6 @@ console.log(contpriceone,">>>PERCENTONE")
                                                                                 % discount of contract rate
                                                                                 </>
                                                                                )}
-
-
                                                                             </p>
                                                                             </div>
                                                                         </div>
@@ -426,7 +440,7 @@ console.log(contpriceone,">>>PERCENTONE")
                                                                         {contract.rolerate == 1 ? (
                                                                                             <>
                                                                                              <label style={{ marginTop:'2rem' }} htmlFor="">Market</label>
-                                                                                            <input type="text" value={'all'} className='form-control' readOnly/>
+                                                                                            <input type="text" value={'WORLDWIDE'} className='form-control' readOnly/>
                                                                                             </>
                                                                                         ):(
                                                                                             <>
@@ -438,7 +452,7 @@ console.log(contpriceone,">>>PERCENTONE")
                                                                                                     onChange={handleSelectDistribute}
                                                                                                     multiple
                                                                                                 >
-                                                                                                    <option value="all">all</option>
+                                                                                                    <option value="WORLDWIDE">WORLDWIDE</option>
                                                                                                     {Object.keys(country).map((key) => (
                                                                                                     <option key={key} value={country[key]}>
                                                                                                         {country[key]}
@@ -463,12 +477,12 @@ console.log(contpriceone,">>>PERCENTONE")
 
                                                                             </div>
 
-                                                                        <label htmlFor="pickdays" className='fw-bold'>Pick valid day</label>
+                                                                        {/* <label htmlFor="pickdays" className='fw-bold'>Pick valid day</label>
                                                                         <label className="form-label mx-5">
                                                                                 <input
                                                                                     type="checkbox"
                                                                                     className='form-check-input'
-                                                                                    name="all"
+                                                                                    name="WORLDWIDE"
                                                                                     checked={Object.values(checkboxes).every(val => val)}
                                                                                     onChange={handleCheckboxChangeAll}
                                                                                 />
@@ -546,7 +560,7 @@ console.log(contpriceone,">>>PERCENTONE")
                                                                                 Sat
                                                                             </label>
 
-                                                                        </div>
+                                                                        </div> */}
 
                                                                         {/* <div className="mb-3">
                                                                             <label htmlFor="">exclude</label>
@@ -657,10 +671,9 @@ console.log(contpriceone,">>>PERCENTONE")
                                                                                     {contractprice.map((item, index) => (
                                                                                         <>
                                                                                             <tr key={index}>
-
-                                                                                                <td>{item.room.ratedesc}</td>
                                                                                                 {contract.rolerate == 1 ? (
                                                                                                     <>
+                                                                                                    <td>{item.room.ratedesc}</td>
                                                                                                     <td>
                                                                                                         {formatRupiah(item.barprice.price)}
                                                                                                     </td>
@@ -674,40 +687,25 @@ console.log(contpriceone,">>>PERCENTONE")
 
                                                                                                 ):(
                                                                                                     <>
+                                                                                                     <td>{item.room.ratedesc}</td>
                                                                                                     {/* <td>{formatRupiah(contpriceone[index].recom_price)}</td> */}
                                                                                                     <td>
                                                                                                     {contract.percentage == percentage
                                                                                                         ? formatRupiah(item.recom_price)
-                                                                                                        : formatRupiah(contpriceone[index].recom_price * ((100 - percentage) / 100))}
+                                                                                                        : formatRupiah(contpriceone[index][0].recom_price * ((100 - percentage) / 100))}
 
                                                                                                     </td>
                                                                                                     </>
                                                                                                 )}
 
-
-                                                                                                {/* <td>
-                                                                                                    {markup[0].markup_price == 0 ? (
-                                                                                                        formatRupiah(parseInt(item.barprice.price) - parseInt(item.recom_price + 15000))
-                                                                                                    ) : (
-                                                                                                        formatRupiah(markup[0].markup_price)
-                                                                                                    )}
-                                                                                                </td> */}
-
-                                                                                                {/* <td >
-                                                                                                    {markup[0].markup_price == 0 ? (
-                                                                                                        formatRupiah(parseInt(item.recom_price) + (parseInt(item.barprice.price) - parseInt(item.recom_price + 15000)))
-                                                                                                    ) : (
-                                                                                                        formatRupiah(parseInt(item.recom_price) + parseInt(markup[0].markup_price))
-                                                                                                    )
-                                                                                                    }
-                                                                                                </td> */}
                                                                                                 <td>
                                                                                                     <a href='#' className='btn btn-datatable btn-icon btn-transparent-dark mr-2' onClick={() => buttonSendValue(item)}>
                                                                                                         <i className='fa fa-edit'></i>
                                                                                                     </a>
-                                                                                                    <a href={`/room/contract/destroycontractprice/${item.id}`} className='btn btn-datatable btn-icon btn-transparent-dark mr-2'>
+                                                                                                    {/* <a href={`/room/contract/destroycontractprice/${item.id}`} className='btn btn-datatable btn-icon btn-transparent-dark mr-2'>
                                                                                                         <i className='fa fa-trash'></i>
-                                                                                                    </a>
+                                                                                                    </a> */}
+                                                                                                    <a href={`/room/contract/contract_price_is_active/${item.id}/${item.is_active == 1 ? 0 : 1}`} className='btn btn-datatable btn-icon btn-transparent-dark mr-2'>{item.is_active == 1 ? <><span className='text-success'><i class="fa fa-toggle-on" aria-hidden="true"></i>on </span></> : <><span className='text-danger'><i class="fa fa-toggle-off" aria-hidden="true"></i>off</span></>} </a>
                                                                                                 </td>
                                                                                             </tr>
                                                                                         </>
@@ -766,36 +764,6 @@ console.log(contpriceone,">>>PERCENTONE")
                                                                         onChange={handleRateMinChange}
                                                                     />
                                                                 </Form.Group>
-                                                                {/* <Form.Group controlId="formMarkup">
-                                                                    <Form.Label>Markup</Form.Label>
-                                                                    <Form.Control
-                                                                        type="text"
-                                                                        name="markup"
-                                                                        defaultValue={markup[0].markup_price == 0 ? (
-                                                                            modalData?.barprice.price - ((modalData?.barprice.price * 0.8) + 15000)
-                                                                        ) : (
-                                                                            markup[0].markup_price
-                                                                        )}
-                                                                        disabled
-                                                                    />
-                                                                </Form.Group> */}
-                                                                {/* <Form.Group controlId="formSelling">
-                                                                    <Form.Label>Selling</Form.Label>
-                                                                    {sellingPrice > modalData?.barprice.price ? (
-                                                                        <>
-                                                                            <p className='text-danger'>the selling price exceeds the price on the website</p>
-                                                                        </>
-                                                                    ) : (
-                                                                        <>
-                                                                        </>
-                                                                    )}
-                                                                    <Form.Control
-                                                                        type="text"
-                                                                        name="selling"
-                                                                        value={sellingPrice}
-                                                                        disabled
-                                                                    />
-                                                                </Form.Group> */}
                                                                 <a href={`/room/contract/updatecontractprice/${modalData?.id}/${minPrice ? minPrice : modalData?.recom_price}/${sellingPrice}`} className='btn btn-primary mt-4'>
                                                                     Save Changes
                                                                 </a>
@@ -858,25 +826,7 @@ console.log(contpriceone,">>>PERCENTONE")
                                                         </Modal.Footer>
                                                     </Modal>
 
-                                                    {/* <Modal show={showModalMarkup} onHide={handleCloseModalMarkup}>
-                                                        <Modal.Header>
-                                                            <Modal.Title>Edit Select RoomType</Modal.Title>
-                                                        </Modal.Header>
-                                                        <Modal.Body>
-                                                           <form action="">
-                                                            <label htmlFor="">Min Markup</label>
-                                                            <input type="text" className='form-conshowModalMarkuptrol' defaultValue={contract.percentage} onChange={(e) =>setPercentage(e.target.value)}/>
-                                                           </form>
-                                                        </Modal.Body>
-                                                        <Modal.Footer>
-                                                            <a href={`/room/markup/updateprice/${contract.percentage}`} className='btn btn-primary'>
-                                                                <i className='fa fa-plus'></i> save
-                                                            </a>
-                                                            <Button variant="secondary" onClick={handleCloseModalMarkup}>
-                                                                Close
-                                                            </Button>
-                                                        </Modal.Footer>
-                                                    </Modal> */}
+                                                   
                                                 </div>
                                                 <hr />
                                                 <div className="row justify-content-between"> {/* Use justify-content-between to move the buttons to both ends */}
@@ -908,7 +858,7 @@ console.log(contpriceone,">>>PERCENTONE")
                                     <>
                                     <div className="row" key={index}>
                                         <div className="col-lg-12">
-                                            <form onSubmit={(e) => storeAdvance(e, item.id,item.beginsell,item.endsell,item.day)}>
+                                            <form onSubmit={(e) => storeAdvance(e, item.id,item.day,item.beginsell,item.endsell)}>
                                             <div className="card mt-3">
                                                 <div className="card-header">
                                                     <div className="d-flex justify-content-between">
@@ -1053,6 +1003,9 @@ console.log(contpriceone,">>>PERCENTONE")
                     </Modal.Body>
 
                 </Modal>
+                </>
+            )}
+                
             </Layout>
         </>
     )

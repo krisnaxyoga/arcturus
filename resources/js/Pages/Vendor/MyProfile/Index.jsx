@@ -12,20 +12,23 @@ import { Inertia } from '@inertiajs/inertia';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 
-export default function Index({ session,data,country,vendor,markup,banner }) {
- console.log(data,">>>>>>>data user");
+export default function Index({ session,data,country,vendor,markup,banner,property }) {
+//  console.log(data,">>>>>>>data user");
  const { url } = usePage();
  const [selectcountry,setCountry] = useState('');
+ const [type_property,setProperty] = useState('');
  const [busisnessname,setBusisness] = useState('');
  const [email,setEmail] = useState('');
  const [firstname,setFirstName] = useState('');
  const [lastname,setLasttName] = useState('');
  const [phone,setPhone] = useState('');
- const [logo,setlogo] = useState(null);
+ const [logo,setLogo] = useState(null);
  const [address,setAddress] = useState('');
  const [address2,setAddress2] = useState('');
  const [city,setCity] = useState('');
  const [state,setState] = useState('');
+ const [description,setDesc] = useState('');
+ const [highlight,setHight] = useState('');
 
  const [taxValue, setTaxValue] = useState('');
  const [bankname, setBankName] = useState('');
@@ -41,13 +44,50 @@ export default function Index({ session,data,country,vendor,markup,banner }) {
  const [descbanner,setDescbanner] = useState('');
 
 
-    const handleFileChange = (e) => {
-        setlogo(e.target.files[0]);
-    };
+        const handleFileChange = (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const fileNameParts = file.name.split('.');
+                const fileExtension = fileNameParts[fileNameParts.length - 1].toLowerCase();
+                const allowedExtensions = ['jpg', 'jpeg', 'png'];
+                const maxFileSizeInBytes = 5 * 1024 * 1024; // 5 MB
 
-    const handleBanner = (e) =>{
-        setBanner(e.target.files[0]);
-    };
+                if (!allowedExtensions.includes(fileExtension)) {
+                    alert('Only image files with formats png, jpg, or jpeg are allowed!');
+                    e.target.value = ''; // Mengosongkan input file
+                } else if (file.size > maxFileSizeInBytes) {
+                    alert('File size must not exceed 5 MB!');
+                    e.target.value = ''; // Mengosongkan input file
+                } else {
+                    setLogo(file);
+                }
+            }
+        };
+
+        const handleBanner = (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const fileNameParts = file.name.split('.');
+                const fileExtension = fileNameParts[fileNameParts.length - 1].toLowerCase();
+                const allowedExtensions = ['jpg', 'jpeg', 'png'];
+                const maxFileSizeInBytes = 5 * 1024 * 1024; // 5 MB
+
+                if (!allowedExtensions.includes(fileExtension)) {
+                    alert('Only image files with formats png, jpg, or jpeg are allowed!');
+                    e.target.value = ''; // Mengosongkan input file
+                } else if (file.size > maxFileSizeInBytes) {
+                    alert('File size must not exceed 5 MB!');
+                    e.target.value = ''; // Mengosongkan input file
+                } else {
+                    setBanner(file);
+                }
+            }
+        };
+            
+
+        // Tampilkan gambar pratinjau jika gambar ada
+        const logoPreview = logo ? URL.createObjectURL(logo) : null;
+        const bannerPreview = imgbanner ? URL.createObjectURL(imgbanner) : null;
 
     const storePost = async (e) => {
         e.preventDefault();
@@ -64,6 +104,9 @@ export default function Index({ session,data,country,vendor,markup,banner }) {
         formData.append('address2', address2 ? address2 : data[0].address_line2);
         formData.append('city', city ? city : data[0].city);
         formData.append('state', state ? state : data[0].state);
+        // formData.append('description', description ? description : data[0].description);
+        formData.append('highlight', highlight ? highlight : data[0].highlight);
+        formData.append('type_property', type_property ? type_property : data[0].type_property);
 
         formData.append('tax', taxValue ? taxValue : markup.tax);
         formData.append('bank', bankname ? bankname : data[0].bank_name);
@@ -85,7 +128,7 @@ export default function Index({ session,data,country,vendor,markup,banner }) {
 
         const formData = new FormData();
         formData.append('title', title);
-        formData.append('description', descbanner);
+        // formData.append('description', descbanner);
         formData.append('banner', imgbanner);
 
         Inertia.post('/myprofile/slider/store', formData, {
@@ -130,7 +173,7 @@ export default function Index({ session,data,country,vendor,markup,banner }) {
                                                         </div>
                                                     </div>
                                                 <div>
-                                                <label for="Email" className="form-label">Email</label>
+                                                <label for="Email" className="form-label">Email Sales</label>
                                                     <div className="input-group mb-3">
                                                     <span className="input-group-text rounded-0" id="basic-addon1"><i className="fa fa-envelope" aria-hidden="true"></i></span>
                                                         <input defaultValue={data[0].users.email} onChange={(e)=>setEmail(e.target.value)} type="email" inputMode="email" className="form-control" placeholder="E-mail" aria-label="email" aria-describedby="basic-addon1"/>
@@ -141,7 +184,7 @@ export default function Index({ session,data,country,vendor,markup,banner }) {
                                                     <input defaultValue={data[0].email_reservation} onChange={(e)=>setEmailReservation(e.target.value)} type="email" inputMode="email" className="form-control" placeholder="E-mail" aria-label="email" aria-describedby="basic-addon1"/>
                                                 </div>
                                                 </div>
-                                                
+
 
                                                     <div className="d-flex">
                                                         <div className='mr-2'>
@@ -173,13 +216,24 @@ export default function Index({ session,data,country,vendor,markup,banner }) {
                                                             <input type="date" className="form-control" placeholder="Birthday" aria-label="Username" aria-describedby="basic-addon1"/>
                                                         </div>
                                                     </div> */}
+                                                    
                                                     <div className="mb-3">
                                                         <label for="formFile" className="form-label">Logo</label>
                                                         <input className="form-control" onChange={handleFileChange} type="file" id="formFile"/>
                                                     </div>
                                                     <div className="mb-3">
+                                                    {logoPreview ? (
+                                                        <>
+                                                        {logoPreview && <img src={logoPreview} alt="Logo Preview" style={{width:'100px'}}/>}
+                                                        </>
+                                                    ):(
+                                                        <>
                                                         <img style={{width:"100px"}} src={data[0].logo_img||'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Image_not_available.png/640px-Image_not_available.png'} alt="" />
+                                                        </>
+                                                    )}
                                                     </div>
+
+
                                                 </div>
                                                 <div className="col-lg-6">
                                                     <p style={{fontWeight:"bold"}}>Location Information</p>
@@ -215,6 +269,14 @@ export default function Index({ session,data,country,vendor,markup,banner }) {
 
                                                         </div>
                                                     </div>
+                                                    <div className="mb-3">
+                                                        <label htmlFor="">Property Type</label>
+                                                         <select required onChange={(e)=>setProperty(e.target.value)} className="form-control" aria-label="Default select example">
+                                                            {Object.keys(property).map(key => (
+                                                                <option key={key} selected={property[key] === data[0].type_property} value={property[key]}>{property[key]}</option>
+                                                            ))}
+                                                        </select>
+                                                    </div>
                                                     <div className='mb-3'>
                                                         <label for="Lastname" className="form-label">Country <span className='text-danger'>*</span></label>
                                                         <input readOnly type="text" value={data[0].country} className='form-control'/>
@@ -229,12 +291,12 @@ export default function Index({ session,data,country,vendor,markup,banner }) {
                                                     </div>
                                                     <div className="mb-3">
                                                         <div className="row">
-                                                            <div className="col-lg-12">
+                                                            {/* <div className="col-lg-12">
                                                                 <div htmlFor="" className='text-info d-flex'><p>* all rates are inclusive of </p>
-                                                                    <input required style={{width: '3rem'}} defaultValue={markup && markup.tax} type="text" className='form-control' placeholder='...%' onChange={(e)=>setTaxValue(e.target.value)} /> <span className='ml-2 text-warning'>% </span>
+                                                                    <input style={{width: '3rem'}} defaultValue={markup && markup.tax} type="text" className='form-control' placeholder='...%' onChange={(e)=>setTaxValue(e.target.value)} /> <span className='ml-2 text-warning'>% </span>
                                                             <p> goverment tax & service charge</p></div>
 
-                                                            </div>
+                                                            </div> */}
                                                             </div>
                                                         {/* <div className="row justify-content-center">
 
@@ -250,6 +312,19 @@ export default function Index({ session,data,country,vendor,markup,banner }) {
                                                         <span className="input-group-text rounded-0" id="basic-addon1"><i className='fa fa-map-pin'></i></span>
                                                             <input type="text" className="form-control" placeholder="Zip code" aria-label="busisnessname" aria-describedby="basic-addon1"/>
                                                         </div>
+                                                    </div> */}
+
+                                                </div>
+                                            </div>
+                                            <div className="row">
+                                                <div className="col-lg-12">
+                                                    <div className="mb-3">
+                                                        <label htmlFor="">Highlight</label>
+                                                        <textarea onChange={(e)=>setHight(e.target.value)} className='form-control' cols="30" rows="10">{data[0].highlight}</textarea>
+                                                    </div>
+                                                    {/* <div className="mb-3">
+                                                        <label htmlFor="">Description</label>
+                                                        <textarea onChange={(e)=>setDesc(e.target.value)} className='form-control' cols="30" rows="10">{data[0].description}</textarea>
                                                     </div> */}
                                                 </div>
                                             </div>
@@ -297,7 +372,7 @@ export default function Index({ session,data,country,vendor,markup,banner }) {
                                                         </div>
                                                         <div className="col-lg-4">
                                                             <div className="mb-3">
-                                                                <label htmlFor="">Swif code</label>
+                                                                <label htmlFor="">Swift code</label>
                                                                 <input defaultValue={data[0].swif_code} type="text" className='form-control' onChange={(e) => setSwifCode(e.target.value)}/>
                                                             </div>
                                                         </div>
@@ -315,27 +390,28 @@ export default function Index({ session,data,country,vendor,markup,banner }) {
                                 </Tab>
                                 <Tab eventKey="slider" title="Banner">
                                         <div className="row">
-                                            <div className="col-lg-12">
+                                            <div className="col-lg-6">
                                                 <div className="card mb-3">
                                                     <div className="card-body">
                                                         <form onSubmit={storeBanner}>
                                                             <div className="row">
-                                                                <div className="col-lg-6">
+                                                                <div className="col-lg-12">
                                                                     <div className="mb-3">
                                                                         <label htmlFor="">title</label>
                                                                         <input onChange={(e)=>setTitle(e.target.value)} type="text" className='form-control' />
                                                                     </div>
                                                                     <div className="mb-3">
+                                                                    {bannerPreview && <img className='mb-3' src={bannerPreview} alt="Banner Preview" style={{width:'200px'}}/>}
                                                                         <label htmlFor="">image</label>
                                                                         <input onChange={handleBanner} type="file" className='form-control' />
                                                                     </div>
                                                                 </div>
-                                                                <div className="col-lg-6">
+                                                                {/* <div className="col-lg-6">
                                                                     <div className="mb-3">
                                                                         <label htmlFor="">description</label>
                                                                         <input onChange={(e)=>setDescbanner(e.target.value)} type="text" className='form-control' />
                                                                     </div>
-                                                                </div>
+                                                                </div> */}
                                                             </div>
                                                             <div className="row">
                                                                 <div className="col-lg-12">
@@ -350,7 +426,7 @@ export default function Index({ session,data,country,vendor,markup,banner }) {
                                             </div>
                                         </div>
                                         <div className="row">
-                                            <div className="col-lg-12">
+                                            <div className="col-lg-6">
                                                 <div className="card">
                                                     <div className="card-body">
                                                         <div className="table-responsive">
@@ -359,7 +435,7 @@ export default function Index({ session,data,country,vendor,markup,banner }) {
                                                                     <tr>
                                                                         <th>image</th>
                                                                         <th>title</th>
-                                                                        <th>description</th>
+                                                                        {/* <th>description</th> */}
                                                                         <th>action</th>
                                                                     </tr>
                                                                 </thead>
@@ -369,7 +445,7 @@ export default function Index({ session,data,country,vendor,markup,banner }) {
                                                                         <tr key={item.id}>
                                                                             <td><img src={item.image} alt={item.image} style={{ width:'200px' }} /></td>
                                                                             <td>{item.title}</td>
-                                                                            <td>{item.description}</td>
+                                                                            {/* <td>{item.description}</td> */}
                                                                             <td>
                                                                             <Link className='btn btn-datatable btn-icon btn-transparent-dark mr-2' href={`/myprofile/slider/delete/${item.id}`}>
                                                                                 <i className='fa fa-trash'></i>

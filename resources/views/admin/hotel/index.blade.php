@@ -16,7 +16,7 @@
                                     <thead>
                                         <tr>
                                             <th>Hotel Name</th>
-                                            <th>Company Name</th>
+                                            {{-- <th>Company Name</th> --}}
                                             <th>Address</th>
                                             <th>Phone</th>
                                             <th>Email</th>
@@ -27,11 +27,15 @@
                                         @foreach ($data as $item)
                                             <tr>
                                                 <td>{{ $item->vendor_name }}</td>
-                                                <td>{{ $item->vendor_legal_name }}</td>
+                                                {{-- <td>{{ $item->vendor_legal_name }}</td> --}}
                                                 <td>{{ $item->address_line1 }}</td>
                                                 <td>{{ $item->phone }}</td>
                                                 <td>{{ $item->email }}</td>
-                                                <td><a href="{{ route('dashboard.hotel.edit', $item->id) }}"
+                                                <td>
+                                                    <a href="{{route('dashboard.loginhotel',$item->user_id)}}" class="btn btn-datatable btn-icon btn-transparent-dark mr-2">
+                                                    <i data-feather="key"></i>
+                                                    </a>
+                                                    <a href="{{ route('dashboard.hotel.edit', $item->id) }}"
                                                         class="btn btn-datatable btn-icon btn-transparent-dark mr-2"><i
                                                             data-feather="edit"></i></a>
 

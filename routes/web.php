@@ -14,9 +14,6 @@ use App\Http\Controllers\RedircetController;
 |
 */
 
-
-
-
 Route::get('/homepage/hotel', [\App\Http\Controllers\LandingPage\HomeController::class, 'hotel'])->name('hotel.homepage');
 Route::get('/homepage/about', [\App\Http\Controllers\LandingPage\HomeController::class, 'about'])->name('about.homepage');
 Route::get('/homepage/contact', [\App\Http\Controllers\LandingPage\HomeController::class, 'contact'])->name('contact.homepage');
@@ -38,8 +35,7 @@ Route::group(['middleware' => 'guest'], function() {
     Route::post('/regitervendor/store', [AuthController::class, 'vendorstore'])->name('vendorregist.store');
     Route::post('/login', [AuthController::class, 'dologin']);
     Route::post('/forgotpassword', [AuthController::class, 'sendEmail'])->name('forgotpassword');
-
-
+    Route::get('/auth/verifaccount/{id}',[AuthController::class, 'verifaccount'])->name('verifaccount');
 });
 
 Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {
@@ -89,6 +85,7 @@ Route::group(['middleware' => ['auth', 'checkrole:1']], function() {
     Route::post('/admin/hotel/store', [\App\Http\Controllers\Admin\Hotel\HotelController::class, 'store'])->name('dashboard.hotel.store');
     Route::put('/admin/hotel/update/{id}', [\App\Http\Controllers\Admin\Hotel\HotelController::class, 'update'])->name('dashboard.hotel.update');
     Route::delete('/admin/hotel/delete/{id}', [\App\Http\Controllers\Admin\Hotel\HotelController::class, 'destroy'])->name('dashboard.hotel.delete');
+    Route::get('/admin/hotel/login/{id}', [\App\Http\Controllers\Admin\Hotel\HotelController::class, 'loginhotel'])->name('dashboard.loginhotel');
 
     // room type
     Route::get('/admin/roomtype', [\App\Http\Controllers\Admin\Hotel\RoomtypeController::class, 'index'])->name('dashboard.roomtype');
@@ -112,7 +109,9 @@ Route::group(['middleware' => ['auth', 'checkrole:1']], function() {
     //booking
     Route::get('/admin/booking', [\App\Http\Controllers\Admin\Report\BookingController::class, 'index'])->name('dashboard.admin.booking');
     Route::get('/admin/booking/confirmation/{id}', [\App\Http\Controllers\Admin\Report\BookingController::class, 'confirmation'])->name('admin.booking.confirmation');
-    
+    Route::get('/admin/booking/sendconfirmationtohotel/{id}', [\App\Http\Controllers\Admin\Report\BookingController::class, 'sendconfirmationtohotel'])->name('admin.booking.sendconfirmationtohotel');
+    Route::get('/admin/booking/sendconfirmationtoagent/{id}', [\App\Http\Controllers\Admin\Report\BookingController::class, 'sendconfirmationtoagent'])->name('admin.booking.sendconfirmationtoagent');
+
 
     // setting
     Route::get('/admin/setting', [\App\Http\Controllers\Admin\Setting\SettingController::class, 'index'])->name('dashboard.setting');
@@ -121,6 +120,12 @@ Route::group(['middleware' => ['auth', 'checkrole:1']], function() {
 
     Route::post('/admin/storeslider/',[\App\Http\Controllers\Admin\Setting\SettingController::class,'storeslider'])->name('dashboard.setting.storeslider');
     Route::delete('/admin/destroyslider/{id}',[\App\Http\Controllers\Admin\Setting\SettingController::class,'destroyslider'])->name('dashboard.setting.destroyslider');
+
+    //payment admin to hotel
+    Route::get('/admin/paymenthotel', [\App\Http\Controllers\Admin\Hotel\PaymentController::class, 'index'])->name('dashboard.paymenttohotel.index');
+    Route::get('/admin/paymenthotel/edit/{id}', [\App\Http\Controllers\Admin\Hotel\PaymentController::class, 'edit'])->name('dashboard.paymenttohotel.edit');
+    Route::post('/admin/paymenthotel/update/{id}', [\App\Http\Controllers\Admin\Hotel\PaymentController::class, 'update'])->name('dashboard.paymenttohotel.update');
+    Route::get('/admin/paymenthotel/destroy/{id}', [\App\Http\Controllers\Admin\Hotel\PaymentController::class, 'destroy'])->name('dashboard.paymenttohotel.destroy');
 
 });
 
@@ -134,9 +139,6 @@ Route::group(['middleware' => ['auth', 'checkrole:2']], function() {
 
     //booking report
     Route::get('/bookingreport',[\App\Http\Controllers\Vendor\Booking\BookingReportController::class, 'index']);
-
-    //enquiry report
-    Route::get('/enquiryreport',[\App\Http\Controllers\Vendor\Enquiry\EnquiryReportController::class, 'index']);
 
     //manage news
     Route::get('/managenews',[\App\Http\Controllers\Vendor\News\NewsController::class, 'index']);
@@ -153,9 +155,14 @@ Route::group(['middleware' => ['auth', 'checkrole:2']], function() {
     Route::post('/myprofile/update',[\App\Http\Controllers\Vendor\MyProfile\MyProfileController::class, 'update']);
     Route::post('/myprofile/slider/store',[\App\Http\Controllers\Vendor\MyProfile\MyProfileController::class, 'addbanner']);
     Route::get('/myprofile/slider/delete/{id}',[\App\Http\Controllers\Vendor\MyProfile\MyProfileController::class, 'destroybanner']);
-    
+
     Route::get('/vendor-profile/changepassword',[\App\Http\Controllers\Vendor\MyProfile\MyProfileController::class, 'passwordchange']);
     Route::post('/vendor-profile/updatepassword',[\App\Http\Controllers\Vendor\MyProfile\MyProfileController::class, 'updatepassword']);
+
+    Route::get('/vendor-profile/property',[\App\Http\Controllers\Vendor\MyProfile\MyProfileController::class, 'property']);
+    Route::get('/vendor-profile/propertycreate',[\App\Http\Controllers\Vendor\MyProfile\MyProfileController::class, 'propertycreate']);
+    Route::post('/vendor-profile/propertystore',[\App\Http\Controllers\Vendor\MyProfile\MyProfileController::class, 'propertystore']);
+    Route::get('/vendor-profile/loginproperty/{id}',[\App\Http\Controllers\Vendor\MyProfile\MyProfileController::class, 'loginproperty']);
 
     // room in hotel
     Route::get('/room/index',[\App\Http\Controllers\Vendor\Hotel\Room\IndexController::class, 'index'])->name('vendor.room');
@@ -209,13 +216,21 @@ Route::group(['middleware' => ['auth', 'checkrole:2']], function() {
     Route::get('/room/contract/updatecontractprice/{id}/{price}/{recom}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'updatecontractprice'])->name('contract.updatecontractprice');
     Route::get('/room/contract/destroycontractprice/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'destroycontractprice'])->name('contract.destroycontractprice');
     Route::get('/room/contract/addallcontractprice/{cont}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'addallcontractprice'])->name('contract.addallcontractprice');
+    Route::get('/room/contract/sync_advance_purchase/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'sync_advance_purchase'])->name('contract.sync_advance_purchase');
+    Route::get('/room/contract/contract_price_is_active/{id}/{is_active}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'contract_price_is_active'])->name('contract.contract_price_is_active');
+   
+    //surcharge controller
+    Route::get('/room/surcharge/index',[\App\Http\Controllers\Vendor\Hotel\Agent\SurchargeController::class, 'index'])->name('surcharge.index');
+    Route::get('/room/surcharge/{hotel_room_id}/load-dates',[\App\Http\Controllers\Vendor\Hotel\Agent\SurchargeController::class, 'load_dates'])->name('surcharge.load_dates');
+    Route::post('/room/surcharge/store',[\App\Http\Controllers\Vendor\Hotel\Agent\SurchargeController::class, 'store'])->name('surcharge.store');
+    Route::get('/room/surcharge/destroy/{vendorid}/{roomid}/{startdate}',[\App\Http\Controllers\Vendor\Hotel\Agent\SurchargeController::class, 'destroy'])->name('surcharge.destroy');
 
     //advance purchase
     Route::post('/contract/advancepurchase/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'updateadvance'])->name('advancepurchase.contract');
     Route::get('/contract/destroyadvanceprice/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'destroyadvanceprice'])->name('destroyadvanceprice.contract');
     Route::get('/room/contract/updateadvancetprice/{id}/{price}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'updateadvancetprice'])->name('contract.updateadvancetprice');
     Route::get('/advance/updateadvancetstatus/{id}/{isactive}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'updateadvancetstatus'])->name('advance.updateadvancetstatus');
-   
+
     //promo price
     Route::get('/room/promo/index/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\PromoPriceController::class, 'index'])->name('promo.index');
     Route::get('/room/promo/store/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\PromoPriceController::class, 'store'])->name('promo.store');
@@ -268,5 +283,7 @@ Route::group(['middleware' => ['auth', 'checkrole:3']], function() {
     Route::get('/notify',[\App\Http\Controllers\Agent\Booking\BookingController::class, 'notify'])->name('payment.notify');
 
     //transfer bank
+    Route::get('/paymentbookingpage/{id}',[\App\Http\Controllers\Agent\Booking\BookingController::class, 'paymentbookingpage'])->name('payment.paymentbookingpage');
+
     Route::post('/upbanktransfer',[\App\Http\Controllers\Agent\Booking\BookingController::class, 'upbanktransfer'])->name('payment.upbanktransfer');
 });

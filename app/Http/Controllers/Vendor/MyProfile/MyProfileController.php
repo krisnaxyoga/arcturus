@@ -10,6 +10,9 @@ use App\Models\AgentMarkupSetup;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Slider;
 
+use Illuminate\Support\Facades\File;
+use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class MyProfileController extends Controller
@@ -20,6 +23,7 @@ class MyProfileController extends Controller
     public function index()
     {
         $country = get_country_lists();
+        $property = type_property();
         $iduser = auth()->user()->id;
         $data = Vendor::with('users')->where('user_id',$iduser)->get();
         // dd($data, $iduser);
@@ -32,7 +36,8 @@ class MyProfileController extends Controller
             'country'=> $country,
             'markup' => $markup,
             'banner' => $slider,
-            'vendor' => $vendor
+            'vendor' => $vendor,
+            'property' => $property,
         ]);
     }
 
@@ -59,7 +64,9 @@ class MyProfileController extends Controller
             if ($request->hasFile('logo')) {
                 $logo = $request->file('logo');
                 $filename = time() . '.' . $logo->getClientOriginalExtension();
-                $logo->move(public_path('hotel/logo'), $filename);
+                // $logo->move(public_path('hotel/logo'), $filename);
+                $compressedImage = Image::make($logo->getRealPath());
+                $compressedImage->resize(300, 200)->save(public_path('hotel/logo/' . $filename), 90); // 90 adalah kualitas kompresi yang lebih baik
 
                 // Lakukan hal lain yang diperlukan, seperti menyimpan nama file dalam database
                 $logo = "/hotel/logo/".$filename;
@@ -90,6 +97,9 @@ class MyProfileController extends Controller
             $member->bank_address = $request->bankaddress;
             $member->account_number = $request->accountnumber;
             $member->email_reservation = $request->email_reservation;
+            $member->highlight = $request->highlight;
+            $member->description = $request->description;
+            $member->type_property = $request->type_property;
             // $member->email = $request->email;
             $member->save();
 
@@ -133,7 +143,9 @@ class MyProfileController extends Controller
             if ($request->hasFile('banner')) {
                 $banner = $request->file('banner');
                 $filename = time() . '.' . $banner->getClientOriginalExtension();
-                $banner->move(public_path('slider'), $filename);
+                // $banner->move(public_path('slider'), $filename);
+                $compressedImage = Image::make($banner->getRealPath());
+                $compressedImage->resize(1500, 1000)->save(public_path('slider/' . $filename), 90); // 90 adalah kualitas kompresi yang lebih baik
 
                 // Lakukan hal lain yang diperlukan, seperti menyimpan nama file dalam database
             }else{
@@ -144,12 +156,17 @@ class MyProfileController extends Controller
 
             $iduser = auth()->user()->id;
 
-            $data =  new Slider();
-            $data->user_id = $iduser;
-            $data->title = $request->title;
-            $data->description = $request->description;
-            $data->image = $feature;
-            $data->save();
+            $slider = Slider::where('user_id',$iduser)->count();
+            if($slider >= 3){
+                return redirect()->back()->with('success', 'sorry your picture exceeds 3 pictures!, please delete one of them to upload again');
+            }else{
+                $data =  new Slider();
+                $data->user_id = $iduser;
+                $data->title = $request->title;
+                $data->description = $request->description;
+                $data->image = $feature;
+                $data->save();
+            }
 
             return redirect()->back()->with('success', 'data saved!');
 
@@ -162,6 +179,10 @@ class MyProfileController extends Controller
      public function destroybanner(string $id)
      {
         $data =  Slider::find($id);
+        if (File::exists(public_path($data->image))) 
+        {
+            File::delete(public_path($data->image));
+        }
         $data->delete();
 
         return redirect()->back()->with('success', 'data deleted!');
@@ -201,5 +222,84 @@ class MyProfileController extends Controller
         return redirect()->back()->with('success', 'Password Change');
         }
 
+    }
+
+    public function property(){
+        $iduser = auth()->user()->id;
+        $title = auth()->user()->title;
+        $data = User::with('vendors')->where('title',$title)->get();
+        $vendor = Vendor::with('users')->where('user_id',$iduser)->first();
+        return inertia('Vendor/Property/Index',[
+            'data' => $data,
+            'vendor' => $vendor
+        ]);
+    }
+    public function propertycreate(Request $request){
+        $country = get_country_lists();
+        $iduser = auth()->user()->id;
+        $vendor = Vendor::with('users')->where('user_id',$iduser)->first();
+        return inertia('Vendor/Property/Create',[
+            'vendor' => $vendor,
+            'country'=>$country
+        ]);
+    }
+
+    public function propertystore(Request $request){
+        $iduser = auth()->user()->id;
+        $title = auth()->user()->title;
+        $data = User::with('vendors')->where('title',$title)->where('role_id',2)->where('position','sub-master')->get();
+        $vendor = Vendor::with('users')->where('user_id',$iduser)->first();
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|unique:users,email'
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()->with('success', 'Sorry!, the email you entered already exists');
+        } else {
+            $data = new User();
+            $data->first_name = $request->firstname;
+            $data->last_name = '-';
+            $data->email = $request->email;
+            $data->mobile_phone = $request->phone;
+            $data->password = Hash::make('password123');
+            $data->departement = '-';
+            $data->position = 'sub-master';
+            $data->title = $title;
+            $data->role_id = 2;
+            $data->is_active = 1;
+            $data->save();
+
+            $member = new Vendor();
+            $member->user_id = $data->id;
+            $member->vendor_name = $request->firstname;
+            $member->vendor_legal_name = '-';
+            $member->address_line1 = '-';
+            $member->city = '-';
+            $member->state = '-';
+            $member->country = $request->country;
+            $member->email = $request->email;
+            $member->phone = $request->phone;
+            $member->type_vendor = 'hotel';
+            $member->is_active = 1;
+            $member->save();
+
+            $user = User::find($data->id);
+            $user->vendor_id = $member->id;
+            $user->save();
+
+            return redirect()->back()->with('success', 'Property Add success');
+        }
+    }
+
+    public function loginproperty($id){
+        if (Auth::check() && Auth::user()->role_id == 2) {
+            // Logout admin
+            Auth::logout();
+
+            // Lakukan otentikasi sebagai akun hotel
+            Auth::loginUsingId($id);
+
+            // Redirect ke halaman hotel
+            return redirect('/vendordashboard');
+        }
     }
 }

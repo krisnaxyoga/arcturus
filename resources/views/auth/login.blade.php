@@ -19,11 +19,11 @@
 <section class="vh-100">
     <div class="container-fluid">
       <div class="row">
-        <div class="col-sm-6 text-black">
+        <div class="col-sm-12 col-md-12  col-lg-6 text-black">
   
           <div class="px-5 ms-xl-4 mt-5 text-center">
             <i class="fas fa-crow fa-2x me-3 pt-5 mt-xl-4" style="color: #709085;"></i>
-            <img style="width: 40px" src="{{ $settings->logo_image ?? '/images/pms-sistem-1.png' }}" alt="Logo">
+            <img onerror="this.onerror=null; this.src='https://semantic-ui.com/images/wireframe/white-image.png';" style="width: 40px" src="{{ $settings->logo_image ?? '/images/pms-sistem-1.png' }}" alt="Logo">
           </div>
             @if (session()->has('message'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -82,8 +82,8 @@
           </div>
   
         </div>
-        <div class="col-sm-6 px-0 d-none d-sm-block">
-          <img src="https://w0.peakpx.com/wallpaper/269/841/HD-wallpaper-nusa-penida-nusa-penida-stock-nusa-penida-island.jpg"
+        <div class="col-sm-12 col-md-12 col-lg-6 px-0 d-none d-sm-none d-lg-block d-xl-block d-md-none">
+          <img onerror="this.onerror=null; this.src='https://semantic-ui.com/images/wireframe/white-image.png';" src="https://w0.peakpx.com/wallpaper/269/841/HD-wallpaper-nusa-penida-nusa-penida-stock-nusa-penida-island.jpg"
             alt="Login image" class="w-100 login-image" style="object-fit: cover; object-position: left;">
         </div>
       </div>

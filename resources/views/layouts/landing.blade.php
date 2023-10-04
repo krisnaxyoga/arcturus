@@ -18,11 +18,13 @@
 	<link rel="stylesheet" href="/landing/travel/css/jquery.timepicker.css">
 	<link rel="stylesheet" href="/landing/travel/css/flaticon.css">
 	<link rel="stylesheet" href="/landing/travel/css/style.css">
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-
+    
+     <!-- Include jQuery -->
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+     <!-- Include Date Range Picker Plugin -->
+     <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+     <!-- Include CSS styles for Date Range Picker -->
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
 
     @if(isset(Auth::user()->id) && Auth::user()->role_id == 2)
     <link rel="icon" href="{{ $vendor->logo_img ?? '/images/pms-sistem-1.png' }}">
@@ -57,11 +59,11 @@
 			{{-- <a class="navbar-brand" href="index.html">Pacific<span>Travel Agency</span></a> --}}
             <a class="navbar-brand" href="/">
                 {{-- @if(isset(Auth::user()->id) && Auth::user()->role_id == 2)
-                <img style="width: 40px" src="{{ $vendor->logo_img ?? '/images/pms-sistem-1.png' }}" alt="Logo">
+                <img onerror="this.onerror=null; this.src='https://semantic-ui.com/images/wireframe/white-image.png';" style="width: 40px" src="{{ $vendor->logo_img ?? '/images/pms-sistem-1.png' }}" alt="Logo">
                 @else
-                <img style="width: 40px" src="{{ $settings->logo_image ?? '/images/pms-sistem-1.png' }}" alt="Logo">
+                <img onerror="this.onerror=null; this.src='https://semantic-ui.com/images/wireframe/white-image.png';" style="width: 40px" src="{{ $settings->logo_image ?? '/images/pms-sistem-1.png' }}" alt="Logo">
                 @endif --}}
-                <img style="width: 40px" src="{{ $settings->logo_image }}" alt="{{ $settings->logo_image }}">
+                <img onerror="this.onerror=null; this.src='https://arcturus.my.id/logo/system/1695599539.png';" style="width: 40px" src="{{ $settings->logo_image }}" alt="{{ $settings->logo_image }}">
             </a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="oi oi-menu"></span> Menu
@@ -78,7 +80,7 @@
                     @endif
                     {{-- <li class="nav-item {{ request()->routeIs('contact.homepage') ? 'active' : '' }}"><a href="{{ route('contact.homepage') }}" class="nav-link">Contact</a></li> --}}
                     @if(isset(Auth::user()->id))
-                        <li class="nav-item"><a href="{{route('login')}}" class="nav-link" @if(count($slider) == 0) style="color: rgb(8, 8, 179)" @endif>dashboard</a></li>
+                        <li class="nav-item"><a href="{{route('login')}}" class="nav-link" @if(count($slider) == 0 && Auth::user()->role_id == 2) style="color: rgb(8, 8, 179)" @endif>dashboard</a></li>
                     @else
                     <li class="nav-item"><a href="{{route('agentregist')}}" class="nav-link">Register Agent</a></li>
                     <li class="nav-item"><a href="{{route('vendorregist')}}" class="nav-link">Register Hotel</a></li>
@@ -95,7 +97,7 @@
     </main>
 
     <a href="https://api.whatsapp.com/send?phone=6287888375939" target="_blank" class="whatsapp-button">
-        <img src="https://www.morsealam.com/wp-content/uploads/2018/11/logo-whatsapp-png-transparent-background-8.png" alt="WhatsApp" width="60" height="60">
+        <img onerror="this.onerror=null; this.src='https://semantic-ui.com/images/wireframe/white-image.png';" src="https://www.transparentpng.com/thumb/whatsapp/GrwKkd-wp-logo-whatsapp-cut-out-png.png" alt="WhatsApp" width="60" height="60">
     </a>
     <footer class="ftco-footer bg-bottom ftco-no-pt" style="background-image: url(images/bg_3.jpg);">
         <div class="container">

@@ -33,6 +33,19 @@ export default function Index({ session, props, attr,roomtype,vendor }) {
     const [selectAll, setSelectAll] = useState(false);
 
     const [selectedValues, setSelectedValues] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+        // Anda dapat menambahkan logika tambahan jika diperlukan
+        // Contoh: Memuat data dari server
+
+        // Misalnya, ini adalah simulasi pengambilan data yang memakan waktu
+        setTimeout(() => {
+            setIsLoading(false); // Langkah 2: Setel isLoading menjadi false setelah halaman selesai dimuat
+        }, 1000); // Menggunakan setTimeout untuk simulasi saja (2 detik).
+
+        // Jika Anda ingin melakukan pengambilan data dari server, Anda dapat melakukannya di sini dan kemudian mengatur isLoading menjadi false setelah data berhasil dimuat.
+    }, []); // Kosongkan array dependencies untuk menjalankan efek ini hanya sekali saat komponen dimuat.
 
 
     const [checkboxItems, setCheckboxItems] = useState(attr.map((item) => ({ label: item.name, checked: false })));
@@ -86,24 +99,72 @@ export default function Index({ session, props, attr,roomtype,vendor }) {
     const handleFileChange = (e) => {
 
         const file = e.target.files[0];
-        setImage(file);
+
         if (file) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setSelectedImage(reader.result);
-        };
-        reader.readAsDataURL(file);
+            const fileNameParts = file.name.split('.');
+            const fileExtension = fileNameParts[fileNameParts.length - 1].toLowerCase();
+            const allowedExtensions = ['jpg', 'jpeg', 'png'];
+            const maxFileSizeInBytes = 5 * 1024 * 1024; // 5 MB
+
+            if (!allowedExtensions.includes(fileExtension)) {
+                alert('Only image files with formats png, jpg, or jpeg are allowed!');
+                e.target.value = ''; // Mengosongkan input file
+            } else if (file.size > maxFileSizeInBytes) {
+                alert('File size must not exceed 5 MB!');
+                e.target.value = ''; // Mengosongkan input file
+            } else {
+                setImage(file);
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                        setSelectedImage(reader.result);
+                    };
+                    reader.readAsDataURL(file);
+                    }
+            }
         }
+
     };
+
     const handleImageUpload = (e) => {
         const selectedImages = Array.from(e.target.files);
-        setImages(selectedImages);
+        console.log(selectedImages.length,"LENGS")
+        // Periksa format dan ukuran file sebelum membuat URL
+        const invalidFiles = selectedImages.filter((file) => {
+            if (!file.type.match('image/(png|jpg|jpeg)')) {
+                alert('Only image files with formats png, jpg, or jpeg are allowed!');
+                e.target.value = '';
+                return true; // File ini tidak valid
+            }
+    
+            if (file.size > 5 * 1024 * 1024) {
+                alert('File size must not exceed 5 MB!');
+                e.target.value = '';
+                return true; // File ini tidak valid
+            }
 
-        const files = e.target.files;
-        if (files && files.length > 0) {
-          const imagesArray = Array.from(files).map(file => URL.createObjectURL(file));
-          setSelectedImages(imagesArray);
+            return false; // File ini valid
+        });
+    
+        // Jika ada file yang tidak valid, hentikan pemrosesan
+       if (selectedImages.length > 3) {
+                alert('You can only upload a maximum of 3 images.');
+                e.target.value = '';
+                return true;
+            }
+
+        if (invalidFiles.length > 0 ) {
+            e.target.value = '';
+            return;
         }
+    
+        // Buat URL hanya untuk file yang memenuhi syarat
+        const imagesArray = selectedImages.map((file) => {
+            return URL.createObjectURL(file);
+        });
+    
+        setImages(selectedImages);
+        setSelectedImages(imagesArray);
     };
 
     const handleImageDelete = (index) => {
@@ -113,6 +174,8 @@ export default function Index({ session, props, attr,roomtype,vendor }) {
 
     const storePost = async (e) => {
         e.preventDefault();
+
+        setIsLoading(true);
 
         const formData = new FormData();
         formData.append('ratecode', ratecode);
@@ -139,6 +202,7 @@ export default function Index({ session, props, attr,roomtype,vendor }) {
         Inertia.post('/room/store', formData, {
             onSuccess: () => {
                 // Lakukan aksi setelah gambar berhasil diunggah
+                setIsLoading(false);
             },
         });
     }
@@ -146,6 +210,16 @@ export default function Index({ session, props, attr,roomtype,vendor }) {
     return (
         <>
             <Layout page={'/room/index'} vendor={vendor}>
+            {isLoading ? (
+                <div className="container">
+                    <div className="loading-container">
+                        <div className="loading-spinner"></div>
+                        <div className="loading-text">Loading...</div>
+                    </div>
+                </div>// Langkah 3: Tampilkan pesan "Loading..." saat isLoading true
+            ) : (
+                // Tampilan halaman Anda yang sebenarnya
+                <>
                 <div className="container">
                     <div className="row">
                         <h1>Create Room Type</h1>
@@ -167,7 +241,7 @@ export default function Index({ session, props, attr,roomtype,vendor }) {
                                             <div className="card">
                                                 <div className="card-body">
                                                     <div className="row">
-                                                        <div className="col-lg-3">
+                                                        {/* <div className="col-lg-3">
                                                             <div className="mb-3 ">
                                                                 <label htmlFor="">Category</label>
                                                                 <select required className='form-control' name="" id="" onChange={(e) => setRoomType(e.target.value)}>
@@ -179,20 +253,20 @@ export default function Index({ session, props, attr,roomtype,vendor }) {
                                                                     ))}
                                                                 </select>
                                                             </div>
-                                                        </div>
-                                                        <div className="col-lg-2">
-                                                            <div className="mb-3 mx-2">
+                                                        </div> */}
+                                                        <div className="col-lg-3">
+                                                            <div className="mb-3">
                                                                 <label htmlFor="exampleFormControlInput1" className="form-label">Code</label>
                                                                 <input required onChange={(e) => setRagecode(e.target.value)} type="text" className="form-control" id="exampleFormControlInput1" placeholder="Room Code" />
                                                             </div>
                                                         </div>
-                                                        <div className="col-lg-4">
+                                                        <div className="col-lg-5">
                                                             <div className="mb-3">
                                                                 <label htmlFor="exampleFormControlInput1" className="form-label">Room Type Description</label>
                                                                 <input required onChange={(e) => setRateDesc(e.target.value)} type="text" className="form-control" id="exampleFormControlInput1" placeholder="Room Description" />
                                                             </div>
                                                         </div>
-                                                        <div className="col-lg-3">
+                                                        <div className="col-lg-4">
                                                             <div className="mb-3">
                                                                 <label htmlFor="exampleFormControlInput1" className="form-label">Room allotment</label>
                                                                 <input required onChange={(e) => setAllowed(e.target.value)} type="number" className="form-control" id="exampleFormControlInput1" placeholder="Room allotment" />
@@ -343,7 +417,7 @@ export default function Index({ session, props, attr,roomtype,vendor }) {
                                                             />
                                                         </div>
 
-                                                        <div className="mb-3">
+                                                        {/* <div className="mb-3">
                                                             <label htmlFor="">Service Information</label>
                                                             <CKEditor
                                                                 editor={ClassicEditor}
@@ -378,7 +452,7 @@ export default function Index({ session, props, attr,roomtype,vendor }) {
                                                                     console.log('Focus.', editor);
                                                                 }}
                                                             />
-                                                        </div>
+                                                        </div> */}
                                                         <hr />
                                                         <div className="row justify-content-between"> {/* Use justify-content-between to move the buttons to both ends */}
                                                             <div className="col-lg-auto">
@@ -402,6 +476,9 @@ export default function Index({ session, props, attr,roomtype,vendor }) {
                         </div>
                     </div>
                 </div>
+                </>
+            )}
+                
             </Layout>
         </>
     )

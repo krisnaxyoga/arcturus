@@ -8,8 +8,10 @@ use App\Models\Booking;
 use App\Models\RoomHotel;
 use App\Models\HotelRoomBooking;
 use App\Models\PaymentGetwayTransaction;
+use App\Models\ContractPrice;
 use App\Models\Vendor;
 use App\Models\User;
+use App\Models\Setting;
 use Carbon\Carbon;
 
 use Illuminate\Support\Str;
@@ -18,7 +20,7 @@ use App\Models\ContractRate;
 use Illuminate\Support\Facades\Log;
 use GuzzleHttp\Client;
 use Illuminate\Http\RedirectResponse;
-use App\Mail\BookingConfirmation;
+use App\Mail\PaymentNotif;
 use Illuminate\Support\Facades\Mail;
 
 use Illuminate\Support\Facades\Validator;
@@ -92,6 +94,8 @@ class BookingController extends Controller
 
                 $pricenomarkupint = (int) $pString;
 
+                $contractprice = ContractPrice::where('id',$item['contpriceid'])->first();
+
                 $hotelbook = new HotelRoomBooking();
                 $hotelbook->room_id = $item['roomId'];
                 $hotelbook->booking_id = $data->id;
@@ -102,6 +106,8 @@ class BookingController extends Controller
                 $hotelbook->checkin_date = $request->checkin;
                 $hotelbook->checkout_date = $request->checkout;
                 $hotelbook->price = $priceint;
+                $hotelbook->rate_price = $contractprice->recom_price;
+                $hotelbook->total_ammount = (($contractprice->recom_price * $totalNights) * $item['quantity']);
                 $hotelbook->pricenomarkup = $pricenomarkupint;
                 $hotelbook->save();
 
@@ -215,10 +221,16 @@ class BookingController extends Controller
             ->with('success', 'Data saved!');
         }
     }
+    public function paymentbookingpage($booking){
+        return view('landingpage.hotel.transferbank',compact('booking'));
+    }
 
     public function upbanktransfer(Request $request){
         $validator =  Validator::make($request->all(), [
             'image' => 'nullable|mimes:png,jpg,jpeg|max:2048',
+        ], [
+            'image.mimes' => 'The image must be in PNG, JPG, or JPEG format.',
+            'image.max' => 'The image size cannot exceed 2MB.',
         ]);
 
         if ($validator->fails()) {
@@ -255,7 +267,8 @@ class BookingController extends Controller
             $trans->trx_id = Str::random(5);
             $trans->save();
 
-            // Mail::to($booking->vendor->email)->send(new BookingConfirmation($data));
+            $Setting = Setting::where('id',1)->first();
+            Mail::to($Setting->email)->send(new PaymentNotif($trans));
             // Mail::to(auth()->user()->email)->send(new BookingConfirmation($data));
 
             return redirect()

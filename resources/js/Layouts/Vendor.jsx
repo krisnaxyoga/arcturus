@@ -6,7 +6,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Button from 'react-bootstrap/Button';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
-import Offcanvas from 'react-bootstrap/Offcanvas';
+import '../../css/app.css';
 
 
 function Layout({ children, page, vendor }) {
@@ -41,6 +41,8 @@ function Layout({ children, page, vendor }) {
         }else if(page === '/room/index'){
             setIsOpen2(true);
         }else if(page === '/room/contract/index') {
+            setIsOpen2(true);
+        }else if(page === '/room/surcharge/index') {
             setIsOpen2(true);
         }
         else{
@@ -102,32 +104,24 @@ function Layout({ children, page, vendor }) {
                                     </a>
                                     {isOpen2 && <div className="bg-white py-2 px-4 colapse-inner rounded">
                                         <Link className={`nav-link ${page === '/myprofile' ? 'active' : ''}`} href="/myprofile">Hotel Info</Link>
-                                        <Link className={`nav-link ${page === '/room/attribute' ? 'active' : ''}`} href="/room/attribute">Amenities</Link>
+                                        {/* <Link className={`nav-link ${page === '/room/attribute' ? 'active' : ''}`} href="/room/attribute">Amenities</Link> */}
                                         <Link className={`nav-link ${page === '/room/index' ? 'active' : ''}`} href="/room/index">Room Types</Link>
                                         <Link className={`nav-link ${page === '/room/contract/index' ? 'active' : ''}`} href="/room/contract/index">Rates</Link>
+                                        <Link className={`nav-link ${page === '/room/surcharge/index' ? 'active' : ''}`} href="/room/surcharge/index">Rate Calendar</Link>
                                     </div>}
                                 </div>
-
-                                {/* <Link className={`nav-link ${page === '/managenews' ? 'active' : ''}`} href="/managenews">
-                                    <div className="nav-link-icon"><i className="fa fa-bookmark" aria-hidden="true"></i></div>
-                                    Manage News
-                                </Link> */}
                                 <Link className={`nav-link ${page === '/bookingreport' ? 'active' : ''}`} href="/bookingreport">
                                     <div className="nav-link-icon">  <i className="fas fa-fw fa-chart-area"></i></div>
                                     Booking Report
                                 </Link>
-                                {/* <Link className={`nav-link ${page === '/enquiryreport' ? 'active' : ''}`} href="/enquiryreport">
-                                    <div className="nav-link-icon"><i className="fa fa-book" aria-hidden="true"></i></div>
-                                    Enquiry Report
-                                </Link> */}
-                                {/* <Link className={`nav-link ${page === '/verifications' ? 'active' : ''}`} href="/verifications">
-                                    <div className="nav-link-icon"><i className="fa fa-address-card" aria-hidden="true"></i></div>
-                                    Verifications
-                                </Link> */}
-                                {/* <Link className={`nav-link ${page === '/payouts' ? 'active' : ''}`} href="/payouts">
-                                    <div className="nav-link-icon"><i className="fa fa-credit-card" aria-hidden="true"></i></div>
-                                    Payouts
-                                </Link> */}
+                                {vendor.users.position == 'master' && (
+                                    <>
+                                     <Link className={`nav-link ${page === '/vendor-profile/property' ? 'active' : ''}`} href="/vendor-profile/property">
+                                        <div className="nav-link-icon"><i className="fa fa-building" aria-hidden="true"></i></div>
+                                        Property
+                                    </Link>
+                                    </>
+                                )}
                                 <Link className={`nav-link ${page === '/vendor-profile/changepassword' ? 'active' : ''}`} href="/vendor-profile/changepassword">
                                     <div className="nav-link-icon">  <i className="fas fa-fw fa-key"></i></div>
                                     password

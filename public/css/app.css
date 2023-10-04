@@ -10819,3 +10819,10 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+
+.g-field-search {
+    flex: 0 0 90%;
+    flex-grow: 1;
+    max-width: 90%;
+    padding: 0 15px;
+}

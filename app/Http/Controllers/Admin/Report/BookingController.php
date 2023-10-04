@@ -54,11 +54,11 @@ class BookingController extends Controller
 
         $hotelbook = HotelRoomBooking::where('booking_id',$payment->booking_id)->get();
 
-            foreach($hotelbook as $item){
-                $room = RoomHotel::find($item->room_id);
-                $room->room_allow =  $room->room_allow - $item->total_room;
-                $room->save();
-            }
+            // foreach($hotelbook as $item){
+            //     $room = RoomHotel::find($item->room_id);
+            //     $room->room_allow =  $room->room_allow - $item->total_room;
+            //     $room->save();
+            // }
 
             $contract_id = HotelRoomBooking::where('booking_id',$payment->booking_id)->first();
             $contract = ContractRate::where('id',$contract_id->contract_id)->first();
@@ -77,6 +77,81 @@ class BookingController extends Controller
         Mail::to($booking->vendor->email_reservation)->send(new BookingConfirmationHotel($data));
         Mail::to($booking->vendor->email)->send(new BookingConfirmationHotel($data));
         Mail::to($booking->users->email)->send(new BookingConfirmation($data));
+
+        return redirect()->back()->with('message', 'Email send to agent and hotel');
+    }
+
+    public function sendconfirmationtoagent($id)
+    {
+        $payment = PaymentGetwayTransaction::find($id);
+        $payment->status = 200;
+        $payment->save();
+
+        $booking = Booking::find($payment->booking_id);
+        $booking->booking_status = 'paid';
+        $booking->save();
+
+        $hotelbook = HotelRoomBooking::where('booking_id',$payment->booking_id)->get();
+
+            // foreach($hotelbook as $item){
+            //     $room = RoomHotel::find($item->room_id);
+            //     $room->room_allow =  $room->room_allow - $item->total_room;
+            //     $room->save();
+            // }
+
+            $contract_id = HotelRoomBooking::where('booking_id',$payment->booking_id)->first();
+            $contract = ContractRate::where('id',$contract_id->contract_id)->first();
+            $agent = Vendor::where('user_id',$booking->user_id)->first();
+
+            $data = [
+                'booking' => $booking, // $book merupakan instance dari model Booking yang sudah Anda dapatkan
+                'contract' => $contract,
+                'setting' => Setting::first(),
+                'agent' =>$agent,
+                'hotelbook' => $hotelbook
+            ];
+        // email tes agent
+        // Mail::to('softhouse3@themulia.com')->send(new BookingConfirmation($data));
+        Mail::to($booking->users->email)->send(new BookingConfirmation($data));
+
+        return redirect()->back()->with('message', 'Email send to agent and hotel');
+    }
+
+    public function sendconfirmationtohotel($id)
+    {
+        $payment = PaymentGetwayTransaction::find($id);
+        $payment->status = 200;
+        $payment->save();
+
+        $booking = Booking::find($payment->booking_id);
+        $booking->booking_status = 'paid';
+        $booking->save();
+
+        $hotelbook = HotelRoomBooking::where('booking_id',$payment->booking_id)->get();
+
+            // foreach($hotelbook as $item){
+            //     $room = RoomHotel::find($item->room_id);
+            //     $room->room_allow =  $room->room_allow - $item->total_room;
+            //     $room->save();
+            // }
+
+            $contract_id = HotelRoomBooking::where('booking_id',$payment->booking_id)->first();
+            $contract = ContractRate::where('id',$contract_id->contract_id)->first();
+            $agent = Vendor::where('user_id',$booking->user_id)->first();
+
+            $data = [
+                'booking' => $booking, // $book merupakan instance dari model Booking yang sudah Anda dapatkan
+                'contract' => $contract,
+                'setting' => Setting::first(),
+                'agent' =>$agent,
+                'hotelbook' => $hotelbook
+            ];
+
+        // email tess reservasi
+        // Mail::to('softhouse3@themulia.com')->send(new BookingConfirmationHotel($data));
+        
+        Mail::to($booking->vendor->email_reservation)->send(new BookingConfirmationHotel($data));
+        Mail::to($booking->vendor->email)->send(new BookingConfirmationHotel($data));
 
         return redirect()->back()->with('message', 'Email send to agent and hotel');
     }

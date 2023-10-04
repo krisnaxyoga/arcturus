@@ -25,9 +25,13 @@
             <div class="col-lg-6">
                 <div class="card">
                     <div class="card-body">
-                        <h2 class="text-center">BCA</h2>
-                        <h3 class="text-center">PT Surya Langit Biru</h3>
-                        <h3 class="badge badge-success text-center">2027999995</h3>
+                        <h2>BCA</h2>
+                        <h3>PT Surya Langit Biru</h3>
+                        <div class="d-flex">
+                             <h3 class="badge badge-success text-center m-0" style="font-size: 30px;" id="textToCopy">2027999995</h3>
+                             <button class="copy-button mx-2 btn btn-success" onclick="copyToClipboard()"><i class="fa fa-copy"></i></button>
+                        </div>
+                       
                     </div>
                 </div>
             </div>
@@ -39,9 +43,13 @@
                             @method('POST')
 
                             <div class="mb-3">
-                                <label for="">Upload bank transfer</label>
+                                <label for="image">Upload bank transfer</label>
                                 <input id="image-input" type="file" name="image" class="form-control">
-                                <img id="image-preview" class="mt-3" style="width: 200px" src="#" alt="Preview">
+                                @error('image')
+                                <p style="font-weight: 700; font-size: 13px;" class="text-danger">{{ $message }}</p>
+                                @enderror
+                                <p class="text-danger" style="font-weight: 700; font-size: 13px;">The image must be in PNG, JPG, or JPEG format, The image size cannot exceed 2MB.</p>
+                                <img onerror="this.onerror=null; this.src='https://semantic-ui.com/images/wireframe/white-image.png';" id="image-preview" class="mt-3" style="width: 200px" src="#" alt="Preview">
                             </div>
                             <input type="hidden" value="{{$booking}}" name="idbooking">
                             <div class="mb-3">
@@ -55,6 +63,50 @@
       </div>
 
     </section>
+    <script>
+        document.getElementById('image-input').addEventListener('change', function() {
+            const fileInput = this;
+            const imagePreview = document.getElementById('image-preview');
+    
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                const validExtensions = ['jpg', 'jpeg', 'png'];
+                const maxFileSize = 2 * 1024 * 1024; // 2MB
+    
+                const extension = file.name.split('.').pop().toLowerCase();
+                const fileSize = file.size;
+    
+                if (validExtensions.indexOf(extension) === -1) {
+                    alert('The image must be in PNG, JPG, or JPEG format.');
+                    fileInput.value = ''; // Clear the input
+                    imagePreview.src = ''; // Clear the preview
+                } else if (fileSize > maxFileSize) {
+                    alert('The image size cannot exceed 2MB.');
+                    fileInput.value = ''; // Clear the input
+                    imagePreview.src = ''; // Clear the preview
+                } else {
+                    // Valid file, display the preview
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        imagePreview.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+        });
+    </script>
+    <script>
+        function copyToClipboard() {
+            const textToCopy = document.getElementById('textToCopy');
+            const textArea = document.createElement('textarea');
+            textArea.value = textToCopy.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            alert('Text copied to clipboard');
+        }
+    </script>
     <script>
         $(document).ready(function() {
           // Mengaktifkan event change pada input file

@@ -4881,7 +4881,7 @@ a.close.disabled {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1050;
+  z-index: 1072;
   display: none;
   width: 100%;
   height: 100%;
@@ -4981,10 +4981,11 @@ a.close.disabled {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1040;
+  z-index: 1070;
   width: 100vw;
   height: 100vh;
-  background-color: #000; }
+  background-color: #000; 
+}
   .modal-backdrop.fade {
     opacity: 0; }
   .modal-backdrop.show {
@@ -5047,7 +5048,7 @@ a.close.disabled {
 
 @media (min-width: 576px) {
   .modal-dialog {
-    max-width: 500px;
+    max-width: 800px;
     margin: 1.75rem auto; }
   .modal-dialog-scrollable {
     max-height: calc(100% - 3.5rem); }
@@ -10097,3 +10098,49 @@ textarea.form-control {
   100% {
     stroke-dasharray: 89, 200;
     stroke-dashoffset: -136px; } }
+
+
+.item-loop-list {
+    border: 1px solid #dfdfdf;
+    display: flex;
+    margin-bottom: 30px;
+    overflow: hidden;
+    position: relative;
+}
+
+.thumb-image {
+    background: #ccc;
+    flex: 0 0 30%;
+    height: 190px;
+    overflow: hidden;
+    padding: 0;
+    position: relative;
+}
+.g-info {
+    flex: 0 0 45%;
+    padding: 15px;
+    position: relative;
+}
+
+.g-rate-price {
+    flex: 1;
+    padding: 15px 15px 15px 0;
+    position: relative;
+}
+
+@media (max-width: 766px){
+  .g-rate-price {
+      flex: 0 0 100%;
+      padding: 0 15px 10px;
+  }
+  .thumb-image {
+    flex: 0 0 100%;
+  }
+  .g-info {
+    display: flex;
+    flex: 0 0 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding-bottom: 0;
+  }
+}

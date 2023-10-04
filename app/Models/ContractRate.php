@@ -29,4 +29,12 @@ class ContractRate extends Model
     public function hotelroombooking() {
         return $this->hasMany(HotelRoomBooking::class);
     }
+
+    public function advancepurchaseprice() {
+        return $this->hasMany(AdvancePurchasePrice::class);
+    }
+
+    public function advancepurchase() {
+        return $this->hasMany(AdvancePurchase::class);
+    }
 }

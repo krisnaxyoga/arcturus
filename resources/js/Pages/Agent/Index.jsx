@@ -1,12 +1,11 @@
 //import React
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 
 //import layout
 import Layout from '../../Layouts/Agent';
 
 import Pagination from '../../Components/Pagination';
 import Bookings from '../Agent/BookingHistory/Bookings';
-
 
 //import Link
 import { Link, usePage } from '@inertiajs/inertia-react';
@@ -31,6 +30,7 @@ export default function Index({ totalroom, data,booking,success,pending,getbooki
   const nextPage = () => setCurrentPage(currentPage + 1);
 
   const prevPage = () => setCurrentPage(currentPage - 1);
+  
 
   return (
     <>

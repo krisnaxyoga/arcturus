@@ -47,8 +47,26 @@ export default function Index({ session, data, contacts, country }) {
     const [saldo, setCreditSaldo] = useState(0);
 
     const handleFileChange = (e) => {
-        setlogo(e.target.files[0]);
+        const file = e.target.files[0];
+        if (file) {
+            const fileNameParts = file.name.split('.');
+            const fileExtension = fileNameParts[fileNameParts.length - 1].toLowerCase();
+            const allowedExtensions = ['jpg', 'jpeg', 'png'];
+            const maxFileSizeInBytes = 5 * 1024 * 1024; // 5 MB
+
+            if (!allowedExtensions.includes(fileExtension)) {
+                alert('Only image files with formats png, jpg, or jpeg are allowed!');
+                e.target.value = ''; // Mengosongkan input file
+            } else if (file.size > maxFileSizeInBytes) {
+                alert('File size must not exceed 5 MB!');
+                e.target.value = ''; // Mengosongkan input file
+            } else {
+                setlogo(file);
+            }
+        }
     };
+// Tampilkan gambar pratinjau jika gambar ada
+const logoPreview = logo ? URL.createObjectURL(logo) : null;
 
     const storePost = async (e) => {
         e.preventDefault();
@@ -153,13 +171,20 @@ export default function Index({ session, data, contacts, country }) {
                                                             </div>
                                                         </div>
 
-
                                                         <div className="mb-3">
                                                             <label for="formFile" className="form-label">Logo</label>
                                                             <input className="form-control" onChange={handleFileChange} type="file" id="formFile" />
                                                         </div>
                                                         <div className="mb-3">
-                                                            <img style={{ width: "100px" }} src={data.vendors.logo_img || 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Image_not_available.png/640px-Image_not_available.png'} alt="" />
+                                                        {logoPreview ? (
+                                                                <>
+                                                                {logoPreview && <img src={logoPreview} alt="Logo Preview" style={{width:'100px'}}/>}
+                                                                </>
+                                                            ):(
+                                                                <>
+                                                                <img style={{width:"100px"}} src={data.logo_img||'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Image_not_available.png/640px-Image_not_available.png'} alt="" />
+                                                                </>
+                                                            )}
                                                         </div>
                                                     </div>
                                                     <div className="col-lg-6">
@@ -312,7 +337,7 @@ export default function Index({ session, data, contacts, country }) {
 
                                                         <div className="col-lg-4">
                                                             <div className="mb-3">
-                                                                <label htmlFor="bank">Swif Code</label>
+                                                                <label htmlFor="bank">Swift Code</label>
                                                                 <input defaultValue={data.vendors.swif_code} onChange={(e) => setSwifCode(e.target.value)} type="text" className='form-control' name='swifcode' />
                                                             </div>
                                                             {/* <div className="mb-3">

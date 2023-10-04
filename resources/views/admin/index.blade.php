@@ -284,7 +284,10 @@
                                 <i class="fas fa-circle text-danger"></i> Unpaid
                             </span>
                             <span class="mr-2">
-                                <i class="fas fa-circle text-secondary"></i> unknow
+                                <i class="fas fa-circle text-secondary"></i> Proccessing
+                            </span>
+                            <span class="mr-2">
+                                <i class="fas fa-circle text-warning"></i> Cancelled
                             </span>
                         </div>
                     </div>
@@ -304,18 +307,20 @@ var ctx = document.getElementById("myPieChart");
 var myPieChart = new Chart(ctx, {
     type: "doughnut",
     data: {
-        labels: ["paid", "unpaid", "unknow"],
+        labels: ["paid", "unpaid", "processing","cancelled"],
         datasets: [{
-            data: [{{$paid}}, {{$unpaid}}, {{$unknow}}],
+            data: [{{$paid}}, {{$unpaid}}, {{$process}},{{$cancelled}}],
             backgroundColor: [
                 "rgba(0, 97, 242, 1)",
                 "rgba(243, 76, 79)",
-                "rgba(88, 0, 232, 1)"
+                "rgba(88, 0, 232, 1)",
+                "rgb(244, 161, 0)",
             ],
             hoverBackgroundColor: [
                 "rgba(0, 97, 242, 0.9)",
                 "rgba(249, 87, 86)",
-                "rgba(88, 0, 232, 0.9)"
+                "rgba(88, 0, 232, 0.9)",
+                "rgba(254, 195, 5)",
             ],
             hoverBorderColor: "rgba(234, 236, 244, 1)"
         }]
