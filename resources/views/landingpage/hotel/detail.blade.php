@@ -277,6 +277,9 @@
                                                                             $foundZero = false;
                                                                             $totalNights = $checkinDate->diffInDays($checkoutDate);
                                                                             $recomprice = $itemprice->recom_price;
+
+                                                                            $totalx = 0;
+                                                                            $totalDataCount = 0;
                                                                             // var_dump($totalNights);
                                                                             if ($HotelCalendar->count() != 0) {
                                                                                 foreach ($HotelCalendar as $key => $calendar) {
@@ -370,10 +373,11 @@
                                                                                             $hotelroomid = $calendar->room_hotel_id;
                                                                                         }
                                                                                         else{
-                                                                                            $totalx = 0;
-                                                                                            $totalx += $calendar->recom_price;
-                                                                                            
-                                                                                            var_dump('calender sama nilai dari rate ='.$calendar->recom_price.' total calendar = '.$totalx);
+                                                                                            if($startDate < $checkoutDate && $endDate >= $checkinDate && $startDate == $endDate)
+                                                                                            {
+                                                                                                $totalx += $calendar->recom_price;
+                                                                                                $totalDataCount++;
+                                                                                            }
                                                                                         }
                                                                             
                                                                                         if ($checkoutDate == $endDate) {
@@ -384,7 +388,7 @@
                                                                                             $no_checkin = $calendar->no_checkin;
                                                                                         }
                                                                                     } else {
-                                                                                        if ($calendar->room_hotel_id == $itemprice->room_id) {
+                                                                                        if ($calendar->room_hotel_id == $itemprice->room_id && $foundZero == false) {
                                                                                             $status = $calendar->active; 
                                                                                            
                                                                                             // Periksa apakah room_allow sama dengan 0 atau active sama dengan 0
@@ -408,6 +412,13 @@
                                                                                         }
                                                                                     }
                                                                                 }
+
+                                                                                if($totalx != 0){
+                                                                                    $countNights = $totalNights - $totalDataCount;
+                                                                                    $TotalHotelCalendar = ($totalx + ($itemprice->recom_price * $countNights)) / $totalNights;
+                                                                                }
+                                                                                
+                                                                              
                                                                             }
                                                                             
                                                                             
@@ -432,7 +443,7 @@
                                                                                     // $Room_recomprice = $TotalHotelCalendar;
                                                                                 }
                                                                             }
-                                                                            
+                                                                            // var_dump('calender sama nilai dari rate ='.$Room_recomprice.' total calendar = '.$totalx.' cek night ='.$totalDataCount);
                                                                             // ========================================================= END CALENDAR ====================================
                                                                             
                                                                             // ========================================================= ROOM ALLOWMENT ====================================

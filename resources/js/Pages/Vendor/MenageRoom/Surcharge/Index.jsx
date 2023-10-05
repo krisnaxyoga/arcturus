@@ -226,7 +226,7 @@ export default function Index({ errors, session,contractrate, default_selected_h
                                                 {hotel_rooms.map((item) =>
                                                     (
                                                         <li key={item.id} className="nav-item event-name" onClick={() => handleNavRoomTypeSelect(item.id,item.contract_id)}>
-                                                            <a className={`nav-link ${activeHotelRoom === item.id ? "active" : ""}`}>
+                                                            <a className={`nav-link ${activeHotelRoom == item.id ? "active" : ""}`}>
                                                                 {item.ratedesc}
                                                             </a>
                                                         </li>

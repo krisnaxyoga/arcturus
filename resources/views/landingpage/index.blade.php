@@ -34,7 +34,7 @@
     </div>
 
 
-    @if (isset(Auth::user()->id) && Auth::user()->role_id == 3)
+    @if (isset(Auth::user()->id) && Auth::user()->role_id == 3 && Auth::user()->is_active == 1)
         <section class="ftco-section ftco-no-pb ftco-no-pt">
             <div class="container">
                 <div class="row">

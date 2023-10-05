@@ -46,7 +46,7 @@ export default function Rates({ rates }) {
                             >
                                 <i className="fa fa-edit"></i>
                             </Link>
-                            <a href={`/room/contract/contract_price_is_active/${item.id}/${item.is_active == 1 ? 0 : 1}`} className='btn btn-datatable btn-icon btn-transparent-dark mr-2'>{item.is_active == 1 ? <><span className='text-success'><i class="fa fa-toggle-on" aria-hidden="true"></i>on </span></> : <><span className='text-danger'><i class="fa fa-toggle-off" aria-hidden="true"></i>off</span></>} </a>
+                            <a href={`/room/contract/contractrate_is_active/${item.id}/${item.is_active == 1 ? 0 : 1}`} className='btn btn-datatable btn-icon btn-transparent-dark mr-2'>{item.is_active == 1 ? <><span className='text-success'><i class="fa fa-toggle-on" aria-hidden="true"></i>on </span></> : <><span className='text-danger'><i class="fa fa-toggle-off" aria-hidden="true"></i>off</span></>} </a>
                             {/* <Link
                                 href={`/room/contract/destroy/${item.id}`}
                                 className="btn btn-datatable btn-icon btn-transparent-dark mr-2"

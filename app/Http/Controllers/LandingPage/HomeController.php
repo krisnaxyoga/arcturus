@@ -126,6 +126,7 @@ class HomeController extends Controller
         })
         ->whereHas('contractrate', function ($query) {
                 $query->where('rolerate', 1);
+                $query->where('is_active', 1);
             })
         
             ->whereHas('contractrate', function ($query) use ($checkin, $checkout) {
@@ -177,6 +178,8 @@ class HomeController extends Controller
                 });
             })
             ->whereHas('contractrate', function ($query) use ($checkin, $checkout) {
+                $query->where('is_active', 1);
+
                 $query->where(function ($q) use ($checkin, $checkout) {
                     $q->where(function ($qq) use ($checkin, $checkout) {
                         $qq->where('stayperiod_begin', '<=', $checkin)
@@ -253,8 +256,13 @@ class HomeController extends Controller
         $data->appends($requestdata);
 
         // return view('landingpage.hotel.index',compact('data','requestdata','blackoutVendorIds','surchargesDetail','surcharprice'));
-
-        return view('landingpage.hotel.index', compact('data', 'requestdata','contractprice','advancepurchase'));
+        $acyive = auth()->user()->is_active;
+        if($acyive == 1){
+          return view('landingpage.hotel.index', compact('data', 'requestdata','contractprice','advancepurchase'));  
+        }else{
+            return view('landingpage.pagenotfound.isactiveaccount');
+        }
+        
     }
 
     /**
@@ -262,180 +270,194 @@ class HomeController extends Controller
      */
     public function hoteldetail(Request $request, $id)
     {
-        $iduser = auth()->user()->id;
-        $agent_country = Vendor::where('user_id', $iduser)->first();
-        $agentCountry = $agent_country->country;
-        $category = $request->input('data.category');
-        $datareq = $request->all();
-        // dd($datareq['checkin']);
+        
+        // dd(auth()->check());
+        if(auth()->check() == false){
+            return view('auth.login');
+        }else{
+            $iduser = auth()->user()->id;
+            $agent_country = Vendor::where('user_id', $iduser)->first();
+            $agentCountry = $agent_country->country;
+            $category = $request->input('data.category');
+            $datareq = $request->all();
+            // dd($datareq['checkin']);
 
-        $inputCheckin1 = $datareq['checkin'];
-        $inputCheckout1 = $datareq['checkout'];
-        $checkin2 = Carbon::createFromFormat('Y-m-d', $inputCheckin1);
-        $checkout2 = Carbon::createFromFormat('Y-m-d', $inputCheckout1);
-        $Nights = $checkout2->diffInDays($checkin2);
+            $inputCheckin1 = $datareq['checkin'];
+            $inputCheckout1 = $datareq['checkout'];
+            $checkin2 = Carbon::createFromFormat('Y-m-d', $inputCheckin1);
+            $checkout2 = Carbon::createFromFormat('Y-m-d', $inputCheckout1);
+            $Nights = $checkout2->diffInDays($checkin2);
 
-        $contract_hotel = ContractRate::where('id', $id)->first();
+            $contract_hotel = ContractRate::where('id', $id)->where('is_active', 1)->first();
 
-            $vendor = ContractPrice::where('contract_id', $id)
-                ->where('is_active',1)
-                ->with('contractrate')
-                ->with('contractrate.vendors')
-                ->with('room')
-                ->whereHas('contractrate', function ($query) use ($agentCountry,$Nights) {
-                    $query->where('distribute', 'LIKE', '%' . $agentCountry . '%')
-                        ->orWhere('distribute', 'LIKE', '%all%')
-                        ->orWhere('distribute', 'LIKE', '%WORLDWIDE%');
+                $vendor = ContractPrice::where('contract_id', $id)
+                    ->where('is_active',1)
+                    ->with('contractrate')
+                    ->with('contractrate.vendors')
+                    ->with('room')
+                    ->whereHas('contractrate', function ($query) use ($agentCountry,$Nights) {
+                        $query->where('distribute', 'LIKE', '%' . $agentCountry . '%')
+                            ->orWhere('distribute', 'LIKE', '%all%')
+                            ->orWhere('distribute', 'LIKE', '%WORLDWIDE%');
 
-                    $query->where('min_stay', $Nights)
-                    ->orWhere('min_stay', 1);
-                })
-                ->orderBy('recom_price', 'asc')
-                ->get();
-        // }
+                        $query->where('min_stay', $Nights)
+                        ->orWhere('min_stay', 1);
 
-    //    dd($vendor);
+                        $query->where('is_active', 1);
+                    })
+                    ->orderBy('recom_price', 'asc')
+                    ->get();
+            // }
 
-        $slider = Slider::where('user_id', $vendor[0]->user_id)->get();
+        //    dd($vendor);
 
-        if (isset($datareq['checkin']) && isset($datareq['checkout'])) {
-            $inputCheckin = $datareq['checkin'];
-            $inputCheckout = $datareq['checkout'];
+            $slider = Slider::where('user_id', $vendor[0]->user_id)->get();
 
-            $checkin = Carbon::createFromFormat('Y-m-d', $inputCheckin);
-            $checkout = Carbon::createFromFormat('Y-m-d', $inputCheckout);
-            $today = Carbon::now();
-            
+            if (isset($datareq['checkin']) && isset($datareq['checkout'])) {
+                $inputCheckin = $datareq['checkin'];
+                $inputCheckout = $datareq['checkout'];
 
-            if ($checkout->lt($checkin)) {
-                // Menghitung selisih hari antara checkin dan checkout
-                $dayDifference = $checkin->diffInDays($checkout);
+                $checkin = Carbon::createFromFormat('Y-m-d', $inputCheckin);
+                $checkout = Carbon::createFromFormat('Y-m-d', $inputCheckout);
+                $today = Carbon::now();
+                
 
-                // Menggunakan selisih hari untuk menambahkan ke checkout
-                $checkout = $checkin->copy()->addDays($dayDifference);
+                if ($checkout->lt($checkin)) {
+                    // Menghitung selisih hari antara checkin dan checkout
+                    $dayDifference = $checkin->diffInDays($checkout);
+
+                    // Menggunakan selisih hari untuk menambahkan ke checkout
+                    $checkout = $checkin->copy()->addDays($dayDifference);
+                }
+
+                // Menyimpan nilai $checkin dan $checkout pada $datareq
+                $datareq['checkin'] = $checkin->format('Y-m-d');
+                $datareq['checkout'] = $checkout->format('Y-m-d');
             }
 
-            // Menyimpan nilai $checkin dan $checkout pada $datareq
-            $datareq['checkin'] = $checkin->format('Y-m-d');
-            $datareq['checkout'] = $checkout->format('Y-m-d');
-        }
+            $vendordetail = Vendor::where('id', $vendor[0]->contractrate->vendor_id)->first();
 
-        $vendordetail = Vendor::where('id', $vendor[0]->contractrate->vendor_id)->first();
+            $service = AgentMarkupDetail::where('vendor_id', $vendor[0]->contractrate->vendor_id)->get();
 
-        $service = AgentMarkupDetail::where('vendor_id', $vendor[0]->contractrate->vendor_id)->get();
+            $roomtype = RoomHotel::where('vendor_id', $vendor[0]->contractrate->vendor_id)->get();
 
-        $roomtype = RoomHotel::where('vendor_id', $vendor[0]->contractrate->vendor_id)->get();
+            // $surcharprice = 0;
 
-        // $surcharprice = 0;
+            // $surchargesVendorIds = 0;
+            // $blackoutVendorIds = 0;
 
-        // $surchargesVendorIds = 0;
-        // $blackoutVendorIds = 0;
+            if (isset($datareq)) {
+                // Lakukan sesuatu dengan $datareq
 
-        if (isset($datareq)) {
-            // Lakukan sesuatu dengan $datareq
-
-            $checkin = $datareq['checkin'];
-            $checkout = $datareq['checkout'];
+                $checkin = $datareq['checkin'];
+                $checkout = $datareq['checkout'];
+                
+                $vendorIds = [$vendor[0]->contractrate->vendor_id];
             
-            $vendorIds = [$vendor[0]->contractrate->vendor_id];
-         
-            $contractprice = ContractPrice::where('user_id', $vendor[0]->user_id)
-                ->where('is_active',1)
-                ->with('contractrate')
-                ->with('contractrate.vendors')
-                ->with('room')
-                ->whereHas('contractrate', function ($query) use ($agentCountry) {
-                    $query->where('distribute', 'LIKE', '%' . $agentCountry . '%')
-                    ->orWhere('distribute', 'LIKE', '%all%')
-                    ->orWhere('distribute', 'LIKE', '%WORLDWIDE%');
-                })
-                ->whereHas('contractrate', function ($query) use ($checkin, $checkout) {
-                    $query->where(function ($q) use ($checkin, $checkout) {
-                        $q->where(function ($qq) use ($checkin, $checkout) {
-                            $qq->where('stayperiod_begin', '<=', $checkin)
-                                ->where('stayperiod_end', '>=', $checkout);
-                        })->Where(function ($qq) use ($checkin, $checkout) {
-                            $qq->where('booking_begin', '<=', $checkin)
-                                ->where('booking_end', '>=', $checkout);
-                        });
-                    });
-                })
-                ->orderBy('recom_price', 'asc')
-                ->get();
-
-
-            $HotelRoomBooking = HotelRoomBooking::where('vendor_id', $vendorIds)
-            ->whereHas('booking', function ($query) {
-                $query->where('booking_status', 'paid');
-            })
-            ->where(function ($q) use ($checkin, $checkout) {
-                $q->where(function ($qq) use ($checkin, $checkout) {
-                    $qq->where('checkin_date', '<=', Carbon::createFromFormat('Y-m-d', $checkout)->subDay())
-                        ->where('checkout_date', '>=', $checkin);
-                });
-            })
-            ->orWhere(function ($q) use ($checkin, $checkout) {
-                $q->where('checkin_date', '<=', $checkout)
-                    ->where('checkout_date', '>=', $checkout)
-                    ->whereNotIn('vendor_id', function ($query) use ($checkin, $checkout) {
-                        $query->select('vendor_id')
-                            ->from('hotel_room_bookings')
-                            ->where('checkin_date', '<=', $checkout)
-                            ->where('checkout_date', '>=', $checkin);
-                    });
-            })
-            ->get();
-
-            $HotelCalendar = HotelRoomSurcharge::where('vendor_id', $vendorIds)
-            ->where(function ($q) use ($checkin, $checkout) {
-                $checkinDate = date('Y-m-d', strtotime($checkin));
-                $checkoutDate = date('Y-m-d', strtotime($checkout));
-        
-                $q->where(function ($qq) use ($checkinDate, $checkoutDate) {
-                    $qq->whereRaw('DATE(start_date) >= ?', [$checkinDate])
-                        ->whereRaw('DATE(start_date) <= ?', [$checkoutDate]);
-                })
-                ->orWhere(function ($qq) use ($checkinDate, $checkoutDate) {
-                    $qq->whereRaw('DATE(end_date) >= ?', [$checkinDate])
-                        ->whereRaw('DATE(end_date) <= ?', [$checkoutDate]);
-                })
-                ->orWhere(function ($qq) use ($checkinDate, $checkoutDate) {
-                    $qq->whereRaw('DATE(start_date) <= ?', [$checkinDate])
-                        ->whereRaw('DATE(end_date) >= ?', [date('Y-m-d', strtotime($checkoutDate . ' +1 day'))]);
-                });
-            })
-            ->get();
-            
-
-            // dd($checkin);
-            $interval = $today->diffInDays($checkin);
-            $day = $interval + 1;
-            // dd($day);
-            $advancepurchase = AdvancePurchasePrice::whereHas('advancepurchase', function ($query) use ($day, $checkin, $checkout) {
-                $query->where('is_active', 1)
-                    ->where(function ($query) use ($checkin,$checkout) {
-                        $query->whereDate('beginsell', '<=', $checkin)
-                              ->whereDate('endsell', '>=', $checkin);
+                // dd($agentCountry);
+                $contractprice = ContractPrice::where('user_id', $vendor[0]->user_id)
+                    ->where('is_active',1)
+                    ->with('contractrate')
+                    ->with('contractrate.vendors')
+                    ->with('room')
+                    ->whereHas('contractrate', function ($query) use ($agentCountry) {
+                        $query->where('distribute', 'LIKE', '%' . $agentCountry . '%')
+                        ->orWhere('distribute', 'LIKE', '%all%')
+                        ->orWhere('distribute', 'LIKE', '%WORLDWIDE%');
                     })
-                    ->where(function ($query) use ($day) {
-                        $query->where('day', '<=', $day)
-                              ->orWhereNull('day');
+                    ->whereHas('contractrate', function ($query) use ($checkin, $checkout) {
+                        $query->where('is_active', 1);
+
+                        $query->where(function ($q) use ($checkin, $checkout) {
+                            $q->where(function ($qq) use ($checkin, $checkout) {
+                                $qq->where('stayperiod_begin', '<=', $checkin)
+                                    ->where('stayperiod_end', '>=', $checkout);
+                            })->orWhere(function ($qq) use ($checkin, $checkout) {
+                                $qq->where('booking_begin', '<=', $checkin)
+                                    ->where('booking_end', '>=', $checkout);
+                            });
+                        });
+                    })
+                    ->orderBy('recom_price', 'asc')
+                    ->get();
+
+
+                $HotelRoomBooking = HotelRoomBooking::where('vendor_id', $vendorIds)
+                    ->whereHas('booking', function ($query) {
+                        $query->where('booking_status', 'paid');
+                    })
+                    ->where(function ($q) use ($checkin, $checkout) {
+                        $q->where(function ($qq) use ($checkin, $checkout) {
+                            $qq->where('checkin_date', '<=', Carbon::createFromFormat('Y-m-d', $checkout)->subDay())
+                                ->where('checkout_date', '>=', $checkin);
+                        });
+                    })
+                    ->orWhere(function ($q) use ($checkin, $checkout) {
+                        $q->where('checkin_date', '<=', $checkout)
+                            ->where('checkout_date', '>=', $checkout)
+                            ->whereNotIn('vendor_id', function ($query) use ($checkin, $checkout) {
+                                $query->select('vendor_id')
+                                    ->from('hotel_room_bookings')
+                                    ->where('checkin_date', '<=', $checkout)
+                                    ->where('checkout_date', '>=', $checkin);
+                            });
+                    })
+                    ->get();
+
+                $HotelCalendar = HotelRoomSurcharge::where('vendor_id', $vendorIds)
+                ->where(function ($q) use ($checkin, $checkout) {
+                    $checkinDate = date('Y-m-d', strtotime($checkin));
+                    $checkoutDate = date('Y-m-d', strtotime($checkout));
+            
+                    $q->where(function ($qq) use ($checkinDate, $checkoutDate) {
+                        $qq->whereRaw('DATE(start_date) >= ?', [$checkinDate])
+                            ->whereRaw('DATE(start_date) <= ?', [$checkoutDate]);
+                    })
+                    ->orWhere(function ($qq) use ($checkinDate, $checkoutDate) {
+                        $qq->whereRaw('DATE(end_date) >= ?', [$checkinDate])
+                            ->whereRaw('DATE(end_date) <= ?', [$checkoutDate]);
+                    })
+                    ->orWhere(function ($qq) use ($checkinDate, $checkoutDate) {
+                        $qq->whereRaw('DATE(start_date) <= ?', [$checkinDate])
+                            ->whereRaw('DATE(end_date) >= ?', [date('Y-m-d', strtotime($checkoutDate . ' +1 day'))]);
                     });
-            })
-            ->where('vendor_id',$vendorIds)
-            ->with('room')
-            ->with('users')
-            ->with('advancepurchase')
-            ->get();
-           
-            // dd($day,$advancepurchase);
+                })
+                ->get();
+                
+
+                // dd($checkin);
+                $interval = $today->diffInDays($checkin);
+                $day = $interval + 1;
+                // dd($day);
+                $advancepurchase = AdvancePurchasePrice::whereHas('advancepurchase', function ($query) use ($day, $checkin, $checkout) {
+                    $query->where('is_active', 1)
+                        ->where(function ($query) use ($checkin,$checkout) {
+                            $query->whereDate('beginsell', '<=', $checkin)
+                                ->whereDate('endsell', '>=', $checkin);
+                        })
+                        ->where(function ($query) use ($day) {
+                            $query->where('day', '<=', $day)
+                                ->orWhereNull('day');
+                        });
+                })
+                ->where('vendor_id',$vendorIds)
+                ->where('is_active', 1)
+                ->with('room')
+                ->with('users')
+                ->with('advancepurchase')
+                ->get();
+            
+                // dd($day,$advancepurchase);
+            }
+
+            $data = $vendor;
+            // dd($contractprice);
+            // return view('landingpage.hotel.detail',compact('data','roomtype','service','vendordetail','datareq','surcharprice','surchargesVendorIds','blackoutVendorIds'));
+
+            return view('landingpage.hotel.detail', compact('data','HotelCalendar','advancepurchase', 'slider', 'Nights', 'roomtype', 'service', 'vendordetail', 'datareq', 'contractprice','HotelRoomBooking'));
         }
-
-        $data = $vendor;
-        // return view('landingpage.hotel.detail',compact('data','roomtype','service','vendordetail','datareq','surcharprice','surchargesVendorIds','blackoutVendorIds'));
-
-        return view('landingpage.hotel.detail', compact('data','HotelCalendar','advancepurchase', 'slider', 'Nights', 'roomtype', 'service', 'vendordetail', 'datareq', 'contractprice','HotelRoomBooking'));
     }
+    
 
 
     /**

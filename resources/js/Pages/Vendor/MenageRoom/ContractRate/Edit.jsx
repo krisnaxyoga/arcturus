@@ -924,7 +924,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                                         >
                                                                                             <i className="fa fa-edit"></i>
                                                                                         </a>
-                                                                                        <a href={`/room/contract/contract_price_is_active/${item.id}/${item.is_active == 1 ? 0 : 1}`} className='btn btn-datatable btn-icon btn-transparent-dark mr-2'>{item.is_active == 1 ? <><span className='text-success'><i class="fa fa-toggle-on" aria-hidden="true"></i>on </span></> : <><span className='text-danger'><i class="fa fa-toggle-off" aria-hidden="true"></i>off</span></>} </a>
+                                                                                        <a href={`/room/contract/adv_price_is_active/${advancepriceItem.id}/${advancepriceItem.is_active == 1 ? 0 : 1}`} className='btn btn-datatable btn-icon btn-transparent-dark mr-2'>{advancepriceItem.is_active == 1 ? <><span className='text-success'><i class="fa fa-toggle-on" aria-hidden="true"></i>on </span></> : <><span className='text-danger'><i class="fa fa-toggle-off" aria-hidden="true"></i>off</span></>} </a>
                                                                                         {/* <a
                                                                                             href={`/contract/destroyadvanceprice/${advancepriceItem.id}`}
                                                                                             className="btn btn-datatable btn-icon btn-transparent-dark mr-2"

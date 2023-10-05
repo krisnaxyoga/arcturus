@@ -291,12 +291,12 @@ export default function Index({ session,data,country,vendor,markup,banner,proper
                                                     </div>
                                                     <div className="mb-3">
                                                         <div className="row">
-                                                            {/* <div className="col-lg-12">
+                                                            <div className="col-lg-12">
                                                                 <div htmlFor="" className='text-info d-flex'><p>* all rates are inclusive of </p>
                                                                     <input style={{width: '3rem'}} defaultValue={markup && markup.tax} type="text" className='form-control' placeholder='...%' onChange={(e)=>setTaxValue(e.target.value)} /> <span className='ml-2 text-warning'>% </span>
                                                             <p> goverment tax & service charge</p></div>
 
-                                                            </div> */}
+                                                            </div>
                                                             </div>
                                                         {/* <div className="row justify-content-center">
 

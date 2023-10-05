@@ -212,6 +212,7 @@ Route::group(['middleware' => ['auth', 'checkrole:2']], function() {
     Route::get('/room/contract/edit/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'edit'])->name('contract.edit');
     Route::get('/room/contract/destroy/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'destroy'])->name('contract.destroy');
     Route::post('/room/contract/update/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'update'])->name('contract.update');
+    Route::get('/room/contract/contractrate_is_active/{id}/{is_active}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'contractrate_is_active'])->name('contract.contractrate_is_active');
     Route::get('/room/contract/addcontractprice/{id}/{cont}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'addcontractprice'])->name('contract.addcontractprice');
     Route::get('/room/contract/updatecontractprice/{id}/{price}/{recom}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'updatecontractprice'])->name('contract.updatecontractprice');
     Route::get('/room/contract/destroycontractprice/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'destroycontractprice'])->name('contract.destroycontractprice');
@@ -230,6 +231,7 @@ Route::group(['middleware' => ['auth', 'checkrole:2']], function() {
     Route::get('/contract/destroyadvanceprice/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'destroyadvanceprice'])->name('destroyadvanceprice.contract');
     Route::get('/room/contract/updateadvancetprice/{id}/{price}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'updateadvancetprice'])->name('contract.updateadvancetprice');
     Route::get('/advance/updateadvancetstatus/{id}/{isactive}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'updateadvancetstatus'])->name('advance.updateadvancetstatus');
+    Route::get('/room/contract/adv_price_is_active/{id}/{is_active}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'adv_price_is_active'])->name('contract.adv_price_is_active');
 
     //promo price
     Route::get('/room/promo/index/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\PromoPriceController::class, 'index'])->name('promo.index');

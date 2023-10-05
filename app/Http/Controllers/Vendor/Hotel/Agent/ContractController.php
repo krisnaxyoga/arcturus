@@ -114,6 +114,7 @@ class ContractController extends Controller
                 $data->stayperiod_end = $request->stayperiod_end;
                 $data->booking_begin = $request->booking_begin;
                 $data->booking_end = $request->booking_end;
+                $data->is_active = 1;
                 if($contract == false){
                     $data->min_stay = 1;
                     $data->distribute = ["WORLDWIDE"];
@@ -831,6 +832,24 @@ class ContractController extends Controller
         $data = AdvancePurchasePrice::find($id);
         $data->delete();
         return redirect()->back()->with('success', 'Data Delete');
+    }
+
+    public function adv_price_is_active($id,$is_active){
+
+        $data = AdvancePurchasePrice::find($id);
+        $data->is_active = $is_active;
+        $data->save();
+
+        return redirect()->back()->with('success', 'advance purchase update status');
+    } 
+    
+    public function contractrate_is_active($id,$is_active){
+
+        $data = ContractRate::find($id);
+        $data->is_active = $is_active;
+        $data->save();
+
+        return redirect()->back()->with('success', 'contract rate update status');
     }
 
 }
