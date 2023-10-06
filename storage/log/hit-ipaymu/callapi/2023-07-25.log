@@ -1,0 +1,56 @@
+TIME: 2023-07-25 06:54:13 
+IP: 127.0.0.1HEADER : 
+{"Content-Type":"application\/json","va":"0000002413132123","signature":"3aacc7360f30125f18e7e60aef4aec33b02a07f201c20c0b76d0b5c62ded15a3","timestamp":"20230725065413"} 
+REQUEST : 
+{"url":"https:\/\/sandbox.ipaymu.com\/api\/v2\/payment","body":{"name":[null],"email":["krisna.testingwow@gmail.com"],"product":["subscribe"],"price":[5000000],"qty":[1],"returnUrl":"http:\/\/127.0.0.1:8007\/paymentsuccess?total=5000000&bookingid=25","notifyUrl":"http:\/\/127.0.0.1:8007\/notify","comments":"Booking Agent","referenceId":"1234","vistreason":"chest hurting bad"},"method":"POST"} 
+TIME: 2023-07-25 06:54:13 
+IP: 127.0.0.1HEADER : 
+{"Content-Type":"application\/json","va":"0000002413132123","signature":"3aacc7360f30125f18e7e60aef4aec33b02a07f201c20c0b76d0b5c62ded15a3","timestamp":"20230725065413"} 
+REQUEST : 
+{"url":"https:\/\/sandbox.ipaymu.com\/api\/v2\/payment","body":{"name":[null],"email":["krisna.testingwow@gmail.com"],"product":["subscribe"],"price":[5000000],"qty":[1],"returnUrl":"http:\/\/127.0.0.1:8007\/paymentsuccess?total=5000000&bookingid=25","notifyUrl":"http:\/\/127.0.0.1:8007\/notify","comments":"Booking Agent","referenceId":"1234","vistreason":"chest hurting bad"},"method":"POST"} 
+STATUS: 200
+RESPONSE: "{\"Status\":200,\"Success\":true,\"Message\":\"Success\",\"Data\":{\"SessionID\":\"6bb4d8c7-0fcc-4a1f-844f-a50587c6e68b\",\"Url\":\"https:\\\/\\\/sandbox.ipaymu.com\\\/payment\\\/6bb4d8c7-0fcc-4a1f-844f-a50587c6e68b\"}}"
+-----------------------------------------
+
+TIME: 2023-07-25 07:05:35 
+IP: 127.0.0.1HEADER : 
+{"Content-Type":"application\/json","va":"0000002413132123","signature":"3ae1f4877fc832f5cd5ecdaf5f00f1bed66d1a95f20860b29851e3c0ac8b4a97","timestamp":"20230725070535"} 
+REQUEST : 
+{"url":"https:\/\/sandbox.ipaymu.com\/api\/v2\/payment","body":{"name":[null],"email":["krisna.testingwow@gmail.com"],"product":["subscribe"],"price":[72500000],"qty":[1],"returnUrl":"http:\/\/127.0.0.1:8007\/paymentsuccess?total=72500000&bookingid=26","notifyUrl":"http:\/\/127.0.0.1:8007\/notify","comments":"Booking Agent","referenceId":"1234","vistreason":"chest hurting bad"},"method":"POST"} 
+TIME: 2023-07-25 07:05:35 
+IP: 127.0.0.1HEADER : 
+{"Content-Type":"application\/json","va":"0000002413132123","signature":"3ae1f4877fc832f5cd5ecdaf5f00f1bed66d1a95f20860b29851e3c0ac8b4a97","timestamp":"20230725070535"} 
+REQUEST : 
+{"url":"https:\/\/sandbox.ipaymu.com\/api\/v2\/payment","body":{"name":[null],"email":["krisna.testingwow@gmail.com"],"product":["subscribe"],"price":[72500000],"qty":[1],"returnUrl":"http:\/\/127.0.0.1:8007\/paymentsuccess?total=72500000&bookingid=26","notifyUrl":"http:\/\/127.0.0.1:8007\/notify","comments":"Booking Agent","referenceId":"1234","vistreason":"chest hurting bad"},"method":"POST"} 
+STATUS: 200
+RESPONSE: "{\"Status\":200,\"Success\":true,\"Message\":\"Success\",\"Data\":{\"SessionID\":\"57f51bf3-1646-43b3-b7c1-e2e76c08a1f1\",\"Url\":\"https:\\\/\\\/sandbox.ipaymu.com\\\/payment\\\/57f51bf3-1646-43b3-b7c1-e2e76c08a1f1\"}}"
+-----------------------------------------
+
+TIME: 2023-07-25 07:07:13 
+IP: 127.0.0.1HEADER : 
+{"Content-Type":"application\/json","va":"0000002413132123","signature":"d812815643a1aecc1982a35890f561a60d2fce53712e37338d69ff4e6cb4bd6d","timestamp":"20230725070713"} 
+REQUEST : 
+{"url":"https:\/\/sandbox.ipaymu.com\/api\/v2\/payment","body":{"name":[null],"email":["krisna.testingwow@gmail.com"],"product":["subscribe"],"price":[2500000],"qty":[1],"returnUrl":"http:\/\/127.0.0.1:8007\/paymentsuccess?total=2500000&bookingid=27","notifyUrl":"http:\/\/127.0.0.1:8007\/notify","comments":"Booking Agent","referenceId":"1234","vistreason":"chest hurting bad"},"method":"POST"} 
+TIME: 2023-07-25 07:07:13 
+IP: 127.0.0.1HEADER : 
+{"Content-Type":"application\/json","va":"0000002413132123","signature":"d812815643a1aecc1982a35890f561a60d2fce53712e37338d69ff4e6cb4bd6d","timestamp":"20230725070713"} 
+REQUEST : 
+{"url":"https:\/\/sandbox.ipaymu.com\/api\/v2\/payment","body":{"name":[null],"email":["krisna.testingwow@gmail.com"],"product":["subscribe"],"price":[2500000],"qty":[1],"returnUrl":"http:\/\/127.0.0.1:8007\/paymentsuccess?total=2500000&bookingid=27","notifyUrl":"http:\/\/127.0.0.1:8007\/notify","comments":"Booking Agent","referenceId":"1234","vistreason":"chest hurting bad"},"method":"POST"} 
+STATUS: 200
+RESPONSE: "{\"Status\":200,\"Success\":true,\"Message\":\"Success\",\"Data\":{\"SessionID\":\"522966eb-3383-4df4-845f-530c8676fe51\",\"Url\":\"https:\\\/\\\/sandbox.ipaymu.com\\\/payment\\\/522966eb-3383-4df4-845f-530c8676fe51\"}}"
+-----------------------------------------
+
+TIME: 2023-07-25 07:09:38 
+IP: 127.0.0.1HEADER : 
+{"Content-Type":"application\/json","va":"0000002413132123","signature":"136ac0ef5bc92bd6b315edf6ec4d860c4f14eea49dc8c677d930b019c734e4f0","timestamp":"20230725070938"} 
+REQUEST : 
+{"url":"https:\/\/sandbox.ipaymu.com\/api\/v2\/payment","body":{"name":[null],"email":["krisna.testingwow@gmail.com"],"product":["subscribe"],"price":[10000000],"qty":[1],"returnUrl":"http:\/\/127.0.0.1:8007\/paymentsuccess?total=10000000&bookingid=28","notifyUrl":"http:\/\/127.0.0.1:8007\/notify","comments":"Booking Agent","referenceId":"1234","vistreason":"chest hurting bad"},"method":"POST"} 
+TIME: 2023-07-25 07:09:38 
+IP: 127.0.0.1HEADER : 
+{"Content-Type":"application\/json","va":"0000002413132123","signature":"136ac0ef5bc92bd6b315edf6ec4d860c4f14eea49dc8c677d930b019c734e4f0","timestamp":"20230725070938"} 
+REQUEST : 
+{"url":"https:\/\/sandbox.ipaymu.com\/api\/v2\/payment","body":{"name":[null],"email":["krisna.testingwow@gmail.com"],"product":["subscribe"],"price":[10000000],"qty":[1],"returnUrl":"http:\/\/127.0.0.1:8007\/paymentsuccess?total=10000000&bookingid=28","notifyUrl":"http:\/\/127.0.0.1:8007\/notify","comments":"Booking Agent","referenceId":"1234","vistreason":"chest hurting bad"},"method":"POST"} 
+STATUS: 200
+RESPONSE: "{\"Status\":200,\"Success\":true,\"Message\":\"Success\",\"Data\":{\"SessionID\":\"380118fd-93c8-485a-b613-5f44632ad362\",\"Url\":\"https:\\\/\\\/sandbox.ipaymu.com\\\/payment\\\/380118fd-93c8-485a-b613-5f44632ad362\"}}"
+-----------------------------------------
+
