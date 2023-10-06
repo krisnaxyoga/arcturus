@@ -107,7 +107,7 @@
                         </div>
                         <div class="form-outline mb-4">
                             
-                            <input
+                            <input required
                             inputmode="email"
                             type="email" name="email" class="form-control @error('email') is-invalid @enderror"
                                 id="email">
@@ -120,7 +120,7 @@
                         </div>
                         <div class="form-outline mb-4">
                             
-                            <input type="text" name="phone" class="form-control @error('phone') is-invalid @enderror"
+                            <input required type="text" name="phone" class="form-control @error('phone') is-invalid @enderror"
                                 id="name">
                             @error('phone')
                                 <div class="invalid-feedback">
