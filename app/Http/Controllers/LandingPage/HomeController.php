@@ -182,11 +182,11 @@ class HomeController extends Controller
 
                 $query->where(function ($q) use ($checkin, $checkout) {
                     $q->where(function ($qq) use ($checkin, $checkout) {
-                        $qq->where('stayperiod_begin', '<=', $checkin)
-                            ->where('stayperiod_end', '>=', $checkout);
-                    })->orWhere(function ($qq) use ($checkin, $checkout) {
                         $qq->where('booking_begin', '<=', $checkin)
                             ->where('booking_end', '>=', $checkout);
+                    })->orWhere(function ($qq) use ($checkin, $checkout) {
+                        $qq->where('stayperiod_begin', '<=', $checkin)
+                            ->where('stayperiod_end', '>=', $checkout);
                     });
                 });
             })
@@ -368,15 +368,28 @@ class HomeController extends Controller
                     ->whereHas('contractrate', function ($query) use ($checkin, $checkout) {
                         $query->where('is_active', 1);
 
-                        $query->where(function ($q) use ($checkin, $checkout) {
-                            $q->where(function ($qq) use ($checkin, $checkout) {
-                                $qq->where('stayperiod_begin', '<=', $checkin)
-                                    ->where('stayperiod_end', '>=', $checkout);
-                            })->orWhere(function ($qq) use ($checkin, $checkout) {
-                                $qq->where('booking_begin', '<=', $checkin)
-                                    ->where('booking_end', '>=', $checkout);
+                        $today = Carbon::now(); // Mengambil tanggal hari ini
+
+                        $query->where(function ($q) use ($checkin, $checkout, $today) {
+                            $q->where(function ($qq) use ($checkin, $checkout,$today) {
+                                $qq->where('booking_begin', '<=', $today)
+                                    ->where('booking_end', '>=', $today);
+                            })
+                            ->where(function ($qq) use ($checkin, $checkout) {
+                                    $qq->where('stayperiod_begin', '<', $checkout)
+                                    ->where('stayperiod_end', '>=', $checkin);
                             });
                         });
+                        // $query->where(function ($q) use ($checkin, $checkout) {
+                        //     $q->where(function ($qq) use ($checkin, $checkout) {
+                        //         $qq->where('booking_begin', '<=', $checkin)
+                        //             ->where('booking_end', '>=', $checkout);
+                        //     })
+                        //     ->where(function ($qq) use ($checkin, $checkout) {
+                        //             $qq->where('stayperiod_begin', '<=', $checkin)
+                        //             ->where('stayperiod_end', '>=', $checkout);
+                        //     });
+                        // });
                     })
                     ->orderBy('recom_price', 'asc')
                     ->get();

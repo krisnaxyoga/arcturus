@@ -34,7 +34,8 @@ class BookingController extends Controller
             $setting = new Setting;
         }
 
-        $data = PaymentGetwayTransaction::where('payment_method', 'BANK-TRANSFER')->get();
+        $data = PaymentGetwayTransaction::where('payment_method', 'BANK-TRANSFER')->with('booking')->get();
+        // dd($data);
 
         return view('admin.booking.index',compact('setting','data'));
     }
