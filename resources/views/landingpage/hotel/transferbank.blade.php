@@ -53,52 +53,19 @@
                             </a>
                             <div class="collapse show" id="collapseExample">
                                 <p>Here are the steps on how to manually transfer money to a BCA bank account with the account
-                                    number 2027999995:</p>
+                                    number <b>2027999995</b> :</p>
     
-                                <ol>
-                                    <li>Visit the nearest BCA bank branch.</li>
-                                    <li>Take an interbank transfer form.</li>
-                                    <li>Fill out the interbank transfer form correctly and completely.</li>
-                                    <li>Submit the interbank transfer form to the bank teller.</li>
-                                    <li>Wait for the bank teller to process your transfer transaction.</li>
-                                    <li>Receive the transfer receipt from the bank teller.</li>
-                                </ol>
+                             
     
-                                <p>Here is an explanation of each step:**
+                                <p>
     
-                                <ol>
+                                <ul>
                                     <li>
-                                        <p>Visit the nearest BCA bank branch.</p>
-                                        <p>Make sure you go to the branch that is the same as your bank account.</p>
+                                        <p>use ATM/e-Banking/mBanking/cash deposit to transfer to ARCTURUS account</p>
                                     </li>
-                                    <li>
-                                        <p>Take an interbank transfer form.</p>
-                                        <p>Interbank transfer forms are usually available at the bank teller's desk.</p>
-                                    </li>
-                                    <li>
-                                        <p>Fill out the interbank transfer form correctly and completely.</p>
-                                        <p>Make sure you fill in all the required information, including:</p>
-                                        <ul>
-                                            <li>Sender and recipient name: Your name</li>
-                                            <li>Sender bank account number: Your bank account number</li>
-                                            <li>Recipient bank account number: 2027999995</li>
-                                            <li>Amount of money to be transferred: The amount of money you want to transfer</li>
-                                            <li>Purpose of transfer: PT Surya Langit Biru</li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <p>Submit the interbank transfer form to the bank teller.</p>
-                                        <p>The bank teller will process your transfer transaction.</p>
-                                    </li>
-                                    <li>
-                                        <p>Wait for the bank teller to process your transfer transaction.</p>
-                                        <p>This process usually takes a few minutes.</p>
-                                    </li>
-                                    <li>
-                                        <p>Receive the transfer receipt from the bank teller.</p>
-                                        <p>This receipt is important to keep as an archive.</p>
-                                    </li>
-                                </ol>
+                                    
+                                   
+                                </ul>
     
                                 <p>After receiving the transfer receipt, you can follow these steps to upload the transfer
                                     receipt to the Arcturus system:</p>
@@ -107,7 +74,7 @@
                                     <li>Take a clear photo of the transfer receipt.</li>
                                     <li>Upload the photo of the transfer receipt to the Arcturus system through the Arcturus
                                         website or app.</li>
-                                    <li>Wait for verification from the Arcturus admin for 1 x 24 hours.</li>
+                                    <li>Wait for verification from the Arcturus admin for 1 x 24 hours or contact WA admin.</li>
                                 </ol>
     
                                 <p>The Arcturus admin will verify your transfer receipt for 1 x 24 hours.</p>
