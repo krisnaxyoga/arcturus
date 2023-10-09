@@ -129,7 +129,6 @@ class ContractController extends Controller
                 $data->pick_day = explode(",", $request->pick_day);
                 if($request->cencellation_policy == null){
                     $data->cencellation_policy = "
-                    <p>
                     <ul>
                     <li>HIGH season from 01-31 August: 14 days prior to arrival</li>
                     <li>PEAK season from 27Dec - 05Jan: 45 days prior to arrival</li>
@@ -142,7 +141,6 @@ class ContractController extends Controller
                     </ul>
                     <li>Early Bird/Long Stay/Package Rates are Non - changeable & Non - refundable</li>
                     </ul>
-                    </p>
                     ";
                 }else{
                     $data->cencellation_policy = $request->cencellation_policy;
