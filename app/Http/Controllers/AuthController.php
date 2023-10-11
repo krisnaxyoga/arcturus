@@ -110,7 +110,7 @@ class AuthController extends Controller
             $Setting = Setting::where('id',1)->first();
             Mail::to($Setting->email)->send(new RegisterNotif($data, $member));
             
-            // Mail::to($request->email)->send(new AgentVerifification($data, $member));
+            Mail::to($request->email)->send(new AgentVerifification($data, $member));
 
             // update vendor_id in tabel users where id = $data->id
             $user = User::find($data->id);
@@ -119,7 +119,8 @@ class AuthController extends Controller
 
             return redirect()
                 ->route('login')
-                ->with('message', 'Please wait max 1x24 hours for ADMIN to verify your account');;
+                ->with('message', 'please check your email to activate your account.');
+                // ->with('message', 'Please wait max 1x24 hours for ADMIN to verify your account');
         }
     }
 

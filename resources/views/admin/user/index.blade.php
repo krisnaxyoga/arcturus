@@ -28,6 +28,9 @@
                                                 <td>{{ $item->email }}</td>
                                                 <td>{{ $item->role->role_name }}</td>
                                                 <td>
+                                                    <a href="{{route('dashboard.loginhotel',$item->id)}}" class="btn btn-datatable btn-icon btn-transparent-dark mr-2">
+                                                        <i data-feather="key"></i>
+                                                        </a>
                                                     <a href="{{ route('dashboard.user.edit', $item->id) }}"
                                                         class="btn btn-datatable btn-icon btn-transparent-dark mr-2"><i
                                                             data-feather="edit"></i></a>

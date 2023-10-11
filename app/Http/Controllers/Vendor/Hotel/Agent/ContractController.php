@@ -797,8 +797,14 @@ class ContractController extends Controller
 
             // dd($advance);
         $contract = ContractRate::where('id', $data->contract_id)->first();
-
+        $advprice = AdvancePurchasePrice::where('advance_id',$id)->get();
+        foreach ($advprice as $item){
+            $item->is_active = $is_active;
+            $item->save(); 
+        }
+            
         foreach ($advance as $key => $itm) {
+
             if ($itm->is_active == 1 && $itm->numberactive >= 1 && $itm->numberactive <= 6) {
                 $date3 = AdvancePurchase::where('numberactive', $itm->numberactive)
                     ->where('contract_id', $data->contract_id)
@@ -846,6 +852,10 @@ class ContractController extends Controller
         $data = ContractRate::find($id);
         $data->is_active = $is_active;
         $data->save();
+
+        if($is_active == 1){
+            $this->addallcontractprice($id);
+        }
 
         return redirect()->back()->with('success', 'contract rate update status');
     }
