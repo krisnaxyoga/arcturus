@@ -56,7 +56,7 @@ export default function Index({ session,data,country,vendor,markup,banner,proper
                     alert('Only image files with formats png, jpg, or jpeg are allowed!');
                     e.target.value = ''; // Mengosongkan input file
                 } else if (file.size > maxFileSizeInBytes) {
-                    alert('File size must not exceed 5 MB!');
+                    alert('File size must not exceed 5 MB!, otherwise contact admin');
                     e.target.value = ''; // Mengosongkan input file
                 } else {
                     setLogo(file);
@@ -76,7 +76,7 @@ export default function Index({ session,data,country,vendor,markup,banner,proper
                     alert('Only image files with formats png, jpg, or jpeg are allowed!');
                     e.target.value = ''; // Mengosongkan input file
                 } else if (file.size > maxFileSizeInBytes) {
-                    alert('File size must not exceed 5 MB!');
+                    alert('File size must not exceed 5 MB!, otherwise contact admin');
                     e.target.value = ''; // Mengosongkan input file
                 } else {
                     setBanner(file);
@@ -293,8 +293,9 @@ export default function Index({ session,data,country,vendor,markup,banner,proper
                                                         <div className="row">
                                                             <div className="col-lg-12">
                                                                 <div htmlFor="" className='text-info d-flex'><p>* all rates are inclusive of </p>
-                                                                    <input style={{width: '3rem'}} defaultValue={markup && markup.tax} type="text" className='form-control' placeholder='...%' onChange={(e)=>setTaxValue(e.target.value)} /> <span className='ml-2 text-warning'>% </span>
-                                                            <p> goverment tax & service charge</p></div>
+                                                                    {/* <input style={{width: '3rem'}} defaultValue={markup && markup.tax} type="text" className='form-control' placeholder='...%' onChange={(e)=>setTaxValue(e.target.value)} />  */}
+                                                                    {/* <span className='ml-2 text-warning'>% </span> */}
+                                                            <p>&nbsp;any goverment tax & service charge</p></div>
 
                                                             </div>
                                                             </div>

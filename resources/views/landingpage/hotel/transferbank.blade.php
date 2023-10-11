@@ -133,7 +133,7 @@
                     fileInput.value = ''; // Clear the input
                     imagePreview.src = ''; // Clear the preview
                 } else if (fileSize > maxFileSize) {
-                    alert('The image size cannot exceed 2MB.');
+                    alert('The image size cannot exceed 2MB, otherwise contact admin');
                     fileInput.value = ''; // Clear the input
                     imagePreview.src = ''; // Clear the preview
                 } else {

@@ -19,7 +19,7 @@ class BookingHistoryController extends Controller
     {
         $userid = auth()->user()->id;
         $vendor = Vendor::where('user_id',$userid)->with('users')->first();
-        $data = Booking::where('vendor_id',$vendor->id)->whereNotIn('booking_status', ['-', ''])->with('vendor')->with('users')->get();
+        $data = Booking::where('vendor_id',$vendor->id)->whereNotIn('booking_status', ['-', ''])->with('vendor')->with('users')->orderBy('created_at', 'desc')->get();
         
 
         return inertia('Vendor/BookingHistory/Index',[

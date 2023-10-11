@@ -128,19 +128,20 @@ class ContractController extends Controller
 
                 $data->pick_day = explode(",", $request->pick_day);
                 if($request->cencellation_policy == null){
-                    $data->cencellation_policy = "
+                    $data->cencellation_policy = "<span>
                     <ul>
                     <li>HIGH season from 01-31 August: 14 days prior to arrival</li>
                     <li>PEAK season from 27Dec - 05Jan: 45 days prior to arrival</li>
-                    <li>Except above periods: 72 hours prior to arrvial</li>
+                    <li>Except above periods: 72 hours prior to arrival</li>
                     <ul>
                     <li>If cancellation/amendment is made NORMAL/HIGH/PEAK days prior to your arrival date, no fee will be charged</li>
-                    <li>If cancellation/amendment is made within NORMAL/HIGH/PEAK days, including reservations made within 72 hours of your arrival, 1st night’s room rate and tax will be charged
+                    <li>If cancellation/amendment is made within NORMAL/HIGH/PEAK days, 1st night’s room rate and tax will be charged
                     </li>
                     <li>In case of no-show, 100% room rate and tax will be charged</li>
                     </ul>
-                    <li>Early Bird/Long Stay/Package Rates are Non - changeable & Non - refundable</li>
+                    <li>Early Bird/Long Stay/Package Rates are Non - refundable</li>
                     </ul>
+                    </span>
                     ";
                 }else{
                     $data->cencellation_policy = $request->cencellation_policy;
