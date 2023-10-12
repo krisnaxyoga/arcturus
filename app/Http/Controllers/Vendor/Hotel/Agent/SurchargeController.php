@@ -151,7 +151,7 @@ class SurchargeController extends Controller
                     $color = '#e63946';
                 }
                 $data[] = [
-                    'title' => 'Rp ' . number_format($hotel_room_surcharge->recom_price, 0, ',', '.').'x'.$roomallow,
+                    'title' => 'Rp ' . number_format($hotel_room_surcharge->recom_price, 0, ',', '.').' x '.$roomallow,
                     'start' => date('Y-m-d', strtotime($hotel_room_surcharge->start_date)),
                     'end' => date('Y-m-d', strtotime($hotel_room_surcharge->end_date) + 86400),
                     'price' => $hotel_room_surcharge->recom_price,
@@ -162,7 +162,7 @@ class SurchargeController extends Controller
                 ];
             } else {
                 $data[] = [
-                    'title' => 'Rp ' . number_format($ContractPrice->recom_price, 0, ',', '.').$roomallow,
+                    'title' => 'Rp ' . number_format($ContractPrice->recom_price, 0, ',', '.').' x '.$roomallow,
                     'date' => date('Y-m-d', strtotime($date)),
                     'price' => $ContractPrice->recom_price,
                     'allow' => $roomallow,
