@@ -178,7 +178,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
     const buttonSendValue = (item) => {
         setModalData(item);
 
-        const sellprice = Number(item.recom_price) + Number(markup[0]?.markup_price)
+        const sellprice = Number(item.recom_price); //+ Number(markup[0]?.markup_price)
 
         setSellingPrice(sellprice)
 
@@ -216,13 +216,13 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
     const handleRateMinChange = (e) => {
         const value = e.target.value;
 
-        if (markup[0].markup_price == 0) {
+        // if (markup[0].markup_price == 0) {
             const selling = Number(value) + Number(modalData?.barprice.price) - ((modalData?.barprice.price * 0.8) + 15000);
             setSellingPrice(selling);
-        } else {
-            const selling = Number(value) + Number(markup[0].markup_price);
-            setSellingPrice(selling);
-        }
+        // } else {
+        //     const selling = Number(value) + Number(markup[0].markup_price);
+        //     setSellingPrice(selling);
+        // }
 
         setMinPrice(value)
     }

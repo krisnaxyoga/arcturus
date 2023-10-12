@@ -108,7 +108,7 @@ export default function Index({ session,data,country,vendor,markup,banner,proper
         formData.append('highlight', highlight ? highlight : data[0].highlight);
         formData.append('type_property', type_property ? type_property : data[0].type_property);
 
-        formData.append('tax', taxValue ? taxValue : markup.tax);
+        // formData.append('tax', taxValue ? taxValue : markup.tax);
         formData.append('bank', bankname ? bankname : data[0].bank_name);
         formData.append('bankaccount', bankaccount ? bankaccount : data[0].bank_account);
         formData.append('swifcode', swifcode ? swifcode : data[0].swif_code);

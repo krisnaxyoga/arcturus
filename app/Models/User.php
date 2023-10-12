@@ -66,4 +66,8 @@ class User extends Authenticatable
     public function advancepurchase() {
         return $this->hasMany(AdvancePurchase::class);
     }
+
+    public function historywallet() {
+        return $this->hasMany(HistoryWallet::class);
+    }
 }

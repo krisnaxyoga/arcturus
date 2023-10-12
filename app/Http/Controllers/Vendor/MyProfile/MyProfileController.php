@@ -110,7 +110,7 @@ class MyProfileController extends Controller
                 $mark->user_id = $id;
                 $mark->vendor_id = $vendor[0]->id;
                 $mark->service = $request->service;
-                $mark->tax = $request->tax;
+                $mark->tax = 0;
                 $mark->markup_price = 0;
                 $mark->save();
             }else{
@@ -118,7 +118,7 @@ class MyProfileController extends Controller
                 $mark2->user_id = $id;
                 $mark2->vendor_id = $vendor[0]->id;
                 $mark2->service = $request->service;
-                $mark2->tax = $request->tax;
+                $mark2->tax = 0;
                 $mark2->save();
             }
 

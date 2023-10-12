@@ -12,7 +12,10 @@ function Layout({ children, page, agent }) {
 
     const currentYear = new Date().getFullYear();
 
-    console.log(agent,"data agent di LAYOUT >>>>>>>>>>>>>>>>>>>")
+    function formatRupiah(amount) {
+        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount).slice(0, -3);
+    }
+
 
     const logOut = (e) => {
         Inertia.post('/logout', {
@@ -55,10 +58,10 @@ function Layout({ children, page, agent }) {
 
                             </Dropdown.Toggle>
                             <Dropdown.Menu style={{ transform: "none!important" }}>
-                                <Dropdown.Item href="/logout">
-                                    logout
+                                <Dropdown.Item style={{fontWeight:'700'}} href="/logout">
+                                   <i className="fa fa-power-off"></i>&nbsp;logout
                                 </Dropdown.Item>
-                                {/* <Dropdown.Item href="#/action-3">Something else</Dropdown.Item> */}
+                                {/* <Dropdown.Item href="#"><span className='text-danger'><i className='fa fa-heart'></i></span>&nbsp;Saldo : {formatRupiah(agent.saldo)}</Dropdown.Item> */}
                             </Dropdown.Menu>
                         </Dropdown>
                     </li>

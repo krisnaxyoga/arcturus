@@ -205,48 +205,48 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
 
     const [introDisabled, setIntroDisabled] = useState(false);
     let intro = null;
-    useEffect(() => {
-        // Memeriksa status "tidak ingin ditampilkan lagi" dari penyimpanan lokal
-        const isDisabled = localStorage.getItem('introDisabled');
-        if (isDisabled === 'true' || form != 'add') {
-          setIntroDisabled(true);
-        } else {
-          // Inisialisasi Intro.js jika tidak dinonaktifkan
-          intro = introJs();
-          intro.setOptions({
-            steps: [
-              {
-                element: '.intro-step-1',
-                intro: 'step 1',
-              },
-              {
-                element: '.intro-step-2',
-                intro: 'step 2',
-              }, 
-              {
-                element: '.intro-step-3',
-                intro: 'step 3',
-              },
-              {
-                element: '.intro-step-4',
-                intro: 'step 4',
-              },
-              {
-                element: '.intro-step-5',
-                intro: 'step 5',
-              },
-              {
-                element: '.intro-step-6',
-                intro: 'step 6',
-              },
-              // Tambahkan langkah-langkah sesuai kebutuhan Anda
-            ],
-          });
+    // useEffect(() => {
+    //     // Memeriksa status "tidak ingin ditampilkan lagi" dari penyimpanan lokal
+    //     const isDisabled = localStorage.getItem('introDisabled');
+    //     if (isDisabled === 'true' || form != 'add') {
+    //       setIntroDisabled(true);
+    //     } else {
+    //       // Inisialisasi Intro.js jika tidak dinonaktifkan
+    //       intro = introJs();
+    //       intro.setOptions({
+    //         steps: [
+    //           {
+    //             element: '.intro-step-1',
+    //             intro: 'step 1',
+    //           },
+    //           {
+    //             element: '.intro-step-2',
+    //             intro: 'step 2',
+    //           }, 
+    //           {
+    //             element: '.intro-step-3',
+    //             intro: 'step 3',
+    //           },
+    //           {
+    //             element: '.intro-step-4',
+    //             intro: 'step 4',
+    //           },
+    //           {
+    //             element: '.intro-step-5',
+    //             intro: 'step 5',
+    //           },
+    //           {
+    //             element: '.intro-step-6',
+    //             intro: 'step 6',
+    //           },
+    //           // Tambahkan langkah-langkah sesuai kebutuhan Anda
+    //         ],
+    //       });
     
-          // Mulai tutorial saat komponen di-mount
-          intro.start();
-        }
-      }, []);
+    //       // Mulai tutorial saat komponen di-mount
+    //       intro.start();
+    //     }
+    //   }, []);
     
       // Fungsi untuk menonaktifkan tampilan tutorial
       function disableIntro() {
