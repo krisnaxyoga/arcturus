@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useEffect } from "react";
 //import layout
 import Layout from '../../../../Layouts/Vendor';
-
+import axios from 'axios';
 import { Button, Form, Modal } from 'react-bootstrap';
 
 //import Link
@@ -14,7 +14,7 @@ import { Inertia } from '@inertiajs/inertia';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 
-export default function PriceAgentRoom({ country, session, data, markup, bardata, contract, contractprice, advancepurchase,advanceprice,vendor,contpriceone }) {
+export default function PriceAgentRoom({ country, session, data, markup, bardata, contract, contractprice, advancepurchase,vendor,contpriceone }) {
 
     const [ratecode, setRateCode] = useState('');
     const [ratedesc, setRateDesc] = useState('');
@@ -29,7 +29,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
 
     const [minPrice, setMinPrice] = useState('');
     const [sellingPrice, setSellingPrice] = useState('');
-
+    const [advanceprice, setAdvPrice] = useState('');
 
     const [modalData, setModalData] = useState()
 
@@ -38,7 +38,9 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
     const [showModalMarkup, setShowModalMarkup] = useState(false);
 
     const [showModalTable, setShowModalTable] = useState(false);
-
+    const [updatedRates, setUpdatedRates] = useState(contractprice);
+    const [updatedRatesADV, setUpdatedRatesAdv] = useState(advanceprice);
+    const [updatedadvStatus, setUpdatedAdvStatus] = useState(advancepurchase);
 
     const [showModalAdvance, setShowModalAdvance] = useState(false);
 
@@ -51,6 +53,24 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
     const [endselladvance, setEndselladvance] = useState('');
     const [isLoading, setIsLoading] = useState(true);
 
+    // Buat fungsi untuk mengambil data advanceprice
+    const fetchAdvancePrice = async (contractId) => {
+        try {
+        const response = await axios.get(`/contract/getadvanceprice/${contractId}`);
+        const advancepriceData = response.data.advanceprice;
+        setAdvPrice(advancepriceData);
+        // Lakukan sesuatu dengan data advancepriceData, misalnya, perbarui state
+        // Misalnya, setAdvancePrice(advancepriceData) jika Anda menggunakan React Hooks.
+        // Atau this.setState({ advanceprice: advancepriceData }) jika Anda menggunakan kelas komponen.
+        } catch (error) {
+        console.error('Gagal mengambil data advanceprice:', error);
+        }
+    };
+    
+    // Panggil fungsi fetchAdvancePrice saat diperlukan
+    const contractId = contract.id; // Gantilah dengan ID kontrak yang sesuai
+    fetchAdvancePrice(contractId);
+    
     useEffect(() => {
         // Anda dapat menambahkan logika tambahan jika diperlukan
         // Contoh: Memuat data dari server
@@ -98,9 +118,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
         setSelectedDistribute(contract.distribute || []);
         setSelectedExclude(contract.except || []);
     }, [contract.distribute, contract.except]);
-
-    console.log(selectedDistribute, ">>>>>>>>>>>>> ISI distribute >>>>>>>>>>>>>>>>>>>>>>")
-
+    
     function formatRupiah(amount) {
         return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount).slice(0, -3);
       }
@@ -306,6 +324,80 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
         });
     }
 
+        // Fungsi untuk mengubah status dan mengirim permintaan ke server
+        const toggleStatus = async (id, currentStatus) => {
+            try {
+            // Kirim permintaan ke server untuk mengubah status
+            const response = await fetch(`/room/contract/contract_price_is_active/${id}/${currentStatus == 1 ? 0 : 1}`, {
+                method: 'GET', // Gantilah dengan metode HTTP yang sesuai
+                // Tambahkan header jika diperlukan
+            });
+
+            if (response.ok) {
+                // Jika berhasil, perbarui status secara lokal
+                const updatedRatesCopy = [...updatedRates];
+                const rateIndex = updatedRatesCopy.findIndex((rate) => rate.id == id);
+                updatedRatesCopy[rateIndex].is_active = currentStatus == 1 ? 0 : 1;
+                setUpdatedRates(updatedRatesCopy);
+            } else {
+                // Handle kesalahan jika ada
+                console.error('Gagal mengubah status.');
+            }
+            } catch (error) {
+            console.error('Terjadi kesalahan:', error);
+            }
+        };
+
+         // Fungsi untuk mengubah status dan mengirim permintaan ke server
+         const toggleStatusAdv = async (id, currentStatus) => {
+            try {
+            // Kirim permintaan ke server untuk mengubah status
+            const response = await fetch(`/room/contract/adv_price_is_active/${id}/${currentStatus == 1 ? 0 : 1}`, {
+                method: 'GET', // Gantilah dengan metode HTTP yang sesuai
+                // Tambahkan header jika diperlukan
+            });
+
+            if (response.ok) {
+                // Jika berhasil, perbarui status secara lokal
+                const updatedRatesCopy = [...updatedRatesADV];
+                const rateIndex = updatedRatesCopy.findIndex((rate) => rate.id == id);
+                updatedRatesCopy[rateIndex].is_active = currentStatus == 1 ? 0 : 1;
+                setUpdatedRatesAdv(updatedRatesCopy);
+            } else {
+                // Handle kesalahan jika ada
+                // console.error('Gagal mengubah status.');
+            }
+            } catch (error) {
+            // console.error('Terjadi kesalahan:', error);
+            }
+        };
+        const toggleStatusAdvmaster = async (id, currentStatus) => {
+            try {
+                // Kirim permintaan ke server untuk mengubah status
+                const response = await fetch(`/advance/updateadvancetstatus/${id}/${currentStatus == 2 ? 1 : 2}`, {
+                method: 'GET',
+                // Tambahkan header jika diperlukan
+                });
+
+                if (response.ok) {
+                // Simpan ID yang sedang aktif
+                const updatedRatesCopy = [...updatedadvStatus];
+                const rateIndex = updatedRatesCopy.findIndex((rate) => rate.id == id);
+                updatedRatesCopy[rateIndex].is_active = currentStatus == 2 ? 1 : 2;
+                setUpdatedAdvStatus(updatedRatesCopy);
+
+                // Ganti URL tanpa me-refresh halaman
+                const newURL = window.location.href.replace(/#.*/, '') + `#adv-${id}`;
+                window.history.pushState({}, '', newURL);
+                } else {
+                // Handle kesalahan jika ada
+                console.error('Gagal mengubah status.');
+                }
+            } catch (error) {
+                console.error('Terjadi kesalahan:', error);
+            }
+        };
+
     return (
         <>
             <Layout page='/room/contract/index' vendor={vendor}>
@@ -322,7 +414,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                 <div className="container">
                     <div className="row">
                         <h1>Contract Rate</h1>
-                        {(!contract || Object.keys(contract).length == 0) || (!markup || Object.keys(markup).length == 0) || (!bardata || Object.keys(bardata).length == 0) ? (
+                        {(!contract || Object.keys(contract).length == 0) || (!bardata || Object.keys(bardata).length == 0) ? (
                             <div className="alert alert-danger border-0 shadow-sm rounded-3">
                                 <p>Please check again the information bar and your mark up price is it complete?</p>
                             </div>
@@ -464,8 +556,8 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                                                     <span className="text-secondary">
                                                                                                     {selectedDistribute.map((value) => (
                                                                                                         <span key={value}>
-                                                                                                            <span  onClick={() => handleRemoveSelected(value)} class="btn badge badge-success text-light mx-1">
-                                                                                                            {value} <span class="mx-1 badge badge-danger">x</span>
+                                                                                                            <span  onClick={() => handleRemoveSelected(value)} className="btn badge badge-success text-light mx-1">
+                                                                                                            {value} <span className="mx-1 badge badge-danger">x</span>
                                                                                                             </span>
                                                                                                         </span>
                                                                                                     ))}
@@ -705,7 +797,25 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                                                     {/* <a href={`/room/contract/destroycontractprice/${item.id}`} className='btn btn-datatable btn-icon btn-transparent-dark mr-2'>
                                                                                                         <i className='fa fa-trash'></i>
                                                                                                     </a> */}
-                                                                                                    <a href={`/room/contract/contract_price_is_active/${item.id}/${item.is_active == 1 ? 0 : 1}`} className='btn btn-datatable btn-icon btn-transparent-dark mr-2'>{item.is_active == 1 ? <><span className='text-success'><i class="fa fa-toggle-on" aria-hidden="true"></i>on </span></> : <><span className='text-danger'><i class="fa fa-toggle-off" aria-hidden="true"></i>off</span></>} </a>
+                                                                                                      <a
+                                                                                                        href="#"
+                                                                                                        className="btn btn-datatable btn-icon btn-transparent-dark mr-2"
+                                                                                                        onClick={(e) => {
+                                                                                                            e.preventDefault(); // Mencegah perilaku default dari tautan
+                                                                                                            toggleStatus(item.id, item.is_active);
+                                                                                                        }}
+                                                                                                        >
+                                                                                                        {item.is_active == 1 ? (
+                                                                                                            <span className="text-success">
+                                                                                                            <i className="fa fa-circle" aria-hidden="true"></i>on
+                                                                                                            </span>
+                                                                                                        ) : (
+                                                                                                            <span className="text-danger">
+                                                                                                            <i className="fa fa-circle" aria-hidden="true"></i>off
+                                                                                                            </span>
+                                                                                                        )}
+                                                                                                        </a>
+                                                                                                    {/* <a href={`/room/contract/contract_price_is_active/${item.id}/${item.is_active == 1 ? 0 : 1}`} className='btn btn-datatable btn-icon btn-transparent-dark mr-2'>{item.is_active == 1 ? <><span className='text-success'><i class="fa fa-toggle-on" aria-hidden="true"></i>on </span></> : <><span className='text-danger'><i class="fa fa-toggle-off" aria-hidden="true"></i>off</span></>} </a> */}
                                                                                                 </td>
                                                                                             </tr>
                                                                                         </>
@@ -877,7 +987,15 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                     {item.is_active == 1 ? (
                                                         <>
                                                         <div className="d-flex mb-4">
-                                                        <p className='mr-2'>status : </p>  <a href={`/advance/updateadvancetstatus/${item.id}/${2}`} className='btn btn-success'>on</a>
+                                                        <p className='mr-2'>status : </p>    <a
+                                                        href="#"
+                                                        className="btn btn-success"
+                                                        onClick={(e) => {
+                                                            e.preventDefault(); // Mencegah perilaku default dari tautan
+                                                            toggleStatusAdvmaster(item.id, item.is_active); // Ganti dengan fungsi toggleStatus yang sesuai
+                                                            // window.history.pushState({}, '', `#adv-${item.id}`); // Menggunakan History API
+                                                        }}
+                                                        >on</a>
                                                        
 
                                                         </div>
@@ -924,8 +1042,25 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                                         >
                                                                                             <i className="fa fa-edit"></i>
                                                                                         </a>
-                                                                                        <a href={`/room/contract/adv_price_is_active/${advancepriceItem.id}/${advancepriceItem.is_active == 1 ? 0 : 1}`} className='btn btn-datatable btn-icon btn-transparent-dark mr-2'>{advancepriceItem.is_active == 1 ? <><span className='text-success'><i class="fa fa-toggle-on" aria-hidden="true"></i>on </span></> : <><span className='text-danger'><i class="fa fa-toggle-off" aria-hidden="true"></i>off</span></>} </a>
-                                                                                        {/* <a
+                                                                                        <a
+                                                                                                        href="#"
+                                                                                                        className="btn btn-datatable btn-icon btn-transparent-dark mr-2"
+                                                                                                        onClick={(e) => {
+                                                                                                            e.preventDefault(); // Mencegah perilaku default dari tautan
+                                                                                                            toggleStatusAdv(advancepriceItem.id, advancepriceItem.is_active);
+                                                                                                        }}
+                                                                                                        >
+                                                                                                        {advancepriceItem.is_active == 1? (
+                                                                                                            <span className="text-success">
+                                                                                                            <i className="fa fa-circle" aria-hidden="true"></i>on
+                                                                                                            </span>
+                                                                                                        ) : (
+                                                                                                            <span className="text-danger">
+                                                                                                            <i className="fa fa-circle" aria-hidden="true"></i>off
+                                                                                                            </span>
+                                                                                                        )}
+                                                                                                        </a>
+                                                                                         {/* <a
                                                                                             href={`/contract/destroyadvanceprice/${advancepriceItem.id}`}
                                                                                             className="btn btn-datatable btn-icon btn-transparent-dark mr-2"
                                                                                         >
@@ -950,7 +1085,17 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                     ):(
                                                         <>
                                                         <div className="d-flex">
-                                                        <p>status : </p> <a href={`/advance/updateadvancetstatus/${item.id}/${1}`} className='btn btn-danger mx-2'>off</a>
+                                                        <p>status : </p>
+                                                        
+                                                        <a
+                                                        href="#"
+                                                        className="btn btn-danger"
+                                                        onClick={(e) => {
+                                                            e.preventDefault(); // Mencegah perilaku default dari tautan
+                                                            toggleStatusAdvmaster(item.id, item.is_active); // Ganti dengan fungsi toggleStatus yang sesuai
+                                                           
+                                                        }}
+                                                        >off</a>
 
                                                         </div>
                                                          </>

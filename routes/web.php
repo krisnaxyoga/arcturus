@@ -232,7 +232,8 @@ Route::group(['middleware' => ['auth', 'checkrole:2']], function() {
     Route::get('/room/contract/updateadvancetprice/{id}/{price}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'updateadvancetprice'])->name('contract.updateadvancetprice');
     Route::get('/advance/updateadvancetstatus/{id}/{isactive}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'updateadvancetstatus'])->name('advance.updateadvancetstatus');
     Route::get('/room/contract/adv_price_is_active/{id}/{is_active}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'adv_price_is_active'])->name('contract.adv_price_is_active');
-
+    Route::get('/contract/getadvanceprice/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'getAdvancePrice'])->name('getAdvancePrice.contract');
+   
     //promo price
     Route::get('/room/promo/index/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\PromoPriceController::class, 'index'])->name('promo.index');
     Route::get('/room/promo/store/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\PromoPriceController::class, 'store'])->name('promo.store');

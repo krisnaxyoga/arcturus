@@ -32,6 +32,14 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
         // window.print();
       };
 
+      const formatDate = (dateString) => {
+        const parts = dateString.split('-'); // Memecah tanggal berdasarkan tanda "-"
+        if (parts.length === 3) {
+          const [year, month, day] = parts;
+          return `${day}-${month}-${year}`; // Mengganti urutan tanggal
+        }
+        return dateString; // Kembalikan jika tidak dapat memproses tanggal
+      };
 
     return (
         <>
@@ -102,11 +110,11 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                                             </div> */}
                                                                             <div>
                                                                                 <span className="text-400 text-grey-m2 align-middle">Check in: </span>
-                                                                                <span className="text-400 text-110 text-blue align-middle"> {data.checkin_date}</span>
+                                                                                <span className="text-400 text-110 text-blue align-middle"> {formatDate(data.checkin_date)}</span>
                                                                             </div>
                                                                             <div>
                                                                                 <span className="text-400 text-grey-m2 align-middle">Check out: </span>
-                                                                                <span className="text-400 text-110 text-blue align-middle"> {data.checkout_date}</span>
+                                                                                <span className="text-400 text-110 text-blue align-middle"> {formatDate(data.checkout_date)}</span>
                                                                             </div>
                                                                         </div>
 
@@ -120,7 +128,7 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
 
 
                                                                                 <div className="my-2"><i className="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span className="text-600 text-90">Agent Name:</span> {data.users.first_name} {data.users.last_name}</div>
-                                                                                <div className="my-2"><i className="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span className="text-600 text-90">Booking Date:</span> {data.booking_date}</div>
+                                                                                <div className="my-2"><i className="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span className="text-600 text-90">Booking Date:</span> {formatDate(data.booking_date)}</div>
 
                                                                                 <div className="my-2"><i className="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span className="text-600 text-90">Status: </span>
                                                                                 {data.booking_status === 'paid' ? (

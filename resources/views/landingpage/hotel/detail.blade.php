@@ -781,21 +781,21 @@
             totalNightInput.value = permalam.toLocaleString();
 
             var totalPrice = document.querySelector('input[name="totalprice"]');
-            console.log(totalPrice.value, ">>>total price value");
+            // console.log(totalPrice.value, ">>>total price value");
             var cleanedPrice = totalPrice.value.replace(/,/g, '');
 
             var totalPricenomarkup = document.querySelector('input[name="totalpricenomarkup"]');
-            console.log(totalPricenomarkup.value, ">>>total price value");
+            // console.log(totalPricenomarkup.value, ">>>total price value");
             var cleanedPricenomarkup = totalPricenomarkup.value.replace(/,/g, '');
 
             // Cek apakah cleanedPrice adalah angka sebelum melakukan perhitungan
             if (!isNaN(parseInt(cleanedPrice))) {
                 var priceintext = parseInt(cleanedPrice) * parseInt(permalam);
-                console.log(parseInt(cleanedPrice), ">>>total price inte");
+                // console.log(parseInt(cleanedPrice), ">>>total price inte");
                 totalPriceElements.textContent = priceintext.toLocaleString();
 
                 var pricenomarkupintext = parseInt(cleanedPricenomarkup) * parseInt(permalam);
-                console.log(parseInt(cleanedPricenomarkup), ">>>total price inte");
+                // console.log(parseInt(cleanedPricenomarkup), ">>>total price inte");
                 totalPricenomarkupElements.textContent = pricenomarkupintext.toLocaleString();
             } else {
                 // Jika cleanedPrice adalah NaN, set priceintext menjadi 0
@@ -842,7 +842,7 @@
             totalNightInput.value = permalam.toLocaleString();
 
             var totalPrice = document.querySelector('input[name="totalprice"]');
-            console.log(totalPrice.value, ">>>total price value");
+            // console.log(totalPrice.value, ">>>total price value");
             var cleanedPrice = totalPrice.value.replace(/,/g, '');
 
             var totalPricenomarkup = document.querySelector('input[name="totalpricenomarkup"]');
@@ -852,7 +852,7 @@
             // Cek apakah cleanedPrice adalah angka sebelum melakukan perhitungan
             if (!isNaN(parseInt(cleanedPrice))) {
                 var priceintext = parseInt(cleanedPrice) * parseInt(permalam);
-                console.log(parseInt(cleanedPrice), ">>>total price inte");
+                // console.log(parseInt(cleanedPrice), ">>>total price inte");
                 totalPriceElements.textContent = priceintext.toLocaleString();
 
                 var pricenomarkupintext = parseInt(cleanedPricenomarkup) * parseInt(permalam);
@@ -894,9 +894,9 @@
                 totalRoom += quantity;
                 totalPrice += price;
 
-                console.log("Room Quantity:", quantity);
-                console.log("Price:", price);
-                console.log("Pricenomarkup:", pricenomarkup);
+                // console.log("Room Quantity:", quantity);
+                // console.log("Price:", price);
+                // console.log("Pricenomarkup:", pricenomarkup);
 
                 if (quantity > 0) {
                     selectedItems.push({
@@ -916,9 +916,9 @@
 
             // Mengambil dan mendekripsi data dari localStorage
             var decryptedData = getDecryptedDataFromLocalStorage(encryptionKey);
-            console.log(decryptedData);
+            // console.log(decryptedData);
 
-            console.log(totalPrice, totalPricenomarkup, ">>>totalnomarkup");
+            // console.log(totalPrice, totalPricenomarkup, ">>>totalnomarkup");
             totalRoomElement.textContent = totalRoom;
             var priceintext = parseInt(totalPrice * totalNight.value);
             totalPriceElement.textContent = priceintext.toLocaleString();
@@ -1015,7 +1015,7 @@
             // Ambil data terenkripsi dari local storage
             var encryptionKey = 'KunciEnkripsiRahasia';
             var decryptedData = getDecryptedDataFromLocalStorage(encryptionKey);
-            console.log(decryptedData, ">>>>>>>>decriptdata");
+            // console.log(decryptedData, ">>>>>>>>decriptdata");
             // Tampilkan data ke dalam input elemen
             // $("#checkin").val(decryptedData.checkin);
             // $("#checkout").val(decryptedData.checkout);
@@ -1029,7 +1029,7 @@
 
         $('.category').change(function() {
             var nilaiInput = $(this).val();
-            console.log(nilaiInput, ">>>>>>nilai select");
+            // console.log(nilaiInput, ">>>>>>nilai select");
 
             // Tampilkan loading
             $('#load').append(
@@ -1093,7 +1093,7 @@
                 },
                 success: function(response) {
                     console.log('Data keranjang berhasil disimpan ke database.');
-                    console.log(response, "hasil");
+                    // console.log(response, "hasil");
                     var id = response[0];
                     localStorage.clear();
                     window.location.href = "{{ route('booking.agent.detail', ['id' => ':id']) }}"

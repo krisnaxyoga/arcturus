@@ -464,6 +464,18 @@ class ContractController extends Controller
         ]);
     }
 
+    public function getAdvancePrice(string $id)
+    {
+        // Ambil data advanceprice yang diperlukan
+        $contract = ContractRate::find($id);
+        $advanceprice = AdvancePurchasePrice::where('contract_id', $contract->id)
+            ->with('room')
+            ->orderBy('price', 'asc')
+            ->get();
+
+        return response()->json(['advanceprice' => $advanceprice]);
+    }
+
     /**
      * Update the specified resource in storage.
      */
@@ -798,7 +810,9 @@ class ContractController extends Controller
 
             // dd($advance);
         $contract = ContractRate::where('id', $data->contract_id)->first();
+        
         $advprice = AdvancePurchasePrice::where('advance_id',$id)->get();
+
         foreach ($advprice as $item){
             $item->is_active = $is_active;
             $item->save(); 
