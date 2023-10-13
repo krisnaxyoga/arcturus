@@ -20,6 +20,8 @@ Route::get('/homepage/contact', [\App\Http\Controllers\LandingPage\HomeControlle
 Route::get('/homepage/hotel/{id}', [\App\Http\Controllers\LandingPage\HomeController::class, 'hoteldetail'])->name('hoteldetail.homepage');
 Route::get('/agenthomepage', [\App\Http\Controllers\LandingPage\HomeController::class, 'index'])->name('agent.homepage.home');
 Route::get('/', [\App\Http\Controllers\LandingPage\HomeController::class, 'index'])->name('auth.homepage.home');
+Route::get('/doku', [\App\Http\Controllers\LandingPage\HomeController::class, 'doku'])->name('doku.homepage.home');
+Route::get('/callbackdoku', [\App\Http\Controllers\LandingPage\HomeController::class, 'callbackdoku'])->name('callbackdoku.homepage.home');
 Route::get('/auth/google/callback',[\App\Http\Controllers\Auth\GoogleController::class, 'handleCallback']);
 // Route::get('/account/nonactive', [\App\Http\Controllers\LandingPage\HomeController::class, 'accountnonactive'])->name('accountnonactive.homepage');
 

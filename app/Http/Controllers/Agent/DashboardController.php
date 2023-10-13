@@ -24,7 +24,7 @@ class DashboardController extends Controller
         $bookingsuccess = Booking::where('user_id',$data->vendors->user_id)->where('booking_status','paid')->count();
         $pendingpayment = Booking::where('user_id',$data->vendors->user_id)->where('booking_status','unpaid')->count();
         $roomhotel = Booking::where('user_id',$data->vendors->user_id)->where('booking_status','paid')->sum('night');
-        $bookingdata = Booking::where('user_id',$data->vendors->user_id)->with('users','vendor')->whereNotIn('booking_status', ['-', ''])->get();
+        $bookingdata = Booking::where('user_id',$data->vendors->user_id)->with('users','vendor')->whereNotIn('booking_status', ['-', ''])->orderBy('created_at', 'desc')->get();
         $acyive = auth()->user()->is_active;
         if($acyive == 1){
             return inertia('Agent/Index',[

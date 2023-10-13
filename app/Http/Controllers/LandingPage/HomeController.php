@@ -17,6 +17,8 @@ use App\Models\HotelRoomSurcharge;
 use App\Models\AdvancePurchase;
 use App\Models\AdvancePurchasePrice;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
+use GuzzleHttp\Client; // Anda perlu menginstal Guzzle HTTP client untuk ini
 
 
 class HomeController extends Controller
@@ -517,4 +519,89 @@ class HomeController extends Controller
     {
         //
     }
+
+
+    public function doku(Request $request)
+    {
+        $now = \Carbon\Carbon::now();
+        $requestDate = $now->format('Y-m-d\TH:i:s\Z');
+        $clientId = env('DOKU_MERCHANT_CODE');
+        $requestId = env('DOKU_SHARED_KEY');
+        $requestDate = $requestDate;
+        $targetPath = "http://127.0.0.1:8006"; // Untuk permintaan dari pedagang ke Jokul, gunakan path Jokul di sini. Untuk Notifikasi HTTP, gunakan path pedagang di sini.
+        $secretKey = env('DOKU_SHARED_KEY');
+        $requestBody = [
+            'order' => [
+                'amount' => 15000,
+                'invoice_number' => 'INV-20210124-0001',
+            ],
+            'virtual_account_info' => [
+                'expired_time' => 60,
+                'reusable_status' => false,
+                'info1' => 'Merchant Demo Store',
+            ],
+            'customer' => [
+                'name' => 'Taufik Ismail',
+                'email' => 'taufik@example.com',
+            ],
+        ];
+
+       // Generate Digest
+        $digestValue = base64_encode(hash('sha256', json_encode($requestBody), true));
+
+        // Prepare Signature Component
+        $componentSignature = "Client-Id:" . $clientId . "\n" .
+            "Request-Id:" . $requestId . "\n" .
+            "Request-Timestamp:" . $requestDate . "\n" .
+            "Request-Target:" . $targetPath . "\n" .
+            "Digest:" . $digestValue;
+
+        // Calculate HMAC-SHA256 base64 from all the components above
+        $signature = base64_encode(hash_hmac('sha256', $componentSignature, $secretKey, true));
+        // $signature = base64_encode(hash_hmac('sha256', json_encode($requestData), $sharedKey, true));
+        // Prepare Signature Header
+        $headerSignature = [
+            'Client-Id' => $clientId,
+            'Request-Id' => $requestId,
+            'Request-Timestamp' => $requestDate,
+            'Signature' => "HMACSHA256=" . $signature,
+        ];
+
+        // Create the HTTP client
+        $httpClient = new Client();
+
+        // Endpoint untuk pembayaran Jokul
+        $paymentEndpoint = "https://api-sandbox.doku.com/checkout/v1/payment"; // Gantilah dengan URL yang sesuai dari Jokul
+
+        // Lakukan permintaan pembayaran ke Jokul
+        $response = $httpClient->post($paymentEndpoint, [
+            'headers' => $headerSignature,
+            'json' => $requestBody,
+        ]);
+
+        dd($response);
+        // Handle respons dari Jokul
+        $responseBody = $response->getBody()->getContents();
+
+        // Lakukan apa yang perlu dilakukan dengan respons pembayaran, seperti menampilkan halaman konfirmasi atau menyimpan data pembayaran.
+
+        return response()->json(['paymentResponse' => $responseBody]);
+        // Lakukan apa yang perlu dilakukan dengan $headerSignature, misalnya, kirim permintaan HTTP ke layanan Jokul dengan header ini.
+
+        // return response()->json(['headerSignature' => $headerSignature]);
+    }
+
+    public function callbackdoku()
+    {
+        $data = file_get_contents('php://input');
+        $response = json_decode($data);
+
+        if ($response->success) {
+            dd($response);
+        } else {
+            dd($response);
+            // Proses pembayaran gagal
+        }
+    }
+    
 }

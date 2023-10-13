@@ -361,7 +361,7 @@ export default function Index({ session, props, attr, room,roomtype,vendor }) {
                                                         <div className="col-lg-3">
                                                             <div className="mb-3">
                                                                 <label htmlFor="exampleFormControlInput1" className="form-label">Size</label>
-                                                                <input defaultValue={room[0].size} onChange={(e) => setSize(e.target.value)} type="number" className="form-control" id="exampleFormControlInput1" placeholder="Total Bedroom" />
+                                                                <input defaultValue={room[0].size} onChange={(e) => setSize(e.target.value)} type="number" className="form-control" id="exampleFormControlInput1" placeholder="size room" />
                                                             </div>
                                                         </div>
                                                     </div>
