@@ -108,14 +108,14 @@ class AuthController extends Controller
             $member->save();
 
             $Setting = Setting::where('id',1)->first();
-            Mail::to($Setting->email)->send(new RegisterNotif($data, $member));
-            
-            Mail::to($request->email)->send(new AgentVerifification($data, $member));
-
             // update vendor_id in tabel users where id = $data->id
             $user = User::find($data->id);
             $user->vendor_id = $member->id;
             $user->save();
+
+            Mail::to($Setting->email)->send(new RegisterNotif($data, $member));
+
+            Mail::to($request->email)->send(new AgentVerifification($data, $member));
 
             return redirect()
                 ->route('login')
@@ -171,7 +171,7 @@ class AuthController extends Controller
             $Setting = Setting::where('id',1)->first();
             Mail::to($Setting->email)->send(new RegisterNotif($data, $member));
             Mail::to($request->email)->send(new HotelVerifification($data, $member));
-            
+
             return redirect()
                 ->route('login')
                 ->with('message', 'please check your email to activate your account.');
