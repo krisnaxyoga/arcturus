@@ -9,7 +9,7 @@
 
     <p>thank you for registering at arcturus.my.id to continue you can do</p>
 
-    <p>please verify your account here :</p>
+    <p>please click link below to verify your account :</p>
 
     <a href="{{route('verifaccount', ['id' => $data->id])}}">Verification acccount</a>
 
