@@ -55,7 +55,7 @@ export default function Index({ props, session, data, agent }) {
                                                     <th>Nights</th>
                                                     <th>Total</th>
                                                     <th>Status</th>
-                                                    <th>Action</th>
+                                                    <th>Confirmation letter</th>
                                                 </tr>
                                             </thead>
                                             <Bookings bookings={currentPosts} />

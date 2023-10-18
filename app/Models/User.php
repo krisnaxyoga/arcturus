@@ -70,4 +70,8 @@ class User extends Authenticatable
     public function historywallet() {
         return $this->hasMany(HistoryWallet::class);
     }
+
+    public function paymentgetwaytransaction() {
+        return $this->hasMany(PaymentGetwayTransaction::class);
+    }
 }

@@ -23,7 +23,7 @@ export default function Bookings({ bookings }) {
                         <td>{item.booking_status ? item.booking_status : 'unpaid'}</td>
                         <td>
                             <Link className='btn btn-outline-warning' href={`/agent/bookinghistory/detail/${item.id}`} title='Details'>
-                                <i className="fas fa-info-circle"></i>
+                                <i className="fa fa-file"></i>
                             </Link>&nbsp;
                             {/* <Link className='btn btn-outline-success' href={`/agent/bookinghistory/invoice/${item.id}`} title='Invoice'>
                                 <i className="fas fa-print"></i>

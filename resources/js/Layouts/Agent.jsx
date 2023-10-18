@@ -61,7 +61,7 @@ function Layout({ children, page, agent }) {
                                 <Dropdown.Item style={{fontWeight:'700'}} href="/logout">
                                    <i className="fa fa-power-off"></i>&nbsp;logout
                                 </Dropdown.Item>
-                                {/* <Dropdown.Item href="#"><span className='text-danger'><i className='fa fa-heart'></i></span>&nbsp;Saldo : {formatRupiah(agent.saldo)}</Dropdown.Item> */}
+                                <Dropdown.Item href="/agent/wallet"><span className='text-danger'><i className='fa fa-heart'></i></span>&nbsp;Saldo : {formatRupiah(agent.saldo)}</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
                     </li>

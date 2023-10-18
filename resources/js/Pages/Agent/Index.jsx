@@ -139,7 +139,7 @@ export default function Index({ totalroom, data,booking,success,pending,getbooki
                                     <th>Nights</th>
                                     <th>Total</th>
                                     <th>Status</th>
-                                    <th>Action</th>
+                                    <th>Confirmation letter</th>
                                 </tr>
                             </thead>
                             <Bookings bookings={currentPosts} />

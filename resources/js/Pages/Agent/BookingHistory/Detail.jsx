@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import Layout from '../../../Layouts/Agent';
 import { Link, usePage } from '@inertiajs/inertia-react';
 import { Inertia } from '@inertiajs/inertia';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
+import jsPDF from 'jspdf';
+
 
 export default function Detail({ session, data, agent, contract, setting, roombooking }) {
-    console.log(contract, ">>>>CONTRACT");
+    // console.log(contract, ">>>>CONTRACT");
 
     function formatRupiah(amount) {
         return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount).slice(0, -3);
@@ -22,6 +24,25 @@ export default function Detail({ session, data, agent, contract, setting, roombo
             document.body.innerHTML = originalContents;
         }
     };
+
+    
+   
+    const createAndDownloadPDF = () => {
+        const printContent2 = document.getElementById('print-card');
+  
+        if (printContent2) {
+            html2canvas(printContent2, { scale: 2 }).then(canvas => {
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF({
+                orientation: 'portrait',
+                unit: 'mm',
+                format: 'a4'
+            });
+            pdf.addImage(imgData, 'PNG', 10, 10, 180, 150); // Menambahkan gambar tangkapan layar ke PDF
+            pdf.save('document.pdf'); // Simpan PDF dengan nama "document.pdf"
+            });
+        }
+      }; 
 
     const { url } = usePage();
 
@@ -296,9 +317,15 @@ export default function Detail({ session, data, agent, contract, setting, roombo
                                             </>
                                         ) : (
                                             <>
-                                                 <button className="btn btn-primary" onClick={handlePrintPDF}>
+                                            <span className='d-flex'>
+                                                <button className="btn btn-primary mr-2" onClick={handlePrintPDF}>
                                                     <i className="fa fa-file-pdf"></i> Print as PDF
                                                 </button>
+                                                <button className="btn btn-primary" onClick={createAndDownloadPDF}>
+                                                    <i className="fa fa-download"></i> download PDF
+                                                </button>
+                                            </span>
+                                               
                                             </>
                                         )}
                                 <button onClick={() => history.back()} className="btn btn-danger ml-2">

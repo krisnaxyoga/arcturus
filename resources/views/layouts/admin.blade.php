@@ -92,6 +92,10 @@
                             <div class="nav-link-icon"><i class="fas fa-fw fa-chart-area"></i></div>
                             Booking Confirmation
                         </a>
+                        <a class="nav-link {{ request()->routeIs('dashboard.wallet.admin') ? 'active' : '' }}" href="{{ route('dashboard.wallet.admin') }}">
+                            <div class="nav-link-icon"><i class="fas fa-fw fa-bell"></i></div>
+                            Top Up Confirmation
+                        </a>
                         <a class="nav-link {{ request()->Is('#') ? 'active' : '' }}" href="#" data-toggle="collapse" data-target="#agentCollapse"
                             aria-expanded="false" aria-controls="agentCollapse">
                             <div class="nav-link-icon"><i data-feather="box"></i></div>

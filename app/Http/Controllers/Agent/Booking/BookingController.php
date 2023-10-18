@@ -214,7 +214,22 @@ class BookingController extends Controller
                 }
             }else{
                 $booking = $id;
-                return view('landingpage.hotel.transferbank',compact('booking'));
+                $hotel_room_booking = HotelRoomBooking::where('booking_id',$booking)->get();
+                $totalprice = 0;
+                foreach($hotel_room_booking as $item){
+                    $totalprice += $item->price;
+                }
+        
+                $booking = Booking::find($booking);
+                $totalpayment = $booking->night * $totalprice;
+        
+                $total_as_saldo = 0;
+                if($booking->price == $totalpayment){
+                    $total_as_saldo = $booking->price;
+                }else{
+                    $total_as_saldo = $totalpayment;
+                }
+                return view('landingpage.hotel.transferbank',compact('booking','total_as_saldo'));
             }
             return redirect()
             ->route('agent.booking.history')
@@ -222,7 +237,25 @@ class BookingController extends Controller
         }
     }
     public function paymentbookingpage($booking){
-        return view('landingpage.hotel.transferbank',compact('booking'));
+        $hotel_room_booking = HotelRoomBooking::where('booking_id',$booking)->get();
+        $totalprice = 0;
+        foreach($hotel_room_booking as $item){
+            $totalprice += $item->price;
+        }
+
+        $booking = Booking::find($booking);
+        $totalpayment = $booking->night * $totalprice;
+
+        $total_as_saldo = 0;
+        if($booking->price == $totalpayment){
+            $total_as_saldo = $booking->price;
+        }else{
+            $total_as_saldo = $totalpayment;
+        }
+
+
+
+        return view('landingpage.hotel.transferbank',compact('booking','total_as_saldo'));
     }
 
     public function upbanktransfer(Request $request){

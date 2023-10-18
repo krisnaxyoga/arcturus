@@ -115,7 +115,7 @@
                    
                     <input type="email" name="email"
                     inputmode="email"
-                        class="form-control @error('email') is-invalid @enderror" id="email">
+                        class="form-control @error('email') is-invalid @enderror" id="email" required>
                     @error('email')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -126,7 +126,7 @@
                 <div class="form-outline mb-4">
                     
                     <input type="text" name="phone"
-                        class="form-control @error('phone') is-invalid @enderror" id="name">
+                        class="form-control @error('phone') is-invalid @enderror" id="name" required>
                     @error('phone')
                         <div class="invalid-feedback">
                             {{ $message }}

@@ -108,6 +108,10 @@ Route::group(['middleware' => ['auth', 'checkrole:1']], function() {
     // report
     Route::get('/admin/report', [\App\Http\Controllers\Admin\Report\ReportController::class, 'index'])->name('dashboard.report');
 
+    //top up confirmation
+    Route::get('/admin/topup/index', [\App\Http\Controllers\Admin\Report\WalletController::class, 'index'])->name('dashboard.wallet.admin');
+    Route::get('/admin/topup/confirmation/{id}', [\App\Http\Controllers\Admin\Report\WalletController::class, 'confirmationtopup'])->name('dashboard.wallet.confirmation');
+
     //booking
     Route::get('/admin/booking', [\App\Http\Controllers\Admin\Report\BookingController::class, 'index'])->name('dashboard.admin.booking');
     Route::get('/admin/booking/confirmation/{id}', [\App\Http\Controllers\Admin\Report\BookingController::class, 'confirmation'])->name('admin.booking.confirmation');
@@ -291,4 +295,9 @@ Route::group(['middleware' => ['auth', 'checkrole:3']], function() {
     Route::get('/paymentbookingpage/{id}',[\App\Http\Controllers\Agent\Booking\BookingController::class, 'paymentbookingpage'])->name('payment.paymentbookingpage');
 
     Route::post('/upbanktransfer',[\App\Http\Controllers\Agent\Booking\BookingController::class, 'upbanktransfer'])->name('payment.upbanktransfer');
+
+    //wallet
+    Route::get('/agent/wallet',[\App\Http\Controllers\Agent\Wallet\EwalletController::class, 'index'])->name('agent.wallet');
+    Route::post('/agent/wallet/topup',[\App\Http\Controllers\Agent\Wallet\EwalletController::class, 'store'])->name('agent.wallet.topup');
+    Route::get('/agent/wallet/pay/{id}',[\App\Http\Controllers\Agent\Wallet\EwalletController::class, 'pay'])->name('agent.wallet.pay');
 });

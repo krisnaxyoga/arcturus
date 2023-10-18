@@ -16,24 +16,24 @@ export default function Rates({ rates }) {
         // Fungsi untuk mengubah status dan mengirim permintaan ke server
         const toggleStatus = async (id, currentStatus) => {
             try {
-            // Kirim permintaan ke server untuk mengubah status
-            const response = await fetch(`/room/contract/contractrate_is_active/${id}/${currentStatus == 1 ? 0 : 1}`, {
-                method: 'GET', // Gantilah dengan metode HTTP yang sesuai
-                // Tambahkan header jika diperlukan
-            });
+                // Kirim permintaan ke server untuk mengubah status
+                const response = await fetch(`/room/contract/contractrate_is_active/${id}/${currentStatus == 1 ? 0 : 1}`, {
+                    method: 'GET', // Gantilah dengan metode HTTP yang sesuai
+                    // Tambahkan header jika diperlukan
+                });
 
-            if (response.ok) {
-                // Jika berhasil, perbarui status secara lokal
-                const updatedRatesCopy = [...updatedRates];
-                const rateIndex = updatedRatesCopy.findIndex((rate) => rate.id == id);
-                updatedRatesCopy[rateIndex].is_active = currentStatus == 1 ? 0 : 1;
-                setUpdatedRates(updatedRatesCopy);
-            } else {
-                // Handle kesalahan jika ada
-                console.error('Gagal mengubah status.');
-            }
+                if (response.ok) {
+                    // Jika berhasil, perbarui status secara lokal
+                    const updatedRatesCopy = [...updatedRates];
+                    const rateIndex = updatedRatesCopy.findIndex((rate) => rate.id == id);
+                    updatedRatesCopy[rateIndex].is_active = currentStatus == 1 ? 0 : 1;
+                    setUpdatedRates(updatedRatesCopy);
+                } else {
+                    // Handle kesalahan jika ada
+                    console.error('Gagal mengubah status.');
+                }
             } catch (error) {
-            console.error('Terjadi kesalahan:', error);
+                console.error('Terjadi kesalahan:', error);
             }
         };
 
@@ -81,24 +81,28 @@ export default function Rates({ rates }) {
                             >
                                 <i className="fa fa-edit"></i>
                             </Link>
-                            <a
-                            href="#"
-                            className="btn btn-datatable btn-icon btn-transparent-dark mr-2"
-                            onClick={(e) => {
-                                e.preventDefault(); // Mencegah perilaku default dari tautan
-                                toggleStatus(item.id, item.is_active);
-                            }}
-                            >
-                            {item.is_active == 1 ? (
-                                <span className="text-success">
-                                <i className="fa fa-circle" aria-hidden="true"></i>on
-                                </span>
-                            ) : (
-                                <span className="text-danger">
-                                <i className="fa fa-circle" aria-hidden="true"></i>off
-                                </span>
-                            )}
-                            </a>
+                            {item.is_active != undefined ? (
+                                <a
+                                    href="#"
+                                    className="btn btn-datatable btn-icon btn-transparent-dark mr-2"
+                                    onClick={(e) => {
+                                    e.preventDefault();
+                                    toggleStatus(item.id, item.is_active);
+                                    }}
+                                >
+                                    {item.is_active == 1 ? (
+                                    <span className="text-success">
+                                        <i className="fa fa-circle" aria-hidden="true"></i>on
+                                    </span>
+                                    ) : (
+                                    <span className="text-danger">
+                                        <i className="fa fa-circle" aria-hidden="true"></i>off
+                                    </span>
+                                    )}
+                                </a>
+                                ) : (
+                                <span>Missing or invalid data</span>
+                                )}
                             {/* <Link
                                 href={`/room/contract/destroy/${item.id}`}
                                 className="btn btn-datatable btn-icon btn-transparent-dark mr-2"
