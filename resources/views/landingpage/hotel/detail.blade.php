@@ -280,6 +280,8 @@
 
                                                                             $totalx = 0;
                                                                             $totalDataCount = 0;
+
+                                                                            $lang_of_stay = 1;
                                                                             // var_dump($totalNights);
                                                                             if ($HotelCalendar->count() != 0) {
                                                                                 foreach ($HotelCalendar as $key => $calendar) {
@@ -373,11 +375,13 @@
                                                                                             $hotelroomid = $calendar->room_hotel_id;
                                                                                         }
                                                                                         else{
+                                                                                            //filter yang berfungsi untuk calendar rate
                                                                                             if($startDate < $checkoutDate && $endDate >= $checkinDate && $startDate == $endDate)
                                                                                             {
                                                                                                 $totalx += $calendar->recom_price;
                                                                                                 $totalDataCount++;
                                                                                             }
+                                                                                            //filter yang berfungsi untuk calendar rate
                                                                                         }
                                                                             
                                                                                         if ($checkoutDate == $endDate) {
@@ -386,6 +390,10 @@
                                                                             
                                                                                         if ($checkinDate == $startDate) {
                                                                                             $no_checkin = $calendar->no_checkin;
+                                                                                        }
+
+                                                                                        if ($checkinDate == $startDate) {
+                                                                                            $lang_of_stay = $calendar->night;
                                                                                         }
                                                                                     } else {
                                                                                         if ($calendar->room_hotel_id == $itemprice->room_id && $foundZero == false) {
@@ -415,12 +423,12 @@
                                                                                         }
                                                                                     }
                                                                                 }
-
+                                                                                //filter yang berfungsi untuk calendar rate
                                                                                 if($totalx != 0){
                                                                                     $countNights = $totalNights - $totalDataCount;
                                                                                     $TotalHotelCalendar = ($totalx + ($itemprice->recom_price * $countNights)) / $totalNights;
                                                                                 }
-                                                                                
+                                                                                //filter yang berfungsi untuk calendar rate
                                                                               
                                                                             }
                                                                             

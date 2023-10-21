@@ -8,12 +8,15 @@ import Layout from '../../../Layouts/Agent';
 import { Link, usePage } from '@inertiajs/inertia-react';
 import { Inertia } from '@inertiajs/inertia';
 
-export default function Index({ props, session, agent,history }) {
+export default function Index({ props, session, agent,history,setting }) {
     const { url } = usePage();
     const [copied, setCopied] = useState(false);
     const [text, setText] = useState("2027999995");
     const [totaltopup, setTopup] = useState('');
     const [imgtrf,setTrf] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    
+    const [selectedImage, setSelectedImage] = useState(null);
 
     function formatRupiah(amount) {
         return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount).slice(0, -3);
@@ -31,6 +34,19 @@ export default function Index({ props, session, agent,history }) {
         return `${formattedDay}/${formattedMonth}/${year}`;
     }
       
+    useEffect(() => {
+        // Anda dapat menambahkan logika tambahan jika diperlukan
+        // Contoh: Memuat data dari server
+
+        // Misalnya, ini adalah simulasi pengambilan data yang memakan waktu
+        setTimeout(() => {
+            setIsLoading(false); // Langkah 2: Setel isLoading menjadi false setelah halaman selesai dimuat
+        }, 900); // Menggunakan setTimeout untuk simulasi saja (2 detik).
+
+        // Jika Anda ingin melakukan pengambilan data dari server, Anda dapat melakukannya di sini dan kemudian mengatur isLoading menjadi false setelah data berhasil dimuat.
+    }, []); // Kosongkan array dependencies untuk menjalankan efek ini hanya sekali saat komponen dimuat.
+
+
     useEffect(() => {
       if (copied) {
         setTimeout(() => {
@@ -60,28 +76,56 @@ export default function Index({ props, session, agent,history }) {
                 e.target.value = ''; // Mengosongkan input file
             } else {
                 setTrf(file);
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                        setSelectedImage(reader.result);
+                    };
+                    reader.readAsDataURL(file);
+                    }
             }
         }
     };
+    
 
     const storePost = async (e) => {
         e.preventDefault();
 
+        setIsLoading(true);
         const formData = new FormData();
         formData.append('totaltopup', totaltopup);
         formData.append('image', imgtrf);
         Inertia.post('/agent/wallet/topup', formData, {
             onSuccess: () => {
                 // Lakukan aksi setelah gambar berhasil diunggah
+                setIsLoading(false);
             },
         });
     }
-
+   
   return (
     <>
     <Layout agent={agent} page={url}>
-        <div className="container">
-        <h1>Wallet</h1>
+    {isLoading ? (
+                <div className="container">
+                    <div className="loading-container">
+                        <div className="loading-spinner"></div>
+                        <div className="loading-text">Loading...</div>
+                    </div>
+                </div>// Langkah 3: Tampilkan pesan "Loading..." saat isLoading true
+            ) : (
+                <>
+                 <div className="container">
+                    <div className="d-flex">
+                        <span>
+                        <img onerror="this.onerror=null; this.src='https://arcturus.my.id/logo/system/1695599539.png';" style={{width:'40px',margin:'5px'}} src={setting.logo_image} alt={setting.logo_image}/>
+                       
+                        </span>
+                        <span>
+                            <h1 className='my-3'>Arcturus Pay</h1>
+                        </span>
+                    </div>
+                    
             <div className="row">
                 <div className="col-lg-6">
                     <div className="card mb-3">
@@ -125,6 +169,18 @@ export default function Index({ props, session, agent,history }) {
                                         </div>
                                         <div className="form-group mb-3">
                                             <input type="file" onChange={handleTransfer} className='form-control' required/>
+                                        </div>
+                                        
+                                        <div className="form-group">
+                                        {selectedImage && (
+                                                                    <div className="mb-3">
+                                                                    <img
+                                                                        src={selectedImage}
+                                                                        alt="Selected"
+                                                                        style={{ maxWidth: '200px', maxHeight: '200px' }}
+                                                                    />
+                                                                    </div>
+                                                                )}
                                         </div>
                                          <div className="form-group">
                                              <button type='submit' className='btn btn-primary'>top up</button>
@@ -173,6 +229,9 @@ export default function Index({ props, session, agent,history }) {
                 </div>
             </div>
         </div>
+                </>
+            )}
+       
     </Layout>
     </>
   )

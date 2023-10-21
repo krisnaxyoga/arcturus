@@ -30,9 +30,11 @@ class EwalletController extends Controller
         $iduser = auth()->user()->id;
         $agent = User::where('id',$iduser)->with('vendors')->first();
         $history = HistoryWallet::where('user_id',$iduser)->orderBy('created_at', 'desc')->get();
+        $setting = Setting::first();
         return inertia('Agent/Wallet/Index',[
             'agent' => $agent,
             'history' => $history,
+            'setting' => $setting,
         ]);
     }
 
@@ -166,7 +168,7 @@ class EwalletController extends Controller
             $trans->save();
 
             $Setting = Setting::where('id',1)->first();
-            Mail::to($Setting->email)->send(new TopUpAdminConfirmation($trans));
+            // Mail::to('accounting@arcturus.my.id')->send(new TopUpAdminConfirmation($trans));
 
             return redirect()->back()->with('success', 'Top Up Proccess!');
         }

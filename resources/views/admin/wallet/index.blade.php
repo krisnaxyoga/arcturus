@@ -75,6 +75,12 @@
                                                 @endif
                                                
                                             </td>
+                                            <td> @if($item->status == 400)
+                                                <span class="badge badge-warning">processing</span>
+                                                @else
+                                                <span class="badge badge-success">success</span>
+                                                @endif
+                                                </td>
                                             <td>{{ $item->users->first_name }} {{ $item->users->last_name }}</td>
                                             <td>{{ $item->total_transaction }}</td>
                                             

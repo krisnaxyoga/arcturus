@@ -181,7 +181,8 @@ class SurchargeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): void
+
+     public function store(Request $request): void
     {
         $request->validate([
             'vendor_id' => 'required',
@@ -193,93 +194,24 @@ class SurchargeController extends Controller
         $start_date = date('Y-m-d', strtotime($request->start_date));
         $end_date = date('Y-m-d', strtotime($request->end_date));
 
-        $hotel_room_surcharge = HotelRoomSurcharge::query()->where('vendor_id', $request->vendor_id)
-            ->where('room_hotel_id', $request->room_hotel_id)
-            ->where('start_date', $start_date)
-            ->first();
+        $current_date = $start_date;
 
-        if (!$hotel_room_surcharge) {
-            // Cek jika ada entri sebelumnya dengan harga yang sama
-            $previousSurcharge = HotelRoomSurcharge::where('vendor_id', $request->vendor_id)
-                ->where('room_hotel_id', $request->room_hotel_id)
-                ->where('recom_price', $request->price)
-                ->where('room_allow', $request->room_allow)
-                ->orderBy('end_date', 'desc')
-                ->first();
-
-            if ($previousSurcharge) {
-                // Jika ada entri sebelumnya, periksa jika ada kesenjangan atau gap
-                if (date('Y-m-d', strtotime('+1 day', strtotime($previousSurcharge->end_date))) == $start_date) {
-                    // Tidak ada kesenjangan, gabungkan atau edit rentang yang ada
-                    $start_date = $previousSurcharge->start_date;
-                    $previousSurcharge->end_date = $end_date;
-                    $previousSurcharge->save();
-                    return;
-                }
-            }
-
-            // Jika tidak ada entri sebelumnya atau ada kesenjangan, buat entri baru
-            $newSurcharge = new HotelRoomSurcharge();
-            $newSurcharge->vendor_id = $request->vendor_id;
-            $newSurcharge->room_hotel_id = $request->room_hotel_id;
-            $newSurcharge->start_date = $start_date;
-            $newSurcharge->end_date = $end_date;
-            $newSurcharge->recom_price = $request->price;
-            // $newSurcharge->active = $request->active;
-            $newSurcharge->no_checkin = $request->nocheckin;
-            $newSurcharge->no_checkout = $request->nocheckout;
-
-            if ($request->room_allow == null || $request->room_allow == 0) {
-                $newSurcharge->room_allow = 0;
-                $newSurcharge->active = 0;
-            } else {
-                $newSurcharge->room_allow = $request->room_allow;
-                $newSurcharge->active = 1;
-            }
-
-            $newSurcharge->save();
-        } else {
-            // Mencari semua entri yang memiliki harga yang sama dengan yang baru
-            $surchargeEntries = HotelRoomSurcharge::query()
+        while ($current_date <= $end_date) {
+            $hotel_room_surcharge = HotelRoomSurcharge::query()
                 ->where('vendor_id', $request->vendor_id)
                 ->where('room_hotel_id', $request->room_hotel_id)
-                ->where('recom_price', $request->price)
-                ->orderBy('start_date')
-                ->get();
-            if (!$surchargeEntries->isEmpty()) {
-                foreach ($surchargeEntries as $entry) {
-                    if ($entry->id == $hotel_room_surcharge->id) {
-                        // Skip entri yang sedang diperbarui
-                        continue;
-                    }
+                ->where('start_date', $current_date)
+                ->first();
 
-                    if ($start_date <= $entry->end_date && $end_date >= $entry->start_date) {
-                        // Tanggal yang akan diedit tumpang tindih dengan entri yang ada
-                        if ($start_date <= $entry->start_date && $end_date > $entry->end_date) {
-                            // Tanggal yang akan diedit mencakup entri yang ada sepenuhnya, hapus entri yang ada
-
-                            $entry->delete();
-                        } elseif ($start_date <= $entry->start_date && $end_date < $entry->end_date) {
-                            // Tanggal yang akan diedit dimulai dari entri yang ada,
-                            // perbarui tanggal awal entri yang ada
-                            $entry->start_date = $end_date;
-                            $entry->save();
-                        } elseif ($start_date > $entry->start_date && $end_date >= $entry->end_date) {
-                            // Tanggal yang akan diedit mengakhiri entri yang ada,
-                            // perbarui tanggal akhir entri yang ada
-                            $entry->end_date = $start_date;
-                            $entry->save();
-                        }
-                    }
-                }
+            if (! $hotel_room_surcharge) {
+                $hotel_room_surcharge = new HotelRoomSurcharge();
             }
 
             $hotel_room_surcharge->vendor_id = $request->vendor_id;
             $hotel_room_surcharge->room_hotel_id = $request->room_hotel_id;
-            $hotel_room_surcharge->start_date = $start_date;
-            $hotel_room_surcharge->end_date = $end_date;
+            $hotel_room_surcharge->start_date = $current_date;
+            $hotel_room_surcharge->end_date = $current_date; // End date is the same as start date for daily entries
             $hotel_room_surcharge->recom_price = $request->price;
-            $hotel_room_surcharge->active = $request->active;
             $hotel_room_surcharge->no_checkin = $request->nocheckin;
             $hotel_room_surcharge->no_checkout = $request->nocheckout;
             if ($request->room_allow == null || $request->room_allow == 0) {
@@ -289,9 +221,124 @@ class SurchargeController extends Controller
                 $hotel_room_surcharge->room_allow = $request->room_allow;
                 $hotel_room_surcharge->active = 1;
             }
+
             $hotel_room_surcharge->save();
+
+            $current_date = date('Y-m-d', strtotime($current_date . ' +1 day')); // Move to the next day
         }
     }
+
+    // public function store(Request $request): void
+    // {
+    //     $request->validate([
+    //         'vendor_id' => 'required',
+    //         'room_hotel_id' => 'required',
+    //         'start_date' => 'required',
+    //         'end_date' => 'required',
+    //     ]);
+
+    //     $start_date = date('Y-m-d', strtotime($request->start_date));
+    //     $end_date = date('Y-m-d', strtotime($request->end_date));
+
+    //     $hotel_room_surcharge = HotelRoomSurcharge::query()->where('vendor_id', $request->vendor_id)
+    //         ->where('room_hotel_id', $request->room_hotel_id)
+    //         ->where('start_date', $start_date)
+    //         ->first();
+
+    //     if (!$hotel_room_surcharge) {
+    //         // Cek jika ada entri sebelumnya dengan harga yang sama
+    //         $previousSurcharge = HotelRoomSurcharge::where('vendor_id', $request->vendor_id)
+    //             ->where('room_hotel_id', $request->room_hotel_id)
+    //             ->where('recom_price', $request->price)
+    //             ->where('room_allow', $request->room_allow)
+    //             ->orderBy('end_date', 'desc')
+    //             ->first();
+
+    //         if ($previousSurcharge) {
+    //             // Jika ada entri sebelumnya, periksa jika ada kesenjangan atau gap
+    //             if (date('Y-m-d', strtotime('+1 day', strtotime($previousSurcharge->end_date))) == $start_date) {
+    //                 // Tidak ada kesenjangan, gabungkan atau edit rentang yang ada
+    //                 $start_date = $previousSurcharge->start_date;
+    //                 $previousSurcharge->end_date = $end_date;
+    //                 $previousSurcharge->save();
+    //                 return;
+    //             }
+    //         }
+
+    //         // Jika tidak ada entri sebelumnya atau ada kesenjangan, buat entri baru
+    //         $newSurcharge = new HotelRoomSurcharge();
+    //         $newSurcharge->vendor_id = $request->vendor_id;
+    //         $newSurcharge->room_hotel_id = $request->room_hotel_id;
+    //         $newSurcharge->start_date = $start_date;
+    //         $newSurcharge->end_date = $end_date;
+    //         $newSurcharge->recom_price = $request->price;
+    //         // $newSurcharge->active = $request->active;
+    //         $newSurcharge->no_checkin = $request->nocheckin;
+    //         $newSurcharge->no_checkout = $request->nocheckout;
+
+    //         if ($request->room_allow == null || $request->room_allow == 0) {
+    //             $newSurcharge->room_allow = 0;
+    //             $newSurcharge->active = 0;
+    //         } else {
+    //             $newSurcharge->room_allow = $request->room_allow;
+    //             $newSurcharge->active = 1;
+    //         }
+
+    //         $newSurcharge->save();
+    //     } else {
+    //         // Mencari semua entri yang memiliki harga yang sama dengan yang baru
+    //         $surchargeEntries = HotelRoomSurcharge::query()
+    //             ->where('vendor_id', $request->vendor_id)
+    //             ->where('room_hotel_id', $request->room_hotel_id)
+    //             ->where('recom_price', $request->price)
+    //             ->orderBy('start_date')
+    //             ->get();
+    //         if (!$surchargeEntries->isEmpty()) {
+    //             foreach ($surchargeEntries as $entry) {
+    //                 if ($entry->id == $hotel_room_surcharge->id) {
+    //                     // Skip entri yang sedang diperbarui
+    //                     continue;
+    //                 }
+
+    //                 if ($start_date <= $entry->end_date && $end_date >= $entry->start_date) {
+    //                     // Tanggal yang akan diedit tumpang tindih dengan entri yang ada
+    //                     if ($start_date <= $entry->start_date && $end_date > $entry->end_date) {
+    //                         // Tanggal yang akan diedit mencakup entri yang ada sepenuhnya, hapus entri yang ada
+
+    //                         $entry->delete();
+    //                     } elseif ($start_date <= $entry->start_date && $end_date < $entry->end_date) {
+    //                         // Tanggal yang akan diedit dimulai dari entri yang ada,
+    //                         // perbarui tanggal awal entri yang ada
+    //                         $entry->start_date = $end_date;
+    //                         $entry->save();
+    //                     } elseif ($start_date > $entry->start_date && $end_date >= $entry->end_date) {
+    //                         // Tanggal yang akan diedit mengakhiri entri yang ada,
+    //                         // perbarui tanggal akhir entri yang ada
+    //                         $entry->end_date = $start_date;
+    //                         $entry->save();
+    //                     }
+    //                 }
+    //             }
+    //         }
+
+    //         $hotel_room_surcharge->vendor_id = $request->vendor_id;
+    //         $hotel_room_surcharge->room_hotel_id = $request->room_hotel_id;
+    //         $hotel_room_surcharge->start_date = $start_date;
+    //         $hotel_room_surcharge->end_date = $end_date;
+    //         $hotel_room_surcharge->recom_price = $request->price;
+    //         $hotel_room_surcharge->active = $request->active;
+    //         $hotel_room_surcharge->no_checkin = $request->nocheckin;
+    //         $hotel_room_surcharge->no_checkout = $request->nocheckout;
+    //         if ($request->room_allow == null || $request->room_allow == 0) {
+    //             $hotel_room_surcharge->room_allow = 0;
+    //             $hotel_room_surcharge->active = 0;
+    //         } else {
+    //             $hotel_room_surcharge->room_allow = $request->room_allow;
+    //             $hotel_room_surcharge->active = 1;
+    //         }
+    //         $hotel_room_surcharge->save();
+    //     }
+    // }
 
 
 
