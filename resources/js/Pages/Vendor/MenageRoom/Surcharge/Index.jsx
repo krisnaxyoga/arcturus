@@ -32,6 +32,7 @@ export default function Index({ errors, session,contractrate, default_selected_h
     const [date, setDate] = useState('')
     const [startDate, setStartDate] = useState('')
 
+    const [night,setNight] = useState('')
     const [endDate, setEndDate] = useState('')
     const [price, setPrice] = useState(0)
     const [allow, setAllow] = useState('')
@@ -49,7 +50,7 @@ export default function Index({ errors, session,contractrate, default_selected_h
 
         // Split tanggal menjadi bagian-bagian
         const startDateParts = startDateStr.split('/');
-
+        
         // Buat format tanggal 'yyyy-mm-dd'
         const formattedStartDate = `${startDateParts[2]}-${startDateParts[1]}-${startDateParts[0]}`;
 
@@ -71,6 +72,7 @@ export default function Index({ errors, session,contractrate, default_selected_h
         setEndDate(formattedDate);
         setPrice(arg.event.extendedProps.price);
         setAllow(arg.event.allow);
+        setNight(arg.event.extendedProps.night);
 
         if(arg.event.extendedProps.nocheckout != 0){
             setNoCheckout(true);
@@ -169,7 +171,8 @@ export default function Index({ errors, session,contractrate, default_selected_h
             active: active,
             nocheckin: nocheckin,
             nocheckout: nocheckout,
-            room_allow: allow
+            room_allow: allow,
+            night : night
         }, {
             onSuccess: () => {
                 handleNavRoomTypeSelect(activeHotelRoom)
@@ -321,7 +324,10 @@ export default function Index({ errors, session,contractrate, default_selected_h
                                         {errors.allow}
                                     </div>
                                 )}
-
+                                <div className="mb-3">
+                                    <label className="form-label fw-bold">Min Stay</label>
+                                    <input id="allow" type="number" className="form-control" value={night} onChange={(e) => setNight(e.target.value)} />
+                                </div>
 
                                 <div className="mb-3">
                                     <label className="form-label fw-bold">Status</label>

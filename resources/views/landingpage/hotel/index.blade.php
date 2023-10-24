@@ -77,9 +77,15 @@
                                     class="form-control ">
                                     <option value="">{{ __('-- Select --') }}
                                     </option>
-                                    @foreach (get_country_lists() as $id => $name)
+                                    {{-- @foreach (get_country_lists() as $id => $name)
                                         <option @if (($requestdata['country'] ?? '') == $name) selected @endif value="{{ $name }}">{{ $name }}</option>
-                                    @endforeach
+                                    @endforeach --}}
+                                    @foreach ($country as $name)
+                                    <option
+                                        @if (($requestdata['country'] ?? '') == $name->country) selected @endif
+                                            value="{{ $name->country }}">
+                                            {{ $name->country }}</option>
+                                        @endforeach
                                 </select>
                                 </div>
                             </div>
@@ -270,11 +276,12 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <p class="star mb-0">
-                                            <span class="fa fa-star"></span>
-                                            <span class="fa fa-star"></span>
-                                            <span class="fa fa-star"></span>
-                                            <span class="fa fa-star"></span>
-                                            <span class="fa fa-star"></span>
+                                            @php
+                                               $hotel_star_count = $item->contractrate->vendors->hotel_star
+                                            @endphp
+                                            @for($i = 0; $i < $hotel_star_count; $i++)
+                                                <span class="fa fa-star"></span>
+                                            @endfor
                                         </p>
                                         <h3 class="m-0"><a href="{{ route('hoteldetail.homepage', ['id' => $item->contract_id]) }}?{{ http_build_query($requestdata) }}">{{$item->contractrate->vendors->vendor_name}}</a></h3>
 

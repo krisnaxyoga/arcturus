@@ -48,8 +48,12 @@ class HomeController extends Controller
 
         $hotel = Vendor::where('type_vendor', 'hotel')->count();
         $agent = Vendor::where('type_vendor', 'agent')->count();
+        $country = Vendor::where('type_vendor', 'hotel')
+        ->distinct()
+        ->select('country')
+        ->get();
 
-        return view('landingpage.index', compact('slider', 'hotel', 'agent'));
+        return view('landingpage.index', compact('slider', 'hotel', 'agent','country','user'));
     }
 
     public function hotel(Request $request)
@@ -59,6 +63,10 @@ class HomeController extends Controller
         $checkout = Carbon::parse($request->checkout);
         $Nights = $checkout->diffInDays($checkin);
         $today = Carbon::now();
+        $country = Vendor::where('type_vendor', 'hotel')
+        ->distinct()
+        ->select('country')
+        ->get();
 
         if (isset($request->checkin) && isset($request->checkout)) {
             $inputCheckin = $request->checkin;
@@ -241,7 +249,8 @@ class HomeController extends Controller
                 $subquery->select(\DB::raw('MIN(contract_prices.id)'))
                     ->from('contract_prices')
                     ->groupBy('contract_prices.contract_id');
-            });
+            })
+            ->orderBy('recomend', 'asc');
         }
 
         // Eksekusi query dan terapkan paginasi
@@ -264,7 +273,7 @@ class HomeController extends Controller
         // return view('landingpage.hotel.index',compact('data','requestdata','blackoutVendorIds','surchargesDetail','surcharprice'));
         $acyive = auth()->user()->is_active;
         if($acyive == 1){
-          return view('landingpage.hotel.index', compact('data', 'requestdata','contractprice','advancepurchase'));  
+          return view('landingpage.hotel.index', compact('data', 'requestdata','contractprice','advancepurchase','country'));  
         }else{
             return view('landingpage.pagenotfound.isactiveaccount');
         }

@@ -157,6 +157,7 @@ class SurchargeController extends Controller
                     'price' => $hotel_room_surcharge->recom_price,
                     'color' => $color,
                     'allow' => $roomallow,
+                    'night'=> $hotel_room_surcharge->night,
                     'nocheckin' => $hotel_room_surcharge->no_checkin,
                     'nocheckout' => $hotel_room_surcharge->no_checkout
                 ];
@@ -166,6 +167,7 @@ class SurchargeController extends Controller
                     'date' => date('Y-m-d', strtotime($date)),
                     'price' => $ContractPrice->recom_price,
                     'allow' => $roomallow,
+                    'night' => 1,
                     'color' => '#0077b6',
                     'nocheckin' => 0,
                     'nocheckout' => 0
@@ -214,6 +216,7 @@ class SurchargeController extends Controller
             $hotel_room_surcharge->recom_price = $request->price;
             $hotel_room_surcharge->no_checkin = $request->nocheckin;
             $hotel_room_surcharge->no_checkout = $request->nocheckout;
+            $hotel_room_surcharge->night = $request->night;
             if ($request->room_allow == null || $request->room_allow == 0) {
                 $hotel_room_surcharge->room_allow = 0;
                 $hotel_room_surcharge->active = 0;

@@ -204,6 +204,7 @@ class ContractController extends Controller
 
         $userid = auth()->user()->id;
         $barprice = BarPrice::where('user_id',$userid)->get();
+        $vendor = Vendor::where('user_id',$userid)->first();
 
         // $markup = AgentMarkupSetup::where('user_id',$userid)->get();
 
@@ -247,6 +248,7 @@ class ContractController extends Controller
 
                 $data->price = 0;
                 $data->is_active = 1;
+                $data->recomend = $vendor->recomend;
                 $data->barprice_id = $baritem->id;
                 $data->save();
 
@@ -286,6 +288,7 @@ class ContractController extends Controller
         $barprice = BarPrice::find($id);
         $userid = auth()->user()->id;
         $contract = ContractRate::find($cont);
+        $vendor = Vendor::where('user_id',$userid)->first();
 
         $contractroleone= ContractRate::where('user_id',$userid)->where('rolerate',1)->first();
             // $markup = AgentMarkupSetup::where('user_id',$userid)->first();
@@ -323,6 +326,7 @@ class ContractController extends Controller
 
             $data->is_active = 1;
             $data->barprice_id = $id;
+            $data->recomend = $vendor->recomend;
             $data->save();
 
 

@@ -14,6 +14,14 @@ return new class extends Migration
         Schema::table('hotel_room_surcharges', function (Blueprint $table) {
             $table->integer('night')->after('price')->default(1)->nullable();
         });
+
+        Schema::table('vendors', function (Blueprint $table) {
+            $table->integer('recomend')->after('zip_code')->default(2000)->nullable();
+        });
+
+        Schema::table('contract_prices', function (Blueprint $table) {
+            $table->integer('recomend')->after('price')->default(2000)->nullable();
+        });
     }
 
     /**

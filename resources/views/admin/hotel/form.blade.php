@@ -74,6 +74,16 @@
                                             <input type="email" name="email" class="form-control" id="input1"
                                             value="{{ $model->email }}"   placeholder="email@mail.com">
                                         </div>
+                                            <div class="mb-3">
+                                                <label for="hotel_star" class="form-label">Hotel Stars</label>
+                                                <input type="number" class="form-control" id="hotel_star" name="hotel_star"
+                                                    value="{{ $model->hotel_star }}" placeholder="hotel_star">
+                                            </div>
+                                            <div class="mb-6">
+                                                <label for="recomend" class="form-label">recomended</label>
+                                                <input type="number" class="form-control" id="recomend" name="recomend"
+                                                    value="{{ $model->recomend }}" placeholder="System recomended">
+                                            </div>
                                     </div>
                                 </div>
                                 <div class="row">

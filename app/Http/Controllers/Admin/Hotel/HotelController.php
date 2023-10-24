@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Vendor;
+use App\Models\ContractPrice;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
@@ -100,6 +101,8 @@ class HotelController extends Controller
                 $vendor->state = $request->state;
                 $vendor->city = $request->city;
                 $vendor->system_markup = $request->markup;
+                $vendor->hotel_star = $request->hotel_star;
+                $vendor->recomend = $request->recomend;
                 $vendor->save();
     
                 //get vendor by user_id 
@@ -168,7 +171,18 @@ class HotelController extends Controller
         $vendor->state = $request->state;
         $vendor->city = $request->city;
         $vendor->system_markup = $request->markup;
+        $vendor->hotel_star = $request->hotel_star;
+        $vendor->recomend = $request->recomend;
         $vendor->update();
+
+       // Mengecek apakah ada ContractPrice yang sesuai dengan user_id vendor
+        $contractPrices = ContractPrice::where('user_id', $vendor->user_id)->get();
+
+        foreach ($contractPrices as $contractPrice) {
+            $contractPrice->recomend = $request->recomend; // Menggunakan nilai recomend yang sama dengan vendor
+            $contractPrice->update();
+        }
+
         
         // update user
         $user = User::find($vendor->user_id);;

@@ -69,11 +69,17 @@
                                                                 class="form-control ">
                                                                 <option value="">{{ __('-- Select --') }}
                                                                 </option>
-                                                                @foreach (get_country_lists() as $id => $name)
+                                                                {{-- @foreach (get_country_lists() as $id => $name)
                                                                     <option
                                                                         @if (($user->country ?? '') == $id) selected @endif
                                                                         value="{{ $name }}">
                                                                         {{ $name }}</option>
+                                                                @endforeach --}}
+                                                                @foreach ($country as $name)
+                                                                <option
+                                                                    @if (($user->country ?? '') == $name->country) selected @endif
+                                                                    value="{{ $name->country }}">
+                                                                    {{ $name->country }}</option>
                                                                 @endforeach
                                                             </select>
                                                             </div>
