@@ -53,7 +53,7 @@ class HomeController extends Controller
         ->select('country')
         ->get();
 
-        return view('landingpage.index', compact('slider', 'hotel', 'agent','country','user'));
+        return view('landingpage.index', compact('slider', 'hotel', 'agent','country'));
     }
 
     public function hotel(Request $request)

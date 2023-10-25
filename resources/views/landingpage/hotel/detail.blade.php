@@ -529,7 +529,7 @@
                                                                                     <span
                                                                                         class="badge badge-danger">Sold</span>
                                                                                 @else
-                                                                                    @if ($Nights >= $itemprice->contractrate->min_stay)
+                                                                                    @if ($Nights == $itemprice->contractrate->min_stay)
                                                                                         <select
                                                                                             class="form-control room-quantity"
                                                                                             name="room_quantity"
