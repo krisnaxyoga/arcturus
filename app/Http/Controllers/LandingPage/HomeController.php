@@ -16,6 +16,7 @@ use App\Models\HotelRoomBooking;
 use App\Models\HotelRoomSurcharge;
 use App\Models\AdvancePurchase;
 use App\Models\AdvancePurchasePrice;
+use App\Models\SurchargeAllRoom;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use GuzzleHttp\Client; // Anda perlu menginstal Guzzle HTTP client untuk ini
@@ -230,6 +231,10 @@ class HomeController extends Controller
             ->with('advancepurchase')
             ->get();
 
+            $surchargeAllRoom = SurchargeAllRoom::where('start_date', '>=', $checkin)
+            ->where('end_date', '<=', Carbon::parse($checkout)->subDay())
+            ->get();
+            
         $data = $vendor;
 
         if ($request->sort == 'low_to_high') {
@@ -254,7 +259,7 @@ class HomeController extends Controller
         }
 
         // Eksekusi query dan terapkan paginasi
-        $data = $data->paginate(6);
+        $data = $data->simplePaginate(6);
 
         // Buat array data request
         $requestdata = [
@@ -267,13 +272,14 @@ class HomeController extends Controller
             'properties' =>$selectedProperties
         ];
 
+      
         // Terapkan append ke objek paginasi
         $data->appends($requestdata);
 
         // return view('landingpage.hotel.index',compact('data','requestdata','blackoutVendorIds','surchargesDetail','surcharprice'));
         $acyive = auth()->user()->is_active;
         if($acyive == 1){
-          return view('landingpage.hotel.index', compact('data', 'requestdata','contractprice','advancepurchase','country'));  
+          return view('landingpage.hotel.index', compact('data', 'requestdata','contractprice','advancepurchase','country','surchargeAllRoom','Nights'));  
         }else{
             return view('landingpage.pagenotfound.isactiveaccount');
         }
@@ -451,7 +457,10 @@ class HomeController extends Controller
                     });
                 })
                 ->get();
-                
+
+                $surchargeAllRoom = SurchargeAllRoom::where('start_date', '>=', $checkin)
+                ->where('end_date', '<=', Carbon::parse($checkout)->subDay())
+                ->get();
 
                 // dd($checkin);
                 $interval = $today->diffInDays($checkin);
@@ -482,7 +491,7 @@ class HomeController extends Controller
             // dd($contractprice);
             // return view('landingpage.hotel.detail',compact('data','roomtype','service','vendordetail','datareq','surcharprice','surchargesVendorIds','blackoutVendorIds'));
 
-            return view('landingpage.hotel.detail', compact('data','HotelCalendar','advancepurchase', 'slider', 'Nights', 'roomtype', 'service', 'vendordetail', 'datareq', 'contractprice','HotelRoomBooking'));
+            return view('landingpage.hotel.detail', compact('data','HotelCalendar','advancepurchase', 'slider', 'Nights', 'roomtype', 'service', 'vendordetail', 'datareq', 'contractprice','HotelRoomBooking','surchargeAllRoom'));
         }
     }
     

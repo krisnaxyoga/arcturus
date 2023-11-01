@@ -389,6 +389,22 @@
                                                                             }
 
 
+                                                                            $totalsurchargex = 0;
+                                                                            $totalDataCountx = 0;
+                                                                            $surchargepricetotalx = 0;
+                                                                            $vendoridx = 0;
+                                                                            foreach ($surchargeAllRoom as $surchargeAllRoomitem) {
+                                                                            if($surchargeAllRoomitem->vendor_id == $item->contractrate->vendors->id){
+                                                                                    $totalsurchargex += $surchargeAllRoomitem->surcharge_price;
+                                                                                    $totalDataCountx++;
+                                                                                    $vendoridx = $surchargeAllRoomitem->vendor_id;
+                                                                            }
+                                                                            }
+                                                                            if($vendoridx == $item->contractrate->vendors->id){
+                                                                                $surchargepricetotalx = $totalsurchargex/$totalNights;
+                                                                            }
+                                                                        
+
                                                                             // $Room_recomprice = ($TotalHotelCalendar <= 0) ? $itemprice->recom_price : $TotalHotelCalendar;
                                                                             if ($TotalHotelCalendar <= 0) {
                                                                                 $Room_recomprice = $itemprice->recom_price;
@@ -504,7 +520,7 @@
                                                                             <div class="col-lg">
                                                                                 <span class="price text-primary"
                                                                                     style="font-weight: 600">Rp.
-                                                                                    {{ number_format($price + $itemprice->contractrate->vendors->system_markup, 0, ',', '.') }}
+                                                                                    {{ number_format(($price + $itemprice->contractrate->vendors->system_markup) + $surchargepricetotalx, 0, ',', '.') }}
                                                                                     / night
                                                                                 </span>
                                                                                 <p class="m-0">Benefits :</p>
@@ -544,7 +560,7 @@
                                                                                                     data-contprice={{ $itemprice->id }}
                                                                                                     data-contractid={{ $itemprice->contract_id }}
                                                                                                     data-roomid={{ $itemprice->room->id }}
-                                                                                                    data-price="{{ $i * ($price + $itemprice->contractrate->vendors->system_markup) }}"
+                                                                                                    data-price="{{ $i * (($price + $itemprice->contractrate->vendors->system_markup) + $surchargepricetotalx) }}"
                                                                                                     data-pricenomarkup="{{ $i * $price }}"
                                                                                                     value="{{ $i }}">
                                                                                                     {{ $i }}

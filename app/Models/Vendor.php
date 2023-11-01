@@ -36,4 +36,8 @@ class Vendor extends Model
     public function historywallet() {
         return $this->hasMany(HistoryWallet::class);
     }
+
+    public function surchargeAllRoom() {
+        return $this->hasMany(SurchargeAllRoom::class);
+    }
 }

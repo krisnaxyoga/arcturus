@@ -231,7 +231,10 @@ Route::group(['middleware' => ['auth', 'checkrole:2']], function() {
     Route::get('/room/surcharge/{hotel_room_id}/load-dates',[\App\Http\Controllers\Vendor\Hotel\Agent\SurchargeController::class, 'load_dates'])->name('surcharge.load_dates');
     Route::post('/room/surcharge/store',[\App\Http\Controllers\Vendor\Hotel\Agent\SurchargeController::class, 'store'])->name('surcharge.store');
     Route::get('/room/surcharge/destroy/{vendorid}/{roomid}/{startdate}',[\App\Http\Controllers\Vendor\Hotel\Agent\SurchargeController::class, 'destroy'])->name('surcharge.destroy');
-
+    Route::get('/room/surcharge/surchargeallroom',[\App\Http\Controllers\Vendor\Hotel\Agent\SurchargeController::class, 'surchargeallroom'])->name('admin.surchargeallroom');
+    Route::post('/room/surcharge/surchargeallroomstore',[\App\Http\Controllers\Vendor\Hotel\Agent\SurchargeController::class, 'surchargeallroomstore'])->name('admin.surchargeallroomstore');
+    Route::get('/room/surcharge/surchargeallroomdestroy/{code}',[\App\Http\Controllers\Vendor\Hotel\Agent\SurchargeController::class, 'surchargeallroomdestroy'])->name('admin.surchargeallroomdestroy');
+  
     //advance purchase
     Route::post('/contract/advancepurchase/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'updateadvance'])->name('advancepurchase.contract');
     Route::get('/contract/destroyadvanceprice/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'destroyadvanceprice'])->name('destroyadvanceprice.contract');

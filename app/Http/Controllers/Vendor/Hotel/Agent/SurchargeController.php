@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\BarPrice;
 use App\Models\BarRoom;
 use App\Models\HotelRoomSurcharge;
+use App\Models\SurchargeAllRoom;
 use App\Models\RoomHotel;
 use App\Models\Vendor;
 use App\Models\ContractPrice;
@@ -15,6 +16,8 @@ use App\Models\HotelRoomBooking;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class SurchargeController extends Controller
 {
@@ -387,25 +390,88 @@ class SurchargeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function surchargeallroom()
     {
-        //
+        $userid = Auth::id();
+
+        $vendor = Vendor::query()->where('user_id', $userid)->with('users')->first();
+
+        $today = Carbon::now();
+        $tomorrow = $today->addDay();
+
+        $surchargeallroom = SurchargeAllRoom::where('user_id', $userid)
+        ->select('code', 'stayperiod_start', 'stayperiod_end','surcharge_price')
+        ->groupBy('code', 'stayperiod_start', 'stayperiod_end','surcharge_price')
+        ->get();
+
+        return inertia('Vendor/MenageRoom/Surcharge/SurchargeAllRoom',[
+            'vendor' => $vendor,
+            'surchargeallroom' => $surchargeallroom
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function surchargeallroomstore(Request $request)
     {
-        //
+        $request->validate([
+            'start_date' => 'required',
+            'end_date' => 'required',
+        ]);
+
+        $userid = Auth::id();
+
+        $vendor = Vendor::query()->where('user_id', $userid)->with('users')->first();
+        $code = Str::random(8);
+        $start_date = date('Y-m-d', strtotime($request->start_date));
+        $end_date = date('Y-m-d', strtotime($request->end_date));
+
+        $current_date = $start_date;
+
+        while ($current_date <= $end_date) {
+            $hotel_room_surcharge = SurchargeAllRoom::query()
+                ->where('vendor_id', $vendor->id)
+                ->where('start_date', $current_date)
+                ->first();
+
+            if (! $hotel_room_surcharge) {
+                $hotel_room_surcharge = new SurchargeAllRoom();
+            }
+
+            $hotel_room_surcharge->user_id = $userid;
+            $hotel_room_surcharge->vendor_id = $vendor->id;
+            $hotel_room_surcharge->stayperiod_start = $request->start_date;
+            $hotel_room_surcharge->stayperiod_end = $request->end_date;
+            $hotel_room_surcharge->start_date = $current_date;
+            $hotel_room_surcharge->end_date = $current_date; // End date is the same as start date for daily entries
+            $hotel_room_surcharge->surcharge_price = $request->surchargeprice;
+            $hotel_room_surcharge->status = 1;
+            $hotel_room_surcharge->code = $code;
+    
+            $hotel_room_surcharge->save();
+
+            $current_date = date('Y-m-d', strtotime($current_date . ' +1 day')); // Move to the next day
+        }
+
+        
+        return redirect()->back()->with('success', 'Data Saved!');
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function surchargeallroomdestroy($code)
     {
-        //
+        $hotel_room_surcharge = SurchargeAllRoom::query()
+            ->where('code', $code)
+            ->get();
+        foreach ($hotel_room_surcharge as $item){
+            $item->delete();
+        }
+       
+
+        return redirect()->back()->with('success', 'surcharge deleted');
     }
 
     /**

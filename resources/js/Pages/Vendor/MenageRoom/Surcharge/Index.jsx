@@ -238,20 +238,8 @@ export default function Index({ errors, session,contractrate, default_selected_h
                                             </>
                                         )}
                                     </ul>
-                                    {/* <p className='font-weight-700'>Market</p>
-                                    <ul className="nav nav-tabs flex-column vertical-nav">
-                                        {contractrate.length > 0 && (
-                                            <>
-                                            {contractrate.map((item) => (
-                                                <li key={item.id} className='nav-item event-name' onClick={() => handleNavContractSelect(activeHotelRoom,item.id)}>
-                                                    <a className={`nav-link ${activeContractRoom === item.id ? "active" : ""}`}>
-                                                        {item.codedesc}
-                                                    </a>
-                                                </li>
-                                            ))}
-                                            </>
-                                        )}
-                                    </ul> */}
+                                   <hr />
+                                   <Link href='/room/surcharge/surchargeallroom' className='btn btn-primary'>Surcharge</Link>
                                 </div>
                                 <div className="col-md-9" style={{ background: "white", padding: "15px"}}>
                                     <FullCalendar

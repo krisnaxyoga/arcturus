@@ -89,6 +89,7 @@
                                 </select>
                                 </div>
                             </div>
+
                             {{-- <div class="col-md d-flex">
                                 <div class="form-group mb-3 mt-2 mx-2">
                                     <label class="pl-3 mt-3" for="#">State</label>
@@ -103,6 +104,8 @@
                                 // Mendapatkan nilai checkin dan checkout dari requestdata
                                 $checkin = isset($requestdata['checkin']) ? date('m/d/Y', strtotime($requestdata['checkin'])) : date('m/d/Y');
                                 $checkout = isset($requestdata['checkout']) ? date('m/d/Y', strtotime($requestdata['checkout'])) : date('m/d/Y', strtotime('+1 day'));
+                                // Menghitung selisih antara tanggal check-in dan check-out
+                                // $totalNights = ceil(($checkout - $checkin) / 86400); // 86400 detik dalam sehari
                                 ?>
                                 <div class="form-group mb-3 mt-2 mx-2">
                                     <label class="pl-3 mt-3" for="">CheckIn - CheckOut</label>
@@ -300,7 +303,30 @@
                                         </p>
                                     </div>
                                     <div class="col-lg-3 border-left">
+
                                         @php
+                                         $totalsurcharge = 0;
+                                        $totalDataCount = 0;
+                                        $surchargepricetotal = 0;
+                                        $vendorid = 0;
+                                        foreach ($surchargeAllRoom as $surchargeAllRoomitem) {
+                                           if($surchargeAllRoomitem->vendor_id == $item->contractrate->vendors->id){
+                                                $totalsurcharge += $surchargeAllRoomitem->surcharge_price;
+                                                $totalDataCount++;
+                                                $vendorid = $surchargeAllRoomitem->vendor_id;
+                                           }
+                                        }
+                                        if($vendorid == $item->contractrate->vendors->id){
+                                            // $countNights = ($Nights + 1) - ($totalDataCount);
+                                            // $surchargepricetotal = ($totalsurcharge * $countNights) / $Nights;
+                                            // var_dump(($totalsurcharge * $countNights));
+                                            // var_dump($countNights);
+
+                                            $surchargepricetotal = $totalsurcharge / $Nights;
+                                        }
+                                        // var_dump($surchargepricetotal);
+                                       
+                                       
                                         $lowestPrice = null; // Inisialisasi variabel untuk harga terendah
                                     @endphp
                                     
@@ -320,7 +346,12 @@
                                         @endphp
                                         @if ($contprice->user_id == $item->user_id)
                                             @php
+                                            if($surchargepricetotal > 0){
+                                                $price = $advprice + $item->contractrate->vendors->system_markup + $surchargepricetotal;
+                                            }else{
                                                 $price = $advprice + $item->contractrate->vendors->system_markup;
+                                            }
+                                                
                                                 if ($lowestPrice == null || $price < $lowestPrice) {
                                                     $lowestPrice = $price; // Simpan harga terendah
                                                 }

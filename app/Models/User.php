@@ -74,4 +74,8 @@ class User extends Authenticatable
     public function paymentgetwaytransaction() {
         return $this->hasMany(PaymentGetwayTransaction::class);
     }
+
+    public function surchargeAllRoom() {
+        return $this->hasMany(SurchargeAllRoom::class);
+    }
 }
