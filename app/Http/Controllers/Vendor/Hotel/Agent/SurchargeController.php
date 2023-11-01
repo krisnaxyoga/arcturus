@@ -399,6 +399,12 @@ class SurchargeController extends Controller
         $today = Carbon::now();
         $tomorrow = $today->addDay();
 
+        $currentDate = now(); // Mendapatkan tanggal saat ini
+
+        $surchargeallroom = SurchargeAllRoom::where('user_id', $userid)
+        ->where('stayperiod_end', '<', $today)
+        ->delete();
+
         $surchargeallroom = SurchargeAllRoom::where('user_id', $userid)
         ->select('code', 'stayperiod_start', 'stayperiod_end','surcharge_price')
         ->groupBy('code', 'stayperiod_start', 'stayperiod_end','surcharge_price')
