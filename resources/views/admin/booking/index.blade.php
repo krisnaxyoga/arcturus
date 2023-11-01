@@ -73,9 +73,35 @@
                                                                 <i data-feather="check"></i>
                                                             </span>
                                                         </li>
-                                                        <li style="list-style: none;"><a href="{{route('admin.booking.confirmation',$item->id)}}" class="badge badge-warning">send email all</a></li>
-                                                        <li style="list-style: none;"><a href="{{route('admin.booking.sendconfirmationtoagent',$item->id)}}" class="badge badge-primary">send email to agent</a></li>
-                                                        <li style="list-style: none;"><a href="{{route('admin.booking.sendconfirmationtohotel',$item->id)}}" class="badge badge-secondary">send email to hotel</a></li>
+                                                        <li style="list-style: none;">
+                                                            <form class="d-inline" action="{{route('admin.booking.confirmation',$item->id)}}" method="GET" onSubmit="return confirm('Are you sure you want to send an email to this user?');">
+                                                                @csrf
+                                                                @method('get')
+                    
+                                                                <button type="submit" class="badge badge-warning border-0">
+                                                                    send email all
+                                                                </button>
+                                                            </form>
+                                                        </li>
+                                                        <li style="list-style: none;">
+                                                            <form class="d-inline" action="{{route('admin.booking.sendconfirmationtoagent',$item->id)}}" method="GET" onSubmit="return confirm('Are you sure you want to send an email to this user?');">
+                                                                @csrf
+                                                                @method('get')
+                    
+                                                                <button type="submit" class="badge badge-primary border-0">
+                                                                    send email to agent
+                                                                </button>
+                                                            </form>
+                                                        </li>
+                                                        <li style="list-style: none;">
+                                                            <form class="d-inline" action="{{route('admin.booking.sendconfirmationtohotel',$item->id)}}" method="GET" onSubmit="return confirm('Are you sure you want to send an email to this user?');">
+                                                                @csrf
+                                                                @method('get')
+                    
+                                                                <button type="submit" class="badge badge-secondary border-0">
+                                                                    send email to hotel
+                                                                </button>
+                                                            </form>
                                                     </ul>
                                                 @endif
                                                

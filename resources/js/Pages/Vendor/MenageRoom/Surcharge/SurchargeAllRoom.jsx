@@ -13,6 +13,8 @@ export default function SurchargeAllRoom({ session, vendor, surchargeallroom }) 
     const [startdate, setStartDate] = useState('');
     const [enddate, setEndDate] = useState('');
     const [surchargeprice, setSurcharge] = useState('');
+    const [editData, setEditData] = useState(null); // Menyimpan data yang akan diedit
+ 
 
     function formatRupiah(amount) {
         return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount).slice(0, -3);
@@ -25,6 +27,14 @@ export default function SurchargeAllRoom({ session, vendor, surchargeallroom }) 
           return `${day}/${month}/${year}`; // Mengganti urutan tanggal
         }
         return dateString; // Kembalikan jika tidak dapat memproses tanggal
+      };
+
+      const handleEdit = (item) => {
+        // Ketika tombol "Edit" diklik, isi editData dengan data yang akan diedit
+        setEditData(item);
+        setStartDate(item.stayperiod_start); // Isi nilai awal Start Date
+        setEndDate(item.stayperiod_end); // Isi nilai awal End Date
+        setSurcharge(item.surcharge_price); // Isi nilai awal Surcharge
       };
 
     const storePost = async (e) => {
@@ -41,6 +51,32 @@ export default function SurchargeAllRoom({ session, vendor, surchargeallroom }) 
             },
         });
     }
+
+    const handleStartDateChange = (e) => {
+        const newStartDate = e.target.value;
+        setStartDate(newStartDate);
+    
+        // Jika Anda ingin mengatur nilai awal "End Date" berdasarkan "Start Date", Anda bisa melakukannya di sini
+        // Contoh: Mengatur "End Date" berdasarkan "Start Date" + 1 hari
+        const startDate = new Date(newStartDate);
+        const nextDay = new Date(startDate);
+        nextDay.setDate(startDate.getDate() + 1);
+    
+        const year = nextDay.getFullYear();
+        let month = nextDay.getMonth() + 1;
+        if (month < 10) {
+          month = `0${month}`;
+        }
+        let day = nextDay.getDate();
+        if (day < 10) {
+          day = `0${day}`;
+        }
+    
+        const formattedEndDate = `${year}-${month}-${day}`;
+
+        console.log(formattedEndDate);
+        setEndDate(formattedEndDate);
+      };
 
     return (
         <>
@@ -66,7 +102,8 @@ export default function SurchargeAllRoom({ session, vendor, surchargeallroom }) 
                                                     <input
                                                         type="date"
                                                         className="form-control"
-                                                        onChange={(e) =>setStartDate(e.target.value)}
+                                                        defaultValue={startdate}
+                                                        onChange={handleStartDateChange}
                                                     />
                                                 </div>
                                             </div>
@@ -78,6 +115,7 @@ export default function SurchargeAllRoom({ session, vendor, surchargeallroom }) 
                                                     <input
                                                         type="date"
                                                         className="form-control"
+                                                        defaultValue={enddate}
                                                         onChange={(e) =>setEndDate(e.target.value)}
                                                     />
                                                 </div>
@@ -87,7 +125,7 @@ export default function SurchargeAllRoom({ session, vendor, surchargeallroom }) 
                                             <div className="col">
                                                 <div className="mb-3 form-group">
                                                     <label htmlFor="">Surcharge</label>
-                                                    <input type="number" className="form-control" onChange={(e) =>setSurcharge(e.target.value)}/>
+                                                    <input type="number" className="form-control" defaultValue={surchargeprice} onChange={(e) =>setSurcharge(e.target.value)}/>
                                                 </div>
                                             </div>
                                         </div>
@@ -132,6 +170,9 @@ export default function SurchargeAllRoom({ session, vendor, surchargeallroom }) 
                                                             <td>{formatDate(item.stayperiod_start)}</td>
                                                             <td>{formatDate(item.stayperiod_end)}</td>
                                                             <td>
+                                                            <button className="btn btn-datatable btn-icon btn-transparent-dark mr-2" onClick={() => handleEdit(item)}>
+                                                            <i className='fa fa-edit'></i>
+                                                            </button>
                                                                 <Link className='btn btn-datatable btn-icon btn-transparent-dark mr-2' href={`/room/surcharge/surchargeallroomdestroy/${item.code}`}>
                                                                     <i className='fa fa-trash'></i>
                                                                 </Link>
