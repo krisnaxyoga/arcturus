@@ -173,7 +173,13 @@ export default function SurchargeAllRoom({ session, vendor, surchargeallroom }) 
                                                             <button className="btn btn-datatable btn-icon btn-transparent-dark mr-2" onClick={() => handleEdit(item)}>
                                                             <i className='fa fa-edit'></i>
                                                             </button>
-                                                                <Link className='btn btn-datatable btn-icon btn-transparent-dark mr-2' href={`/room/surcharge/surchargeallroomdestroy/${item.code}`}>
+                                                                <Link className='btn btn-datatable btn-icon btn-transparent-dark mr-2'
+                                                                onClick={() => {
+                                                                  if (window.confirm('Are you sure you want to delete this?')) {
+                                                                    // Lanjutkan dengan menghapus jika pengguna menekan OK pada konfirmasi
+                                                                    window.location.href = `/room/surcharge/surchargeallroomdestroy/${item.code}`;
+                                                                  }
+                                                                }}>
                                                                     <i className='fa fa-trash'></i>
                                                                 </Link>
                                                             </td>

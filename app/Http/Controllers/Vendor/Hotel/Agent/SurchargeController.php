@@ -402,6 +402,7 @@ class SurchargeController extends Controller
         $surchargeallroom = SurchargeAllRoom::where('user_id', $userid)
         ->select('code', 'stayperiod_start', 'stayperiod_end','surcharge_price')
         ->groupBy('code', 'stayperiod_start', 'stayperiod_end','surcharge_price')
+        ->orderBy('stayperiod_start', 'asc')
         ->get();
 
         return inertia('Vendor/MenageRoom/Surcharge/SurchargeAllRoom',[
