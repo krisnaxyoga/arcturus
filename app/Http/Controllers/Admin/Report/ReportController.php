@@ -6,13 +6,14 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Setting;
 use App\Models\Booking;
+use App\Models\HotelRoomBooking;
 
 class ReportController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $settingExists = Setting::exists();
 
@@ -21,10 +22,29 @@ class ReportController extends Controller
         } else {
             $setting = new Setting;
         }
+        // dd($request->startdate);
+        $startdate = $request->startdate;
+        $enddate = $request->enddate;
 
-        $data = Booking::whereNotIn('booking_status', ['-', ''])->get();
+        $data = HotelRoomBooking::whereHas('booking', function ($query) use ($startdate, $enddate) {
+            $query->where('booking_status', '<>', '-')
+                  ->where('booking_status', '<>', '');
 
-        return view('admin.report.index',compact('setting','data'));
+                  if ($startdate && $enddate) {
+                    $query->whereBetween('booking_date', [$startdate, $enddate]);
+                } elseif ($startdate) {
+                    $query->where('booking_date', '>=', $startdate);
+                } elseif ($enddate) {
+                    $query->where('booking_date', '<=', $enddate);
+                }
+                
+                // $query->where('checkout_date', '<=', now());
+
+                $query->where('booking_status', 'paid');
+        })
+        ->get();
+
+        return view('admin.report.index',compact('setting','data','startdate','enddate'));
     }
 
     /**

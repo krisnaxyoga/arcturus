@@ -106,6 +106,18 @@ class HomeController extends Controller
             $query->where('type_vendor', 'hotel')
                 ->where('is_active', 1);
 
+            $query->when($request->search, function ($q, $search) {
+                return $q->where(function ($subquery) use ($search) {
+                    $subquery->where('country', 'like', '%' . $search . '%')
+                        ->orWhere('vendor_name', 'like', '%' . $search . '%')
+                        ->orWhere('state', 'like', '%' . $search . '%')
+                        ->orWhere('city', 'like', '%' . $search . '%')
+                        ->orWhere(function ($subsubquery) use ($search) {
+                            $subsubquery->where('type_property', 'like', '%' . $search . '%');
+                        });
+                });
+            });
+
             $query->when($request->country, function ($q, $country) {
                 return $q->where('country', $country);
             });
@@ -163,6 +175,18 @@ class HomeController extends Controller
                     return $q->where('country', $country);
                 });
             
+                $query->when($request->search, function ($q, $search) {
+                    return $q->where(function ($subquery) use ($search) {
+                        $subquery->where('country', 'like', '%' . $search . '%')
+                            ->orWhere('vendor_name', 'like', '%' . $search . '%')
+                            ->orWhere('state', 'like', '%' . $search . '%')
+                            ->orWhere('city', 'like', '%' . $search . '%')
+                            ->orWhere(function ($subsubquery) use ($search) {
+                                $subsubquery->where('type_property', 'like', '%' . $search . '%');
+                            });
+                    });
+                });
+
                 $query->when($request->state, function ($q, $state) {
                     return $q->where('state', $state);
                 });
@@ -264,6 +288,7 @@ class HomeController extends Controller
         // Buat array data request
         $requestdata = [
             'country' => $request->country,
+            'search' => $request->search,
             'state' => $request->state,
             'person' => $request->person,
             'checkin' => $request->checkin,

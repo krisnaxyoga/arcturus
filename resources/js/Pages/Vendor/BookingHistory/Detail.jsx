@@ -11,6 +11,7 @@ import { Inertia } from '@inertiajs/inertia';
 
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
+import jsPDF from 'jspdf';
 
 export default function Detail({ session, data,vendor, agent,roombooking,contract, setting }) {
     console.log(data, ">>>>>>>data country >>>>>>>>");
@@ -31,6 +32,23 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
         }
         // window.print();
       };
+
+      const createAndDownloadPDF = () => {
+        const printContent2 = document.getElementById('print-card');
+  
+        if (printContent2) {
+            html2canvas(printContent2, { scale: 2 }).then(canvas => {
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF({
+                orientation: 'portrait',
+                unit: 'mm',
+                format: 'a4'
+            });
+            pdf.addImage(imgData, 'PNG', 10, 10, 180, 150); // Menambahkan gambar tangkapan layar ke PDF
+            pdf.save('document.pdf'); // Simpan PDF dengan nama "document.pdf"
+            });
+        }
+      }; 
 
       const formatDate = (dateString) => {
         const parts = dateString.split('-'); // Memecah tanggal berdasarkan tanda "-"
@@ -283,7 +301,10 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                             </div>
                                         </div>
                                     </div>
-                                    <button className="btn btn-primary" onClick={handlePrintPDF}><i className='fa fa-file-pdf'></i> Print as PDF</button>
+                                    <button className="btn btn-primary mr-1" onClick={handlePrintPDF}><i className='fa fa-file-pdf'></i> Print as PDF</button>
+                                    <button className="btn btn-success" onClick={createAndDownloadPDF}>
+                                                    <i className="fa fa-download"></i> download PDF
+                                                </button>
                                     <button onClick={() => history.back()} className="btn btn-danger ml-2">
                                         Cancel
                                     </button>

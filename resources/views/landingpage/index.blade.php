@@ -64,24 +64,25 @@
                                                     <div class="row">
                                                         <div class="col-md d-flex">
                                                             <div class="form-group border-0 mb-3 mt-2 mx-2">
-                                                                <label class="pl-3 mt-3" for="">country</label>
-                                                                <select name="country" id=""
+                                                                <label class="pl-3 mt-3" for="">Search</label>
+                                                                <input type="text" name="search" class="form-control" placeholder="Search...">
+                                                                {{-- <select name="country" id=""
                                                                 class="form-control ">
                                                                 <option value="">{{ __('-- Select --') }}
-                                                                </option>
+                                                                </option> --}}
                                                                 {{-- @foreach (get_country_lists() as $id => $name)
                                                                     <option
                                                                         @if (($user->country ?? '') == $id) selected @endif
                                                                         value="{{ $name }}">
                                                                         {{ $name }}</option>
                                                                 @endforeach --}}
-                                                                @foreach ($country as $name)
+                                                                {{-- @foreach ($country as $name)
                                                                 <option
                                                                     @if (($user->country ?? '') == $name->country) selected @endif
                                                                     value="{{ $name->country }}">
                                                                     {{ $name->country }}</option>
                                                                 @endforeach
-                                                            </select>
+                                                            </select> --}}
                                                             </div>
                                                         </div>
                                                         {{-- <div class="col-md d-flex">
