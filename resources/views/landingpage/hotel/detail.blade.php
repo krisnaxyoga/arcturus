@@ -192,11 +192,11 @@
                                                     <p>{!! $item->room->content !!}</p>
                                                     
                                                     @if ($contractprice->count() != 0)
-                                                        <a class="text-primary" style="font-weight:500;font-size:14px"
+                                                        <a class="btn btn-success" style="font-weight:500;font-size:14px"
                                                             data-toggle="collapse"
                                                             href="#collapseExample{{ $keyup }}" role="button"
                                                             aria-expanded="false" aria-controls="collapseExample">
-                                                            View Rates:
+                                                            <i class="fa fa-eye"></i> View Rates
                                                         </a>
                                                         <div class="collapse" id="collapseExample{{ $keyup }}">
                                                             <div>

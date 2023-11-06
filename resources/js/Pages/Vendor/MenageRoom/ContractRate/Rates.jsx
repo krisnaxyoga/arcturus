@@ -42,8 +42,8 @@ export default function Rates({ rates }) {
             {rates.map((item) => (
                 <>
                     <tr className={item.rolerate == 1 && "bg-light"} key={item.id}>
-                        <td>{item.ratecode}</td>
-                        <td>{item.codedesc}</td>
+                        {/* <td>{item.ratecode}</td>
+                        <td>{item.codedesc}</td> */}
                         <td>{formatDate(item.stayperiod_begin)}</td>
                         <td>{formatDate(item.stayperiod_end)}</td>
                         <td>{formatDate(item.booking_begin)}</td>
@@ -103,12 +103,21 @@ export default function Rates({ rates }) {
                                 ) : (
                                 <span>Missing or invalid data</span>
                                 )}
-                            {/* <Link
-                                href={`/room/contract/destroy/${item.id}`}
-                                className="btn btn-datatable btn-icon btn-transparent-dark mr-2"
-                            >
-                                <i className="fa fa-trash"></i>
-                            </Link> */}
+                                {item.rolerate == 2 && <>
+                                    <Link
+                                        href="#"
+                                        className="btn btn-datatable btn-icon btn-transparent-dark mr-2"
+                                        onClick={() => {
+                                            if (window.confirm('Are you sure you want to delete this?')) {
+                                              // Lanjutkan dengan menghapus jika pengguna menekan OK pada konfirmasi
+                                              window.location.href = `/room/surcharge/surchargeallroomdestroy/${item.code}`;
+                                            }
+                                          }}
+                                    >
+                                        <i className="fa fa-trash"></i>
+                                    </Link>
+                                </>}
+                           
                         </td>
                     </tr>
                 </>

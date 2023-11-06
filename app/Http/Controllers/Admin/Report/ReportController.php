@@ -25,34 +25,75 @@ class ReportController extends Controller
         // dd($request->startdate);
         $startdate = $request->startdate;
         $enddate = $request->enddate;
+        $hotel_select = $request->hotel;
 
         $data = HotelRoomBooking::whereHas('booking', function ($query) use ($startdate, $enddate) {
             $query->where('booking_status', '<>', '-')
                   ->where('booking_status', '<>', '');
 
                   if ($startdate && $enddate) {
-                    $query->whereBetween('booking_date', [$startdate, $enddate]);
+                    $query->whereBetween('checkout_date', [$startdate, $enddate]);
                 } elseif ($startdate) {
-                    $query->where('booking_date', '>=', $startdate);
+                    $query->where('checkout_date', '>=', $startdate);
                 } elseif ($enddate) {
-                    $query->where('booking_date', '<=', $enddate);
+                    $query->where('checkout_date', '<=', $enddate);
                 }
                 
                 // $query->where('checkout_date', '<=', now());
 
                 $query->where('booking_status', 'paid');
+        })->whereHas('booking.vendor', function ($query) use ($hotel_select) {
+            $query->where('vendor_name', $hotel_select);
         })
         ->get();
 
-        return view('admin.report.index',compact('setting','data','startdate','enddate'));
+        $hotels = Booking::where('booking_status', 'paid')
+        ->join('vendors', 'bookings.vendor_id', '=', 'vendors.id') // Gabungkan tabel vendor
+        ->select('vendors.vendor_name')
+        ->groupBy('vendors.vendor_name') // Kelompokkan hasil berdasarkan vendor_name
+        ->get();
+
+        return view('admin.report.index',compact('setting','data','startdate','enddate','hotels','hotel_select'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function adminpdfreport(Request $request)
     {
-        //
+        $settingExists = Setting::exists();
+
+        if ($settingExists) {
+            $settings = Setting::first();
+        } else {
+            $settings = new Setting;
+        }
+
+        $startdate = $request->star_tdate;
+        $enddate = $request->end_date;
+        $hotel_select = $request->hotelselect;
+
+        $data = HotelRoomBooking::whereHas('booking', function ($query) use ($startdate, $enddate) {
+            $query->where('booking_status', '<>', '-')
+                  ->where('booking_status', '<>', '');
+
+                  if ($startdate && $enddate) {
+                    $query->whereBetween('checkout_date', [$startdate, $enddate]);
+                } elseif ($startdate) {
+                    $query->where('checkout_date', '>=', $startdate);
+                } elseif ($enddate) {
+                    $query->where('checkout_date', '<=', $enddate);
+                }
+                
+                // $query->where('checkout_date', '<=', now());
+
+                $query->where('booking_status', 'paid');
+        })->whereHas('booking.vendor', function ($query) use ($hotel_select) {
+            $query->where('vendor_name', $hotel_select);
+        })
+        ->get();
+
+        return view('admin.report.pdf',compact('data','settings','startdate','enddate'));
     }
 
     /**

@@ -107,6 +107,7 @@ Route::group(['middleware' => ['auth', 'checkrole:1']], function() {
 
     // report
     Route::get('/admin/report', [\App\Http\Controllers\Admin\Report\ReportController::class, 'index'])->name('dashboard.report');
+    Route::get('/admin/report/pdf', [\App\Http\Controllers\Admin\Report\ReportController::class, 'adminpdfreport'])->name('dashboard.report.pdf');
 
     //top up confirmation
     Route::get('/admin/topup/index', [\App\Http\Controllers\Admin\Report\WalletController::class, 'index'])->name('dashboard.wallet.admin');

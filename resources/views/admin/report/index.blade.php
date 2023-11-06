@@ -8,6 +8,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.5.0/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.5.0/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.3/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
 
 
 <section class="mt-3">
@@ -20,14 +22,27 @@
                     <div class="card-body">
                         <div class="d-flex">
                             <form action="{{route('dashboard.report')}}" class="d-flex" method="get">
+                                <select name="hotel" id="" class="form-control mr-2">
+                                    <option value="">-select hotel-</option>
+                                    @foreach ($hotels as $itemhotel)
+                                    <option value="{{$itemhotel->vendor_name}}" @if($hotel_select == $itemhotel->vendor_name) selected @endif>{{$itemhotel->vendor_name}}</option>                                        
+                                    @endforeach
+                                </select>
                                 <input type="date" name="startdate" id="startdate" class="form-control mr-2" value="{{$startdate}}">
                                 <input type="date" name="enddate" id="enddate" class="form-control mr-2" value="{{$enddate}}">
                                 <button class="btn btn-primary mr-2" type="submit">filter</button>
                             </form>
-                            <div class="buttons-excel">
+                            <div class="buttons-excel mr-2">
                                 <button class="dt-button btn btn-success">Excel</button>
                             </div>
-                            
+                            <form action="{{route('dashboard.report.pdf')}}" method="get">
+                                <input type="date" hidden value="{{$startdate}}" name="star_tdate">
+                                <input type="date" hidden value="{{$enddate}}" name="end_date">
+                                <input type="text" hidden value="{{$hotel_select}}" name="hotelselect">
+                                <button class="btn btn-secondary">
+                                    Pdf
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -50,6 +65,7 @@
                                         <th>Night</th>
                                         <th>Rate</th>
                                         <th>Total Room Revenue</th>
+                                        <th>Commision</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -72,6 +88,12 @@
                                                     {{ $item->total_ammount }}
                                                 @endif
                                             </td>
+                                            <td> @if (is_null($item->total_ammount))
+                                                {{ $item->booking->pricenomarkup * 0.025 }}
+                                            @else
+                                                {{ $item->total_ammount * 0.025 }}
+                                            @endif
+                                        </td>
                                            
                                         </tr>
                                     @endforeach
@@ -84,6 +106,8 @@
           </div>
     </div>
 </section>
+
+
 <script>
 // Inisialisasi DataTables dan definisikan variabel table
 $(document).ready(function () {
@@ -104,7 +128,7 @@ $(document).ready(function () {
         excelData = excelData.concat(filteredData);
 
         // Hitung total dari kolom 'pricenomarkup'
-        var columnIndex = 9; // Ganti dengan indeks kolom yang sesuai (dimulai dari 0)
+        var columnIndex = 10; // Ganti dengan indeks kolom yang sesuai (dimulai dari 0)
         var totalPricenomarkup = 0;
 
         filteredData.forEach(function (rowData) {
@@ -113,7 +137,7 @@ $(document).ready(function () {
         });
 
         // Tambahkan baris total
-        excelData.push(['', '', '', '', '','','','', 'Total', totalPricenomarkup]);
+        excelData.push(['', '', '', '', '','','','','', 'Total', totalPricenomarkup]);
 
         var ws = XLSX.utils.aoa_to_sheet(excelData);
         var wb = XLSX.utils.book_new();

@@ -169,6 +169,35 @@
 
     <section class="ftco-section services-section">
         <div class="container">
+            <div class="row d-flex justify-content-center mb-4">
+                <div
+                    class="col-md-4 ftco-animate">
+                    <div class="card shadow border-0 mb-3" style="border-radius: 20px;">
+                        <div class="card-body">
+                            <h5 class="text-center text-secondary font-weight-bold"><i class="fa fa-building"></i> Hotel</h5>
+                            <h3 class="text-center text-secondary font-weight-bold">{{$hotel}}</h3>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="col-md-4 ftco-animate">
+                    <div class="card shadow border-0 mb-3" style="border-radius: 20px;">
+                        <div class="card-body">
+                            <h5 class="text-center text-secondary font-weight-bold"><i class="fa fa-users"></i> Agent</h5>
+                            <h3 class="text-center text-secondary font-weight-bold">{{$agent}}</h3>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="col-md-4 ftco-animate">
+                    <div class="card shadow border-0 mb-3 " style="border-radius: 20px;">
+                        <div class="card-body">
+                            <h5 class="text-center text-secondary font-weight-bold"><i class="fa fa-question-circle-o"></i> Others</h5>
+                            <h3 class="text-center text-secondary font-weight-bold">0</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="row d-flex mb-5">
                 <div class="col-md-12 order-md-last heading-section pl-md-5 ftco-animate d-flex align-items-center">
                     <div class="w-100">
@@ -212,35 +241,7 @@
                 </div>
 
             </div>
-            <div class="row d-flex justify-content-center mt-4">
-                <div
-                    class="col-md-4 ftco-animate">
-                    <div class="card shadow border-0 mb-3">
-                        <div class="card-body">
-                            <h3 class="text-center">Hotel</h3>
-                            <p class="text-center" style="font-size: 16px">{{$hotel}}</p>
-                        </div>
-                    </div>
-                </div>
-                <div
-                    class="col-md-4 ftco-animate">
-                    <div class="card shadow border-0 mb-3">
-                        <div class="card-body">
-                            <h3 class="text-center">Agent</h3>
-                            <p class="text-center" style="font-size: 16px">{{$agent}}</p>
-                        </div>
-                    </div>
-                </div>
-                <div
-                    class="col-md-4 ftco-animate">
-                    <div class="card shadow border-0 mb-3">
-                        <div class="card-body">
-                            <h3 class="text-center">Others</h3>
-                            <p class="text-center" style="font-size: 16px">0</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+           
         </div>
     </section>
     {{--

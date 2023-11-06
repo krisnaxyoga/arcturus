@@ -518,8 +518,8 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
                                     <table className="table table-bordered" id="dataTable" width="100%" cellSpacing="0">
                                         <thead>
                                         <tr>
-                                            <th>Rate code</th>
-                                            <th>Rate description</th>
+                                            {/* <th>Rate code</th>
+                                            <th>Rate description</th> */}
                                             <th>Begin Stay</th>
                                             <th>End Stay</th>
                                             <th>Begin Booking</th>
