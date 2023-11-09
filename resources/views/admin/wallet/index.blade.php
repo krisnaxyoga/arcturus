@@ -70,15 +70,57 @@
                                                             </span>
                                                         </li>
                                                         <li style="list-style: none;">
-                                                            <form class="d-inline" action="{{route('admin.booking.sendconfirmationtoagent',$item->id)}}" method="GET" onSubmit="return confirm('Are you sure you want to send an email to this user?');">
-                                                                @csrf
-                                                                @method('get')
-                    
-                                                                <button type="submit" class="badge badge-primary border-0">
-                                                                    send email to agent
-                                                                </button>
-                                                            </form>
+                                                            <button type="button" class="badge badge-primary border-0" data-toggle="modal" data-target="#sendEmailToAgentModal">
+                                                                Send email to agent
+                                                            </button>
                                                         </li>
+                                                         <!-- Modal for sending email to agent -->
+                                                        <div class="modal fade" id="sendEmailToAgentModal" tabindex="-1" role="dialog" aria-labelledby="sendEmailToAgentModalLabel" aria-hidden="true">
+                                                            <!-- Include the same modal structure as above, just change the IDs, titles, and action URL accordingly -->
+                                                            <div class="modal-dialog" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title" id="sendEmailModalLabel">Send Email to Agent</h5>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        Are you sure you want to send an email to Agent?
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <form class="d-inline" action="{{route('admin.booking.sendconfirmationtoagent',$item->id)}}" method="GET">
+                                                                            @csrf
+                                                                            @method('get')
+                                                                            <button type="submit" class="btn btn-warning">Send Email</button>
+                                                                        </form>
+                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <script>
+                                                            // Enable Bootstrap modal functionality
+                                                            $(document).ready(function() {
+                                                                $('#sendEmailModal').modal({
+                                                                    backdrop: 'static',
+                                                                    keyboard: false,
+                                                                    show: false
+                                                                });
+                                                        
+                                                                $('#sendEmailToAgentModal').modal({
+                                                                    backdrop: 'static',
+                                                                    keyboard: false,
+                                                                    show: false
+                                                                });
+                                                        
+                                                                $('#sendEmailToHotelModal').modal({
+                                                                    backdrop: 'static',
+                                                                    keyboard: false,
+                                                                    show: false
+                                                                });
+                                                            });
+                                                        </script>
                                                        
                                                     </ul>
                                                 @endif

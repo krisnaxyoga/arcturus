@@ -273,6 +273,14 @@ class ContractController extends Controller
                     $advanceprice->rolerate = 2;
                     $advanceprice->is_active = $item->is_active;
                     $advanceprice->save();
+
+                     // Hitung persentase
+                    $pecentage1 = 1 - $nilai[$key];
+                    $pecentage2 = $pecentage1 * 100;
+
+                    // Tetapkan persentase pada $advancepurchase atau $item
+                    $item->percentage = $pecentage2;
+                    $item->save();
                 }
             }
         }
@@ -351,6 +359,14 @@ class ContractController extends Controller
                 $advanceprice->rolerate = 2;
                 $advanceprice->is_active = $item->is_active;
                 $advanceprice->save();
+
+                 // Hitung persentase
+                 $pecentage1 = 1 - $nilai[$key];
+                 $pecentage2 = $pecentage1 * 100;
+
+                 // Tetapkan persentase pada $advancepurchase atau $item
+                 $item->percentage = $pecentage2;
+                 $item->save();
             }
 
 
@@ -648,6 +664,13 @@ class ContractController extends Controller
                             $advanceprice->save();
                         }
                     }
+                     // Hitung persentase
+                     $pecentage1 = 1 - $nilai[$key];
+                     $pecentage2 = $pecentage1 * 100;
+ 
+                     // Tetapkan persentase pada $advancepurchase atau $item
+                     $item->percentage = $pecentage2;
+                     $item->save();
                 }
 
                 // Perulangan pada AdvancePurchasePrice
@@ -710,6 +733,13 @@ class ContractController extends Controller
                     $advanceprice->save();
                 }
             }
+             // Hitung persentase
+             $pecentage1 = 1 - $nilai[$key];
+             $pecentage2 = $pecentage1 * 100;
+
+             // Tetapkan persentase pada $advancepurchase atau $item
+             $item->percentage = $pecentage2;
+             $item->save();
         }
         return redirect()->back()->with('success', 'advance purchase price has refresh');
     }
@@ -775,7 +805,20 @@ class ContractController extends Controller
                 ->withInput($request->all());
         } else {
             $data = AdvancePurchase::find($id);
-            
+
+            if($data->percentage != $request->percentage){
+
+                $percentagenew = (1-($request->percentage/100));
+
+                $advancePurchasePrices = AdvancePurchasePrice::where('advance_id', $data->id)->get();
+                foreach ($advancePurchasePrices as $advancePurchasePrice) {
+                    $advaPrice = AdvancePurchasePrice::find($advancePurchasePrice->id);
+                    $advaPrice->price =  ceil(($advaPrice->price/(1-($data->percentage/100))) * $percentagenew);
+                    $advaPrice->save();
+                }
+            }
+
+            $data->percentage = $request->percentage;
             $data->day = $request->day;
 
             // $beginsell = Carbon::parse($data->beginsell); // Convert beginsell to Carbon object
@@ -787,6 +830,7 @@ class ContractController extends Controller
 
             $data->beginsell = $newbeginsell; // Set the new endsell value
             $data->save();
+            
 
             return redirect()->back()->with('success', 'Advance Purchase Updated!');
         }

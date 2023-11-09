@@ -98,6 +98,19 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
         }
       };
 
+  const [advPercentage, setAdvPercentage] = useState('');
+  const [advPercentageFinal, setAdvPercentageFinal] = useState('');
+
+const handlePercentageAdv = (e) => {
+    const percentageAdv = parseFloat(e.target.value); // Ubah ke tipe angka desimal
+    setAdvPercentage(percentageAdv);
+
+    const percentageFinal = 1 - (percentageAdv / 100);
+    setAdvPercentageFinal(percentageFinal);
+
+    // console.log(advPercentageFinal);
+}
+
     const [checkboxes, setCheckboxes] = useState({
         sunday: false,
         monday: false,
@@ -307,12 +320,13 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
         });
     }
 
-    const storeAdvance = async (e,itemId,itemDay) => {
+    const storeAdvance = async (e,itemId,itemDay,itemPercentage) => {
         e.preventDefault();
 
         const formData = new FormData();
 
         formData.append('day', day ? day : itemDay);
+        formData.append('percentage', advPercentage ? advPercentage : itemPercentage);
         // formData.append('beginsell',beginselladvance ? beginselladvance : itemBeginsell);
         // formData.append('endsell',endselladvance ? endselladvance : itemEndsell);
         setIsLoading(true);
@@ -968,17 +982,22 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                     <>
                                     <div className="row" key={index}>
                                         <div className="col-lg-12">
-                                            <form onSubmit={(e) => storeAdvance(e, item.id,item.day,item.beginsell,item.endsell)}>
+                                            <form onSubmit={(e) => storeAdvance(e, item.id,item.day,item.percentage,item.beginsell,item.endsell)}>
                                             <div className="card mt-3">
                                                 <div className="card-header">
                                                     <div className="d-flex justify-content-between">
                                                         <h2>
                                                              ADVANCE PURCHASE
                                                         </h2>
-
                                                         <span className='d-flex'>
-                                                            <input onChange={(e) => handleDayChange(e, item.beginsell, item.endsell, item.day)} type="number" className='form-control' style={{width:'5rem'}} defaultValue={item.day}/>
-                                                            <p className='text-dark' style={{marginTop: '8px',marginLeft: '7px'}}> DAYS</p>
+                                                            <span className='d-flex'>
+                                                                <input onChange={(e) => handlePercentageAdv(e)} type="text" className='form-control' style={{width:'5rem'}} defaultValue={item.percentage}/>
+                                                                <p className='text-dark' style={{marginTop: '8px',marginLeft: '7px'}}> %</p>
+                                                            </span>
+                                                            <span className='d-flex'>
+                                                                <input onChange={(e) => handleDayChange(e, item.beginsell, item.endsell, item.day)} type="number" className='form-control' style={{width:'5rem'}} defaultValue={item.day}/>
+                                                                <p className='text-dark' style={{marginTop: '8px',marginLeft: '7px'}}> DAYS</p>
+                                                            </span>
                                                         </span>
                                                     </div>
 
@@ -1031,8 +1050,11 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                                     .map((advancepriceItem, index) => (
                                                                                     <tr key={index}>
                                                                                         <td>{advancepriceItem.room.ratedesc}</td>
+                                                                                        {/* <td>
+                                                                                        {(1-(item.percentage/100))}
+                                                                                        </td> */}
                                                                                         <td>
-                                                                                        {formatRupiah(advancepriceItem.price)}
+                                                                                            {advPercentageFinal !== '' ? formatRupiah(((advancepriceItem.price/(1-(item.percentage/100))) * advPercentageFinal)) : formatRupiah(advancepriceItem.price)}
                                                                                         </td>
                                                                                         <td>
                                                                                         <a

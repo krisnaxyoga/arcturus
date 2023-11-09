@@ -110,7 +110,7 @@ export default function Rates({ rates }) {
                                         onClick={() => {
                                             if (window.confirm('Are you sure you want to delete this?')) {
                                               // Lanjutkan dengan menghapus jika pengguna menekan OK pada konfirmasi
-                                              window.location.href = `/room/surcharge/surchargeallroomdestroy/${item.code}`;
+                                              window.location.href = `/room/contract/destroy/${item.id}`;
                                             }
                                           }}
                                     >
