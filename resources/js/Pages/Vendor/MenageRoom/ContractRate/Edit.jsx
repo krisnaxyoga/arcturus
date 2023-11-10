@@ -101,7 +101,11 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
   const [advPercentage, setAdvPercentage] = useState('');
   const [advPercentageFinal, setAdvPercentageFinal] = useState('');
 
-const handlePercentageAdv = (e) => {
+  const [advId, setAdvId] = useState('');
+
+const handlePercentageAdv = (e,itemId) => {
+
+    setAdvId(itemId);
     const percentageAdv = parseFloat(e.target.value); // Ubah ke tipe angka desimal
     setAdvPercentage(percentageAdv);
 
@@ -991,7 +995,7 @@ const handlePercentageAdv = (e) => {
                                                         </h2>
                                                         <span className='d-flex'>
                                                             <span className='d-flex'>
-                                                                <input onChange={(e) => handlePercentageAdv(e)} type="text" className='form-control' style={{width:'5rem'}} defaultValue={item.percentage}/>
+                                                                <input onChange={(e) => handlePercentageAdv(e, item.id)} type="text" className='form-control' style={{width:'5rem'}} defaultValue={item.percentage}/>
                                                                 <p className='text-dark' style={{marginTop: '8px',marginLeft: '7px'}}> %</p>
                                                             </span>
                                                             <span className='d-flex'>
@@ -1054,7 +1058,7 @@ const handlePercentageAdv = (e) => {
                                                                                         {(1-(item.percentage/100))}
                                                                                         </td> */}
                                                                                         <td>
-                                                                                            {advPercentageFinal !== '' ? formatRupiah(((advancepriceItem.price/(1-(item.percentage/100))) * advPercentageFinal)) : formatRupiah(advancepriceItem.price)}
+                                                                                            {advPercentageFinal !== '' && advId == advancepriceItem.advance_id ? formatRupiah(((advancepriceItem.price/(1-(item.percentage/100))) * advPercentageFinal)) : formatRupiah(advancepriceItem.price)}
                                                                                         </td>
                                                                                         <td>
                                                                                         <a
