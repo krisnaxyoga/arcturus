@@ -7,13 +7,18 @@ use Illuminate\Http\Request;
 use App\Models\Vendor;
 use App\Models\User;
 use App\Models\AgentMarkupSetup;
+use App\Models\Booking;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Slider;
+use App\Models\RoomHotel;
+use App\Models\WidrawVendor;
+use Carbon\Carbon;
 
 use Illuminate\Support\Facades\File;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Inertia\Inertia;
 
 class MyProfileController extends Controller
 {
@@ -297,9 +302,34 @@ class MyProfileController extends Controller
 
             // Lakukan otentikasi sebagai akun hotel
             Auth::loginUsingId($id);
+            $iduser = $id;
+            $vendor = Vendor::where('user_id',$iduser)->with('users')->first();
+            $totalincome = Booking::where('vendor_id',$vendor->id)->where('booking_status','paid')->sum('pricenomarkup');
+            $totalbooking = Booking::where('vendor_id',$vendor->id)->where('booking_status','paid')->count();
+            $bookingsuccess = Booking::where('vendor_id',$vendor->id)->where('booking_status','paid')->count();
+            $pendingpayment = Booking::where('vendor_id',$vendor->id)->where('booking_status','unpaid')->count();
+            $booking = Booking::where('vendor_id',$vendor->id)->whereNotIn('booking_status', ['-', ''])->with('vendor','users')->orderBy('created_at', 'desc')->get();
+            $acyive = auth()->user()->is_active;
+            $roomhotel = Booking::where('vendor_id',$vendor->id)->where('booking_status','paid')->sum('night');
+            $widraw = WidrawVendor::where('vendor_id', $vendor->id)
+            ->whereDate('created_at', '=', Carbon::today())
+            ->get();
+            // Redirect ke halaman hotel
+            // return redirect('/vendordashboard');
+            // Menyertakan variabel position
+            Inertia::share('position', 'master');
 
             // Redirect ke halaman hotel
-            return redirect('/vendordashboard');
+            return Inertia::render('Vendor/Index',[
+                'income'=>$totalincome,
+                'booking'=>$totalbooking,
+                'success'=>$bookingsuccess,
+                'pending'=>$pendingpayment,
+                'data'=>$booking,
+                'widraw'=>$widraw,
+                'totalroom' => $roomhotel,
+                'vendor' => $vendor,
+            ]);
         }
     }
 }

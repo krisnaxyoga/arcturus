@@ -8,6 +8,9 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
 import '../../css/app.css';
 
+const decrypt = (encryptedValue) => {
+    return atob(encryptedValue);
+};
 
 function Layout({ children, page, vendor }) {
 
@@ -15,14 +18,17 @@ function Layout({ children, page, vendor }) {
     const [isOpen, setIsOpen] = useState(false);
     const [isOpen2, setIsOpen2] = useState(false);
 
+    // const [positionmaster, setPostionmaster] = useState('')
     const logOut = (e) => {
-        Inertia.post('/logout', {
-            onSuccess: () => {
-                console.log('logout');
-                // Lakukan aksi setelah gambar berhasil diunggah
-            },
-        });
+        localStorage.clear();
+        window.location.href = `/logout`;
     }
+    // Mendapatkan nilai 'encryptedPosition' dari localStorage
+    const encryptedPosition = localStorage.getItem('encryptedPosition');
+
+    // Mendekripsi nilai jika 'encryptedPosition' ada di localStorage
+    const position = decrypt(encryptedPosition);
+    // setPostionmaster(position);
 
     const handleShow = () => {
         setShow(!show);
@@ -70,7 +76,7 @@ function Layout({ children, page, vendor }) {
 
                             </Dropdown.Toggle>
                             <Dropdown.Menu style={{ transform: "none!important" }}>
-                                <Dropdown.Item href="/logout">
+                                <Dropdown.Item onClick={logOut}>
                                     logout
                                 </Dropdown.Item>
                                 {/* <Dropdown.Item href="#/action-3">Something else</Dropdown.Item> */}
@@ -114,7 +120,7 @@ function Layout({ children, page, vendor }) {
                                     <div className="nav-link-icon">  <i className="fas fa-fw fa-chart-area"></i></div>
                                     Booking Report
                                 </Link>
-                                {vendor.users.position == 'master' && (
+                                {(vendor.users.position == 'master' || position == 'master') && (
                                     <>
                                      <Link className={`nav-link ${page === '/vendor-profile/property' ? 'active' : ''}`} href="/vendor-profile/property">
                                         <div className="nav-link-icon"><i className="fa fa-building" aria-hidden="true"></i></div>

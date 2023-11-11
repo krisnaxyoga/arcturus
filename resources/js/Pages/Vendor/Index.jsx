@@ -1,6 +1,11 @@
 //import React
 import React, { useState,useEffect } from 'react';
 
+const encrypt = (value) => {
+  return btoa(value);
+};
+
+
 //import layout
 import Layout from '../../Layouts/Vendor';
 
@@ -20,6 +25,7 @@ export default function Index({ totalroom,income,vendor,success,pending,data,wid
   const [currentPage, setCurrentPage] = useState(1)
   const [postsPerPage, setPostsPerPage] = useState(10)
   const [isLoading, setIsLoading] = useState(true);
+
 
   useEffect(() => {
       // Anda dapat menambahkan logika tambahan jika diperlukan
@@ -44,6 +50,21 @@ export default function Index({ totalroom,income,vendor,success,pending,data,wid
   const nextPage = () => setCurrentPage(currentPage + 1);
 
   const prevPage = () => setCurrentPage(currentPage - 1);
+
+  // Dapatkan nilai 'position' dari props
+  const { position } = usePage().props;
+
+  // Enkripsi dan simpan ke dalam localStorage hanya sekali
+  useEffect(() => {
+    // Hanya jalankan efek jika nilai position adalah 'master'
+    if (position == 'master') {
+        const encryptedPosition = encrypt(position);
+        localStorage.setItem('encryptedPosition', encryptedPosition);
+    }
+}, [position]);
+  // Sekarang, variabel 'position' dapat digunakan di dalam komponen React Anda
+  console.log('Position:', position);
+  
 
   return (
     <>
