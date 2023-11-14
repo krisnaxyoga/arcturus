@@ -57,7 +57,7 @@
                         <div class="card-body">
                             <div class="w-100">
                                 @if ($message == 'payment success')
-                                <div class="body">
+                                <div class="body mb-3">
                                 <div class="cardx">
                                     <div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;">
                                       <i class="i checkmark">✓</i>
@@ -69,6 +69,11 @@
                                         {{ $message }}
                                         <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                     </div> --}}
+
+                                   
+                                </div>
+                                <div class="d-flex justify-content-center">
+                                    <a href="/" class="btn btn-danger"><i class="fa fa-undo"></i> back</a>
                                 </div>
                                 
                                 @endif

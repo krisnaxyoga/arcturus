@@ -25,6 +25,8 @@ export default function Bookings({ bookings }) {
                             <Link className='btn btn-outline-warning' href={`/agent/bookinghistory/detail/${item.id}`} title='Details'>
                                 <i className="fa fa-file"></i>
                             </Link>&nbsp;
+                            {item.booking_status == 'unpaid' && <a href={`/paymentbookingpage/${item.id}`} title='Pay' className='btn btn-outline-danger'> <span style={{fontSize:'12px',fontWeight:'700'}}>pay</span> </a>}
+                            
                             {/* <Link className='btn btn-outline-success' href={`/agent/bookinghistory/invoice/${item.id}`} title='Invoice'>
                                 <i className="fas fa-print"></i>
                             </Link> */}

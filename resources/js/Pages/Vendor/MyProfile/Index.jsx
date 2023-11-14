@@ -29,6 +29,7 @@ export default function Index({ session,data,country,vendor,markup,banner,proper
  const [state,setState] = useState('');
  const [description,setDesc] = useState('');
  const [highlight,setHight] = useState('');
+ const [managementcode,setManageCode] = useState('');
 
  const [taxValue, setTaxValue] = useState('');
  const [bankname, setBankName] = useState('');
@@ -83,44 +84,69 @@ export default function Index({ session,data,country,vendor,markup,banner,proper
                 }
             }
         };
-            
+        
+        const handleCopyCode = () => {
+            // Pilih teks di dalam input
+            const inputElement = document.getElementById('manageCodeInput');
+            inputElement.select();
+        
+            // Eksekusi perintah salin
+            try {
+              const successful = document.execCommand('copy');
+              const message = successful ? 'Copied successfully!' : 'Failed to copy. Use Ctrl+C (Cmd+C on Mac) to copy.';
+            //   console.log(message);
+              alert(message);
+            } catch (err) {
+              console.error('Failure to copy:', err);
+            }
+          };
 
         // Tampilkan gambar pratinjau jika gambar ada
         const logoPreview = logo ? URL.createObjectURL(logo) : null;
         const bannerPreview = imgbanner ? URL.createObjectURL(imgbanner) : null;
 
     const storePost = async (e) => {
-        e.preventDefault();
+       
+        const confirmSave = window.confirm('Do you want to save the data?');
 
-        const formData = new FormData();
-        formData.append('country', selectcountry ? selectcountry : data[0].country);
-        formData.append('busisnessname', busisnessname ? busisnessname : data[0].vendor_name);
-        formData.append('email', email ? email : data[0].users.email);
-        formData.append('firstname',firstname ? firstname : data[0].users.first_name);
-        formData.append('lastname', lastname ? lastname : data[0].users.last_name);
-        formData.append('phone', phone ? phone : data[0].phone);
-        formData.append('logo', logo ? logo : data[0].logo_img);
-        formData.append('address', address ? address : data[0].address_line1);
-        formData.append('address2', address2 ? address2 : data[0].address_line2);
-        formData.append('city', city ? city : data[0].city);
-        formData.append('state', state ? state : data[0].state);
-        // formData.append('description', description ? description : data[0].description);
-        formData.append('highlight', highlight ? highlight : data[0].highlight);
-        formData.append('type_property', type_property ? type_property : data[0].type_property);
+        // console.log(confirmSave);
+        if (confirmSave) {
+            e.preventDefault();
 
-        // formData.append('tax', taxValue ? taxValue : markup.tax);
-        formData.append('bank', bankname ? bankname : data[0].bank_name);
-        formData.append('bankaccount', bankaccount ? bankaccount : data[0].bank_account);
-        formData.append('swifcode', swifcode ? swifcode : data[0].swif_code);
-        formData.append('bankaddress', bankaddress ? bankaddress : data[0].bank_address);
-        formData.append('accountnumber', accountnumber ? accountnumber : data[0].account_number);
-        formData.append('email_reservation',emailreservation ? emailreservation : data[0].email_reservation);
+            const formData = new FormData();
+            formData.append('country', selectcountry ? selectcountry : data[0].country);
+            formData.append('busisnessname', busisnessname ? busisnessname : data[0].vendor_name);
+            formData.append('email', email ? email : data[0].users.email);
+            formData.append('firstname',firstname ? firstname : data[0].users.first_name);
+            formData.append('lastname', lastname ? lastname : data[0].users.last_name);
+            formData.append('phone', phone ? phone : data[0].phone);
+            formData.append('logo', logo ? logo : data[0].logo_img);
+            formData.append('address', address ? address : data[0].address_line1);
+            formData.append('address2', address2 ? address2 : data[0].address_line2);
+            formData.append('city', city ? city : data[0].city);
+            formData.append('state', state ? state : data[0].state);
+            // formData.append('description', description ? description : data[0].description);
+            formData.append('highlight', highlight ? highlight : data[0].highlight);
+            formData.append('type_property', type_property ? type_property : data[0].type_property);
 
-        Inertia.post('/myprofile/update', formData, {
-            onSuccess: () => {
-                // Lakukan aksi setelah gambar berhasil diunggah
-            },
-        });
+            formData.append('code', managementcode ? managementcode : data[0].users.title);
+            // formData.append('tax', taxValue ? taxValue : markup.tax);
+            formData.append('bank', bankname ? bankname : data[0].bank_name);
+            formData.append('bankaccount', bankaccount ? bankaccount : data[0].bank_account);
+            formData.append('swifcode', swifcode ? swifcode : data[0].swif_code);
+            formData.append('bankaddress', bankaddress ? bankaddress : data[0].bank_address);
+            formData.append('accountnumber', accountnumber ? accountnumber : data[0].account_number);
+            formData.append('email_reservation',emailreservation ? emailreservation : data[0].email_reservation);
+
+            Inertia.post('/myprofile/update', formData, {
+                onSuccess: () => {
+                    alert('data saved success!');
+                },
+            });
+        }else{
+            // Handle pembatalan penyimpanan
+            alert('Data not saved.');
+          }
     }
 
     const storeBanner = async (e) => {
@@ -327,6 +353,17 @@ export default function Index({ session,data,country,vendor,markup,banner,proper
                                                         <label htmlFor="">Description</label>
                                                         <textarea onChange={(e)=>setDesc(e.target.value)} className='form-control' cols="30" rows="10">{data[0].description}</textarea>
                                                     </div> */}
+                                                </div>
+                                            </div>
+                                            <div className="row">
+                                                <div className="col-lg-6">
+                                                        <div className="form-group">
+                                                            <label htmlFor="">Management code</label>
+                                                            <span className='d-flex'>
+                                                                <input  id="manageCodeInput" onChange={(e)=>setManageCode(e.target.value)} type="text" className='form-control' defaultValue={data[0].users.title}/>
+                                                                <button onClick={handleCopyCode} className='btn btn-secondary' type='button'><i className='fa fa-copy'></i></button>
+                                                            </span>
+                                                        </div>
                                                 </div>
                                             </div>
                                             <hr />

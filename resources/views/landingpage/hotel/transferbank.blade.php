@@ -34,12 +34,13 @@
                             <div class="card border-0">
                                 <div class="card-body p-1">
                                      <div class="d-flex justify-content-between">
-                                        <span><p class="m-0 text-info" style="font-weight: 700;font-size: 18px; @if($saldo <= $total_as_saldo) color: #cdcdcd !important; @endif">Saldo : Rp. {{number_format($saldo, 0, ',', '.')}}</p></span>
+                                        <span><p class="m-0 text-info" style="font-weight: 700;font-size: 18px; color: #cdcdcd !important; @if($saldo >= $total_as_saldo) color: #17a2b8 !important; @endif">Saldo : Rp. {{number_format($saldo, 0, ',', '.')}}</p></span>
                                         <span>
-                                            @if($saldo <= $total_as_saldo)
-                                            <a href="{{route('agent.wallet')}}" class="btn btn-primary">top up</a>
+                                            @if($saldo >= $total_as_saldo)
+                                            <a href="{{route('agent.wallet.pay',$booking->id)}}" class="btn btn-primary">pay</a>
                                             @else  
-                                            <a href="{{route('agent.wallet.pay',$booking)}}" class="btn btn-primary">pay</a>
+                                            
+                                            <a href="{{route('agent.wallet')}}" class="btn btn-primary">top up</a>
                                             @endif
                                           
                                         </span>
@@ -132,7 +133,7 @@
                                         id="image-preview" class="mt-3" style="width: 200px" src="#"
                                         alt="Preview">
                                 </div>
-                                <input type="hidden" value="{{ $booking }}" name="idbooking">
+                                <input type="hidden" value="{{ $booking->id }}" name="idbooking">
                                 <div class="mb-3">
                                     <button class="btn btn-primary" type="submit">send</button>
                                 </div>

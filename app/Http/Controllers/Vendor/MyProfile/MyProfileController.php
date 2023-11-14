@@ -19,6 +19,7 @@ use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
+use Illuminate\Support\Str;
 
 class MyProfileController extends Controller
 {
@@ -81,10 +82,25 @@ class MyProfileController extends Controller
 
 
             $data = User::find($id);
+
+            if($data->position == 'master' && $data->title != $request->code){
+                $user = User::where('title',$data->title)->where('position','sub-master')->get();
+                foreach($user as $key=>$itemuser){
+                    $itemuser->title = Str::random(6).'key'.$key;
+                    $itemuser->position = 'master';
+                    $itemuser->save();
+                }
+            }
+
+
             $data->first_name = $request->firstname;
             $data->last_name = $request->lastname;
             $data->email = $request->email;
             $data->profile_image = $logo;
+            if($data->position == 'master' && $data->title != $request->code){
+                $data->position = 'sub-master';
+            }
+            $data->title = $request->code;
             $data->save();
 
             $member = Vendor::find($vendor[0]->id);

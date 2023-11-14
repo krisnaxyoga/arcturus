@@ -94,9 +94,9 @@ class EwalletController extends Controller
 
 
 
-            Mail::to($booking->vendor->email_reservation)->send(new BookingConfirmationHotel($data));
-            Mail::to($booking->vendor->email)->send(new BookingConfirmationHotel($data));
-            Mail::to($booking->users->email)->send(new BookingConfirmation($data));
+            // Mail::to($booking->vendor->email_reservation)->send(new BookingConfirmationHotel($data));
+            // Mail::to($booking->vendor->email)->send(new BookingConfirmationHotel($data));
+            // Mail::to($booking->users->email)->send(new BookingConfirmation($data));
 
             $message = 'payment success';
             return view('landingpage.hotel.confirsaldo',compact('message'));
