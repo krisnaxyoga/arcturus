@@ -101,6 +101,15 @@ export default function Index({ session,data,country,vendor,markup,banner,proper
             }
           };
 
+          const generateRandomCode = () => {
+            const confirmSave = window.confirm('Out from current management, please click the button below to create a New Management Code, then press the save button to save the changes. if you are sure? press yes');
+            if (confirmSave) {
+            // Fungsi untuk menghasilkan kode acak, bisa disesuaikan sesuai kebutuhan
+            const randomCode = Math.random().toString(36).substring(2, 8); // Contoh kode acak dengan panjang 6 karakter
+            setManageCode(randomCode);
+            }
+        };
+
         // Tampilkan gambar pratinjau jika gambar ada
         const logoPreview = logo ? URL.createObjectURL(logo) : null;
         const bannerPreview = imgbanner ? URL.createObjectURL(imgbanner) : null;
@@ -360,8 +369,9 @@ export default function Index({ session,data,country,vendor,markup,banner,proper
                                                         <div className="form-group">
                                                             <label htmlFor="">Management code</label>
                                                             <span className='d-flex'>
-                                                                <input  id="manageCodeInput" onChange={(e)=>setManageCode(e.target.value)} type="text" className='form-control' defaultValue={data[0].users.title}/>
+                                                                <input  id="manageCodeInput" onChange={(e)=>setManageCode(e.target.value)} type="text" className='form-control' value={managementcode || data[0].users.title}/>
                                                                 <button onClick={handleCopyCode} className='btn btn-secondary' type='button'><i className='fa fa-copy'></i></button>
+                                                                <button onClick={generateRandomCode} className='btn btn-success' type='button' title='generate new management code'> <i className='fa fa-spinner'></i></button>
                                                             </span>
                                                         </div>
                                                 </div>

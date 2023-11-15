@@ -92,13 +92,22 @@ class MyProfileController extends Controller
                 }
             }
 
+            
 
             $data->first_name = $request->firstname;
             $data->last_name = $request->lastname;
             $data->email = $request->email;
             $data->profile_image = $logo;
-            if($data->position == 'master' && $data->title != $request->code){
-                $data->position = 'sub-master';
+            if ($data->title != $request->code) {
+                $user1 = User::where('title', $request->code)->first();
+            
+                if (!$user1) {
+                    $data->position = 'master';
+                } else {
+                    if ($data->position != 'master') {
+                        $data->position = 'sub-master';
+                    }
+                }
             }
             $data->title = $request->code;
             $data->save();
@@ -146,7 +155,7 @@ class MyProfileController extends Controller
             // dd($member->id);
             return redirect()
                 ->route('vendor.myprofile')
-                ->with('success', 'data updated success');;
+                ->with('success', 'data updated success');
         }
     }
 

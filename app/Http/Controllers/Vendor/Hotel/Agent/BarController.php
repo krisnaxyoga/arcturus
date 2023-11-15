@@ -132,70 +132,70 @@ class BarController extends Controller
                         'rolerate' => 2,
                         'distribute' => ["WORLDWIDE"]
                         ],
-                     4 =>[
-                        'ratecode' => 'WORLD9',
-                        'desc' => 'worldwide',
-                        'percented' => 20,
-                        'minstay' => 9,
-                        'rolerate' => 2,
-                        'distribute' => ["WORLDWIDE"]
-                        ],
-                    5 =>[
-                        'ratecode' => 'APAC',
-                        'desc' => 'ASIAPACIFIC',
-                        'percented' => 5,
-                        'minstay' => 1,
-                        'rolerate' => 2,
-                        'distribute' => ["China", "Hongkong", "Japan", "Korea", "Malaysia", "Singapore", "Taiwan", "Thailand", "Vietnam", "Philippines", "Australia", "New Zealand"]
-                        ],
-                    6 =>[
-                    'ratecode' => 'APAC3',
-                    'desc' => 'ASIAPACIFIC',
-                    'percented' => 10,
-                    'minstay' => 3,
-                    'rolerate' => 2,
-                    'distribute' => ["China", "Hongkong", "Japan", "Korea", "Malaysia", "Singapore", "Taiwan", "Thailand", "Vietnam", "Philippines", "Australia", "New Zealand"]
-                    ],
-                    7 =>[
-                    'ratecode' => 'APAC5',
-                    'desc' => 'ASIAPACIFIC',
-                    'percented' => 15,
-                    'minstay' => 5,
-                    'rolerate' => 2,
-                    'distribute' => ["China", "Hongkong", "Japan", "Korea", "Malaysia", "Singapore", "Taiwan", "Thailand", "Vietnam", "Philippines", "Australia", "New Zealand"]
-                    ],
-                    8 =>[
-                    'ratecode' => 'APAC7',
-                    'desc' => 'ASIAPACIFIC',
-                    'percented' => 20,
-                    'minstay' => 7,
-                    'rolerate' => 2,
-                    'distribute' => ["China", "Hongkong", "Japan", "Korea", "Malaysia", "Singapore", "Taiwan", "Thailand", "Vietnam", "Philippines", "Australia", "New Zealand"]
-                    ],
-                    9 =>[
-                    'ratecode' => 'DOM',
-                    'desc' => 'DOMESTIC',
-                    'percented' => 10,
-                    'minstay' => 1,
-                    'rolerate' => 2,
-                    'distribute' => ["Indonesia"]
-                    ], 
-                    10 =>[
-                    'ratecode' => 'DOM3',
-                    'desc' => 'DOMESTIC',
-                    'percented' => 15,
-                    'minstay' => 3,
-                    'rolerate' => 2,
-                    'distribute' => ["Indonesia"]
-                    ],
-                    11 =>[
-                    'ratecode' => 'DOM5',
-                    'desc' => 'DOMESTIC',
-                    'percented' => 20,
-                    'minstay' => 5,
-                    'rolerate' => 2,
-                    'distribute' => ["Indonesia"]
-                    ],
+                    //  4 =>[
+                    //     'ratecode' => 'WORLD9',
+                    //     'desc' => 'worldwide',
+                    //     'percented' => 20,
+                    //     'minstay' => 9,
+                    //     'rolerate' => 2,
+                    //     'distribute' => ["WORLDWIDE"]
+                    //     ],
+                    // 5 =>[
+                    //     'ratecode' => 'APAC',
+                    //     'desc' => 'ASIAPACIFIC',
+                    //     'percented' => 5,
+                    //     'minstay' => 1,
+                    //     'rolerate' => 2,
+                    //     'distribute' => ["China", "Hongkong", "Japan", "Korea", "Malaysia", "Singapore", "Taiwan", "Thailand", "Vietnam", "Philippines", "Australia", "New Zealand"]
+                    //     ],
+                    // 6 =>[
+                    // 'ratecode' => 'APAC3',
+                    // 'desc' => 'ASIAPACIFIC',
+                    // 'percented' => 10,
+                    // 'minstay' => 3,
+                    // 'rolerate' => 2,
+                    // 'distribute' => ["China", "Hongkong", "Japan", "Korea", "Malaysia", "Singapore", "Taiwan", "Thailand", "Vietnam", "Philippines", "Australia", "New Zealand"]
+                    // ],
+                    // 7 =>[
+                    // 'ratecode' => 'APAC5',
+                    // 'desc' => 'ASIAPACIFIC',
+                    // 'percented' => 15,
+                    // 'minstay' => 5,
+                    // 'rolerate' => 2,
+                    // 'distribute' => ["China", "Hongkong", "Japan", "Korea", "Malaysia", "Singapore", "Taiwan", "Thailand", "Vietnam", "Philippines", "Australia", "New Zealand"]
+                    // ],
+                    // 8 =>[
+                    // 'ratecode' => 'APAC7',
+                    // 'desc' => 'ASIAPACIFIC',
+                    // 'percented' => 20,
+                    // 'minstay' => 7,
+                    // 'rolerate' => 2,
+                    // 'distribute' => ["China", "Hongkong", "Japan", "Korea", "Malaysia", "Singapore", "Taiwan", "Thailand", "Vietnam", "Philippines", "Australia", "New Zealand"]
+                    // ],
+                    // 9 =>[
+                    // 'ratecode' => 'DOM',
+                    // 'desc' => 'DOMESTIC',
+                    // 'percented' => 10,
+                    // 'minstay' => 1,
+                    // 'rolerate' => 2,
+                    // 'distribute' => ["Indonesia"]
+                    // ], 
+                    // 10 =>[
+                    // 'ratecode' => 'DOM3',
+                    // 'desc' => 'DOMESTIC',
+                    // 'percented' => 15,
+                    // 'minstay' => 3,
+                    // 'rolerate' => 2,
+                    // 'distribute' => ["Indonesia"]
+                    // ],
+                    // 11 =>[
+                    // 'ratecode' => 'DOM5',
+                    // 'desc' => 'DOMESTIC',
+                    // 'percented' => 20,
+                    // 'minstay' => 5,
+                    // 'rolerate' => 2,
+                    // 'distribute' => ["Indonesia"]
+                    // ],
                 ];
 
                 foreach ($nilai as $key => $value) {
@@ -215,20 +215,26 @@ class BarController extends Controller
                     $contract->distribute = $value['distribute'];
                     $contract->rolerate = $value['rolerate'];
                     $contract->pick_day = [""];
+                    // $contract->cencellation_policy = "<span>
+                    // <ul>
+                    // <li>HIGH season from 01-31 August: 14 days prior to arrival</li>
+                    // <li>PEAK season from 27Dec - 05Jan: 45 days prior to arrival</li>
+                    // <li>Except above periods: 72 hours prior to arrival</li>
+                    // <ul>
+                    // <li>If cancellation/amendment is made NORMAL/HIGH/PEAK days prior to your arrival date, no fee will be charged</li>
+                    // <li>If cancellation/amendment is made within NORMAL/HIGH/PEAK days, 1st night’s room rate and tax will be charged
+                    // </li>
+                    // <li>In case of no-show, 100% room rate and tax will be charged</li>
+                    // </ul>
+                    // <li>Early Bird/Long Stay/Package Rates are Non - refundable</li>
+                    // </ul>
+                    // </span>";
                     $contract->cencellation_policy = "<span>
                     <ul>
-                    <li>HIGH season from 01-31 August: 14 days prior to arrival</li>
-                    <li>PEAK season from 27Dec - 05Jan: 45 days prior to arrival</li>
-                    <li>Except above periods: 72 hours prior to arrival</li>
-                    <ul>
-                    <li>If cancellation/amendment is made NORMAL/HIGH/PEAK days prior to your arrival date, no fee will be charged</li>
-                    <li>If cancellation/amendment is made within NORMAL/HIGH/PEAK days, 1st night’s room rate and tax will be charged
-                    </li>
-                    <li>In case of no-show, 100% room rate and tax will be charged</li>
+                    <li>Rates are Non - refundable, changeable with New rate apply</li>
                     </ul>
-                    <li>Early Bird/Long Stay/Package Rates are Non - refundable</li>
-                    </ul>
-                    </span>";
+                    </span>
+                    ";
                     $contract->deposit_policy = "<li>Full payment is required upon booking received</li>";
                     $contract->benefit_policy = "<li>Include daily breakfast for 2 pax</li>";
         

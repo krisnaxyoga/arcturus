@@ -8,6 +8,7 @@ use App\Models\Setting;
 use App\Models\Vendor;
 use App\Models\Slider;
 use App\Models\User;
+use App\Models\PaymentGetwayTransaction;
 
 class ViewComposerServiceProvider extends ServiceProvider
 {
@@ -24,6 +25,12 @@ class ViewComposerServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        View::composer('layouts.admin', function ($view) {
+            $bookingconfirmation = PaymentGetwayTransaction::count();
+            
+            $view->with('bookingconfirmation', $bookingconfirmation);
+        });
+
         View::composer('layouts.landing', function ($view) {
             $settings = Setting::first();
             $vendor = null; // Default value
