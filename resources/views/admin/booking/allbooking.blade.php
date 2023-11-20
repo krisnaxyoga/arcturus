@@ -31,6 +31,7 @@
                                     <tr>
                                         <th>confirmation</th>
                                         <th>Booking Status</th>
+                                        <th>payment type</th>
                                         <th>Hotel Name</th>
                                         <th>Agent Name</th>
                                         <th>Guest Name</th>
@@ -38,34 +39,17 @@
                                         <th>Price</th>
                                         <th>Guest Email</th>
                                         
+                                        
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($data as $key=>$item)
                                         <tr>
                                             <td>
-                                                @if($item->status == 400)
-                                                    <button type="button" class="btn btn-datatable btn-icon btn-transparent-dark mr-2" data-bs-toggle="modal" data-bs-target="#imageModal{{$key}}">
-                                                        <i data-feather="eye"></i>
-                                                    </button>
-                                                    
-                                                    <!-- Modal -->
-                                                    <div class="modal fade" id="imageModal{{$key}}" tabindex="-1" aria-labelledby="imageModalLabel{{$key}}" aria-hidden="true">
-                                                        <div class="modal-dialog modal-dialog-centered modal-lg">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title" id="imageModalLabel{{$key}}">Image Preview</h5>
-                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <img src="{{$item->url_payment}}" alt="Image" class="img-fluid">
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <a href="{{route('admin.booking.confirmation',$item->id)}}" class="btn btn-success text-right">Confirmation Payment</a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                @if($item->booking_status != 'paid')
+                                                <span class="badge badge-danger">
+                                                    <i class="fa fa-clock"></i>
+                                                </span>
                                                     @else
                                                     <ul>
                                                         <li style="list-style: none;">
@@ -104,7 +88,7 @@
                                                                     Are you sure you want to send an email to all?
                                                                 </div>
                                                                 <div class="modal-footer">
-                                                                    <form class="d-inline" action="{{ route('admin.booking.confirmation', $item->id) }}" method="GET">
+                                                                    <form class="d-inline" action="{{ route('admin.bookingall.confirmation', $item->id) }}" method="GET">
                                                                         @csrf
                                                                         @method('get')
                                                                         <button type="submit" class="btn btn-warning">Send Email</button>
@@ -130,7 +114,7 @@
                                                                     Are you sure you want to send an email to Agent?
                                                                 </div>
                                                                 <div class="modal-footer">
-                                                                    <form class="d-inline" action="{{ route('admin.booking.sendconfirmationtoagent',$item->id) }}" method="GET">
+                                                                    <form class="d-inline" action="{{ route('admin.bookingall.sendconfirmationtoagent',$item->id) }}" method="GET">
                                                                         @csrf
                                                                         @method('get')
                                                                         <button type="submit" class="btn btn-warning">Send Email</button>
@@ -156,7 +140,7 @@
                                                                     Are you sure you want to send an email to Hotel?
                                                                 </div>
                                                                 <div class="modal-footer">
-                                                                    <form class="d-inline" action="{{ route('admin.booking.sendconfirmationtohotel',$item->id) }}" method="GET">
+                                                                    <form class="d-inline" action="{{ route('admin.bookingall.sendconfirmationtohotel',$item->id) }}" method="GET">
                                                                         @csrf
                                                                         @method('get')
                                                                         <button type="submit" class="btn btn-warning">Send Email</button>
@@ -193,19 +177,25 @@
                                                 @endif
                                                
                                             </td>
-                                            <td> @if($item->status == 400)
-                                                <span class="badge badge-danger">{{ $item->booking->booking_status }}</span>
+                                            <td> @if($item->booking_status != 'paid')
+                                                <span class="badge badge-warning">{{ $item->booking_status }}</span>
                                                 @else
-                                                <span class="badge badge-success">{{ $item->booking->booking_status }}</span>
+                                                <span class="badge badge-success">{{ $item->booking_status }}</span>
                                                 @endif
                                                 </td>
-                                            <td>{{ $item->booking->vendor->vendor_name }}</td>
-                                            <td>{{ $item->booking->users->first_name }} {{ $item->booking->users->last_name }}</td>
-                                            <td>{{ $item->booking->first_name }} {{ $item->booking->last_name }}</td>
-                                            <td>{{ $item->booking->total_guests }}</td>
-                                            <td>{{ $item->booking->price }}</td>
-                                            
-                                            <td>{{ $item->booking->email }}</td>
+                                            <td>
+                                                @if($item->payment_method == 1)
+                                                    <span class="badge badge-secondary">transfer bank</span>
+                                                    @else
+                                                    <span class="badge badge-secondary">Wallet</span>
+                                                @endif
+                                            </td>
+                                            <td>{{ $item->vendor->vendor_name }}</td>
+                                            <td>{{ $item->users->first_name }} {{ $item->users->last_name }}</td>
+                                            <td>{{ $item->first_name }} {{ $item->last_name }}</td>
+                                            <td>{{ $item->total_guests }}</td>
+                                            <td>{{ $item->price }}</td>
+                                            <td>{{ $item->email }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>

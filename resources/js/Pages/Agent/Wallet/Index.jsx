@@ -98,6 +98,7 @@ export default function Index({ props, session, agent,history,setting }) {
         Inertia.post('/agent/wallet/topup', formData, {
             onSuccess: () => {
                 // Lakukan aksi setelah gambar berhasil diunggah
+                window.location.reload();
                 setIsLoading(false);
             },
         });

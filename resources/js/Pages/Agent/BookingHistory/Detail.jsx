@@ -29,17 +29,23 @@ export default function Detail({ session, data, agent, contract, setting, roombo
    
     const createAndDownloadPDF = () => {
         const printContent2 = document.getElementById('print-card');
-  
+
         if (printContent2) {
-            html2canvas(printContent2, { scale: 2 }).then(canvas => {
-            const imgData = canvas.toDataURL('image/png');
-            const pdf = new jsPDF({
-                orientation: 'portrait',
-                unit: 'mm',
-                format: 'a4'
-            });
-            pdf.addImage(imgData, 'PNG', 10, 10, 180, 150); // Menambahkan gambar tangkapan layar ke PDF
-            pdf.save('document.pdf'); // Simpan PDF dengan nama "document.pdf"
+            // Mendapatkan lebar window untuk menyesuaikan skala gambar
+            const windowWidth = 1600;
+    
+            html2canvas(printContent2, { 
+                scale: 2,
+                windowWidth: windowWidth, // Menyesuaikan lebar kanvas dengan lebar window
+            }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: 'a4'
+                });
+                pdf.addImage(imgData, 'PNG', 10, 10, 180, 150); // Menambahkan gambar tangkapan layar ke PDF
+                pdf.save('document.pdf'); // Simpan PDF dengan nama "document.pdf"
             });
         }
       }; 

@@ -88,13 +88,22 @@
                             <div class="nav-link-icon"><i data-feather="activity"></i></div>
                             Dashboard
                         </a>
+                        <a class="nav-link {{ request()->routeIs('bookingall.admin.dashboard') ? 'active' : '' }}" href="{{ route('bookingall.admin.dashboard') }}">
+                            <div class="nav-link-icon"><i class="fas fa-fw fa-book"></i></div>
+                            Booking 
+                            @if($booking > 0)
+                                <span class="badge badge-danger mx-2 debardebar">{{$booking}}</span> 
+                            @endif 
+                        </a>
                         <a class="nav-link {{ request()->routeIs('dashboard.admin.booking') ? 'active' : '' }}" href="{{ route('dashboard.admin.booking') }}">
                             <div class="nav-link-icon"><i class="fas fa-fw fa-chart-area"></i></div>
-                            Booking Confirmation
+                            Transfer Confirmation @if($bookingconfirmation > 0)
+                                <span class="badge badge-danger mx-2 debardebar">{{$bookingconfirmation}}</span> 
+                            @endif 
                         </a>
                         <a class="nav-link {{ request()->routeIs('dashboard.wallet.admin') ? 'active' : '' }}" href="{{ route('dashboard.wallet.admin') }}">
                             <div class="nav-link-icon"><i class="fas fa-fw fa-bell"></i></div>
-                            Top Up Confirmation
+                            Top Up Confirmation  @if($topupconfirmation > 0) <span class="badge badge-danger mx-2 debardebar">{{$topupconfirmation}}</span>  @endif 
                         </a>
                         <a class="nav-link {{ request()->Is('#') ? 'active' : '' }}" href="#" data-toggle="collapse" data-target="#agentCollapse"
                             aria-expanded="false" aria-controls="agentCollapse">

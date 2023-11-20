@@ -77,6 +77,8 @@ class EwalletController extends Controller
             $user->save();
 
             $booking->booking_status = 'paid';
+            $booking->payment_method = 2;
+            $booking->is_see = 0;
             $booking->save();
 
             $hotelbook = HotelRoomBooking::where('booking_id',$id)->get();
@@ -165,6 +167,7 @@ class EwalletController extends Controller
             $trans->status = 400;
             $trans->payment_method = 'BANK-TRANSFER-TOP-UP';
             $trans->trx_id = $history->id;
+            $trans->is_see = 0;
             $trans->save();
 
             $Setting = Setting::where('id',1)->first();

@@ -23353,3 +23353,29 @@ hr {
 .align-bottom {
   vertical-align: bottom!important;
 }
+
+@keyframes heartbeat {
+  0% {
+    transform: scale(1);
+  }
+  20% {
+    transform: scale(1.2);
+  }
+  40% {
+    transform: scale(1);
+  }
+  60% {
+    transform: scale(1.2);
+  }
+  80% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.debardebar {
+  animation: heartbeat 1s infinite;
+  transform-origin: center;
+}

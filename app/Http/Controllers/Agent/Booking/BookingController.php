@@ -14,6 +14,7 @@ use App\Models\User;
 use App\Models\Setting;
 use Carbon\Carbon;
 
+use App\Models\SurchargeAllRoom;
 use Illuminate\Support\Str;
 use App\Models\ContractRate;
 
@@ -70,6 +71,19 @@ class BookingController extends Controller
 
             $pricenomarkup = (int) $pricenomarkupString;
 
+            $surchargeAllRoom = SurchargeAllRoom::where('start_date', '>=', $checkin)
+            ->where('end_date', '<=', Carbon::parse($checkout)->subDay())
+            ->where('vendor_id',$request->vendorid)
+            ->get();
+
+            $totalsurchargex = 0;
+            $surchargepricetotalx = 0;
+            foreach ($surchargeAllRoom as $surchargeAllRoomitem) {
+                    $totalsurchargex += $surchargeAllRoomitem->surcharge_price;
+                    // $totalDataCountx++;
+            }
+            $surcharge = $totalsurchargex/$totalNights;
+            
             $data =  new Booking();
             $data->user_id = $userid;
             $data->booking_code = '#BO_'. $this->generateRandomString(10);
@@ -80,7 +94,7 @@ class BookingController extends Controller
             $data->total_room = $request->totalroom;
             $data->night = $totalNights;
             $data->price = $totalNights * $price;
-            $data->pricenomarkup = $totalNights * $pricenomarkup;
+            $data->pricenomarkup = $totalNights * ($pricenomarkup + $surcharge);
             $data->total_guests = $request->person;
             $data->booking_status = '-';
             $data->save();
@@ -96,6 +110,7 @@ class BookingController extends Controller
 
                 $contractprice = ContractPrice::where('id',$item['contpriceid'])->first();
 
+
                 $hotelbook = new HotelRoomBooking();
                 $hotelbook->room_id = $item['roomId'];
                 $hotelbook->booking_id = $data->id;
@@ -106,9 +121,9 @@ class BookingController extends Controller
                 $hotelbook->checkin_date = $request->checkin;
                 $hotelbook->checkout_date = $request->checkout;
                 $hotelbook->price = $priceint;
-                $hotelbook->rate_price = $contractprice->recom_price;
-                $hotelbook->total_ammount = (($contractprice->recom_price * $totalNights) * $item['quantity']);
-                $hotelbook->pricenomarkup = $pricenomarkupint;
+                $hotelbook->rate_price = $contractprice->recom_price + $surcharge;
+                $hotelbook->total_ammount = ((($contractprice->recom_price + $surcharge) * $totalNights) * $item['quantity']);
+                $hotelbook->pricenomarkup = $pricenomarkupint + ($surcharge * $totalNights);
                 $hotelbook->save();
 
             }
@@ -286,6 +301,7 @@ class BookingController extends Controller
 
             $booking = Booking::find($request->idbooking);
             $booking->booking_status = 'proccessing';
+            $booking->is_see = 0;
             $booking->save();
 
             $userid = auth()->user()->id;
@@ -298,10 +314,11 @@ class BookingController extends Controller
             $trans->status = 400;
             $trans->payment_method = 'BANK-TRANSFER';
             $trans->trx_id = Str::random(5);
+            $trans->is_see = 0;
             $trans->save();
 
             $Setting = Setting::where('id',1)->first();
-            Mail::to($Setting->email)->send(new PaymentNotif($trans));
+            // Mail::to($Setting->email)->send(new PaymentNotif($trans));
             // Mail::to(auth()->user()->email)->send(new BookingConfirmation($data));
 
             return redirect()

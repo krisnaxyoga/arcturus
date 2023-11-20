@@ -18,8 +18,7 @@ use App\Mail\BookingConfirmationHotel;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
-
-class BookingController extends Controller
+class BookingAllController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,33 +33,26 @@ class BookingController extends Controller
             $setting = new Setting;
         }
 
-        $data = PaymentGetwayTransaction::where('payment_method', 'BANK-TRANSFER')->with('booking')->orderBy('created_at', 'desc')->get();
+        $data = Booking::with('users','vendor')->whereNotIn('booking_status', ['-', '','unpaid','cancelled'])->orderBy('created_at', 'desc')->get();
         // dd($data);
 
-        $isee = PaymentGetwayTransaction::where('payment_method', 'BANK-TRANSFER')->where('is_see',0)->get();
+        $isee = Booking::where('is_see',0)->get();
         foreach($isee as $show){
             $show->is_see = 1;
             $show->save();
         }
 
-        return view('admin.booking.index',compact('setting','data'));
+        return view('admin.booking.allbooking',compact('setting','data'));
     }
 
-    
-    /**
-     * Show the form for creating a new resource.
-     */
     public function confirmation($id)
     {
-        $payment = PaymentGetwayTransaction::find($id);
-        $payment->status = 200;
-        $payment->save();
 
-        $booking = Booking::find($payment->booking_id);
+        $booking = Booking::find($id);
         $booking->booking_status = 'paid';
         $booking->save();
 
-        $hotelbook = HotelRoomBooking::where('booking_id',$payment->booking_id)->get();
+        $hotelbook = HotelRoomBooking::where('booking_id',$id)->get();
 
             // foreach($hotelbook as $item){
             //     $room = RoomHotel::find($item->room_id);
@@ -68,7 +60,7 @@ class BookingController extends Controller
             //     $room->save();
             // }
 
-            $contract_id = HotelRoomBooking::where('booking_id',$payment->booking_id)->first();
+            $contract_id = HotelRoomBooking::where('booking_id',$id)->first();
             $contract = ContractRate::where('id',$contract_id->contract_id)->first();
             $agent = Vendor::where('user_id',$booking->user_id)->first();
 
@@ -91,15 +83,12 @@ class BookingController extends Controller
 
     public function sendconfirmationtoagent($id)
     {
-        $payment = PaymentGetwayTransaction::find($id);
-        $payment->status = 200;
-        $payment->save();
 
-        $booking = Booking::find($payment->booking_id);
+        $booking = Booking::find($id);
         $booking->booking_status = 'paid';
         $booking->save();
 
-        $hotelbook = HotelRoomBooking::where('booking_id',$payment->booking_id)->get();
+        $hotelbook = HotelRoomBooking::where('booking_id',$id)->get();
 
             // foreach($hotelbook as $item){
             //     $room = RoomHotel::find($item->room_id);
@@ -107,7 +96,7 @@ class BookingController extends Controller
             //     $room->save();
             // }
 
-            $contract_id = HotelRoomBooking::where('booking_id',$payment->booking_id)->first();
+            $contract_id = HotelRoomBooking::where('booking_id',$id)->first();
             $contract = ContractRate::where('id',$contract_id->contract_id)->first();
             $agent = Vendor::where('user_id',$booking->user_id)->first();
 
@@ -127,15 +116,15 @@ class BookingController extends Controller
 
     public function sendconfirmationtohotel($id)
     {
-        $payment = PaymentGetwayTransaction::find($id);
-        $payment->status = 200;
-        $payment->save();
+        // $payment = PaymentGetwayTransaction::find($id);
+        // $payment->status = 200;
+        // $payment->save();
 
-        $booking = Booking::find($payment->booking_id);
+        $booking = Booking::find($id);
         $booking->booking_status = 'paid';
         $booking->save();
 
-        $hotelbook = HotelRoomBooking::where('booking_id',$payment->booking_id)->get();
+        $hotelbook = HotelRoomBooking::where('booking_id',$id)->get();
 
             // foreach($hotelbook as $item){
             //     $room = RoomHotel::find($item->room_id);
@@ -143,7 +132,7 @@ class BookingController extends Controller
             //     $room->save();
             // }
 
-            $contract_id = HotelRoomBooking::where('booking_id',$payment->booking_id)->first();
+            $contract_id = HotelRoomBooking::where('booking_id',$id)->first();
             $contract = ContractRate::where('id',$contract_id->contract_id)->first();
             $agent = Vendor::where('user_id',$booking->user_id)->first();
 
@@ -162,19 +151,6 @@ class BookingController extends Controller
         Mail::to($booking->vendor->email)->send(new BookingConfirmationHotel($data));
 
         return redirect()->back()->with('message', 'Email send to agent and hotel');
-    }
-
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
     }
 
     /**

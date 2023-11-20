@@ -9,6 +9,7 @@ use App\Models\Vendor;
 use App\Models\Slider;
 use App\Models\User;
 use App\Models\PaymentGetwayTransaction;
+use App\Models\Booking;
 
 class ViewComposerServiceProvider extends ServiceProvider
 {
@@ -26,9 +27,10 @@ class ViewComposerServiceProvider extends ServiceProvider
     public function boot(): void
     {
         View::composer('layouts.admin', function ($view) {
-            $bookingconfirmation = PaymentGetwayTransaction::count();
-            
-            $view->with('bookingconfirmation', $bookingconfirmation);
+            $bookingconfirmation = PaymentGetwayTransaction::where('is_see',0)->where('payment_method','BANK-TRANSFER')->count();
+            $topupconfirmation = PaymentGetwayTransaction::where('is_see',0)->where('payment_method','BANK-TRANSFER-TOP-UP')->count();
+            $booking = Booking::where('is_see',0)->count();
+            $view->with('bookingconfirmation', $bookingconfirmation)->with('topupconfirmation',$topupconfirmation)->with('booking',$booking);
         });
 
         View::composer('layouts.landing', function ($view) {

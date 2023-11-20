@@ -33,6 +33,12 @@ class WalletController extends Controller
 
         $data = PaymentGetwayTransaction::where('payment_method','BANK-TRANSFER-TOP-UP')->orderBy('created_at', 'desc')->get();
 
+        $isee = PaymentGetwayTransaction::where('payment_method', 'BANK-TRANSFER-TOP-UP')->where('is_see',0)->get();
+        foreach($isee as $show){
+            $show->is_see = 1;
+            $show->save();
+        }
+
         return view('admin.wallet.index',compact('setting','data'));
     }
 

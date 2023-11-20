@@ -90,6 +90,7 @@ class AuthController extends Controller
             $data->role_id = 3;
             $data->departement = '-';
             $data->position = '-';
+            $data->is_see = 0;
             $data->save();
 
             // add new agents
@@ -147,6 +148,7 @@ class AuthController extends Controller
             $data->position = 'master';
             $data->title = Str::random(8);
             $data->role_id = 2;
+            $data->is_see = 0;
             $data->save();
 
             $member = new Vendor();
