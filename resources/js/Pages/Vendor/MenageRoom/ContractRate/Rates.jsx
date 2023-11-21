@@ -1,7 +1,7 @@
 import React,{ useState } from "react";
 import { Link } from "@inertiajs/inertia-react";
 
-export default function Rates({ rates }) {
+export default function Rates({ rates,toggleStatus }) {
     const formatDate = (dateString) => {
         const parts = dateString.split('-'); // Memecah tanggal berdasarkan tanda "-"
         if (parts.length === 3) {
@@ -11,31 +11,6 @@ export default function Rates({ rates }) {
         return dateString; // Kembalikan jika tidak dapat memproses tanggal
       };
 
-      const [updatedRates, setUpdatedRates] = useState(rates);
-
-        // Fungsi untuk mengubah status dan mengirim permintaan ke server
-        const toggleStatus = async (id, currentStatus) => {
-            try {
-                // Kirim permintaan ke server untuk mengubah status
-                const response = await fetch(`/room/contract/contractrate_is_active/${id}/${currentStatus == 1 ? 0 : 1}`, {
-                    method: 'GET', // Gantilah dengan metode HTTP yang sesuai
-                    // Tambahkan header jika diperlukan
-                });
-
-                if (response.ok) {
-                    // Jika berhasil, perbarui status secara lokal
-                    const updatedRatesCopy = [...updatedRates];
-                    const rateIndex = updatedRatesCopy.findIndex((rate) => rate.id == id);
-                    updatedRatesCopy[rateIndex].is_active = currentStatus == 1 ? 0 : 1;
-                    setUpdatedRates(updatedRatesCopy);
-                } else {
-                    // Handle kesalahan jika ada
-                    console.error('Gagal mengubah status.');
-                }
-            } catch (error) {
-                console.error('Terjadi kesalahan:', error);
-            }
-        };
 
     return (
         <tbody>

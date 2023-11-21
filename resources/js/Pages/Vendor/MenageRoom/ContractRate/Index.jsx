@@ -28,9 +28,13 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
     const [show, setShow] = useState(false);
     const [modalData, setModalData] = useState();
 
+    const [updatedRates, setUpdatedRates] = useState(data);
+
     function formatRupiah(amount) {
         return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount).slice(0, -3);
     }
+
+    
 
     useEffect(() => {
         // Anda dapat menambahkan logika tambahan jika diperlukan
@@ -195,7 +199,7 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
 
     const indexOfLastPost = currentPage * postsPerPage;
     const indexOfFirstPost = indexOfLastPost - postsPerPage;
-    const currentPosts = data.slice(indexOfFirstPost, indexOfLastPost);
+    const currentPosts = updatedRates.slice(indexOfFirstPost, indexOfLastPost);
 
     const paginate = pageNum => setCurrentPage(pageNum);
 
@@ -273,6 +277,35 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
         }
       }, [intro]);
 
+
+
+    //   const [updatedRates, setUpdatedRates] = useState(currentPosts);
+
+        // Fungsi untuk mengubah status dan mengirim permintaan ke server
+        const toggleStatus = async (id, currentStatus) => {
+            try {
+                // Kirim permintaan ke server untuk mengubah status
+                const response = await fetch(`/room/contract/contractrate_is_active/${id}/${currentStatus == 1 ? 0 : 1}`, {
+                    method: 'GET', // Gantilah dengan metode HTTP yang sesuai
+                    // Tambahkan header jika diperlukan
+                });
+
+                if (response.ok) {
+                    // Jika berhasil, perbarui status secara lokal
+                    const updatedRatesCopy = [...updatedRates];
+                    const rateIndex = updatedRatesCopy.findIndex((rate) => rate.id === id);
+                    updatedRatesCopy[rateIndex].is_active = currentStatus === 1 ? 0 : 1;
+                    setUpdatedRates(updatedRatesCopy);
+                    // setCurrentPage(1); // Set ke halaman pertama setelah perubahan rate
+                } else {
+                    // Handle kesalahan jika ada
+                    console.error('Gagal mengubah status.');
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        
     return (
         <>
         <Layout page={url} vendor={vendor}>
@@ -529,7 +562,7 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
                                             <th>action</th>
                                         </tr>
                                         </thead>
-                                        <Rates rates={currentPosts} />
+                                        <Rates rates={currentPosts} toggleStatus={toggleStatus}/>
                                     </table>
                                     <Pagination postsPerPage={postsPerPage} totalPosts={data.length} paginate={paginate} nextPage={nextPage} prevPage={prevPage} crntPage={currentPage}/>
                                 </div>

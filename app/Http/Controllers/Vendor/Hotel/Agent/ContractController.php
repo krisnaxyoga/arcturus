@@ -145,7 +145,8 @@ class ContractController extends Controller
                     // ";
                     $data->cencellation_policy = "<span>
                     <ul>
-                    <li>Rates are Non - refundable, changeable with New rate apply</li>
+                    <li>Non - refundable,</li>
+                    <li>7days prior to arrival, changeable within the same year with NEW rate apply</li>
                     </ul>
                     </span>
                     ";

@@ -71,27 +71,27 @@
                                 <tbody>
                                     @foreach ($data as $item)
                                         <tr>
-                                            <td>{{ $item->booking->vendor->vendor_name }}</td>
-                                            <td>{{ $item->booking->first_name }} {{ $item->booking->last_name }}</td>
-                                            <td>{{ date('d/m/Y', strtotime($item->booking->booking_date)) }}</td>
+                                            <td>{{ $item->vendor->vendor_name }}</td>
+                                            <td>{{ $item->first_name }} {{ $item->last_name }}</td>
+                                            <td>{{ date('d/m/Y', strtotime($item->booking_date)) }}</td>
                                             <td>{{ date('d/m/Y', strtotime($item->checkin_date)) }}</td>
                                             <td>{{ date('d/m/Y', strtotime($item->checkout_date)) }}</td>
-                                            <td>{{ $item->booking->total_guests }}</td>
+                                            <td>{{ $item->total_guests }}</td>
                                             <td>{{ $item->total_room }}</td>
-                                            <td>{{ $item->booking->night }}</td>
+                                            <td>{{ $item->night }}</td>
                                             <td>
-                                                {{ ($item->booking->pricenomarkup / $item->booking->night)/$item->booking->total_room }}
+                                                {{ ($item->pricenomarkup / $item->night)/$item->total_room }}
                                             </td>
-                                            <td> @if (is_null($item->total_ammount))
-                                                    {{ $item->booking->pricenomarkup }}
+                                            <td> @if (is_null($item->pricenomarkup))
+                                                    {{ $item->pricenomarkup }}
                                                 @else
-                                                    {{ $item->total_ammount }}
+                                                    {{ $item->pricenomarkup }}
                                                 @endif
                                             </td>
-                                            <td> @if (is_null($item->total_ammount))
-                                                {{ $item->booking->pricenomarkup * 0.025 }}
+                                            <td> @if (is_null($item->pricenomarkup))
+                                                {{ $item->pricenomarkup * 0.025 }}
                                             @else
-                                                {{ $item->total_ammount * 0.025 }}
+                                                {{ $item->pricenomarkup * 0.025 }}
                                             @endif
                                         </td>
                                            

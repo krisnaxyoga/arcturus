@@ -11,6 +11,9 @@ import { Inertia } from '@inertiajs/inertia';
 
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
+const decrypt = (encryptedValue) => {
+    return atob(encryptedValue);
+};
 
 export default function Index({ session,data,country,vendor,markup,banner,property }) {
 //  console.log(data,">>>>>>>data user");
@@ -44,6 +47,12 @@ export default function Index({ session,data,country,vendor,markup,banner,proper
  const [title,setTitle] = useState('');
  const [descbanner,setDescbanner] = useState('');
 
+    // Mendapatkan nilai 'encryptedPosition' dari localStorage
+    const encryptedPosition = localStorage.getItem('encryptedPosition');
+
+    // Mendekripsi nilai jika 'encryptedPosition' ada di localStorage
+    const position = decrypt(encryptedPosition);
+    // setPostionmaster(position);
 
         const handleFileChange = (e) => {
             const file = e.target.files[0];
@@ -364,18 +373,23 @@ export default function Index({ session,data,country,vendor,markup,banner,proper
                                                     </div> */}
                                                 </div>
                                             </div>
-                                            <div className="row">
-                                                <div className="col-lg-6">
-                                                        <div className="form-group">
-                                                            <label htmlFor="">Management code</label>
-                                                            <span className='d-flex'>
-                                                                <input  id="manageCodeInput" onChange={(e)=>setManageCode(e.target.value)} type="text" className='form-control' value={managementcode || data[0].users.title}/>
-                                                                <button onClick={handleCopyCode} className='btn btn-secondary' type='button'><i className='fa fa-copy'></i></button>
-                                                                <button onClick={generateRandomCode} className='btn btn-success' type='button' title='generate new management code'> <i className='fa fa-spinner'></i></button>
-                                                            </span>
-                                                        </div>
+                                            {(vendor.users.position == 'master' || position == 'master') && (
+                                                <>
+                                                <div className="row">
+                                                    <div className="col-lg-6">
+                                                            <div className="form-group">
+                                                                <label htmlFor="">Management code</label>
+                                                                <span className='d-flex'>
+                                                                    <input  id="manageCodeInput" onChange={(e)=>setManageCode(e.target.value)} type="text" className='form-control' value={managementcode || data[0].users.title}/>
+                                                                    <button onClick={handleCopyCode} className='btn btn-secondary' type='button'><i className='fa fa-copy'></i></button>
+                                                                    <button onClick={generateRandomCode} className='btn btn-success' type='button' title='generate new management code'> <i className='fa fa-spinner'></i></button>
+                                                                </span>
+                                                            </div>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                                </>
+                                            )}
+                                            
                                             <hr />
                                             <button type='submit' className='btn btn-primary'>
                                             <i className='fa fa-save'></i>

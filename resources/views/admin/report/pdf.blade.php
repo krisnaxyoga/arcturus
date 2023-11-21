@@ -260,8 +260,8 @@ background-color: #f7f7ff;
                                 <div class="row contacts justify-content-between">
                                     <div class="col-4 invoice-to">
                                         <h2 class="to">BILL TO:</h2>
-                                        <div class="text-gray-light">{{ $data[0]->booking->vendor->vendor_name }}</div>
-                                        <div class="address">{{ $data[0]->booking->vendor->address_line1 }}</div>
+                                        <div class="text-gray-light">{{ $data[0]->vendor->vendor_name }}</div>
+                                        <div class="address">{{ $data[0]->vendor->address_line1 }}</div>
                                         <div class="email">
                                         </div>
                                     </div>
@@ -278,7 +278,7 @@ background-color: #f7f7ff;
                                     foreach ($data as $item) {
                                         // Hitung komisi untuk setiap item
                                         $commision = is_null($item->total_ammount)
-                                            ? $item->booking->pricenomarkup * 0.025
+                                            ? $item->pricenomarkup * 0.025
                                             : $item->total_ammount * 0.025;
                                         
                                         $totalCommision += $commision; // Tambahkan komisi ke total
@@ -305,28 +305,28 @@ background-color: #f7f7ff;
                                     <tbody>
                                         @foreach ($data as $item)
                                         <tr>
-                                            {{-- <td>{{ $item->booking->vendor->vendor_name }}</td> --}}
+                                            {{-- <td>{{ $item->vendor->vendor_name }}</td> --}}
                                           
-                                            <td>  {{ $item->booking->first_name }} {{ $item->booking->last_name }}
+                                            <td>  {{ $item->first_name }} {{ $item->last_name }}
                                             </td>
-                                            <td>{{ date('d/m/Y', strtotime($item->booking->booking_date)) }}</td>
+                                            <td>{{ date('d/m/Y', strtotime($item->booking_date)) }}</td>
                                             <td>{{ date('d/m/Y', strtotime($item->checkin_date)) }}</td>
                                             <td>{{ date('d/m/Y', strtotime($item->checkout_date)) }}</td>
-                                            <td>{{ $item->booking->total_guests }}</td>
+                                            <td>{{ $item->total_guests }}</td>
                                             <td>{{ $item->total_room }}</td>
-                                            <td>{{ $item->booking->night }}</td>
-                                            <td>Rp. {{ number_format((($item->booking->pricenomarkup / $item->booking->night) / $item->booking->total_room) ?? '0', 0, ',', '.') }}</td>
+                                            <td>{{ $item->night }}</td>
+                                            <td>Rp. {{ number_format((($item->pricenomarkup / $item->night) / $item->total_room) ?? '0', 0, ',', '.') }}</td>
                                             <td> @if (is_null($item->total_ammount))
-                                                    Rp. {{ number_format($item->booking->pricenomarkup ?? '0', 0, ',', '.')  }}
+                                                    Rp. {{ number_format($item->pricenomarkup ?? '0', 0, ',', '.')  }}
                                                 @else
                                                     Rp. {{ number_format($item->total_ammount ?? '0', 0, ',', '.')  }}
                                                 @endif
                                             </td>
                                             <td> 
                                                 @if (is_null($item->total_ammount))
-                                                Rp. {{ number_format(($item->booking->pricenomarkup * 0.025) ?? '0', 0, ',', '.') }}
+                                                Rp. {{ number_format(($item->pricenomarkup * 0.025) ?? '0', 0, ',', '.') }}
                                                 @else
-                                                Rp. {{ number_format(($item->total_ammount * 0.025) ?? '0', 0, ',', '.') }}
+                                                Rp. {{ number_format(($item->pricenomarkup * 0.025) ?? '0', 0, ',', '.') }}
                                                 @endif
                                             </td>
                                            

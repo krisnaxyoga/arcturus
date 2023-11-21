@@ -320,6 +320,7 @@
                                                                                             //filter yang berfungsi untuk calendar rate
                                                                                             if($startDate < $checkoutDate && $endDate >= $checkinDate && $startDate == $endDate)
                                                                                             {
+                                                                                                $ratecalender = $calendar->recom_price;
                                                                                                 $totalx += $calendar->recom_price;
                                                                                                 $totalDataCount++;
 
@@ -379,8 +380,6 @@
                                                                                     $countNights = $totalNights - $totalDataCount;
                                                                                     $TotalHotelCalendar = ($totalx + ($itemprice->recom_price * $countNights)) / $totalNights;
                                                                                 }
-
-
                                                                                 if($room_allowx != 0){
                                                                                     $room_allow = $room_allowx;
                                                                                 }
@@ -403,7 +402,6 @@
                                                                             if($vendoridx == $item->contractrate->vendors->id){
                                                                                 $surchargepricetotalx = $totalsurchargex/$totalNights;
                                                                             }
-                                                                        
 
                                                                             // $Room_recomprice = ($TotalHotelCalendar <= 0) ? $itemprice->recom_price : $TotalHotelCalendar;
                                                                             if ($TotalHotelCalendar <= 0) {
@@ -412,7 +410,6 @@
                                                                                 if ($itemprice->recom_price == $TotalHotelCalendar) {
                                                                                     if($itemprice->contractrate->rolerate == 2){
                                                                                         $Room_recomprice = $totalpricecalendar * ((100 - $itemprice->contractrate->percentage)/100);
-
                                                                                     }else{
                                                                                         if($totalpricecalendar == 0){
                                                                                             $Room_recomprice = $TotalHotelCalendar;
@@ -423,11 +420,10 @@
 
                                                                                     // $Room_recomprice = $totalpricecalendar;
                                                                                 } else {
-                                                                                    if($itemprice->contractrate->rolerate == 2){
+                                                                                    if($itemprice->contractrate->rolerate == 2 && $item->recom_price != $ratecalender){
                                                                                         $Room_recomprice = $TotalHotelCalendar * ((100 - $itemprice->contractrate->percentage)/100);
                                                                                     }else{
-                                                                                        $Room_recomprice = $TotalHotelCalendar;
-
+                                                                                        $Room_recomprice = $itemprice->recom_price;
                                                                                     }
                                                                                     // $Room_recomprice = $TotalHotelCalendar;
                                                                                 }
@@ -481,7 +477,6 @@
                                                                             if ($Room_recomprice) {
                                                                                     $price = $Room_recomprice;
                                                                             }
-
                                                                             if ($advancepurchase->count() > 0) {
                                                                                 foreach ($advancepurchase as $advancevalue) {
                                                                                     if ($advancevalue->contract_id == $itemprice->contract_id && $advancevalue->room_id == $itemprice->room_id && $advancevalue->room_id == $item->room->id) {
