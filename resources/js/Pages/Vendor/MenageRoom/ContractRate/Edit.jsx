@@ -391,11 +391,17 @@ const handlePercentageAdv = (e,itemId) => {
         };
         const toggleStatusAdvmaster = async (id, currentStatus) => {
             try {
+                const scrollPosition = window.scrollY;
+                setIsLoading(true);
+
                 // Kirim permintaan ke server untuk mengubah status
                 const response = await fetch(`/advance/updateadvancetstatus/${id}/${currentStatus == 2 ? 1 : 2}`, {
                 method: 'GET',
                 // Tambahkan header jika diperlukan
                 });
+                setIsLoading(false);
+                 // Atur kembali posisi scroll setelah perubahan
+                window.scrollTo({ top: scrollPosition, behavior: 'auto' });
 
                 if (response.ok) {
                 // Simpan ID yang sedang aktif

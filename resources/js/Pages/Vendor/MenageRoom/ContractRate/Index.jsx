@@ -284,13 +284,21 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
         // Fungsi untuk mengubah status dan mengirim permintaan ke server
         const toggleStatus = async (id, currentStatus) => {
             try {
+                const scrollPosition = window.scrollY;
+                setIsLoading(true);
                 // Kirim permintaan ke server untuk mengubah status
                 const response = await fetch(`/room/contract/contractrate_is_active/${id}/${currentStatus == 1 ? 0 : 1}`, {
                     method: 'GET', // Gantilah dengan metode HTTP yang sesuai
                     // Tambahkan header jika diperlukan
+                    
                 });
+                setIsLoading(false);
+                 // Atur kembali posisi scroll setelah perubahan
+                window.scrollTo({ top: scrollPosition, behavior: 'auto' });
+
 
                 if (response.ok) {
+                   
                     // Jika berhasil, perbarui status secara lokal
                     const updatedRatesCopy = [...updatedRates];
                     const rateIndex = updatedRatesCopy.findIndex((rate) => rate.id === id);

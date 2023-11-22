@@ -17,6 +17,8 @@ export default function Index({ errors, session,contractrate, default_selected_h
     const { url } = usePage();
 
     const [loadDates, setLoadDates] = useState([])
+    
+    const [isLoading, setIsLoading] = useState(true);
     const [showModel, setShowModal] = useState(false)
     const [activeHotelRoom, setActiveHotelRoom] = useState(default_selected_hotel_room.room_id)
     const [activeContractRoom, setActiveContractRoom] = useState(default_selected_hotel_room.contract_id)
@@ -96,6 +98,17 @@ export default function Index({ errors, session,contractrate, default_selected_h
         setPrice(0)
         setShowModal(false)
     }
+    useEffect(() => {
+        // Anda dapat menambahkan logika tambahan jika diperlukan
+        // Contoh: Memuat data dari server
+
+        // Misalnya, ini adalah simulasi pengambilan data yang memakan waktu
+        setTimeout(() => {
+            setIsLoading(false); // Langkah 2: Setel isLoading menjadi false setelah halaman selesai dimuat
+        }, 900); // Menggunakan setTimeout untuk simulasi saja (2 detik).
+
+        // Jika Anda ingin melakukan pengambilan data dari server, Anda dapat melakukannya di sini dan kemudian mengatur isLoading menjadi false setelah data berhasil dimuat.
+    }, []); // Kosongkan array dependencies untuk menjalankan efek ini hanya sekali saat komponen dimuat.
 
     useEffect(() => {
         // Fungsi yang ingin Anda jalankan saat halaman di-reload
@@ -189,11 +202,44 @@ export default function Index({ errors, session,contractrate, default_selected_h
             }
         })
     }
+      
+      // Di bagian yang melakukan navigasi
+      const handleLinkClick = async (vendorId) => {
+        try {
+          // Lakukan permintaan jaringan dengan fetch
+          const response = await fetch(`/room/surcharge/destroy/${vendorId}/${activeHotelRoom}/${startDate}`, {
+            method: 'GET',
+            // Tambahkan header jika diperlukan
+          });
+         
+          // Lakukan sesuatu dengan respons jika diperlukan
+          if (response.ok) {
+            handleNavRoomTypeSelect(activeHotelRoom);
+            handleCloseModal()
+          } else {
+            // Handle kesalahan jika respons tidak OK
+            console.error('Gagal melakukan permintaan.');
+          }
+      
+        } catch (error) {
+          console.error(error);
+        }
+      };
 
     return (
         <>
             <Layout page={url} vendor={vendor}>
-                <div className="container">
+            {isLoading ? (
+                                    <div className="container">
+                                        <div className="loading-container">
+                                            <div className="loading-spinner"></div>
+                                            <div className="loading-text">Loading...</div>
+                                        </div>
+                                    </div>// Langkah 3: Tampilkan pesan "Loading..." saat isLoading true
+                                ) : (
+                                    // Tampilan halaman Anda yang sebenarnya
+                                    <>
+                                     <div className="container">
                     {alert.show && (
                         <Alert variant={alert.type} onClose={() => setShowAlert(false)} dismissible>
                             {alert.message}
@@ -242,15 +288,15 @@ export default function Index({ errors, session,contractrate, default_selected_h
                                    <Link href='/room/surcharge/surchargeallroom' className='btn btn-primary'>Surcharge</Link>
                                 </div>
                                 <div className="col-md-9" style={{ background: "white", padding: "15px"}}>
-                                    <FullCalendar
-                                        plugins={[ dayGridPlugin ]}
-                                        initialView="dayGridMonth"
-                                        datesSet={handleDatesRender}
-                                        events={loadDates}
-                                        eventClick={handleOpenModal}
-                                        // rerenderDelay={1000} // Sesuaikan waktu penundaan sesuai kebutuhan Anda
+                                   <FullCalendar
+                                            plugins={[ dayGridPlugin ]}
+                                            initialView="dayGridMonth"
+                                            datesSet={handleDatesRender}
+                                            events={loadDates}
+                                            eventClick={handleOpenModal}
+                                            // rerenderDelay={1000} // Sesuaikan waktu penundaan sesuai kebutuhan Anda
 
-                                    />
+                                        />
                                 </div>
                             </div>
                         </div>
@@ -262,7 +308,14 @@ export default function Index({ errors, session,contractrate, default_selected_h
                         <Modal.Title>
                             Surcharge Hotel Room
                         </Modal.Title>
-                        <Link href={`/room/surcharge/destroy/${vendor.id}/${activeHotelRoom}/${startDate}`} className='btn btn-datatable btn-icon btn-transparent-dark mr-2'>
+                        <Link
+                        href="#"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            handleLinkClick(vendor.id); 
+                        }}
+                        className='btn btn-datatable btn-icon btn-transparent-dark mr-2'
+                        >
                         <svg
                                     xmlns="http://www.w3.org/1000/svg"
                                     width="24"
@@ -361,6 +414,9 @@ export default function Index({ errors, session,contractrate, default_selected_h
                         </div>
                     </Modal.Body>
                 </Modal>
+                                    </>
+                                )}
+                
             </Layout>
         </>
     )

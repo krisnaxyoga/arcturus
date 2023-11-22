@@ -168,8 +168,8 @@ export default function Index({ totalroom,income,vendor,success,pending,data,wid
                 </div>
               </div>
               <div className="row">
-                <div className="col-lg-8">
-                  <div className="card">
+                <div className="col-lg-12">
+                  <div className="card mb-5">
                     <div className="card-header">
                       <h2>Booking</h2>
                     </div>
