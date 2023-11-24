@@ -104,10 +104,10 @@
                                     <li>Take a clear photo of the transfer receipt.</li>
                                     <li>Upload the photo of the transfer receipt to the Arcturus system through the Arcturus
                                         website or app.</li>
-                                    <li>Wait for verification from the Arcturus admin for 1 x 24 hours or contact WA admin.</li>
+                                    <li>Verify by ADMIN maximum up to 3 hours depending on transaction traffic or contact WA admin for immediately respond</li>
                                 </ol>
     
-                                <p>The Arcturus admin will verify your transfer receipt for 1 x 24 hours.</p>
+                                <p>The Arcturus admin will verify your transfer receipt in less then 15 minutes.</p>
                             </div>
                         </div>
                     </div>
@@ -121,7 +121,7 @@
                                 @method('POST')
 
                                 <div class="mb-3">
-                                    <label for="image">Upload bank transfer</label>
+                                    <label for="image">Upload bank transfer receipt</label>
                                     <input id="image-input" type="file" name="image" class="form-control">
                                     @error('image')
                                         <p style="font-weight: 700; font-size: 13px;" class="text-danger">{{ $message }}

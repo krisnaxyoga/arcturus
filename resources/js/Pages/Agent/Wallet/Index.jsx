@@ -169,9 +169,12 @@ export default function Index({ props, session, agent,history,setting }) {
                                             <input required type="number" className='form-control' onChange={(e)=>setTopup(e.target.value)} placeholder='total top up...'/>
                                         </div>
                                         <div className="form-group mb-3">
-                                            <input type="file" onChange={handleTransfer} className='form-control' required/>
+                                        <label for="image">Upload bank transfer receipt</label>
+                                            <input type="file" onChange={handleTransfer} className='form-control' required/> 
+                                            <p className="text-danger" style={{fontWeight: '700', fontSize: '13px'}}>The image must be in
+                                        PNG, JPG, or JPEG format, The image size cannot exceed 2MB.</p>
                                         </div>
-                                        
+                                       
                                         <div className="form-group">
                                         {selectedImage && (
                                                                     <div className="mb-3">
@@ -189,6 +192,19 @@ export default function Index({ props, session, agent,history,setting }) {
                                     </form>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-lg-6">
+                    <div className="card mb-5">
+                        <div className="card-header">
+                            Manual Transfer to BCA
+                        </div>
+                        <div className="card-body">
+                            <ol>
+                                <li> verify by ADMIN maximum up to 3 hours depending on transaction traffic or contact WA admin for immediately respond</li>
+                                <li>ADMIN verification when we do TOP UP and IF your saldo is still available for the next transaction, no more ADMIN verification needed</li>
+                            </ol>
                         </div>
                     </div>
                 </div>
