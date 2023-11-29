@@ -972,6 +972,9 @@ const handlePercentageAdv = (e,itemId) => {
                                                         <div className="mb-3 ml-2 text-right">
                                                             <a href="#" onClick={() => buttonSendValueTable()} className='btn btn-success'><i className='fa fa-plus'></i>add price</a>
                                                         </div>
+                                                        <div className="ml-2 mb-3">
+                                                        <Link href={`/room/contract/blackoutcontract/${contract.id}`} className='btn btn-secondary'>Blackout</Link>
+                                                        </div>
                                                         </div>
 
                                                         {/* <Link href={`/room/promo/index/${contract.id}`} className='btn btn-warning'>Promo Price</Link> */}

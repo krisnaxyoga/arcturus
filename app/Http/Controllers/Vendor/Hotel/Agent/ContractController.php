@@ -14,9 +14,12 @@ use App\Models\ContractRate;
 use App\Models\ContractPrice;
 use App\Models\AdvancePurchase;
 use App\Models\AdvancePurchasePrice;
+use App\Models\BlackoutContractRate;
+use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Response;
+use Illuminate\Support\Facades\Auth;
 
 class ContractController extends Controller
 {
@@ -930,4 +933,92 @@ class ContractController extends Controller
         return redirect()->back()->with('success', 'contract rate update status');
     }
 
+    // ========================================================== BLACKOUTDATE ===========================================================//
+
+    public function blackoutcontract($contid){
+        $userid = auth()->user()->id;
+        $vendor = Vendor::where('user_id',$userid)->with('users')->first();
+
+        $today = Carbon::now();
+        $tomorrow = $today->addDay();
+
+        $currentDate = now(); // Mendapatkan tanggal saat ini
+
+        $data = BlackoutContractRate::where('user_id', $userid)
+        ->where('stayperiod_end', '<', $today)
+        ->delete();
+
+        $data = BlackoutContractRate::where('user_id', $userid)
+        ->where('contract_id',$contid)
+        ->select('code', 'stayperiod_start', 'stayperiod_end')
+        ->groupBy('code', 'stayperiod_start', 'stayperiod_end')
+        ->orderBy('stayperiod_start', 'asc')
+        ->get();
+
+        return inertia('Vendor/MenageRoom/ContractRate/Blackoutdate/Index',[
+            'data'=>$data,
+            'vendor'=>$vendor,
+            'contractid'=>$contid
+        ]);
+    }
+
+    public function blackoutcontractstore(Request $request)
+    {
+        $request->validate([
+            'start_date' => 'required',
+            'end_date' => 'required',
+            'contractid' => 'required',
+        ]);
+
+        $userid = Auth::id();
+
+        $vendor = Vendor::query()->where('user_id', $userid)->with('users')->first();
+        $code = Str::random(8);
+        $start_date = date('Y-m-d', strtotime($request->start_date));
+        $end_date = date('Y-m-d', strtotime($request->end_date));
+
+        $current_date = $start_date;
+
+        while ($current_date <= $end_date) {
+            $hotel_blackoutdate = BlackoutContractRate::query()
+                ->where('vendor_id', $vendor->id)
+                ->where('start_date', $current_date)
+                ->where('contract_id', $request->contractid)
+                ->first();
+
+            if (! $hotel_blackoutdate) {
+                $hotel_blackoutdate = new BlackoutContractRate();
+            }
+            
+            $hotel_blackoutdate->user_id = $userid;
+            $hotel_blackoutdate->vendor_id = $vendor->id;
+            $hotel_blackoutdate->contract_id = $request->contractid;
+            $hotel_blackoutdate->stayperiod_start = $request->start_date;
+            $hotel_blackoutdate->stayperiod_end = $request->end_date;
+            $hotel_blackoutdate->start_date = $current_date;
+            $hotel_blackoutdate->end_date = $current_date; // End date is the same as start date for daily entries
+            $hotel_blackoutdate->status = 1;
+            $hotel_blackoutdate->code = $code;
+    
+            $hotel_blackoutdate->save();
+
+            $current_date = date('Y-m-d', strtotime($current_date . ' +1 day')); // Move to the next day
+        }
+
+        
+        return redirect()->back()->with('success', 'Data Saved!');
+    }
+
+    public function blackoutdestroy($code)
+    {
+        $hotel_blackout = BlackoutContractRate::query()
+            ->where('code', $code)
+            ->get();
+        foreach ($hotel_blackout as $item){
+            $item->delete();
+        }
+       
+
+        return redirect()->back()->with('success', 'blackout deleted');
+    }
 }

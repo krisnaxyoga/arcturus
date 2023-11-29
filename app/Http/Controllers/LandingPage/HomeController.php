@@ -17,6 +17,7 @@ use App\Models\HotelRoomSurcharge;
 use App\Models\AdvancePurchase;
 use App\Models\AdvancePurchasePrice;
 use App\Models\SurchargeAllRoom;
+use App\Models\BlackoutContractRate;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use GuzzleHttp\Client; // Anda perlu menginstal Guzzle HTTP client untuk ini
@@ -487,7 +488,11 @@ class HomeController extends Controller
                 ->where('end_date', '<=', Carbon::parse($checkout)->subDay())
                 ->get();
 
-                // dd($checkin);
+                $blackoutdate = BlackoutContractRate::where('start_date', '>=', $checkin)
+                ->where('end_date', '<=', Carbon::parse($checkout)->subDay())
+                ->get();
+
+                // dd($blackoutdate);
                 $interval = $today->diffInDays($checkin);
                 $day = $interval + 1;
                 // dd($day);
@@ -516,7 +521,22 @@ class HomeController extends Controller
             // dd($contractprice);
             // return view('landingpage.hotel.detail',compact('data','roomtype','service','vendordetail','datareq','surcharprice','surchargesVendorIds','blackoutVendorIds'));
 
-            return view('landingpage.hotel.detail', compact('data','HotelCalendar','advancepurchase', 'slider', 'Nights', 'roomtype', 'service', 'vendordetail', 'datareq', 'contractprice','HotelRoomBooking','surchargeAllRoom'));
+            return view('landingpage.hotel.detail', 
+            compact(
+                'data',
+                'HotelCalendar',
+                'advancepurchase', 
+                'slider', 
+                'Nights', 
+                'roomtype', 
+                'service', 
+                'vendordetail', 
+                'datareq', 
+                'contractprice',
+                'HotelRoomBooking',
+                'surchargeAllRoom',
+                'blackoutdate'
+            ));
         }
     }
     

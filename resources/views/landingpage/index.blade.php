@@ -168,6 +168,7 @@
     @endif
 
     <section class="ftco-section services-section">
+        
         <div class="container">
             <div class="row d-flex justify-content-center mb-4">
                 <div
@@ -192,17 +193,132 @@
                     class="col-md-4 ftco-animate">
                     <div class="card shadow border-0 mb-3 " style="border-radius: 20px;">
                         <div class="card-body">
-                            <h5 class="text-center text-secondary font-weight-bold"><i class="fa fa-question-circle-o"></i> Others</h5>
-                            <h3 class="text-center text-secondary font-weight-bold">0</h3>
+                            <h5 class="text-center text-secondary font-weight-bold"><i class="fa fa-car"></i> Transport</h5>
+                            <h3 class="text-center text-secondary font-weight-bold">2</h3>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="container">
+            <div class="row d-flex mb-5">
+                <div class="col-md-12 order-md-last heading-section pl-md-5 ftco-animate d-flex align-items-center">
+                    <div class="w-100">
+                         {{-- <span class="subheading">Welcome to Arcturus</span> --}}
+                         <h2 class="subheading mb-4">Welcome to Arcturus</h2>
+                         <p>ARCTURUS is a growing online travel marketplace that connects retailer agents with travel service
+                             providers, especially hotels, boats, and tour operators. With one-time registration, ARCTURUS
+                             helps retailer agents get access to the hotel’s dynamic rates and other special offers provided
+                             by travel service providers. On the other hand, hotels and travel service providers can
+                             efficiently reach and target their promotions directly to hundreds of retailer agents. </p>
+                         <p>Our mission is to make it easier for retailer agents and hotels including travel services
+                             providers to collaborate and support one another. The platform is built to enable properties
+                             around the world to reach a global audience and grow their businesses by offering travellers an
+                             extensive selection of hotels and activities at competitive rates.
+                         </p>
+                    </div>
+                </div>
+            </div>
+            <h3 class="text-center mb-3 text-secondary font-weight-bold">How Rates Distributed</h3>
+            <div class="row mb-3 justify-content-center">
+                <div class="col-lg-4 mb-3 col-md-6">
+                    <div class="cardx">
+                        <p class="cardx-title text-center"> Hotel </p>
+                        <div class="cardx-body">
+                           <ul>
+                            <li>Update Best AVAILABLE (BAR) in the system to make sure contract rate given is lower than website rates</li>
+                            <li>provide contract rate for Arcturus with min 15% OFF BAR</li>
+                            <li>provide monthly special offer or flash deal if available</li>
+                           </ul>
+                        </div>
+                      </div>
+                </div>
+                <div class="col-lg-4 mb-3 col-md-6">
+                    <div class="cardx">
+                        <p class="cardx-title text-center">Arcturus</p>
+                        <div class="cardx-body">
+                          <ul>
+                            <li>Arcturus will upload all rates with guarantee allotment minimum 1 room to be able displayed in Arcturus system</li>
+                                
+                                <li>To keep the rate COMPETITIVE with other channels, Arcturus only allows bank transfer due to if we allow credit card
+                                or others, we have to pay bank fee about 2,5% from the total transaction which will be added on the top of rate
+                                and automatically the rate become higher, no longer competitive and less profit for retail agent</li>
+                          </ul>
+                        </div>
+                      </div>
+                </div>
+                <div class="col-lg-4 mb-3 col-md-6">
+                    <div class="cardx">
+                        <p class="cardx-title text-center">Retail Agent</p>
+                        <div class="cardx-body">
+                         <ul>
+                            <li>JUST register in ARCTURUS then all will be displayed in your screen and ready to sell to your guests </li>
+
+                                <li>Bank transfer need to verify by ADMIN maximum up to 3 hours depending on transaction traffic</li>
+                                
+                              <li>other payment option is E-WALLET, only need ADMIN verification when we do TOP UP and if your saldo 
+                                is still available for the next transaction, no more ADMIN verification needed</li>
+                         </ul>
+                        </div>
+                      </div>
+                </div>
+            </div>
+            <h3 class="text-center mb-3 text-secondary font-weight-bold">Benefits For</h3>
+            <div class="row justify-content-center mb-5">
+                <div class="col-lg-4 mb-3 col-md-6">
+                    <div class="cardx">
+                        <p class="cardx-title text-center">Hotel</p>
+                        <div class="cardx-body">
+                          <ul>
+                            <li>Generated more hotel revenue due to hotel only pay 2.5% commission to system 
+                                instead have to pay 25% up to 30% to others.</li>
+                                  
+                               <li> No risk since hotel will receives full payment upon bookings received.</li>
+                          </ul>
+                        </div>
+                      </div>
+                </div>
+                <div class="col-lg-4 mb-3 col-md-6">
+                    <div class="cardx">
+                        <p class="cardx-title text-center">Arcturus</p>
+                        <div class="cardx-body">
+                         <ul>
+                            <li>Arcturus will offers FREE registration for first 500 Indonesian agents and 500 Overseas agents 
+                                afterward agent has to pay annual fee but for those first 1000 agents will be free forever</li>
+                         </ul>
+                        </div>
+                      </div>
+                </div>
+                <div class="col-lg-4 mb-3 col-md-6">
+                    <div class="cardx">
+                        <p class="cardx-title text-center">Retail Agent</p>
+                        <div class="cardx-body">
+                            <ul>
+                                <li>Automatically able to access ALL rates in Arcturus system without contacting any hotel sales to get 
+                                    rate and room availability</li>
+                                <li>Instant confirmation will be received with Agent logo and Hotel logo. print directly 
+                                    from system or download and send via email to your guests</li>
+                            </ul>
+                        </div>
+                      </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <p class="text-center"> For more information, please visit our instagram</p> <br>
+            </div>
+            <div class="row justify-content-center">
+                <a href="https://www.instagram.com/arcturus.my.id?=NzZIODBkYWE4Ng==" target="_blank" class="instagram-button Btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 448 512" class="svgIcon"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"></path></svg>
+                  <span class="text-secondary font-weight-bold">@arcturus.my.id</span>
+                </a>
+            </div>
+        </div>
+             {{--
             <div class="row d-flex mb-5">
                 <div class="col-md-12 order-md-last heading-section pl-md-5 ftco-animate d-flex align-items-center">
                     <div class="w-100">
                         {{-- <span class="subheading">Welcome to Arcturus</span> --}}
-                        <h2 class="subheading mb-4">Welcome to Arcturus</h2>
+                        {{-- <h2 class="subheading mb-4">Welcome to Arcturus</h2>
                         <p>ARCTURUS is a growing online travel marketplace that connects retailer agents with travel service
                             providers, especially hotels, boats, and tour operators. With one-time registration, ARCTURUS
                             helps retailer agents get access to the hotel’s dynamic rates and other special offers provided
@@ -225,9 +341,9 @@
                             <li>Hotels can focus their promotion based on their target location. It will only be shown,
                                 distributed, and visible to your target market.</li>
                             <li>Hotels will receive promo recommendations based on their target market and statistics.</li>
-                            <li>Full payment will be received 1x24 hours after the booking is confirmed.</li>
+                            <li>Full payment will be received 1x24 hours after the booking is confirmed.</li> --}}
                             {{-- <li>Lower commission fee than other OTAs. Only 2,5%- 5%.</li> --}}
-                        </ul>
+                        {{-- </ul>
                         <h4>Benefits for travel agents</h4>
                         <ul>
                             <li>FREE to join & FREE of charge.</li>
@@ -242,7 +358,7 @@
 
             </div>
            
-        </div>
+        </div> --}} 
     </section>
     {{--
     <section class="ftco-section img ftco-select-destination"
@@ -697,9 +813,9 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12 text-center">
-                <div class="img" style="background-image: url(/landing/travel/images/bg_2.jpg);">
+                <div class="img" style="background-image: url(/landing/travel/images/bg_2.jpg); border-radius: 29px">
                     <div class="overlay"></div>
-                    <h2>Vibes Hospitality</h2>
+                    <h2 style="text-transform: none;">ViBES HOSPITALITY</h2>
                     <!--<p>We can manage your dream building A small river named Duden flows by their place</p>-->
                     <!--<p class="mb-0"><a href="#" class="btn btn-primary px-4 py-3">Ask For A Quote</a></p>-->
                 </div>

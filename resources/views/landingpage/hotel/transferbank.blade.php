@@ -84,27 +84,26 @@
                             <div class="collapse show" id="collapseExample">
                                 <p>Here are the steps on how to manually transfer money to a BCA bank account with the account
                                     number <b>2027999995</b> :</p>
-    
-                             
-    
                                 <p>
     
                                 <ul>
                                     <li>
                                         <p>use ATM/e-Banking/mBanking/cash deposit to transfer to ARCTURUS account</p>
                                     </li>
-                                    
-                                   
                                 </ul>
     
-                                <p>After receiving the transfer receipt, you can follow these steps to upload the transfer
-                                    receipt to the Arcturus system:</p>
+                                <p>
+                                    After receiving the transfer receipt, you can follow these steps to upload the transfer
+                                    receipt to the Arcturus system:
+                                </p>
     
                                 <ol>
                                     <li>Take a clear photo of the transfer receipt.</li>
                                     <li>Upload the photo of the transfer receipt to the Arcturus system through the Arcturus
                                         website or app.</li>
-                                    <li>Verify by ADMIN maximum up to 3 hours depending on transaction traffic or contact WA admin for immediately respond</li>
+                                    <li>
+                                        Verify by ADMIN maximum up to 3 hours depending on transaction traffic or contact WA admin for immediately respond
+                                    </li>
                                 </ol>
     
                                 <p>The Arcturus admin will verify your transfer receipt in less then 15 minutes.</p>

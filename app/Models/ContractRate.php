@@ -37,4 +37,8 @@ class ContractRate extends Model
     public function advancepurchase() {
         return $this->hasMany(AdvancePurchase::class);
     }
+
+    public function blackoutContractRate() {
+        return $this->hasMany(BlackoutContractRate::class);
+    }
 }

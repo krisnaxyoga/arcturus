@@ -1,24 +1,19 @@
+import React, { useState }  from 'react'
 //import React
-import React, { useState } from "react";
-
+import { useEffect } from "react";
 //import layout
-import Layout from "../../../../Layouts/Vendor";
+import Layout from '../../../../../Layouts/Vendor';
 
-//import Link
-import { Link, usePage } from "@inertiajs/inertia-react";
+import { Link, usePage } from '@inertiajs/inertia-react';
+
 import { Inertia } from "@inertiajs/inertia";
 
-export default function SurchargeAllRoom({ session, vendor, surchargeallroom }) {
+function Index({vendor,data,session,contractid}) {
     const { url } = usePage();
+
     const [startdate, setStartDate] = useState('');
     const [enddate, setEndDate] = useState('');
-    const [surchargeprice, setSurcharge] = useState('');
     const [editData, setEditData] = useState(null); // Menyimpan data yang akan diedit
- 
-
-    function formatRupiah(amount) {
-        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount).slice(0, -3);
-      }
 
     const formatDate = (dateString) => {
         const parts = dateString.split('-'); // Memecah tanggal berdasarkan tanda "-"
@@ -43,8 +38,8 @@ export default function SurchargeAllRoom({ session, vendor, surchargeallroom }) 
         const formData = new FormData();
         formData.append('start_date', startdate);
         formData.append('end_date', enddate);
-        formData.append('surchargeprice', surchargeprice);
-        Inertia.post('/room/surcharge/surchargeallroomstore', formData, {
+        formData.append('contractid', contractid);
+        Inertia.post('/room/contract/blackoutcontractstore', formData, {
             onSuccess: () => {
                 // Lakukan aksi setelah gambar berhasil diunggah
                 window.location.reload();
@@ -52,7 +47,7 @@ export default function SurchargeAllRoom({ session, vendor, surchargeallroom }) 
         });
     }
 
-    const handleStartDateChange = (e) => {
+      const handleStartDateChange = (e) => {
         const newStartDate = e.target.value;
         setStartDate(newStartDate);
     
@@ -78,16 +73,15 @@ export default function SurchargeAllRoom({ session, vendor, surchargeallroom }) 
         setEndDate(formattedEndDate);
       };
 
-    return (
-        <>
-            <Layout page={`/room/surcharge/index`} vendor={vendor}>
-                <div className="container">
+  return (
+    <Layout page={`/room/contract/index`} vendor={vendor}>
+         <div className="container">
                 {session.success && (
                         <div className={`alert ${session.success === 'Data saved!' ? 'alert-danger' : 'alert-success'} border-0 shadow-sm rounded-3`}>
                         {session.success}
                     </div>
                 )}
-                    <h1>Surcharge Rate</h1>
+                    <h1>Blackout Date</h1>
                     <div className="row">
                         <div className="col-lg-6">
                             <div className="card mb-3">
@@ -121,14 +115,6 @@ export default function SurchargeAllRoom({ session, vendor, surchargeallroom }) 
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="row">
-                                            <div className="col">
-                                                <div className="mb-3 form-group">
-                                                    <label htmlFor="">Surcharge</label>
-                                                    <input type="number" className="form-control" defaultValue={surchargeprice} onChange={(e) =>setSurcharge(e.target.value)}/>
-                                                </div>
-                                            </div>
-                                        </div>
                                         <div className="row justify-content-between">
                                             <div className="col">
                                                 <div className="mb-3">
@@ -137,7 +123,7 @@ export default function SurchargeAllRoom({ session, vendor, surchargeallroom }) 
                                             </div>
                                             <div className="col">
                                                 <div className="mb-3  d-flex justify-content-end">
-                                                    <Link href="/room/surcharge/index" className="btn btn-danger ">Cancel</Link>
+                                                    <Link href={`/room/contract/edit/${contractid}`} className="btn btn-danger ">Back</Link>
                                                 </div>
                                             </div>
                                         </div>
@@ -155,18 +141,16 @@ export default function SurchargeAllRoom({ session, vendor, surchargeallroom }) 
                                             <thead>
                                                 <tr>
                                                     <th>No</th>
-                                                    <th>surcharge</th>
                                                     <th>start date</th>
                                                     <th>end date</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {surchargeallroom.map((item, index) => (
+                                                {data.map((item, index) => (
                                                     <>
                                                         <tr key={index}>
                                                             <td>{index+1}</td>
-                                                            <td>{formatRupiah(item.surcharge_price)}</td>
                                                             <td>{formatDate(item.stayperiod_start)}</td>
                                                             <td>{formatDate(item.stayperiod_end)}</td>
                                                             <td>
@@ -177,7 +161,7 @@ export default function SurchargeAllRoom({ session, vendor, surchargeallroom }) 
                                                                 onClick={() => {
                                                                   if (window.confirm('Are you sure you want to delete this?')) {
                                                                     // Lanjutkan dengan menghapus jika pengguna menekan OK pada konfirmasi
-                                                                    window.location.href = `/room/surcharge/surchargeallroomdestroy/${item.code}`;
+                                                                    window.location.href = `/room/contract/blackoutdestroy/${item.code}`;
                                                                   }
                                                                 }}>
                                                                     <i className='fa fa-trash'></i>
@@ -194,7 +178,8 @@ export default function SurchargeAllRoom({ session, vendor, surchargeallroom }) 
                         </div>
                     </div>
                 </div>
-            </Layout>
-        </>
-    );
+    </Layout>
+  )
 }
+
+export default Index

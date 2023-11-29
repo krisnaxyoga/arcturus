@@ -232,6 +232,11 @@ Route::group(['middleware' => ['auth', 'checkrole:2']], function() {
     Route::get('/room/contract/sync_advance_purchase/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'sync_advance_purchase'])->name('contract.sync_advance_purchase');
     Route::get('/room/contract/contract_price_is_active/{id}/{is_active}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'contract_price_is_active'])->name('contract.contract_price_is_active');
    
+    //blackout
+    Route::get('/room/contract/blackoutcontract/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'blackoutcontract'])->name('contract.blackoutcontract');
+    Route::post('/room/contract/blackoutcontractstore',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'blackoutcontractstore'])->name('contract.blackoutcontractstore');
+    Route::get('/room/contract/blackoutdestroy/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'blackoutdestroy'])->name('contract.blackoutdestroy');
+   
     //surcharge controller
     Route::get('/room/surcharge/index',[\App\Http\Controllers\Vendor\Hotel\Agent\SurchargeController::class, 'index'])->name('surcharge.index');
     Route::get('/room/surcharge/{hotel_room_id}/load-dates',[\App\Http\Controllers\Vendor\Hotel\Agent\SurchargeController::class, 'load_dates'])->name('surcharge.load_dates');

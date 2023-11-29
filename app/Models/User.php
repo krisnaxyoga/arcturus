@@ -78,4 +78,8 @@ class User extends Authenticatable
     public function surchargeAllRoom() {
         return $this->hasMany(SurchargeAllRoom::class);
     }
+
+    public function blackoutContractRate() {
+        return $this->hasMany(BlackoutContractRate::class);
+    }
 }
