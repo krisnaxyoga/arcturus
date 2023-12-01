@@ -225,7 +225,7 @@ export default function Detail({ session, data, agent, contract, setting, roombo
                                                                                         <div> 
                                                                                             <div className='m-0'>
                                                                                                 <p style={{ padding: "5px 0",margin:'0px',fontSize:'18px',fontWeight:'700' }}>Benefits :</p> 
-                                                                                                <div className='m-0' dangerouslySetInnerHTML={{ __html: item.contractrate.benefit_policy.substring(0, 250) }}></div>
+                                                                                                <div className='m-0' dangerouslySetInnerHTML={{ __html: item.contractrate.benefit_policy.substring(0, 1500) }}></div>
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
@@ -235,7 +235,7 @@ export default function Detail({ session, data, agent, contract, setting, roombo
                                                                                             <p style={{ padding: "5px 0",margin:'0px',fontSize:'18px',fontWeight:'700' }}>Cancellation Policy :</p> 
                                                                                             <p>
                                                                                             {item.contractrate.cencellation_policy && (
-                                                                                                <div dangerouslySetInnerHTML={{ __html: item.contractrate.cencellation_policy.substring(0, 250) }}></div>
+                                                                                                <div dangerouslySetInnerHTML={{ __html: item.contractrate.cencellation_policy.substring(0, 1250) }}></div>
                                                                                                 )}
                                                                                             </p>
                                                                                         </div>
@@ -244,7 +244,7 @@ export default function Detail({ session, data, agent, contract, setting, roombo
                                                                                             <p style={{ padding: "5px 0",margin:'0px',fontSize:'18px',fontWeight:'700' }}>Deposit Policy :</p> 
                                                                                             <p>
                                                                                                 {item.contractrate.deposit_policy && (
-                                                                                                    <div dangerouslySetInnerHTML={{ __html: item.contractrate.deposit_policy.substring(0, 250) }}></div>
+                                                                                                    <div dangerouslySetInnerHTML={{ __html: item.contractrate.deposit_policy.substring(0, 1250) }}></div>
                                                                                                 )}
                                                                                             </p>
                                                                                         </div>
