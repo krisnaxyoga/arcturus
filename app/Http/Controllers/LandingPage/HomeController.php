@@ -442,24 +442,45 @@ class HomeController extends Controller
                     ->get();
 
 
+                // $HotelRoomBooking = HotelRoomBooking::where('vendor_id', $vendorIds)
+                //     ->whereHas('booking', function ($query) {
+                //         $query->where('booking_status', 'paid');
+                //     })
+                //     ->where(function ($q) use ($checkin, $checkout) {
+                //         $q->where(function ($qq) use ($checkin, $checkout) {
+                //             $qq->where('checkin_date', '<=', Carbon::createFromFormat('Y-m-d', $checkout)->subDay())
+                //                 ->where('checkout_date', '>=', $checkin);
+                //         });
+                //     })
+                //     ->orWhere(function ($q) use ($checkin, $checkout) {
+                //         $q->where('checkin_date', '<=', Carbon::createFromFormat('Y-m-d', $checkout)->subDay())
+                //             ->where('checkout_date', '>=', $checkout)
+                //             ->whereNotIn('vendor_id', function ($query) use ($checkin, $checkout) {
+                //                 $query->select('vendor_id')
+                //                     ->from('hotel_room_bookings')
+                //                     ->where('checkin_date', '<=', Carbon::createFromFormat('Y-m-d', $checkout)->subDay())
+                //                     ->where('checkout_date', '>=', $checkin);
+                //             });
+                //     })
+                //     ->get();
                 $HotelRoomBooking = HotelRoomBooking::where('vendor_id', $vendorIds)
                     ->whereHas('booking', function ($query) {
                         $query->where('booking_status', 'paid');
                     })
                     ->where(function ($q) use ($checkin, $checkout) {
                         $q->where(function ($qq) use ($checkin, $checkout) {
-                            $qq->where('checkin_date', '<=', Carbon::createFromFormat('Y-m-d', $checkout)->subDay())
-                                ->where('checkout_date', '>=', $checkin);
+                            $qq->where('checkin_date', '<', $checkout)
+                                ->where('checkout_date', '>', $checkin);
                         });
                     })
                     ->orWhere(function ($q) use ($checkin, $checkout) {
-                        $q->where('checkin_date', '<=', $checkout)
-                            ->where('checkout_date', '>=', $checkout)
+                        $q->where('checkin_date', '<', $checkout)
+                            ->where('checkout_date', '>', $checkout)
                             ->whereNotIn('vendor_id', function ($query) use ($checkin, $checkout) {
                                 $query->select('vendor_id')
                                     ->from('hotel_room_bookings')
-                                    ->where('checkin_date', '<=', $checkout)
-                                    ->where('checkout_date', '>=', $checkin);
+                                    ->where('checkin_date', '<', $checkout)
+                                    ->where('checkout_date', '>', $checkin);
                             });
                     })
                     ->get();

@@ -323,7 +323,7 @@
                                                                                                 $totalx += $calendar->recom_price;
                                                                                                 $totalDataCount++;
 
-                                                                                                $status = $calendar->active;
+                                                                                                $status += $calendar->active;
                                                                                                 $room_allowx = $calendar->room_allow;
                                                                                                 $lang_of_stay = $calendar->night;
                                                                                                 if ($room_allowx == 0) {
@@ -331,8 +331,8 @@
                                                                                                     $status = 2;
                                                                                                 }
                                                                                                 $hotelroomid = $calendar->room_hotel_id;
-
                                                                                                 
+                                                                                
                                                                                             }
                                                                                             //filter yang berfungsi untuk calendar rate
                                                                                         }
@@ -348,6 +348,7 @@
                                                                                         if ($checkinDate == $startDate) {
                                                                                             $lang_of_stay = $calendar->night;
                                                                                         }
+
                                                                                     } else {
                                                                                         if ($calendar->room_hotel_id == $itemprice->room_id && $foundZero == false) {
                                                                                             $status = $calendar->active;
@@ -373,11 +374,13 @@
                                                                                             }
 
                                                                                             $hotelroomid = $calendar->room_hotel_id;
+                                                                                                
+                                                                                            
                                                                                         }
+
                                                                                     }
                                                                                 }
 
-                                                                                
                                                                                 //filter yang berfungsi untuk calendar rate
                                                                                 if($totalx != 0){
                                                                                     $countNights = $totalNights - $totalDataCount;
@@ -391,6 +394,7 @@
 
                                                                             }
 
+                                                                            
                                                                         // ============================================= total surcharge all room =========================================//
                                                                             $totalsurchargex = 0;
                                                                             $totalDataCountx = 0;
@@ -456,11 +460,11 @@
                                                                             if ($HotelRoomBooking->count() != 0) {
                                                                                 foreach ($HotelRoomBooking as $key => $value) {
                                                                                     if ($value->room_id == $itemprice->room_id) {
-                                                                                        $totalRoomBooking = $value->total_room;
+                                                                                        $totalRoomBooking += $value->total_room;
                                                                                     }
-
                                                                                 }
                                                                             }
+                                                                            // var_dump($totalRoomBooking);
                                                                             // Setel $RoomAllowment ke $itemprice->room->room_allow dikurangi total total_room yang sesuai
                                                                             if($itemprice->room_id == $item->room->id){
                                                                                 $RoomAllowment = $itemprice->room->room_allow - $totalRoomBooking;
@@ -468,7 +472,6 @@
                                                                             
                                                                             if ($foundZero == true) {
                                                                                 $room_allow = 0;
-                                                                                var_dump('is work');
                                                                                 
                                                                             }
 
