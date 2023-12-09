@@ -128,6 +128,17 @@ class BookingController extends Controller
 
             }
 
+            $hotelbook_where_totalamount = HotelRoomBooking::where('booking_id',$data->id)->get();
+
+            $pricenomaruptotal = 0;
+            foreach($hotelbook_where_totalamount as $hbwt){
+                $pricenomaruptotal += $hbwt->total_ammount;
+            }
+
+            $booking_update_pricenomarkup = Booking::find($data->id);
+            $booking_update_pricenomarkup->pricenomarkup = $pricenomaruptotal;
+            $booking_update_pricenomarkup->save();
+
             return response()->json([
                 $data->id
             ]);
