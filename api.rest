@@ -1,0 +1,74 @@
+POST http://127.0.0.1:8007/api/login/transport 
+Content-Type: application/json
+
+{
+    "email" : "krisnayogas@gmail.com",
+    "password" : "password123$$$"
+}
+
+###
+GET http://127.0.0.1:8007/api/country
+Authorization: Bearere eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYW5zcG9ydCIsImlhdCI6MTcwMjk0NzczMywiZXhwIjoxNzAyOTUxMzMzLCJuYmYiOjE3MDI5NDc3MzMsImp0aSI6IktGbUJBblZ1dFc4akVSWkUiLCJzdWIiOiIxIiwicHJ2IjoiYTMxNWZhYjg1ODI2MjM5NGU1N2YyOWZhNzUyNTQ2NTRiZjQ4ZjQxMSJ9.tLNCJKJbm09XURVfa9zV-6REaGUD6c4kS8tTRWGmqGY
+
+###
+GET http://127.0.0.1:8007/api/user
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYW5zcG9ydCIsImlhdCI6MTcwMTk5NDEzNywiZXhwIjoxNzAxOTk3NzM3LCJuYmYiOjE3MDE5OTQxMzcsImp0aSI6IjNVcXdBT2EwR2xBcElKaXUiLCJzdWIiOiIxIiwicHJ2IjoiYTMxNWZhYjg1ODI2MjM5NGU1N2YyOWZhNzUyNTQ2NTRiZjQ4ZjQxMSJ9.do1JVdNkKZ9M42tJ_mDT-xCY2ns7lIuX5zwNjmnVe7U
+
+###
+POST http://127.0.0.1:8007/api/login/transport/logout
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYW5zcG9ydCIsImlhdCI6MTcwMjI1NTEwMywiZXhwIjoxNzAyMjU4NzAzLCJuYmYiOjE3MDIyNTUxMDMsImp0aSI6Ilp0dmJoZkxJOVJwaVQ1bFkiLCJzdWIiOiIxIiwicHJ2IjoiYTMxNWZhYjg1ODI2MjM5NGU1N2YyOWZhNzUyNTQ2NTRiZjQ4ZjQxMSJ9.jfogS-Dt5Ip9jbH2h210auijco9KNNLVwq46gOiFds0
+
+###
+GET http://127.0.0.1:8007/api/packagecar
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYW5zcG9ydCIsImlhdCI6MTcwMjM0MjY2MSwiZXhwIjoxNzAyMzQ2MjYxLCJuYmYiOjE3MDIzNDI2NjEsImp0aSI6Ik9PcjkzQlo4b1c2cnZTYm0iLCJzdWIiOiIxIiwicHJ2IjoiYTMxNWZhYjg1ODI2MjM5NGU1N2YyOWZhNzUyNTQ2NTRiZjQ4ZjQxMSJ9.4lWXyn4_McLeZjOtW9MZC2Lf4W9hHzX9KjKNye-JhAw
+
+###
+POST http://127.0.0.1:8007/api/packagecar/store
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYW5zcG9ydCIsImlhdCI6MTcwMjI2MDYwNiwiZXhwIjoxNzAyMjY0MjA2LCJuYmYiOjE3MDIyNjA2MDYsImp0aSI6InVGRUNwQTB5VmJFa1E2UkoiLCJzdWIiOiIxIiwicHJ2IjoiYTMxNWZhYjg1ODI2MjM5NGU1N2YyOWZhNzUyNTQ2NTRiZjQ4ZjQxMSJ9.5oLwUuiTCLaKAgA-Ahd7RCwGY7xQkeQ4GHzQGBnQIPs
+
+{
+    "type_car" : "ferari",
+    "destination" : "seminyak", 
+    "price" : 600000,
+    "number_police" : "DK 3421 EF"
+}
+
+###
+GET http://127.0.0.1:8007/api/userlogin/1
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYW5zcG9ydCIsImlhdCI6MTcwMjI2NTMyMywiZXhwIjoxNzAyMjY4OTIzLCJuYmYiOjE3MDIyNjUzMjMsImp0aSI6InAyVVZrVWgzV2pQUUhpVVUiLCJzdWIiOiIxIiwicHJ2IjoiYTMxNWZhYjg1ODI2MjM5NGU1N2YyOWZhNzUyNTQ2NTRiZjQ4ZjQxMSJ9.d9tahFfbT1MMvjnZ31ARye-hkiONv6kkYP9dcb_7h3k
+
+###
+GET http://127.0.0.1:8007/api/packagecar/destroy/6
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYW5zcG9ydCIsImlhdCI6MTcwMjM0MjY2MSwiZXhwIjoxNzAyMzQ2MjYxLCJuYmYiOjE3MDIzNDI2NjEsImp0aSI6Ik9PcjkzQlo4b1c2cnZTYm0iLCJzdWIiOiIxIiwicHJ2IjoiYTMxNWZhYjg1ODI2MjM5NGU1N2YyOWZhNzUyNTQ2NTRiZjQ4ZjQxMSJ9.4lWXyn4_McLeZjOtW9MZC2Lf4W9hHzX9KjKNye-JhAw
+
+###
+POST http://127.0.0.1:8007/api/profileupdate/1
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYW5zcG9ydCIsImlhdCI6MTcwMjQ1NTExNywiZXhwIjoxNzAyNDU4NzE3LCJuYmYiOjE3MDI0NTUxMTcsImp0aSI6Ilp1b05ZZHlDcURscGlGanAiLCJzdWIiOiIxIiwicHJ2IjoiYTMxNWZhYjg1ODI2MjM5NGU1N2YyOWZhNzUyNTQ2NTRiZjQ4ZjQxMSJ9.aqLh8eAzAY4Xai7GaPM6avQeeM0QRhT90J1Qq4yfbfk
+
+{
+    "company_name" : "musi tour",
+    "email" : "krisnax@gmail.com",
+    "mobile_phone": "08123123121212",
+    "address" : "jogjakarta",
+    "password" : "password"
+}
+
+###
+GET http://127.0.0.1:8007/api/destination
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYW5zcG9ydCIsImlhdCI6MTcwMzE0MTU3NywiZXhwIjoxNzAzMTQ1MTc3LCJuYmYiOjE3MDMxNDE1NzcsImp0aSI6IjBoVFBDeVg4YUVBM1RjNEoiLCJzdWIiOiIxIiwicHJ2IjoiYTMxNWZhYjg1ODI2MjM5NGU1N2YyOWZhNzUyNTQ2NTRiZjQ4ZjQxMSJ9.clR00SMjstqFylRgteLFQ3mCmAJ9ZAJ5w5M2eChFQ3U
+
+###
+GET http://127.0.0.1:8007/api/reportordertransport
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYW5zcG9ydCIsImlhdCI6MTcwMzE0MTU3NywiZXhwIjoxNzAzMTQ1MTc3LCJuYmYiOjE3MDMxNDE1NzcsImp0aSI6IjBoVFBDeVg4YUVBM1RjNEoiLCJzdWIiOiIxIiwicHJ2IjoiYTMxNWZhYjg1ODI2MjM5NGU1N2YyOWZhNzUyNTQ2NTRiZjQ4ZjQxMSJ9.clR00SMjstqFylRgteLFQ3mCmAJ9ZAJ5w5M2eChFQ3U
+
+###
+GET http://127.0.0.1:8007/api/reportordertransport/4
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYW5zcG9ydCIsImlhdCI6MTcwMzQ3MjIwOSwiZXhwIjoxNzAzNDc1ODA5LCJuYmYiOjE3MDM0NzIyMDksImp0aSI6Ikx1c3QyTDM1S1JHVzg0eHAiLCJzdWIiOiIxIiwicHJ2IjoiYTMxNWZhYjg1ODI2MjM5NGU1N2YyOWZhNzUyNTQ2NTRiZjQ4ZjQxMSJ9.2aCr1M3M_beoFDyAvdpTeapfjYjyEyTSYn7vssjZl18

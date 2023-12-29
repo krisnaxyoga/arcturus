@@ -25,4 +25,7 @@ class Booking extends Model
         return $this->hasMany(PaymentGetwayTransaction::class);
     }
 
+    public function ordertransport() {
+        return $this->hasMany(OrderTransport::class);
+    }
 }

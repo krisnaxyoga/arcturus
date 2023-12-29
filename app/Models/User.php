@@ -82,4 +82,8 @@ class User extends Authenticatable
     public function blackoutContractRate() {
         return $this->hasMany(BlackoutContractRate::class);
     }
+
+    public function ordertransport() {
+        return $this->hasMany(OrderTransport::class);
+    }
 }

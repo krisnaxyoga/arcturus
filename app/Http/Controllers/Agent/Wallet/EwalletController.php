@@ -18,6 +18,7 @@ use App\Models\Booking;
 use App\Mail\TopUpAdminConfirmation;
 use App\Mail\BookingConfirmation;
 use App\Mail\BookingConfirmationHotel;
+use App\Models\OrderTransport;
 use Illuminate\Support\Facades\Mail;
 
 class EwalletController extends Controller
@@ -43,6 +44,13 @@ class EwalletController extends Controller
      */
     public function pay($id)
     {
+        $transportbooking = OrderTransport::where('booking_id',$id)->first();
+        if($transportbooking){
+            $totaltranport = $transportbooking->total_price;
+        }else{
+            $totaltranport = 0;
+        }
+
         $hotel_room_booking = HotelRoomBooking::where('booking_id',$id)->get();
         $saldo = auth()->user()->saldo;
         $totalprice = 0;
@@ -51,11 +59,11 @@ class EwalletController extends Controller
         }
 
         $booking = Booking::find($id);
-        $totalpayment = $booking->night * $totalprice;
+        $totalpayment = ($booking->night * $totalprice) + $totaltranport;
 
         if($booking->price == $totalpayment){
-            $minsaldo = $booking->price;
-            $total_as_saldo = $saldo - $booking->price;
+            $minsaldo = ($booking->price + $totaltranport);
+            $total_as_saldo = $saldo - ($booking->price + $totaltranport);
         }else{
             $total_as_saldo = $saldo - $totalpayment;
             $minsaldo = $totalpayment;
@@ -93,7 +101,6 @@ class EwalletController extends Controller
                 'agent' =>$agent,
                 'hotelbook' => $hotelbook
             ];
-
 
 
             // Mail::to($booking->vendor->email_reservation)->send(new BookingConfirmationHotel($data));

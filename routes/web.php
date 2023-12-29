@@ -25,6 +25,17 @@ Route::get('/callbackdoku', [\App\Http\Controllers\LandingPage\HomeController::c
 Route::get('/auth/google/callback',[\App\Http\Controllers\Auth\GoogleController::class, 'handleCallback']);
 // Route::get('/account/nonactive', [\App\Http\Controllers\LandingPage\HomeController::class, 'accountnonactive'])->name('accountnonactive.homepage');
 
+//transport application
+Route::get('/auth/transport',[\App\Http\Controllers\Transport\AuthController::class, 'index']);
+Route::get('/profile/transport/{token}/{id}',[\App\Http\Controllers\Transport\AuthController::class, 'profile'])->name('transport.profile');
+Route::get('/transport/dashboard/{token}/{id}',[\App\Http\Controllers\Transport\HomeController::class, 'index']);
+Route::get('/transport/addpackage/{token}/{id}',[\App\Http\Controllers\Transport\PackageController::class, 'index']);
+Route::get('/transport/addpackageform/{token}/{id}',[\App\Http\Controllers\Transport\PackageController::class, 'create']);
+Route::get('/transport/editpackageform/{token}/{iddata}/{id}',[\App\Http\Controllers\Transport\PackageController::class, 'edit']);
+
+Route::get('/transport/bookinghistory/{token}/{id}',[\App\Http\Controllers\Transport\ReportController::class, 'index']);
+Route::get('/transport/bookinghistoryshow/{iddata}/{token}/{id}',[\App\Http\Controllers\Transport\ReportController::class, 'show']);
+
 //  jika user belum login
 Route::group(['middleware' => 'guest'], function() {
     Route::get('/login', [AuthController::class, 'login'])->name('login');
@@ -107,6 +118,8 @@ Route::group(['middleware' => ['auth', 'checkrole:1']], function() {
 
     // report
     Route::get('/admin/report', [\App\Http\Controllers\Admin\Report\ReportController::class, 'index'])->name('dashboard.report');
+    Route::get('/admin/report/madeon', [\App\Http\Controllers\Admin\Report\ReportController::class, 'madeon'])->name('dashboard.reportmadeon');
+    Route::get('/admin/madeonpdfreport/pdf', [\App\Http\Controllers\Admin\Report\ReportController::class, 'madeonpdfreport'])->name('dashboard.madeonpdfreport.pdf');
     Route::get('/admin/report/pdf', [\App\Http\Controllers\Admin\Report\ReportController::class, 'adminpdfreport'])->name('dashboard.report.pdf');
 
     //top up confirmation
@@ -116,6 +129,7 @@ Route::group(['middleware' => ['auth', 'checkrole:1']], function() {
     //booking
     Route::get('/admin/booking', [\App\Http\Controllers\Admin\Report\BookingController::class, 'index'])->name('dashboard.admin.booking');
     Route::get('/admin/booking/confirmation/{id}', [\App\Http\Controllers\Admin\Report\BookingController::class, 'confirmation'])->name('admin.booking.confirmation');
+    Route::get('/admin/booking/confirmationcancel/{id}', [\App\Http\Controllers\Admin\Report\BookingController::class, 'confirmationcancel'])->name('admin.booking.confirmationcancel');
     Route::get('/admin/booking/sendconfirmationtohotel/{id}', [\App\Http\Controllers\Admin\Report\BookingController::class, 'sendconfirmationtohotel'])->name('admin.booking.sendconfirmationtohotel');
     Route::get('/admin/booking/sendconfirmationtoagent/{id}', [\App\Http\Controllers\Admin\Report\BookingController::class, 'sendconfirmationtoagent'])->name('admin.booking.sendconfirmationtoagent');
 
@@ -138,6 +152,27 @@ Route::group(['middleware' => ['auth', 'checkrole:1']], function() {
     Route::get('/admin/paymenthotel/edit/{id}', [\App\Http\Controllers\Admin\Hotel\PaymentController::class, 'edit'])->name('dashboard.paymenttohotel.edit');
     Route::post('/admin/paymenthotel/update/{id}', [\App\Http\Controllers\Admin\Hotel\PaymentController::class, 'update'])->name('dashboard.paymenttohotel.update');
     Route::get('/admin/paymenthotel/destroy/{id}', [\App\Http\Controllers\Admin\Hotel\PaymentController::class, 'destroy'])->name('dashboard.paymenttohotel.destroy');
+
+
+    //transport admin
+    Route::get('/admin/transport', [\App\Http\Controllers\Admin\Transport\TransportController::class, 'index'])->name('dashboard.transport.index');
+    Route::get('/admin/transport/create', [\App\Http\Controllers\Admin\Transport\TransportController::class, 'create'])->name('dashboard.transport.create');
+    Route::post('/admin/transport/store', [\App\Http\Controllers\Admin\Transport\TransportController::class, 'store'])->name('dashboard.transport.store');
+    Route::get('/admin/transport/edit/{id}', [\App\Http\Controllers\Admin\Transport\TransportController::class, 'edit'])->name('dashboard.transport.edit');
+    Route::put('/admin/transport/update/{id}', [\App\Http\Controllers\Admin\Transport\TransportController::class, 'update'])->name('dashboard.transport.update');
+    Route::get('/admin/transport/destroy/{id}', [\App\Http\Controllers\Admin\Transport\TransportController::class, 'destroy'])->name('dashboard.transport.destroy');
+    Route::get('/admin/transport/destination', [\App\Http\Controllers\Admin\Transport\DestinationController::class, 'index'])->name('dashboard.transport.destination');
+    Route::get('/admin/transportdestination/create', [\App\Http\Controllers\Admin\Transport\DestinationController::class, 'create'])->name('dashboard.transportdestination.create');
+    Route::post('/admin/transportdestination/store', [\App\Http\Controllers\Admin\Transport\DestinationController::class, 'store'])->name('dashboard.transportdestination.store');
+    Route::get('/admin/transportdestination/edit/{id}', [\App\Http\Controllers\Admin\Transport\DestinationController::class, 'edit'])->name('dashboard.transportdestination.edit');
+    Route::put('/admin/transportdestination/update/{id}', [\App\Http\Controllers\Admin\Transport\DestinationController::class, 'update'])->name('dashboard.transportdestination.update');
+    Route::delete('/admin/transportdestination/delete/{id}', [\App\Http\Controllers\Admin\Transport\DestinationController::class, 'destroy'])->name('dashboard.transportdestination.destroy');
+    Route::get('/admin/transport/invite/{id}', [\App\Http\Controllers\Admin\Transport\TransportController::class, 'invite'])->name('dashboard.transportdestination.invite');
+    Route::get('/admin/transport/isactive/{id}/{ac}', [\App\Http\Controllers\Admin\Transport\TransportController::class, 'is_active'])->name('dashboard.transport.isactive');
+    Route::get('/admin/transport/report', [\App\Http\Controllers\Admin\Transport\TransportController::class, 'report'])->name('dashboard.transport.report');
+    Route::post('/admin/transport/widraw', [\App\Http\Controllers\Admin\Transport\TransportController::class, 'widraw'])->name('dashboard.transport.widraw');
+   
+    Route::get('/admin/transport/login/{id}', [\App\Http\Controllers\Admin\Transport\TransportController::class, 'logintransport'])->name('login.transport.index');
 
 });
 
@@ -315,3 +350,4 @@ Route::group(['middleware' => ['auth', 'checkrole:3']], function() {
     Route::post('/agent/wallet/topup',[\App\Http\Controllers\Agent\Wallet\EwalletController::class, 'store'])->name('agent.wallet.topup');
     Route::get('/agent/wallet/pay/{id}',[\App\Http\Controllers\Agent\Wallet\EwalletController::class, 'pay'])->name('agent.wallet.pay');
 });
+

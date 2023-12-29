@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Country;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Resources\PostResource;
 
 class CoutryController extends Controller
 {
@@ -14,9 +15,7 @@ class CoutryController extends Controller
     {
        $country = get_country_lists();
 
-       return response()->json([
-        $country
-    ]);
+       return new PostResource(true, 'Country', $country);
     }
 
     /**
