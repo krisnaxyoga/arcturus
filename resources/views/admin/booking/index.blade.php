@@ -44,7 +44,7 @@
                                     @foreach ($data as $key=>$item)
                                         <tr>
                                             <td>
-                                                @if($item->status == 400)
+                                                @if($item->status == 400 && $item->booking->booking_status != 'paid')
                                                     <button type="button" class="btn btn-datatable btn-icon btn-transparent-dark mr-2" data-bs-toggle="modal" data-bs-target="#imageModal{{$key}}">
                                                         <i data-feather="eye"></i>
                                                     </button>
@@ -60,7 +60,8 @@
                                                                 <div class="modal-body">
                                                                     <img src="{{$item->url_payment}}" alt="Image" class="img-fluid">
                                                                 </div>
-                                                                <div class="modal-footer">
+                                                                <div class="modal-footer d-flex justify-content-between">
+                                                                    <a href="{{route('admin.booking.confirmationcancel',$item->id)}}" class="btn btn-danger text-right">Cancel Payment</a>
                                                                     <a href="{{route('admin.booking.confirmation',$item->id)}}" class="btn btn-success text-right">Confirmation Payment</a>
                                                                 </div>
                                                             </div>

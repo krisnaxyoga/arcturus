@@ -811,7 +811,8 @@
 
   <section class="ftco-intro ftco-section ftco-no-pt mt-5">
     <div class="container">
-        <div class="row justify-content-center">
+        <a href="https://www.vibeshospitality.id/" target="_blank">
+             <div class="row justify-content-center">
             <div class="col-md-12 text-center">
                 <div class="img" style="background-image: url(/landing/travel/images/bg_2.jpg); border-radius: 29px">
                     <div class="overlay"></div>
@@ -821,6 +822,8 @@
                 </div>
             </div>
         </div>
+        </a>
+       
     </div>
 </section>
     <script>
