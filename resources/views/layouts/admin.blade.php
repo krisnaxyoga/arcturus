@@ -123,6 +123,34 @@
                                 </li>
                             </ul>
                         </div>
+                        <a class="nav-link {{ request()->Is('#') ? 'active' : '' }}" href="#" data-toggle="collapse" data-target="#TransportCollapse"
+                            aria-expanded="false" aria-controls="TransportCollapse">
+                            <div class="nav-link-icon"><i data-feather="truck"></i></div>
+                            Transport
+                        </a>
+                        <div id="TransportCollapse" class="collapse">
+                            <!-- Isi menu -->
+                            <ul>
+                                <li class="list-unstyled">
+                                    <a class="nav-link {{ request()->routeIs('dashboard.transport.index') ? 'active' : '' }}" href="{{ route('dashboard.transport.index') }}">All agent</a>
+                                </li>
+                                <li class="list-unstyled">
+                                    <a class="nav-link {{ request()->routeIs('dashboard.transport.create') ? 'active' : '' }}" href="{{ route('dashboard.transport.create') }}">
+                                        Add New agent
+                                    </a>
+                                </li>
+                                <li class="list-unstyled">
+                                    <a class="nav-link {{ request()->routeIs('dashboard.transport.destination') ? 'active' : '' }}" href="{{ route('dashboard.transport.destination') }}">
+                                        List destination
+                                    </a>
+                                </li>
+                                <li class="list-unstyled">
+                                    <a class="nav-link {{ request()->routeIs('dashboard.transport.report') ? 'active' : '' }}" href="{{ route('dashboard.transport.report') }}">
+                                        Transport Booking
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                         <!-- Tombol untuk memicu collapse -->
                         <a class="nav-link" href="#" data-toggle="collapse" data-target="#menuCollapse"
                             aria-expanded="false" aria-controls="menuCollapse">
@@ -229,6 +257,14 @@
 
             if (activeMenu2) {
                 agentCollapse.classList.add('show');
+            }
+
+             //agentcolapse
+             const TransportCollapse = document.getElementById('TransportCollapse');
+            const activeMenu3 = TransportCollapse.querySelector('.active');
+
+            if (activeMenu3) {
+                TransportCollapse.classList.add('show');
             }
         });
     </script>

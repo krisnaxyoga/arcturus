@@ -323,7 +323,7 @@
                                                                                                 $totalx += $calendar->recom_price;
                                                                                                 $totalDataCount++;
 
-                                                                                                $status += $calendar->active;
+                                                                                                $status = $calendar->active;
                                                                                                 $room_allowx = $calendar->room_allow;
                                                                                                 $lang_of_stay = $calendar->night;
                                                                                                 if ($room_allowx == 0) {
@@ -370,7 +370,7 @@
                                                                                             } else {
                                                                                                 // Jika tidak, gunakan nilai room_allow dari $calendar
                                                                                                 $room_allow = $calendar->room_allow;
-
+                                                                                                
                                                                                             }
 
                                                                                             $hotelroomid = $calendar->room_hotel_id;
@@ -380,7 +380,7 @@
 
                                                                                     }
                                                                                 }
-
+                                                                                
                                                                                 //filter yang berfungsi untuk calendar rate
                                                                                 if($totalx != 0){
                                                                                     $countNights = $totalNights - $totalDataCount;
@@ -412,7 +412,7 @@
                                                                             }
                                                                         // ============================================= total surcharge all room =========================================//
 
-                                                                            // var_dump($itemprice->contractrate->id);
+                                                                            //var_dump($TotalHotelCalendar);
                                                                             
 
                                                                            
@@ -420,6 +420,7 @@
                                                                             // $Room_recomprice = ($TotalHotelCalendar <= 0) ? $itemprice->recom_price : $TotalHotelCalendar;
                                                                             if ($TotalHotelCalendar <= 0) {
                                                                                 $Room_recomprice = $itemprice->recom_price;
+                                                                                // var_dump($Room_recomprice);
                                                                             } else {
                                                                                 if ($itemprice->recom_price == $TotalHotelCalendar) {
                                                                                     if($itemprice->contractrate->rolerate == 2){
@@ -429,6 +430,7 @@
                                                                                             $Room_recomprice = $TotalHotelCalendar;
                                                                                         }else{
                                                                                             $Room_recomprice = $totalpricecalendar;
+                                                                                            
                                                                                         }
                                                                                     }
 
@@ -437,19 +439,23 @@
                                                                                     if($itemprice->contractrate->rolerate == 2 && $item->recom_price != $ratecalender){
                                                                                         $Room_recomprice = $TotalHotelCalendar * ((100 - $itemprice->contractrate->percentage)/100);
                                                                                     }else{
-                                                                                        $Room_recomprice = $itemprice->recom_price;
+                                                                                       if($itemprice->recom_price == $ratecalender){
+                                                                                            $Room_recomprice = $itemprice->recom_price;
+                                                                                        }else{
+                                                                                            $Room_recomprice = $ratecalender;
+                                                                                        }
                                                                                     }
                                                                                     // $Room_recomprice = $TotalHotelCalendar;
                                                                                 }
                                                                             }
-
+                                                                            
                                                                             // var_dump('calender sama nilai dari rate ='.$Room_recomprice.' total calendar = '.$totalx.' cek night ='.$totalDataCount);
                                                                             // ========================================================= END CALENDAR ====================================
 
                                                                             // ========================================================= ROOM ALLOWMENT ====================================
                                                                             $totalRoomBooking = 0; // Inisialisasi totalRoomBooking
 
-                                                                            // var_dump($no_checkout);
+                                                                            
                                                                             if ($status != 1 || $no_checkout != 0 || $no_checkin != 0) {
                                                                                 $totalRoomBooking = $itemprice->room->room_allow;
                                                                             }
@@ -461,10 +467,11 @@
                                                                                 foreach ($HotelRoomBooking as $key => $value) {
                                                                                     if ($value->room_id == $itemprice->room_id) {
                                                                                         $totalRoomBooking += $value->total_room;
+                                                                                        
                                                                                     }
                                                                                 }
                                                                             }
-                                                                            // var_dump($totalRoomBooking);
+                                                                            
                                                                             // Setel $RoomAllowment ke $itemprice->room->room_allow dikurangi total total_room yang sesuai
                                                                             if($itemprice->room_id == $item->room->id){
                                                                                 $RoomAllowment = $itemprice->room->room_allow - $totalRoomBooking;
@@ -482,33 +489,39 @@
                                                                             }else{
                                                                                 $room_allow = $room_allow;
                                                                             }
-
+                                                                            
                                                                             // ========================================================= ROOM ALLOWMENT ====================================
 
                                                                         @endphp
                                                                         @php
 
                                                                             $price = $itemprice->recom_price;
-                                                                            if ($Room_recomprice) {
-                                                                                    $price = $Room_recomprice;
-                                                                            }
+                                                                           
+                                                                            // if ($Room_recomprice) {
+                                                                            //         $price = $Room_recomprice;
+                                                                            // }
                                                                             if ($advancepurchase->count() > 0) {
                                                                                 foreach ($advancepurchase as $advancevalue) {
-                                                                                    if ($advancevalue->contract_id == $itemprice->contract_id && $advancevalue->room_id == $itemprice->room_id && $advancevalue->room_id == $item->room->id) {
-                                                                                        if ($Room_recomprice != $itemprice->recom_price) {
-                                                                                            $price = ($advancevalue->price / $itemprice->recom_price) * $Room_recomprice;
-                                                                                        } else {
-                                                                                            $price = $advancevalue->price;
-                                                                                        }
+                                                                                    if($advancevalue->is_active == 1){
+                                                                                         if ($advancevalue->contract_id == $itemprice->contract_id && $advancevalue->room_id == $itemprice->room_id && $advancevalue->room_id == $item->room->id) {
+                                                                                                if ($Room_recomprice != $itemprice->recom_price) {
+                                                                                                    $price = ($advancevalue->price / $itemprice->recom_price) * $Room_recomprice;
+                                                                                                } else {
+                                                                                                    $price = $advancevalue->price;
+                                                                                                }
+                                                                                            }
                                                                                     }
+                                                                                   
                                                                                 }
                                                                             } else {
-                                                                                // if ($itemprice->contractrate->rolerate == 1) {
+                                                                                if ($itemprice->contractrate->rolerate == 1) {
                                                                                     $price = $Room_recomprice;
-                                                                                // } else {
-                                                                                //     $price = $itemprice->recom_price;
-                                                                                // }
+                                                                                } else {
+                                                                                    $price = $itemprice->recom_price;
+                                                                                }
                                                                             }
+                                                                            
+                                                                             //var_dump($Room_recomprice);
                                                                         @endphp
                                                                         {{-- <hr>
                                                                 <p style="font-size:20px;font-weight:700" class="m-0 p-0">{{$itemprice->contractrate->codedesc}}</p> --}}
@@ -538,19 +551,19 @@
                                                                             </div>
                                                                             <div class="col-lg">
                                                                                 @php
-                                                                                    // if ($room_allow >= 0 && $hotelroomid == $itemprice->room_id) {
-                                                                                    //     if($RoomAllowment >= 0 && $room_allow != 0 && $RoomAllowment == $room_allow){
-                                                                                    //         $RoomAllowment = $room_allow;
-                                                                                    //         var_dump('ini berfungsi 3 '.  $room_allow);
-                                                                                    //     }else if($room_allow >= 0 && $room_allow != $RoomAllowment){
-                                                                                    //        $RoomAllowment = $room_allow;
-                                                                                    //     }
+                                                                                    //if ($room_allow >= 0 && $hotelroomid == $itemprice->room_id) {
+                                                                                      //   if($RoomAllowment >= 0 && $room_allow != 0 && $RoomAllowment == $room_allow){
+                                                                                        //     $RoomAllowment = $room_allow;
+                                                                                            //var_dump('ini berfungsi 3 '.  $room_allow);
+                                                                                        //}else if($room_allow >= 0 && $room_allow != $RoomAllowment){
+                                                                                          //  $RoomAllowment = $room_allow;
+                                                                                         //}
 
                                                                                     // } else {
-                                                                                    //     $RoomAllowment = $RoomAllowment;
+                                                                                        $RoomAllowment = $RoomAllowment;
                                                                                     // }
                                                                                     if ($room_allow >= 0 && $hotelroomid == $itemprice->room_id) {
-                                                                                        if ($RoomAllowment >= 0 && $room_allow != 0 && $RoomAllowment == $room_allow) {
+                                                                                       if ($RoomAllowment >= 0 && $room_allow != 0 && $RoomAllowment == $room_allow) {
                                                                                             $RoomAllowment = $room_allow;
                                                                                             // var_dump('ini berfungsi 3 ' . $room_allow);
                                                                                         } elseif ($room_allow >= 0 && $room_allow != $RoomAllowment) {

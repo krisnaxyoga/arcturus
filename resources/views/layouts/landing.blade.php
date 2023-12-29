@@ -99,14 +99,17 @@
     <a href="https://api.whatsapp.com/send?phone=6287888375939" target="_blank" class="whatsapp-button">
         <img onerror="this.onerror=null; this.src='https://semantic-ui.com/images/wireframe/white-image.png';" src="https://www.transparentpng.com/thumb/whatsapp/GrwKkd-wp-logo-whatsapp-cut-out-png.png" alt="WhatsApp" width="60" height="60">
     </a>
-    <footer class="ftco-footer bg-bottom ftco-no-pt" style="background-image: url(images/bg_3.jpg);">
+    <footer class="ftco-footer bg-bottom ftco-no-pt pb-0" style="background-image: url(images/bg_3.jpg);">
         <div class="container">
             <div class="row">
                 <div class="col-md-12 text-center">
 
-                    <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                        Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://turus.my.id" target="_blank">arcturus</a>
+                    <p class="m-0"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                        Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | 
+                        <!--This is made with <i class="fa fa-heart" aria-hidden="true"></i> by -->
+                        <a href="https://www.vibeshospitality.id/" target="_blank">ViBES Management</a>
                         <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+                        <p style="font-size:13px">Jln. Raya Kuta-Mawun,Kuta Mandalika, Pujut,Lombok 83573</p>
                     </div>
                 </div>
             </div>

@@ -26,21 +26,21 @@
             @endphp
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="card mb-3">
+                    <div class="card mb-3 border-0 shadow" style="border-radius: 20px">
                         <div class="card-body">
                             <div>
-                                <p class="text-dark" style="font-weight: 700;font-size: 20px;">Total Payment : Rp. {{number_format($total_as_saldo, 0, ',', '.')}}</p>
+                                <p class="text-dark" style="font-weight: 700;font-size: 20px;">Total Payment : Rp. {{number_format(($total_as_saldo + $transportbooking), 0, ',', '.')}}</p>
                             </div>
                             <div class="card border-0">
                                 <div class="card-body p-1">
                                      <div class="d-flex justify-content-between">
-                                        <span><p class="m-0 text-info" style="font-weight: 700;font-size: 18px; color: #cdcdcd !important; @if($saldo >= $total_as_saldo) color: #17a2b8 !important; @endif">Saldo : Rp. {{number_format($saldo, 0, ',', '.')}}</p></span>
+                                        <span><p class="m-0 text-info" style="font-weight: 700;font-size: 18px; color: #cdcdcd !important; @if($saldo >= ($total_as_saldo + $transportbooking)) color: #17a2b8 !important; @endif">Saldo : Rp. {{number_format($saldo, 0, ',', '.')}}</p></span>
                                         <span>
-                                            @if($saldo >= $total_as_saldo)
-                                            <a href="{{route('agent.wallet.pay',$booking->id)}}" class="btn btn-primary">pay</a>
+                                            @if($saldo >= ($total_as_saldo + $transportbooking))
+                                                <a href="{{route('agent.wallet.pay',$booking->id)}}" class="btn btn-primary">pay</a>
                                             @else  
                                             
-                                            <a href="{{route('agent.wallet')}}" class="btn btn-primary">top up</a>
+                                                <a href="{{route('agent.wallet')}}" class="btn btn-primary">top up</a>
                                             @endif
                                           
                                         </span>
@@ -52,7 +52,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            {{-- <div class="row">
                 <div class="col-lg-6">
                     <div class="card mb-3">
                         <div class="card-body">
@@ -84,26 +84,27 @@
                             <div class="collapse show" id="collapseExample">
                                 <p>Here are the steps on how to manually transfer money to a BCA bank account with the account
                                     number <b>2027999995</b> :</p>
+    
+                             
+    
                                 <p>
     
                                 <ul>
                                     <li>
                                         <p>use ATM/e-Banking/mBanking/cash deposit to transfer to ARCTURUS account</p>
                                     </li>
+                                    
+                                   
                                 </ul>
     
-                                <p>
-                                    After receiving the transfer receipt, you can follow these steps to upload the transfer
-                                    receipt to the Arcturus system:
-                                </p>
+                                <p>After receiving the transfer receipt, you can follow these steps to upload the transfer
+                                    receipt to the Arcturus system:</p>
     
                                 <ol>
                                     <li>Take a clear photo of the transfer receipt.</li>
                                     <li>Upload the photo of the transfer receipt to the Arcturus system through the Arcturus
                                         website or app.</li>
-                                    <li>
-                                        Verify by ADMIN maximum up to 3 hours depending on transaction traffic or contact WA admin for immediately respond
-                                    </li>
+                                    <li>Verify by ADMIN maximum up to 3 hours depending on transaction traffic or contact WA admin for immediately respond</li>
                                 </ol>
     
                                 <p>The Arcturus admin will verify your transfer receipt in less then 15 minutes.</p>
@@ -134,16 +135,46 @@
                                 </div>
                                 <input type="hidden" value="{{ $booking->id }}" name="idbooking">
                                 <div class="mb-3">
-                                    <button class="btn btn-primary" type="submit">send</button>
+                                    
+                                  <button class="btn btn-primary" type="submit" id="submitBtn">Send</button>
+                                <button class="btn btn-primary" type="button" id="loadingBtn" style="display: none;">Loading...</button>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
 
     </section>
+      <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.querySelector('form');
+        const submitBtn = document.getElementById('submitBtn');
+        const loadingBtn = document.getElementById('loadingBtn');
+        let isImageUploaded = localStorage.getItem('isImageUploaded') === 'true';
+
+        if (isImageUploaded) {
+            submitBtn.disabled = true;
+            loadingBtn.style.display = 'block';
+            submitBtn.style.display = 'none';
+        }
+
+        form.addEventListener('submit', function (event) {
+            if (isImageUploaded) {
+                event.preventDefault();
+                alert('Image already uploaded. Please reload the page.');
+            } else {
+                isImageUploaded = false;
+                localStorage.setItem('isImageUploaded', 'false');
+                submitBtn.disabled = true;
+                loadingBtn.disabled = true;
+                submitBtn.style.display = 'none';
+                loadingBtn.style.display = 'block';
+            }
+        });
+    });
+</script>
     <script>
         document.getElementById('image-input').addEventListener('change', function() {
             const fileInput = this;
