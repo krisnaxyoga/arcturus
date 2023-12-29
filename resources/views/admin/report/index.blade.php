@@ -19,6 +19,9 @@
           <div class="row">
             <div class="col-lg-12">
                 <div class="card mb-3">
+                    <div class="card-header">
+                        Stay
+                    </div>
                     <div class="card-body">
                         <div class="d-flex">
                             <form action="{{route('dashboard.report')}}" class="d-flex" method="get">
@@ -36,6 +39,38 @@
                                 <button class="dt-button btn btn-success">Excel</button>
                             </div>
                             <form action="{{route('dashboard.report.pdf')}}" method="get">
+                                <input type="date" hidden value="{{$startdate}}" name="star_tdate">
+                                <input type="date" hidden value="{{$enddate}}" name="end_date">
+                                <input type="text" hidden value="{{$hotel_select}}" name="hotelselect">
+                                <button class="btn btn-secondary">
+                                    Pdf
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-header">
+                       Made on
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <form action="{{route('dashboard.reportmadeon')}}" class="d-flex" method="get">
+                                <select name="hotel" id="" class="form-control mr-2">
+                                    <option value="">-select hotel-</option>
+                                    @foreach ($hotels as $itemhotel)
+                                    <option value="{{$itemhotel->vendor_name}}" @if($hotel_select == $itemhotel->vendor_name) selected @endif>{{$itemhotel->vendor_name}}</option>                                        
+                                    @endforeach
+                                </select>
+                                <input type="date" name="startdate" id="startdate" class="form-control mr-2" value="{{$startdate}}">
+                                <input type="date" name="enddate" id="enddate" class="form-control mr-2" value="{{$enddate}}">
+                                <button class="btn btn-primary mr-2" type="submit">filter</button>
+                            </form>
+                            <div class="buttons-excel mr-2">
+                                <button class="dt-button btn btn-success">Excel</button>
+                            </div>
+                            <form action="{{route('dashboard.madeonpdfreport.pdf')}}" method="get">
                                 <input type="date" hidden value="{{$startdate}}" name="star_tdate">
                                 <input type="date" hidden value="{{$enddate}}" name="end_date">
                                 <input type="text" hidden value="{{$hotel_select}}" name="hotelselect">
