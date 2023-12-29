@@ -11,7 +11,7 @@ import Bookings from '../BookingHistory/Bookings';
 import { Link, usePage } from '@inertiajs/inertia-react';
 import { Inertia } from '@inertiajs/inertia';
 
-export default function Index({ props, session, data, agent }) {
+export default function Index({ props, session, data, agent, transport }) {
     const { url } = usePage();
 
     const [currentPage, setCurrentPage] = useState(1)
@@ -27,6 +27,7 @@ export default function Index({ props, session, data, agent }) {
 
     const prevPage = () => setCurrentPage(currentPage - 1);
 
+    console.log(transport,">>>TRANSPORT")
     return (
         <>
             <Layout agent={agent} page={url}>
@@ -58,7 +59,7 @@ export default function Index({ props, session, data, agent }) {
                                                     <th>Confirmation letter</th>
                                                 </tr>
                                             </thead>
-                                            <Bookings bookings={currentPosts} />
+                                            <Bookings bookings={currentPosts} transports={transport}/>
                                         </table>
                                         <Pagination postsPerPage={postsPerPage} totalPosts={data.length} paginate={paginate} nextPage={nextPage} prevPage={prevPage} crntPage={currentPage} />
                                     </div>

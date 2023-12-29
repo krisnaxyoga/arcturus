@@ -11,12 +11,16 @@ import { Inertia } from '@inertiajs/inertia';
 export default function Index({ props, session, agent,history,setting }) {
     const { url } = usePage();
     const [copied, setCopied] = useState(false);
+    const [copied2, setCopied2] = useState(false);
+    const [pleaseamount, settotalamoutnt] = useState(false);
     const [text, setText] = useState("2027999995");
     const [totaltopup, setTopup] = useState('');
     const [imgtrf,setTrf] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
-    
+    const [totalPayment, setTotalPayment] = useState('');
     const [selectedImage, setSelectedImage] = useState(null);
+    const [uniqueCode, setUniqueCode] = useState('');
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
     function formatRupiah(amount) {
         return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount).slice(0, -3);
@@ -33,6 +37,41 @@ export default function Index({ props, session, agent,history,setting }) {
     
         return `${formattedDay}/${formattedMonth}/${year}`;
     }
+
+    const handleTopupChange = (e) => {
+        setTopup(e.target.value);
+        // const inputValue = e.target.value;
+        // // Periksa apakah input adalah angka
+        // const isNumericInput = /^[0-9]*$/.test(inputValue);
+    
+        // if (isNumericInput) {
+        //   // Tambahkan 3 angka acak di belakang angka yang dimasukkan
+        //   const randomDigits = Math.floor(Math.random() * 1000);
+        //   const formattedTotal = parseFloat(inputValue) + parseFloat(`0.${randomDigits}`);
+        //   setTopup(inputValue);
+        //   setTotalPayment(formattedTotal.toFixed(0));
+        // } else {
+        //   // Jika input bukan angka, biarkan input kosong
+        //   setTopup('');
+        //   setTotalPayment('');
+        // }
+      };
+
+
+        const generateUniqueCode = () => {
+                const isValidInput = /^[1-9]\d{3,}$/.test(totaltopup);
+
+               
+                if (isValidInput) {
+                  const randomDigits = Math.floor(Math.random() * 900)+100;
+                  const formattedTotal = parseFloat(`${totaltopup}`)+parseFloat(`${randomDigits}`);
+                  setUniqueCode(formattedTotal);
+                  setTopup(formattedTotal);
+                  setIsButtonDisabled(true);
+                } else {
+                    settotalamoutnt(true);
+                }
+        };
       
     useEffect(() => {
         // Anda dapat menambahkan logika tambahan jika diperlukan
@@ -54,11 +93,24 @@ export default function Index({ props, session, agent,history,setting }) {
         }, 2000);
       }
     }, [copied]);
+
+    useEffect(() => {
+        if (copied2) {
+          setTimeout(() => {
+            setCopied2(false);
+          }, 2000);
+        }
+      }, [copied2]);
   
     const handleCopy = () => {
       navigator.clipboard.writeText(text);
       setCopied(true);
     };
+
+    const handleCopy2 = () => {
+        navigator.clipboard.writeText(totaltopup);
+        setCopied2(true);
+      };
 
     const handleTransfer = (e) => {
         const file = e.target.files[0];
@@ -148,6 +200,7 @@ export default function Index({ props, session, agent,history,setting }) {
                                             </div>
                                         )}
                                 {copied && <div className="alert alert-success">Copied!</div>}
+                                {copied2 && <div className="alert alert-success">Copied!</div>}
                                 </div>
                             </div>
                             <div className="row">
@@ -166,7 +219,22 @@ export default function Index({ props, session, agent,history,setting }) {
                                 <div className="col-lg-12">
                                     <form onSubmit={storePost}>
                                         <div className="form-group mb-3">
-                                            <input required type="number" className='form-control' onChange={(e)=>setTopup(e.target.value)} placeholder='total top up...'/>
+                                            {pleaseamount && <>
+                                            <p className='badge badge-danger'>please input total amount</p>
+                                            </>}
+                                            <input required type="number" className='form-control mb-2' onChange={handleTopupChange} placeholder='total top up...'/>
+                                            <button disabled={isButtonDisabled} className='btn btn-success mb-2' type='button' onClick={generateUniqueCode}>Click for Unique Code</button>
+                                           
+                                            {uniqueCode && (
+                                                <>
+                                                <p className='text-danger' style={{fontWeight:'700'}}>transfer below value please:</p>
+                                                 <div className="d-flex mb-3">
+                                                   <span className='badge badge-primary' style={{fontWeight:'700',fontSize:'20px'}}>{formatRupiah(uniqueCode)}</span>
+                                                    <a href="#" className='btn btn-light' onClick={handleCopy2}><i className='fa fa-copy'></i></a>
+                                                </div>
+                                                </>
+                                                  
+                                            )}
                                         </div>
                                         <div className="form-group mb-3">
                                         <label for="image">Upload bank transfer receipt</label>
