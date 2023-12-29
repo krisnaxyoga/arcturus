@@ -8,6 +8,7 @@ use App\Models\Setting;
 use App\Models\Booking;
 use App\Models\PaymentGetwayTransaction;
 
+use App\Models\OrderTransport;
 use App\Models\RoomHotel;
 use App\Models\Vendor;
 use App\Models\User;
@@ -60,6 +61,15 @@ class BookingController extends Controller
         $booking->booking_status = 'paid';
         $booking->save();
 
+        $tranportbookings = OrderTransport::where('booking_id',$payment->booking_id)->first();
+
+        if($tranportbookings){
+             $tranportbookings->booking_status = 'paid';
+            $tranportbookings->is_see = 0;
+            $tranportbookings->save();
+        }
+       
+
         $hotelbook = HotelRoomBooking::where('booking_id',$payment->booking_id)->get();
 
             // foreach($hotelbook as $item){
@@ -82,10 +92,31 @@ class BookingController extends Controller
 
 
 
-        Mail::to($booking->vendor->email_reservation)->send(new BookingConfirmationHotel($data));
-        Mail::to($booking->vendor->email)->send(new BookingConfirmationHotel($data));
-        Mail::to($booking->users->email)->send(new BookingConfirmation($data));
+        // Mail::to($booking->vendor->email_reservation)->send(new BookingConfirmationHotel($data));
+        // Mail::to($booking->vendor->email)->send(new BookingConfirmationHotel($data));
+        // Mail::to($booking->users->email)->send(new BookingConfirmation($data));
 
+        return redirect()->back()->with('message', 'Email send to agent and hotel');
+    }
+
+    public function confirmationcancel($id)
+    {
+        $payment = PaymentGetwayTransaction::find($id);
+        $payment->status = 400;
+        $payment->save();
+
+        $booking = Booking::find($payment->booking_id);
+        $booking->booking_status = 'invalid payment';
+        $booking->save();
+
+        $tranportbookings = OrderTransport::where('booking_id',$payment->booking_id)->first();
+        if($tranportbookings){
+            $tranportbookings->booking_status = 'invalid payment';
+            $tranportbookings->is_see = 0;
+            $tranportbookings->save();
+
+        }
+        
         return redirect()->back()->with('message', 'Email send to agent and hotel');
     }
 

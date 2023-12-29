@@ -13,6 +13,7 @@ use App\Models\ContractRate;
 use App\Models\RoomType;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\OrderTransport;
 
 class BookingHistoryController extends Controller
 {
@@ -24,10 +25,11 @@ class BookingHistoryController extends Controller
         $iduser = auth()->user()->id;
         $user = User::where('id',$iduser)->with('vendors')->first();
         $booking = Booking::with('users','vendor')->whereNotIn('booking_status', ['-', ''])->where('user_id',$user->vendors->user_id)->orderBy('created_at', 'desc')->get();
-        
+        $transport = OrderTransport::where('user_id',$iduser)->get();
         return inertia('Agent/BookingHistory/Index',[
             'data' => $booking,
-            'agent' => $user
+            'agent' => $user,
+            'transport' => $transport,
         ]);
 
     }

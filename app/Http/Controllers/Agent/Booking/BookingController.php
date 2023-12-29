@@ -12,12 +12,16 @@ use App\Models\ContractPrice;
 use App\Models\Vendor;
 use App\Models\User;
 use App\Models\Setting;
+use App\Models\OrderTransport;
 use Carbon\Carbon;
 
+use App\Models\AgentTransport;
 use App\Models\SurchargeAllRoom;
 use Illuminate\Support\Str;
 use App\Models\ContractRate;
 
+use App\Models\PackageTransport;
+use App\Models\TransportDestination;
 use Illuminate\Support\Facades\Log;
 use GuzzleHttp\Client;
 use Illuminate\Http\RedirectResponse;
@@ -152,13 +156,16 @@ class BookingController extends Controller
     {
         $data = Booking::where('id',$id)->with('users')->with('vendor')->first();
 
+        $transport = PackageTransport::with('transportdestination')->get();
+        $destination = TransportDestination::all();
         $hotelbooking = HotelRoomBooking::where('booking_id',$id)->get();
 
-        return view('landingpage.hotel.bookingpage',compact('data','hotelbooking'));
+        return view('landingpage.hotel.bookingpage',compact('data','hotelbooking','transport','destination'));
     }
 
     public function bookingstore(Request $request, string $id)
     {
+        // dd($request->totalPrice);
             $validator = Validator::make($request->all(), [
                 'firstname' => 'required',
                 'lastname' => 'required',
@@ -186,6 +193,27 @@ class BookingController extends Controller
                 $book->booking_status = 'unpaid';
                 $book->save();
 
+                if ($request->idtransport) {
+                    $package = PackageTransport::find($request->idtransport);
+
+                    $ordertransport = new OrderTransport;
+                    $ordertransport->user_id = $book->user_id;
+                    $ordertransport->package_id = $request->idtransport;
+                    $ordertransport->booking_id = $id;
+                    $ordertransport->transport_id = $package->agenttransport->id;
+                    $ordertransport->time_pickup = $request->timepickup;
+                    $ordertransport->pickup_date = $request->datepickup;
+                    $ordertransport->guest_name = $request->firstname.' '.$request->lastname;
+                    $ordertransport->phone_guest = $request->phone;
+                    $ordertransport->total_price_nomarkup = $package->price;
+                    $ordertransport->total_price = $package->price + $package->agenttransport->markup;
+                    $ordertransport->is_see = 0;
+                    $ordertransport->destination = $package->transportdestination->destination;
+                    $ordertransport->typecar = $package->type_car;
+                    $ordertransport->number_police = $package->number_police;
+                    $ordertransport->booking_status = 'unpaid';
+                    $ordertransport->save();
+                }
                 if($request->paymentmethod == 2){
                     $booking = Booking::find($id);
 
@@ -197,6 +225,7 @@ class BookingController extends Controller
                         'total'=>$totalbooking,
                         'bookingid'=>$booking->id
                     ];
+
                     $data['body'] = [
                         'name' => array(auth()->user()->name), //array($request->name),
                         'email' => array(auth()->user()->email),//array($request->email),
@@ -255,7 +284,15 @@ class BookingController extends Controller
                 }else{
                     $total_as_saldo = $totalpayment;
                 }
-                return view('landingpage.hotel.transferbank',compact('booking','total_as_saldo'));
+
+                if ($request->idtransport) {
+                    $tranportbookings = OrderTransport::where('booking_id',$id)->first();
+                    $transportbooking = $tranportbookings->total_price;
+                }else{
+                    $transportbooking = 0;
+                }
+
+                return view('landingpage.hotel.transferbank',compact('booking','total_as_saldo','transportbooking'));
             }
             return redirect()
             ->route('agent.booking.history')
@@ -279,9 +316,16 @@ class BookingController extends Controller
             $total_as_saldo = $totalpayment;
         }
 
+        $tranportbookings = OrderTransport::where('booking_id',$booking->id)->first();
+        if($tranportbookings){
+            $transportbooking = $tranportbookings->total_price;
+        }else{
+            $transportbooking = 0;
+        }
+        
 
 
-        return view('landingpage.hotel.transferbank',compact('booking','total_as_saldo'));
+        return view('landingpage.hotel.transferbank',compact('booking','total_as_saldo','transportbooking'));
     }
 
     public function upbanktransfer(Request $request){
@@ -327,6 +371,14 @@ class BookingController extends Controller
             $trans->trx_id = Str::random(5);
             $trans->is_see = 0;
             $trans->save();
+
+            $tranportbookings = OrderTransport::where('booking_id',$request->idbooking)->first();
+            if($tranportbookings){
+                $tranportbookings->booking_status = 'proccessing';
+                $tranportbookings->is_see = 0;
+                $tranportbookings->save();
+            }
+            
 
             $Setting = Setting::where('id',1)->first();
             // Mail::to($Setting->email)->send(new PaymentNotif($trans));
