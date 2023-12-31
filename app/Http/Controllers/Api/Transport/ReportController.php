@@ -12,7 +12,7 @@ class ReportController extends Controller
 {
     public function index(){
         $iduser = auth()->guard('agent_transport')->id();
-        $data = OrderTransport::where('transport_id',$iduser)->get();
+        $data = OrderTransport::where('transport_id',$iduser)->orderBy('created_at','desc')->get();
 
         return new PostResource(true, 'List Data report', $data);
     }
@@ -20,14 +20,14 @@ class ReportController extends Controller
     public function detail($id){
 
         $data = OrderTransport::find($id);
-        
+
         return new PostResource(true, 'Detail Data report', $data);
     }
 
     public function widraw($id){
 
         $data = WidrawTransport::where('ordertransport_id',$id)->first();
-        
+
         return new PostResource(true, 'Detail Data report', $data);
     }
 }

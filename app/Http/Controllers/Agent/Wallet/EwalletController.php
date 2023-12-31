@@ -45,11 +45,15 @@ class EwalletController extends Controller
     public function pay($id)
     {
         $transportbooking = OrderTransport::where('booking_id',$id)->first();
+
         if($transportbooking){
+            $transportbooking->booking_status = 'paid';
+            $transportbooking->save();
             $totaltranport = $transportbooking->total_price;
         }else{
             $totaltranport = 0;
         }
+
 
         $hotel_room_booking = HotelRoomBooking::where('booking_id',$id)->get();
         $saldo = auth()->user()->saldo;
@@ -89,6 +93,7 @@ class EwalletController extends Controller
             $booking->is_see = 0;
             $booking->save();
 
+
             $hotelbook = HotelRoomBooking::where('booking_id',$id)->get();
             $contract_id = HotelRoomBooking::where('booking_id',$id)->first();
             $contract = ContractRate::where('id',$contract_id->contract_id)->first();
@@ -113,7 +118,7 @@ class EwalletController extends Controller
             $message = 'you must top up';
             return view('landingpage.hotel.confirsaldo',compact('message'));
         }
-        
+
     }
 
     /**

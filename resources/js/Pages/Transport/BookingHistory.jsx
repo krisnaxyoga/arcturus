@@ -93,6 +93,12 @@ export default function BookingHistory({ token, user }) {
                                                             )}
 
                                                             <p>
+                                                                Guest : <br />
+                                                                {
+                                                                    post.guest_name
+                                                                }
+                                                            </p>
+                                                            <p>
                                                                 {
                                                                     post.destination
                                                                 }
@@ -102,23 +108,30 @@ export default function BookingHistory({ token, user }) {
                                                                     formatRupiah(post.total_price_nomarkup)
                                                                 }
                                                             </p>
-                                                            <p>
+                                                            {/* <p>
                                                                 {
                                                                     post.number_police
                                                                 }
-                                                            </p>
+                                                            </p> */}
                                                         </span>
                                                         <span className="col-lg-6">
                                                             <p className="m-0"> Pickup date :  </p>
                                                             <p> {
                                                                     formatDate(post.pickup_date)
                                                                 }</p>
-                                                            <p className="m-0"> Pickup time : 
-                                                                
+                                                            <p className="m-0"> Pickup time :
+
                                                             </p>
-                                                            <p>{
+                                                            <p className="m-0">{
                                                                     post.time_pickup
                                                                 }</p>
+                                                                 <p className="m-0"> Flight time :</p>
+                                                                 <p>
+                                                                    {
+                                                                        post.flight_time
+                                                                    }
+                                                                 </p>
+
                                                         </span>
                                                     </span>
                                                     {post.booking_status ==
@@ -137,10 +150,10 @@ export default function BookingHistory({ token, user }) {
                                                                 </>
                                                             ) : (
                                                                 <>
-                                                                    
+
                                                                 </>
                                                             )}
-                                                    
+
                                                 </div>
                                             </div>
                                         </div>

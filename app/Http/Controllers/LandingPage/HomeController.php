@@ -21,6 +21,7 @@ use App\Models\BlackoutContractRate;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use GuzzleHttp\Client; // Anda perlu menginstal Guzzle HTTP client untuk ini
+use Illuminate\Support\Facades\DB;
 
 
 class HomeController extends Controller
@@ -60,7 +61,7 @@ class HomeController extends Controller
 
     public function hotel(Request $request)
     {
-        
+
         $checkin = Carbon::parse($request->checkin);
         $checkout = Carbon::parse($request->checkout);
         $Nights = $checkout->diffInDays($checkin);
@@ -100,7 +101,7 @@ class HomeController extends Controller
             // dd($totalNights);
         }
 
-        
+
         $selectedProperties = $request->input('properties', []);
 
         $vendor = ContractPrice::whereHas('contractrate.vendors', function ($query) use ($request,$selectedProperties) {
@@ -137,7 +138,7 @@ class HomeController extends Controller
                     $selectedProperties = explode(',', $selectedProperties);
                 }
                 return $q->whereIn('type_property', $selectedProperties);
-            });            
+            });
 
             $query->when($request->country && $request->state && $request->city && $selectedProperties, function ($q) use ($request,$selectedProperties) {
                 return $q->tap(function ($subquery) use ($request) {
@@ -152,7 +153,7 @@ class HomeController extends Controller
                 $query->where('rolerate', 1);
                 $query->where('is_active', 1);
             })
-        
+
             ->whereHas('contractrate', function ($query) use ($checkin, $checkout) {
                 $query->where(function ($q) use ($checkin, $checkout) {
                     $q->where(function ($qq) use ($checkin, $checkout) {
@@ -167,15 +168,15 @@ class HomeController extends Controller
             ->where('is_active',1)
             ->with('contractrate.vendors')
             ->with('room');
-            
+
             $contractprice = ContractPrice::whereHas('contractrate.vendors', function ($query) use ($request, $selectedProperties) {
                 $query->where('type_vendor', 'hotel')
                     ->where('is_active', 1);
-            
+
                 $query->when($request->country, function ($q, $country) {
                     return $q->where('country', $country);
                 });
-            
+
                 $query->when($request->search, function ($q, $search) {
                     return $q->where(function ($subquery) use ($search) {
                         $subquery->where('country', 'like', '%' . $search . '%')
@@ -191,11 +192,11 @@ class HomeController extends Controller
                 $query->when($request->state, function ($q, $state) {
                     return $q->where('state', $state);
                 });
-            
+
                 $query->when($request->city, function ($q, $city) {
                     return $q->where('city', $city);
                 });
-            
+
                 $query->when(!empty($selectedProperties), function ($q) use ($selectedProperties) {
                     if (is_string($selectedProperties)) {
                         // Convert string to an array if needed
@@ -203,7 +204,7 @@ class HomeController extends Controller
                     }
                     return $q->whereIn('type_property', $selectedProperties);
                 });
-            
+
                 $query->when($request->country && $request->state && $request->city && $selectedProperties, function ($q) use ($request, $selectedProperties) {
                     return $q->tap(function ($subquery) use ($request) {
                         $subquery->where('country', $request->country)
@@ -256,10 +257,29 @@ class HomeController extends Controller
             ->with('advancepurchase')
             ->get();
 
+            $HotelCalendar = HotelRoomSurcharge::where(function ($q) use ($checkin, $checkout) {
+                $checkinDate = date('Y-m-d', strtotime($checkin));
+                $checkoutDate = date('Y-m-d', strtotime($checkout));
+
+                $q->where(function ($qq) use ($checkinDate, $checkoutDate) {
+                    $qq->whereRaw('DATE(start_date) >= ?', [$checkinDate])
+                        ->whereRaw('DATE(start_date) <= ?', [$checkoutDate]);
+                })
+                ->orWhere(function ($qq) use ($checkinDate, $checkoutDate) {
+                    $qq->whereRaw('DATE(end_date) >= ?', [$checkinDate])
+                        ->whereRaw('DATE(end_date) <= ?', [$checkoutDate]);
+                })
+                ->orWhere(function ($qq) use ($checkinDate, $checkoutDate) {
+                    $qq->whereRaw('DATE(start_date) <= ?', [$checkinDate])
+                        ->whereRaw('DATE(end_date) >= ?', [date('Y-m-d', strtotime($checkoutDate . ' +1 day'))]);
+                });
+            })
+            ->get();
+
             $surchargeAllRoom = SurchargeAllRoom::where('start_date', '>=', $checkin)
             ->where('end_date', '<=', Carbon::parse($checkout)->subDay())
             ->get();
-            
+
         $data = $vendor;
 
         if ($request->sort == 'low_to_high') {
@@ -298,18 +318,37 @@ class HomeController extends Controller
             'properties' =>$selectedProperties
         ];
 
-      
+
         // Terapkan append ke objek paginasi
         $data->appends($requestdata);
+
+
+        // Tanggal setahun ke depan dari sekarang
+        $oneYearLater = $today->copy()->addYear();
+
+        // Query untuk mendapatkan data dari tabel HotelRoomSurcharge
+        $HotelCalendartool = HotelRoomSurcharge::whereBetween('start_date', [$today, $oneYearLater])
+            ->where('end_date', '=', DB::raw('start_date')) // Menambahkan kondisi bahwa enddate sama dengan startdate
+            ->get();
+
+
 
         // return view('landingpage.hotel.index',compact('data','requestdata','blackoutVendorIds','surchargesDetail','surcharprice'));
         $acyive = auth()->user()->is_active;
         if($acyive == 1){
-          return view('landingpage.hotel.index', compact('data', 'requestdata','contractprice','advancepurchase','country','surchargeAllRoom','Nights'));  
+          return view('landingpage.hotel.index', compact('data',
+          'HotelCalendar',
+          'HotelCalendartool',
+           'requestdata',
+           'contractprice',
+           'advancepurchase',
+           'country',
+           'surchargeAllRoom',
+           'Nights'));
         }else{
             return view('landingpage.pagenotfound.isactiveaccount');
         }
-        
+
     }
 
     /**
@@ -317,7 +356,7 @@ class HomeController extends Controller
      */
     public function hoteldetail(Request $request, $id)
     {
-        
+
         // dd(auth()->check());
         if(auth()->check() == false){
             return view('auth.login');
@@ -367,7 +406,7 @@ class HomeController extends Controller
                 $checkin = Carbon::createFromFormat('Y-m-d', $inputCheckin);
                 $checkout = Carbon::createFromFormat('Y-m-d', $inputCheckout);
                 $today = Carbon::now();
-                
+
 
                 if ($checkout->lt($checkin)) {
                     // Menghitung selisih hari antara checkin dan checkout
@@ -398,9 +437,9 @@ class HomeController extends Controller
 
                 $checkin = $datareq['checkin'];
                 $checkout = $datareq['checkout'];
-                
+
                 $vendorIds = [$vendor[0]->contractrate->vendor_id];
-            
+
                 // dd($agentCountry);
                 $contractprice = ContractPrice::where('user_id', $vendor[0]->user_id)
                     ->where('is_active',1)
@@ -489,7 +528,7 @@ class HomeController extends Controller
                 ->where(function ($q) use ($checkin, $checkout) {
                     $checkinDate = date('Y-m-d', strtotime($checkin));
                     $checkoutDate = date('Y-m-d', strtotime($checkout));
-            
+
                     $q->where(function ($qq) use ($checkinDate, $checkoutDate) {
                         $qq->whereRaw('DATE(start_date) >= ?', [$checkinDate])
                             ->whereRaw('DATE(start_date) <= ?', [$checkoutDate]);
@@ -534,7 +573,7 @@ class HomeController extends Controller
                 ->with('users')
                 ->with('advancepurchase')
                 ->get();
-            
+
                 // dd($day,$advancepurchase);
             }
 
@@ -542,17 +581,17 @@ class HomeController extends Controller
             // dd($contractprice);
             // return view('landingpage.hotel.detail',compact('data','roomtype','service','vendordetail','datareq','surcharprice','surchargesVendorIds','blackoutVendorIds'));
 
-            return view('landingpage.hotel.detail', 
+            return view('landingpage.hotel.detail',
             compact(
                 'data',
                 'HotelCalendar',
-                'advancepurchase', 
-                'slider', 
-                'Nights', 
-                'roomtype', 
-                'service', 
-                'vendordetail', 
-                'datareq', 
+                'advancepurchase',
+                'slider',
+                'Nights',
+                'roomtype',
+                'service',
+                'vendordetail',
+                'datareq',
                 'contractprice',
                 'HotelRoomBooking',
                 'surchargeAllRoom',
@@ -560,7 +599,7 @@ class HomeController extends Controller
             ));
         }
     }
-    
+
 
 
     /**
@@ -568,7 +607,7 @@ class HomeController extends Controller
      */
     public function about()
     {
-        
+
         return view('landingpage.about');
     }
     public function contact()
@@ -691,5 +730,5 @@ class HomeController extends Controller
             // Proses pembayaran gagal
         }
     }
-    
+
 }

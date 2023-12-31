@@ -171,7 +171,7 @@ Route::group(['middleware' => ['auth', 'checkrole:1']], function() {
     Route::get('/admin/transport/isactive/{id}/{ac}', [\App\Http\Controllers\Admin\Transport\TransportController::class, 'is_active'])->name('dashboard.transport.isactive');
     Route::get('/admin/transport/report', [\App\Http\Controllers\Admin\Transport\TransportController::class, 'report'])->name('dashboard.transport.report');
     Route::post('/admin/transport/widraw', [\App\Http\Controllers\Admin\Transport\TransportController::class, 'widraw'])->name('dashboard.transport.widraw');
-   
+
     Route::get('/admin/transport/login/{id}', [\App\Http\Controllers\Admin\Transport\TransportController::class, 'logintransport'])->name('login.transport.index');
 
 });
@@ -266,12 +266,12 @@ Route::group(['middleware' => ['auth', 'checkrole:2']], function() {
     Route::get('/room/contract/addallcontractprice/{cont}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'addallcontractprice'])->name('contract.addallcontractprice');
     Route::get('/room/contract/sync_advance_purchase/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'sync_advance_purchase'])->name('contract.sync_advance_purchase');
     Route::get('/room/contract/contract_price_is_active/{id}/{is_active}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'contract_price_is_active'])->name('contract.contract_price_is_active');
-   
+
     //blackout
     Route::get('/room/contract/blackoutcontract/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'blackoutcontract'])->name('contract.blackoutcontract');
     Route::post('/room/contract/blackoutcontractstore',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'blackoutcontractstore'])->name('contract.blackoutcontractstore');
     Route::get('/room/contract/blackoutdestroy/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'blackoutdestroy'])->name('contract.blackoutdestroy');
-   
+
     //surcharge controller
     Route::get('/room/surcharge/index',[\App\Http\Controllers\Vendor\Hotel\Agent\SurchargeController::class, 'index'])->name('surcharge.index');
     Route::get('/room/surcharge/{hotel_room_id}/load-dates',[\App\Http\Controllers\Vendor\Hotel\Agent\SurchargeController::class, 'load_dates'])->name('surcharge.load_dates');
@@ -280,7 +280,7 @@ Route::group(['middleware' => ['auth', 'checkrole:2']], function() {
     Route::get('/room/surcharge/surchargeallroom',[\App\Http\Controllers\Vendor\Hotel\Agent\SurchargeController::class, 'surchargeallroom'])->name('admin.surchargeallroom');
     Route::post('/room/surcharge/surchargeallroomstore',[\App\Http\Controllers\Vendor\Hotel\Agent\SurchargeController::class, 'surchargeallroomstore'])->name('admin.surchargeallroomstore');
     Route::get('/room/surcharge/surchargeallroomdestroy/{code}',[\App\Http\Controllers\Vendor\Hotel\Agent\SurchargeController::class, 'surchargeallroomdestroy'])->name('admin.surchargeallroomdestroy');
-  
+
     //advance purchase
     Route::post('/contract/advancepurchase/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'updateadvance'])->name('advancepurchase.contract');
     Route::get('/contract/destroyadvanceprice/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'destroyadvanceprice'])->name('destroyadvanceprice.contract');
@@ -288,7 +288,7 @@ Route::group(['middleware' => ['auth', 'checkrole:2']], function() {
     Route::get('/advance/updateadvancetstatus/{id}/{isactive}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'updateadvancetstatus'])->name('advance.updateadvancetstatus');
     Route::get('/room/contract/adv_price_is_active/{id}/{is_active}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'adv_price_is_active'])->name('contract.adv_price_is_active');
     Route::get('/contract/getadvanceprice/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\ContractController::class, 'getAdvancePrice'])->name('getAdvancePrice.contract');
-   
+
     //promo price
     Route::get('/room/promo/index/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\PromoPriceController::class, 'index'])->name('promo.index');
     Route::get('/room/promo/store/{id}',[\App\Http\Controllers\Vendor\Hotel\Agent\PromoPriceController::class, 'store'])->name('promo.store');
@@ -323,6 +323,7 @@ Route::group(['middleware' => ['auth', 'checkrole:3']], function() {
    Route::get('/agent/bookinghistory',[\App\Http\Controllers\Agent\Booking\BookingHistoryController::class, 'index'])->name('agent.booking.history');
    Route::get('/agent/bookinghistory/detail/{id}',[\App\Http\Controllers\Agent\Booking\BookingHistoryController::class, 'detail'])->name('agent.booking.detail');
    Route::get('/agent/bookinghistory/invoice/{id}',[\App\Http\Controllers\Agent\Booking\BookingHistoryController::class, 'invoice'])->name('agent.booking.invoice');
+   Route::post('/agent/bookinghistory/update/{id}',[\App\Http\Controllers\Agent\Booking\BookingHistoryController::class, 'update'])->name('agent.booking.update');
 
 
    //booking report

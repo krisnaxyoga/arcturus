@@ -47,7 +47,7 @@ function Index({token, user}) {
         // }
 
         // Check if tokens match
-       
+
         // console.log(tokenFromLocalStorage,">>>>INI ADA DI LOCALSTORAGE");
         // console.log(token.token,">>>>>INI ADA DI SISTEM");
         // const tokenFromFunction = token;
@@ -129,6 +129,13 @@ function Index({token, user}) {
                                                             )}
 
                                                             <p>
+                                                                Guest : <br />
+                                                                {
+                                                                    post.guest_name
+                                                                }
+                                                            </p>
+
+                                                            <p>
                                                                 {
                                                                     post.destination
                                                                 }
@@ -138,19 +145,19 @@ function Index({token, user}) {
                                                                     formatRupiah(post.total_price_nomarkup)
                                                                 }
                                                             </p>
-                                                            <p>
+                                                            {/* <p>
                                                                 {
                                                                     post.number_police
                                                                 }
-                                                            </p>
+                                                            </p> */}
                                                         </span>
                                                         <span className="col-lg-6">
                                                             <p className="m-0"> Pickup date :  </p>
                                                             <p> {
                                                                     formatDate(post.pickup_date)
                                                                 }</p>
-                                                            <p className="m-0"> Pickup time : 
-                                                                
+                                                            <p className="m-0"> Pickup time :
+
                                                             </p>
                                                             <p>{
                                                                     post.time_pickup
@@ -173,10 +180,10 @@ function Index({token, user}) {
                                                                 </>
                                                             ) : (
                                                                 <>
-                                                                    
+
                                                                 </>
                                                             )}
-                                                    
+
                                                 </div>
                                             </div>
                                         </div>

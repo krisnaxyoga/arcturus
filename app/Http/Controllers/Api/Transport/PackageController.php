@@ -23,7 +23,7 @@ class PackageController extends Controller
          //return collection of package as a resource
          return new PostResource(true, 'List Data User', $package);
     }
-    
+
     public function destination(){
         $dastination = TransportDestination::all();
         return new PostResource(true, 'List Data Destination', $dastination);
@@ -34,36 +34,36 @@ class PackageController extends Controller
         $validator = Validator::make($request->all(), [
             'type_car' => 'required',
             'destination' => 'required',
-         
+
         ]);
-    
+
         // Check if validation fails
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
-    
+
         $iduser = auth()->guard('agent_transport')->id();
-    
+
         // Create PackageTransport instance
         $PackageTransport = PackageTransport::create([
             'transport_id' => $iduser,
             'type_car' => $request->type_car,
             'destination' => $request->destination,
             'price' => $request->price,
-            'number_police' => $request->number_police,
+            // 'number_police' => $request->number_police,
             'change_policy' => $request->change_policy,
             'cancellation_policy' => $request->cancellation_policy,
         ]);
-    
+
         // Check if creation was successful
         if (!$PackageTransport) {
             return response()->json(['message' => 'Gagal membuat data post'], 500);
         }
-    
+
         // Return response with success message and data
         return response()->json(['message' => 'Data Post Berhasil Ditambahkan!', 'data' => $PackageTransport], 201);
     }
-    
+
 
     public function update(Request $request,$id){
             //define validation rules
@@ -83,7 +83,7 @@ class PackageController extends Controller
                 'type_car'     => $request->type_car,
                 'destination'     => $request->destination,
                 'price'   => $request->price,
-                'number_police'   => $request->number_police, 
+                // 'number_police'   => $request->number_police,
                 'change_policy' => $request->change_policy,
                 'cancellation_policy' => $request->cancellation_policy,
             ]);

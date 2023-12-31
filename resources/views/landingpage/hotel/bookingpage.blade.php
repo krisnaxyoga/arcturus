@@ -19,12 +19,12 @@
         @csrf
         @method('POST')
     <div class="container">
-      
+
         <div class="row">
             <div class="col-lg-8">
                 <h4>Booking Submission</h4>
                 <hr>
-               
+
                 <div class="card border-0 shadow mb-5" style="border-radius: 25px !important">
                     <div class="card-body">
                             <div class="row">
@@ -107,11 +107,15 @@
                                     <label for="">Special Requirements</label>
                                     <textarea class="form-control" name="special" id="" placeholder="Special Requirements"></textarea>
                                 </div>
+                                <div class="col-lg-12">
+                                    <input required type="checkbox" name="" id="" placeholder="I have read and accept the terms and conditions"> I have read and accept the terms and conditions
+
+                                </div>
                             </div>
-                           
+
                     </div>
                 </div>
-               
+
                 <input type="text" hidden value="1" name="paymentmethod">
                 {{-- <div class="card mt-4">
                     <div class="card-body">
@@ -126,15 +130,15 @@
                         </div>
                     </div>
                 </div> --}}
-                
+
                 <div class="mt-4">
                     <input type="hidden" id="totalPrice" name="totalPrice" value="{{ $data->price }}">
-                    
+
                     <input type="hidden" id="totalPriceInput" name="totalPriceInput" value="">
-                    
+
                     <input type="hidden" id="PriceInputTransport" name="PriceInputTransport" value="">
                     <input type="hidden" id="idtransport" name="idtransport" value="">
-                   
+
                 </div>
             </div>
             <div class="col-lg-4">
@@ -170,7 +174,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div>
             <div class="mb-3">
                 <h4>Transport</h4>
                 <hr>
@@ -191,7 +195,7 @@
                                             </div>
                                     </div>
                                 </div>
-                        
+
                             </div>
                         </div>
                         <div class="row">
@@ -222,7 +226,7 @@
                                         </div>
                                         @endif
                                         {{-- {{$item->agenttransport->status}} --}}
-                                       
+
                                         @endforeach
                                     </div>
                                 </div>
@@ -233,31 +237,36 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-9">
+            <div class="col-lg-12">
                 <div id="transportform" style="display:none">
                     <div class="row" >
-                        <div class="col-lg-6">
+                        <div class="col-lg-4">
                             <div class="mb-3">
-                                <label for="">time pick up <span class="text-danger">*</span></label>
+                                <label for="">Time pick up <span class="text-danger">*</span></label>
                                 <input type="time" class="form-control" name="timepickup" value="<?php echo date('H:i'); ?>">
                             </div>
                         </div>
-                        <div class="col-lg-6">
+                        <div class="col-lg-4">
                             <div class="mb-3">
-                                <label for="">pick up date<span class="text-danger">*</span></label>
+                                <label for="">Pick up date<span class="text-danger">*</span></label>
                                 <input type="date" class="form-control" name="datepickup" value="{{$data->checkin_date}}">
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="mb-3">
+                                <label for="">Flight <span class="text-danger">*</span></label>
+                                <input type="time" class="form-control" name="flight" value="<?php echo date('H:i'); ?>">
                             </div>
                         </div>
                     </div>
                 </div>
-                <input required type="checkbox" name="" id="" placeholder="I have read and accept the terms and conditions"> I have read and accept the terms and conditions
-                <div class="mt-4">
+                 <div class="mt-4">
                     <button type="submit" class="btn btn-primary">submit</button>
                 </div>
             </div>
         </div>
-    
-       
+
+
     </div>
 </form>
 </section>
@@ -304,7 +313,7 @@
                 transportnota.style.display = 'block';
                 totalPrice += price;
             } else {
-                transportform.style.display = 'none'; 
+                transportform.style.display = 'none';
                 transportnota.style.display = 'none';
                 totalPrice = totalPrice;
             }
@@ -367,10 +376,10 @@
     .transport-cards .card {
         flex: 0 0 auto; /* Memastikan kartu tidak mengecil secara otomatis */
         width: auto; /* Atur lebar kartu */
-        
+
     border-radius: 15px !important;
     }
-    
+
     /* The switch - the box around the slider */
 .switch {
   font-size: 17px;

@@ -13,9 +13,9 @@ export default function Index({ token, user }) {
     function formatRupiah(amount) {
         return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount).slice(0, -3);
     }
-    
+
     useEffect(() => {
-        
+
         fetchData(); // Memanggil fungsi untuk melakukan panggilan API saat komponen dimuat
     }, [tokenFromLocalStorage]); // Menambahkan tokenFromLocalStorage ke dalam dependencies useEffect
 
@@ -44,7 +44,7 @@ export default function Index({ token, user }) {
         // }
 
         // Check if tokens match
-       
+
         // console.log(tokenFromLocalStorage,">>>>INI ADA DI LOCALSTORAGE");
         // console.log(token.token,">>>>>INI ADA DI SISTEM");
         // const tokenFromFunction = token;
@@ -56,7 +56,7 @@ export default function Index({ token, user }) {
         // ...
     }, []);
 
-  
+
     const handleDelete = async (id) => {
       try {
           const response = await axios.get(
@@ -95,7 +95,7 @@ export default function Index({ token, user }) {
                                                       <p style={{fontWeight:'700'}}>{post.type_car}</p>
                                                       <p>{post.transportdestination.destination}</p>
                                                       <p>{formatRupiah(post.price)}</p>
-                                                      <p>{post.number_police}</p>
+                                                      {/* <p>{post.number_police}</p> */}
                                                     </span>
                                                     <span>
                                                       <div className="card mb-2">

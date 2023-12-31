@@ -9,6 +9,7 @@ use App\Models\Booking;
 use App\Models\PaymentGetwayTransaction;
 use App\Models\HotelRoomBooking;
 
+use App\Http\Resources\PostResource;
 use App\Models\ContractRate;
 use App\Models\RoomType;
 use App\Http\Controllers\Controller;
@@ -71,12 +72,14 @@ class BookingHistoryController extends Controller
         $conttract = ContractRate::where('id',$cont_id->contract_id)->first();
         $setting = Setting::first();
         $hotelroombooking = HotelRoomBooking::where('booking_id',$data->id)->with('room')->with('contractprice')->with('contractrate')->with('vendors')->get();
+        $transport = OrderTransport::where('booking_id',$id)->with('agenttransport')->first();
         return inertia('Agent/BookingHistory/Detail',[
             'data' => $data,
             'agent' => $agent,
             'setting' => $setting,
             'contract' => $conttract,
             'roombooking' =>$hotelroombooking,
+            'transport' => $transport
         ]);
     }
 
@@ -123,7 +126,14 @@ class BookingHistoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $transport = OrderTransport::where('booking_id',$id)->first();
+
+        $transport->flight_time = $request->flight_time;
+        $transport->time_pickup = $request->time_pickup;
+        $transport->pickup_confirmation = $request->pickup_confirmation;
+        $transport->save();
+
+        return new PostResource(true, 'Confirmation pickup send to Transport!', $transport);
     }
 
     /**

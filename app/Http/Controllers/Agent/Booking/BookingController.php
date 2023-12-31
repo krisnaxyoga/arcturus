@@ -87,7 +87,7 @@ class BookingController extends Controller
                     // $totalDataCountx++;
             }
             $surcharge = $totalsurchargex/$totalNights;
-            
+
             $data =  new Booking();
             $data->user_id = $userid;
             $data->booking_code = '#BO_'. $this->generateRandomString(10);
@@ -202,6 +202,7 @@ class BookingController extends Controller
                     $ordertransport->booking_id = $id;
                     $ordertransport->transport_id = $package->agenttransport->id;
                     $ordertransport->time_pickup = $request->timepickup;
+                    $ordertransport->flight_time = $request->flight;
                     $ordertransport->pickup_date = $request->datepickup;
                     $ordertransport->guest_name = $request->firstname.' '.$request->lastname;
                     $ordertransport->phone_guest = $request->phone;
@@ -274,10 +275,10 @@ class BookingController extends Controller
                 foreach($hotel_room_booking as $item){
                     $totalprice += $item->price;
                 }
-        
+
                 $booking = Booking::find($booking);
                 $totalpayment = $booking->night * $totalprice;
-        
+
                 $total_as_saldo = 0;
                 if($booking->price == $totalpayment){
                     $total_as_saldo = $booking->price;
@@ -322,7 +323,7 @@ class BookingController extends Controller
         }else{
             $transportbooking = 0;
         }
-        
+
 
 
         return view('landingpage.hotel.transferbank',compact('booking','total_as_saldo','transportbooking'));
@@ -378,7 +379,7 @@ class BookingController extends Controller
                 $tranportbookings->is_see = 0;
                 $tranportbookings->save();
             }
-            
+
 
             $Setting = Setting::where('id',1)->first();
             // Mail::to($Setting->email)->send(new PaymentNotif($trans));

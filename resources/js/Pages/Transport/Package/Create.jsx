@@ -69,7 +69,7 @@ function Create({token, user}) {
         // }
 
         // Check if tokens match
-       
+
         // console.log(tokenFromLocalStorage,">>>>INI ADA DI LOCALSTORAGE");
         // console.log(token.token,">>>>>INI ADA DI SISTEM");
         // const tokenFromFunction = token;
@@ -134,7 +134,7 @@ function Create({token, user}) {
                                             onChange={handleChange}
                                         />
                                     </div>
-                                    <div className="form-group mb-3">
+                                    {/* <div className="form-group mb-3">
                                         <label>Number Police:</label>
                                         <input
                                         className="form-control"
@@ -143,13 +143,15 @@ function Create({token, user}) {
                                             value={formData.number_police}
                                             onChange={handleChange}
                                         />
-                                    </div>
+                                    </div> */}
                                     <div className="form-group mb-3">
+                                        <label htmlFor="">Change Policy</label>
                                         <textarea className="form-control" onChange={handleChange} value={formData.change_policy} name="change_policy" id="" cols="30" rows="10">
                                             {formData.change_policy}
                                         </textarea>
                                     </div>
                                     <div className="form-group mb-3">
+                                    <label htmlFor="">cancellation Policy</label>
                                         <textarea name="cancellation_policy" onChange={handleChange} value={formData.cancellation_policy} className="form-control" id="" cols="30" rows="10">
                                             {formData.cancellation_policy}
                                         </textarea>

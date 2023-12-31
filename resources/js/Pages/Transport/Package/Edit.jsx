@@ -10,7 +10,7 @@ export default function Edit({token, user, iddata}) {
         type_car: "",
         destination: "",
         price: "",
-        number_police: "",  
+        number_police: "",
         change_policy: "",
         cancellation_policy:"",
     });
@@ -55,7 +55,10 @@ export default function Edit({token, user, iddata}) {
                     type_car: data.type_car || "",
                     destination: data.destination || "",
                     price: data.price || "",
-                    number_police: data.number_police || "",
+                    // number_police: data.number_police || "",
+                    change_policy: data.change_policy,
+                    cancellation_policy: data.cancellation_policy,
+
                 });
 
             } catch (error) {
@@ -71,7 +74,7 @@ export default function Edit({token, user, iddata}) {
 
         try {
             const response = await axios.post(
-                `http://127.0.0.1:8007/api/packagecar/update/${iddata}`,
+                `${domain}/api/packagecar/update/${iddata}`,
                 formData,
                 {
                     headers: {
@@ -98,7 +101,7 @@ export default function Edit({token, user, iddata}) {
         // }
 
         // Check if tokens match
-       
+
         // console.log(tokenFromLocalStorage,">>>>INI ADA DI LOCALSTORAGE");
         // console.log(token.token,">>>>>INI ADA DI SISTEM");
         // const tokenFromFunction = token;
@@ -118,7 +121,7 @@ export default function Edit({token, user, iddata}) {
         });
     };
 
-    console.log(formData);
+    // console.log(formData);
 
     return (
         <Layout token={token} user={user} page={`/transport/addpackage/${token}/${user.id}`}>
@@ -164,7 +167,7 @@ export default function Edit({token, user, iddata}) {
                                             onChange={handleChange}
                                         />
                                     </div>
-                                    <div className="form-group mb-3">
+                                    {/* <div className="form-group mb-3">
                                         <label>Number Police:</label>
                                         <input
                                         className="form-control"
@@ -173,13 +176,16 @@ export default function Edit({token, user, iddata}) {
                                             value={formData.number_police}
                                             onChange={handleChange}
                                         />
-                                    </div>
+                                    </div> */}
                                     <div className="form-group mb-3">
+
+                                    <label htmlFor="">Change Policy</label>
                                         <textarea className="form-control" onChange={handleChange} value={formData.change_policy} name="change_policy" id="" cols="30" rows="10">
                                             {formData.change_policy}
                                         </textarea>
                                     </div>
                                     <div className="form-group mb-3">
+                                    <label htmlFor="">cancellation Policy</label>
                                         <textarea name="cancellation_policy" onChange={handleChange} value={formData.cancellation_policy} className="form-control" id="" cols="30" rows="10">
                                             {formData.cancellation_policy}
                                         </textarea>
