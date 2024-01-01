@@ -18,7 +18,7 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                 </div>
                             @endif
-                
+
                             @if (session()->has('error'))
                                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                     {{ session('error') }}
@@ -38,8 +38,8 @@
                                         <th>Total Guest</th>
                                         <th>Price</th>
                                         <th>Guest Email</th>
-                                        
-                                        
+
+
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -59,98 +59,98 @@
                                                         </li>
                                                         <li style="list-style: none;">
                                                             <button type="button" class="badge badge-warning border-0" data-toggle="modal" data-target="#sendEmailModal">
-                                                                Send email all
+                                                                Sent email all
                                                             </button>
                                                         </li>
                                                         <li style="list-style: none;">
                                                             <button type="button" class="badge badge-primary border-0" data-toggle="modal" data-target="#sendEmailToAgentModal">
-                                                                Send email to agent
+                                                                Sent email to agent
                                                             </button>
                                                         </li>
                                                         <li style="list-style: none;">
                                                             <button type="button" class="badge badge-secondary border-0" data-toggle="modal" data-target="#sendEmailToHotelModal">
-                                                                Send email to hotel
+                                                                Sent email to hotel
                                                             </button>
                                                         </li>
                                                     </ul>
-                                                    
+
                                                     <!-- Modal for sending email to all -->
                                                     <div class="modal fade" id="sendEmailModal" tabindex="-1" role="dialog" aria-labelledby="sendEmailModalLabel" aria-hidden="true">
                                                         <div class="modal-dialog" role="document">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
-                                                                    <h5 class="modal-title" id="sendEmailModalLabel">Send Email to All</h5>
+                                                                    <h5 class="modal-title" id="sendEmailModalLabel">Sent Email to All</h5>
                                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                         <span aria-hidden="true">&times;</span>
                                                                     </button>
                                                                 </div>
                                                                 <div class="modal-body">
-                                                                    Are you sure you want to send an email to all?
+                                                                    Are you sure you want to sent an email to all?
                                                                 </div>
                                                                 <div class="modal-footer">
                                                                     <form class="d-inline" action="{{ route('admin.bookingall.confirmation', $item->id) }}" method="GET">
                                                                         @csrf
                                                                         @method('get')
-                                                                        <button type="submit" class="btn btn-warning">Send Email</button>
+                                                                        <button type="submit" class="btn btn-warning">Sent Email</button>
                                                                     </form>
                                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    
+
                                                     <!-- Modal for sending email to agent -->
                                                     <div class="modal fade" id="sendEmailToAgentModal" tabindex="-1" role="dialog" aria-labelledby="sendEmailToAgentModalLabel" aria-hidden="true">
                                                         <!-- Include the same modal structure as above, just change the IDs, titles, and action URL accordingly -->
                                                         <div class="modal-dialog" role="document">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
-                                                                    <h5 class="modal-title" id="sendEmailModalLabel">Send Email to Agent</h5>
+                                                                    <h5 class="modal-title" id="sendEmailModalLabel">Sent Email to Agent</h5>
                                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                         <span aria-hidden="true">&times;</span>
                                                                     </button>
                                                                 </div>
                                                                 <div class="modal-body">
-                                                                    Are you sure you want to send an email to Agent?
+                                                                    Are you sure you want to sent an email to Agent?
                                                                 </div>
                                                                 <div class="modal-footer">
                                                                     <form class="d-inline" action="{{ route('admin.bookingall.sendconfirmationtoagent',$item->id) }}" method="GET">
                                                                         @csrf
                                                                         @method('get')
-                                                                        <button type="submit" class="btn btn-warning">Send Email</button>
+                                                                        <button type="submit" class="btn btn-warning">Sent Email</button>
                                                                     </form>
                                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    
+
                                                     <!-- Modal for sending email to hotel -->
                                                     <div class="modal fade" id="sendEmailToHotelModal" tabindex="-1" role="dialog" aria-labelledby="sendEmailToHotelModalLabel" aria-hidden="true">
                                                         <!-- Include the same modal structure as above, just change the IDs, titles, and action URL accordingly -->
                                                         <div class="modal-dialog" role="document">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
-                                                                    <h5 class="modal-title" id="sendEmailModalLabel">Send Email to Hotel</h5>
+                                                                    <h5 class="modal-title" id="sendEmailModalLabel">Sent Email to Hotel</h5>
                                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                         <span aria-hidden="true">&times;</span>
                                                                     </button>
                                                                 </div>
                                                                 <div class="modal-body">
-                                                                    Are you sure you want to send an email to Hotel?
+                                                                    Are you sure you want to sent an email to Hotel?
                                                                 </div>
                                                                 <div class="modal-footer">
                                                                     <form class="d-inline" action="{{ route('admin.bookingall.sendconfirmationtohotel',$item->id) }}" method="GET">
                                                                         @csrf
                                                                         @method('get')
-                                                                        <button type="submit" class="btn btn-warning">Send Email</button>
+                                                                        <button type="submit" class="btn btn-warning">Sent Email</button>
                                                                     </form>
                                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    
+
                                                     <script>
                                                         // Enable Bootstrap modal functionality
                                                         $(document).ready(function() {
@@ -159,13 +159,13 @@
                                                                 keyboard: false,
                                                                 show: false
                                                             });
-                                                    
+
                                                             $('#sendEmailToAgentModal').modal({
                                                                 backdrop: 'static',
                                                                 keyboard: false,
                                                                 show: false
                                                             });
-                                                    
+
                                                             $('#sendEmailToHotelModal').modal({
                                                                 backdrop: 'static',
                                                                 keyboard: false,
@@ -173,9 +173,9 @@
                                                             });
                                                         });
                                                     </script>
-                                                    
+
                                                 @endif
-                                               
+
                                             </td>
                                             <td> @if($item->booking_status != 'paid')
                                                 <span class="badge badge-warning">{{ $item->booking_status }}</span>

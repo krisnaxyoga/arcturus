@@ -73,6 +73,9 @@ class BookingAllController extends Controller
             ];
 
 
+            // // Mail::to($booking->vendor->email_reservation)->send(new BookingConfirmationHotel($data));
+            // Mail::to('yogakris.yk@gmail.com')->send(new BookingConfirmationHotel($data));
+            // Mail::to('oxygenjuno@gmail.com')->send(new BookingConfirmation($data));
 
         Mail::to($booking->vendor->email_reservation)->send(new BookingConfirmationHotel($data));
         Mail::to($booking->vendor->email)->send(new BookingConfirmationHotel($data));
@@ -108,10 +111,10 @@ class BookingAllController extends Controller
                 'hotelbook' => $hotelbook
             ];
         // email tes agent
-        // Mail::to('softhouse3@themulia.com')->send(new BookingConfirmation($data));
+        // Mail::to('oxygenjuno@gmail.com')->send(new BookingConfirmation($data));
         Mail::to($booking->users->email)->send(new BookingConfirmation($data));
 
-        return redirect()->back()->with('message', 'Email send to agent and hotel');
+        return redirect()->back()->with('message', 'Email send to agent');
     }
 
     public function sendconfirmationtohotel($id)
@@ -145,12 +148,13 @@ class BookingAllController extends Controller
             ];
 
         // email tess reservasi
-        // Mail::to('softhouse3@themulia.com')->send(new BookingConfirmationHotel($data));
-        
+        // Mail::to('yogakris.yk@gmail.com')->send(new BookingConfirmationHotel($data));
+
         Mail::to($booking->vendor->email_reservation)->send(new BookingConfirmationHotel($data));
         Mail::to($booking->vendor->email)->send(new BookingConfirmationHotel($data));
 
-        return redirect()->back()->with('message', 'Email send to agent and hotel');
+        return redirect()->back()->with('message', 'Email sent to hotel');
+
     }
 
     /**
