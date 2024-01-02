@@ -34,6 +34,7 @@ Route::get('/auth/affiliator/profile/{code}/{id}',[\App\Http\Controllers\Affilia
 Route::get('/auth/affiliator/hotel/{code}/{id}',[\App\Http\Controllers\Affiliate\AffiliatorController::class, 'hotel'])->name('auth.affiliator.hotel');
 Route::get('/auth/affiliator/link/{code}/{id}',[\App\Http\Controllers\Affiliate\AffiliatorController::class, 'link'])->name('auth.affiliator.link');
 Route::get('/auth/affiliator/logout/{code}/{id}',[\App\Http\Controllers\Affiliate\AffiliatorController::class, 'logout'])->name('auth.affiliator.logout');
+Route::get('/auth/affiliatorreport/index/{code}/{id}',[\App\Http\Controllers\Affiliate\ReportController::class, 'index'])->name('auth.affiliatorreport.index');
 
 
 //transport application
@@ -62,7 +63,7 @@ Route::group(['middleware' => 'guest'], function() {
     Route::get('/auth/verifaccount/{id}',[AuthController::class, 'verifaccount'])->name('verifaccount');
 
     //registerwith affiliate
-    
+
     Route::get('/regitervendor/{affiliate}', [AuthController::class, 'registvendoraffiliate'])->name('vendorregist.affiliate');
 });
 
@@ -197,7 +198,7 @@ Route::group(['middleware' => ['auth', 'checkrole:1']], function() {
     Route::get('/admin/afiliate/edit/{id}', [\App\Http\Controllers\Admin\Affiliate\AffiliateController::class, 'edit'])->name('admin.afiliate.edit');
     Route::delete('/admin/afiliate/destroy/{id}', [\App\Http\Controllers\Admin\Affiliate\AffiliateController::class, 'destroy'])->name('admin.afiliate.destroy');
     Route::get('/admin/afiliate/invite/{id}', [\App\Http\Controllers\Admin\Affiliate\AffiliateController::class, 'invite'])->name('admin.afiliate.invite');
-  
+
 });
 
 // untuk vendor

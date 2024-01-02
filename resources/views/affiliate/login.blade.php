@@ -32,14 +32,14 @@
           background-image: url(https://mdbootstrap.com/img/new/fluid/city/008.jpg);
           height: 114vh;
         }
-    
+
         /* Height for devices larger than 576px */
         @media (min-width: 992px) {
           #intro {
             margin-top: -58.59px;
           }
         }
-    
+
         .navbar .nav-link {
           color: #fff !important;
         }
@@ -63,6 +63,10 @@
                     </div>
                 @endif
               <!-- Email input -->
+              <h1 class="text-center">
+
+                Login
+              </h1>
               <div class="form-outline mb-4" data-mdb-input-init>
                 <input type="email" id="form1Example1" class="form-control" name="email"/>
                 <label class="form-label" for="form1Example1">Email address</label>
@@ -75,7 +79,7 @@
               </div>
 
               <!-- 2 column grid layout for inline styling -->
-            
+
 
               <!-- Submit button -->
               <button type="submit" class="btn btn-primary btn-block" data-mdb-ripple-init>Sign in</button>

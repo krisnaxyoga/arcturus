@@ -79,7 +79,7 @@
             </li>
         </ul>
     </nav>
-   
+
     <div id="layoutSidenav">
         <div id="layoutSidenav_nav">
             <nav class="sidenav shadow-right sidenav-light">
@@ -98,11 +98,15 @@
                             <div class="nav-link-icon"><i class="fas fa-fw fa-building"></i></div>
                             Hotel
                         </a>
+                        <a class="nav-link {{ request()->routeIs('auth.affiliatorreport.index',['code'=>$code,'id'=>$id]) ? 'active' : '' }}" href="{{ route('auth.affiliatorreport.index',['code'=>$code,'id'=>$id]) }}">
+                            <div class="nav-link-icon"><i class="fas fa-fw fa-chart-area"></i></div>
+                            Report
+                        </a>
                         <a class="nav-link {{ request()->routeIs('auth.affiliator.profile',['code'=>$code,'id'=>$id]) ? 'active' : '' }}" href="{{ route('auth.affiliator.profile',['code'=>$code,'id'=>$id]) }}">
                             <div class="nav-link-icon"><i class="fas fa-fw fa-user"></i></div>
                             Profile
                         </a>
-                        
+
                         <a class="nav-link {{ request()->routeIs('auth.affiliator.logout',['code'=>$code,'id'=>$id]) ? 'active' : '' }}" href="{{ route('auth.affiliator.logout',['code'=>$code,'id'=>$id]) }}">
                             <div class="nav-link-icon"><i data-feather="settings"></i></div>
                             logout
@@ -141,7 +145,7 @@
        </div>
     </div>
     @endif
-   
+
     <script src="/dashboard_assets/code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
     <script src="/dashboard_assets/stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"
         crossorigin="anonymous"></script>
