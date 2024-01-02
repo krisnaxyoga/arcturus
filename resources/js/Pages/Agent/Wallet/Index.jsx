@@ -21,6 +21,7 @@ export default function Index({ props, session, agent,history,setting }) {
     const [selectedImage, setSelectedImage] = useState(null);
     const [uniqueCode, setUniqueCode] = useState('');
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+    const [isButtonDisabledTopup, setIsButtonDisabledTopup] = useState(true);
 
     function formatRupiah(amount) {
         return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount).slice(0, -3);
@@ -68,6 +69,7 @@ export default function Index({ props, session, agent,history,setting }) {
                   setUniqueCode(formattedTotal);
                   setTopup(formattedTotal);
                   setIsButtonDisabled(true);
+                  setIsButtonDisabledTopup(false)
                 } else {
                     settotalamoutnt(true);
                 }
@@ -255,7 +257,7 @@ export default function Index({ props, session, agent,history,setting }) {
                                                                 )}
                                         </div>
                                          <div className="form-group">
-                                             <button type='submit' className='btn btn-primary'>top up</button>
+                                             <button disabled={isButtonDisabledTopup} type='submit' className='btn btn-primary'>top up</button>
                                          </div>
                                     </form>
                                 </div>

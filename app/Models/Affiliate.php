@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Affiliate extends Model
 {
     use HasFactory;
+    public function VendorAffiliate() {
+        return $this->hasMany(VendorAffiliate::class);
+    }
 }

@@ -44,4 +44,8 @@ class Vendor extends Model
     public function blackoutContractRate() {
         return $this->hasMany(BlackoutContractRate::class);
     }
+
+    public function VendorAffiliate() {
+        return $this->hasMany(VendorAffiliate::class);
+    }
 }

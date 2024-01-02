@@ -55,8 +55,9 @@ class WalletController extends Controller
         $user->saldo = $history->total_saldo;
         $user->save();
 
+        if (env('APP_DEBUG') == 'false') {
         Mail::to($history->users->email)->send(new TopUpConfirmation($history));
-
+        }
         return redirect()->back()->with('message', 'Email send to agent');
     }
 

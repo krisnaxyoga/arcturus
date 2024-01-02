@@ -26,6 +26,13 @@ class ViewComposerServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        View::composer('affiliate.layout.app', function ($view) {
+            $code = session('auth_code');
+            $id = session('id_affiliate');
+            $name = session('name_affiliate');
+            $view->with('code', $code)->with('id',$id)->with('name',$name);
+        });
+
         View::composer('layouts.admin', function ($view) {
             $bookingconfirmation = PaymentGetwayTransaction::where('is_see',0)->where('payment_method','BANK-TRANSFER')->count();
             $topupconfirmation = PaymentGetwayTransaction::where('is_see',0)->where('payment_method','BANK-TRANSFER-TOP-UP')->count();
@@ -59,5 +66,6 @@ class ViewComposerServiceProvider extends ServiceProvider
                  ->with('vendor', $vendor)
                  ->with('slider',$slider);
         });
+
     }
 }

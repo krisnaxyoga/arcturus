@@ -187,6 +187,10 @@
                                 </li>
                             </ul>
                         </div>
+                        <a class="nav-link {{ request()->routeIs('admin.afiliate') ? 'active' : '' }}" href="{{ route('admin.afiliate') }}">
+                            <div class="nav-link-icon"><i data-feather="user"></i></div>
+                            Affiliate
+                        </a>
                         <a class="nav-link {{ request()->routeIs('dashboard.user') ? 'active' : '' }}" href="{{ route('dashboard.user') }}">
                             <div class="nav-link-icon"><i data-feather="user"></i></div>
                             Users

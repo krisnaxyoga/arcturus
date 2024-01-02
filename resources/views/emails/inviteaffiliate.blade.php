@@ -20,7 +20,7 @@
         </tr>
         <tr>
           <td colspan="2" style="border: solid 1px #ddd; padding:10px 20px;">
-            <p style="font-size:14px;margin:0 0 6px 0;"><span style="font-weight:bold;display:inline-block;min-width:150px">Type Vendor</span><b style="color:green;font-weight:normal;margin:0">Transport</b></p>
+            <p style="font-size:14px;margin:0 0 6px 0;"><span style="font-weight:bold;display:inline-block;min-width:150px">Type Vendor</span><b style="color:green;font-weight:normal;margin:0">Affiliate</b></p>
             <p style="font-size:14px;margin:0 0 6px 0;"><span style="font-weight:bold;display:inline-block;min-width:146px">Vendor Name</span> {{ $data->company_name }}</p>
           </td>
         </tr>
@@ -30,11 +30,11 @@
         <tr>
           <td style="width:50%;padding:20px;vertical-align:top">
                     <p style="margin:0 0 10px 0;padding:0;font-size:14px;"><span style="display:block;font-weight:bold;font-size:13px;">Email</span> {{$data->email}}</p>
-                    <p style="margin:0 0 10px 0;padding:0;font-size:14px;"><span style="display:block;font-weight:bold;font-size:13px;">Passsword</span> {{$data->code}}</p>
+                    <p style="margin:0 0 10px 0;padding:0;font-size:14px;"><span style="display:block;font-weight:bold;font-size:13px;">affiliate Code</span> {{$data->code}}</p>
           </td>
           <td style="width:50%;padding:20px;vertical-align:top">
             <p style="margin:0 0 10px 0;padding:0;font-size:14px;"><span style="display:block;font-weight:bold;font-size:13px;">Login Here</span> 
-              <a href="{{route('auth.transport')}}">{{route('auth.transport')}}</a>
+              <a href="{{route('auth.affiliator',['code'=>$data->auth_code,'id' => $data->id])}}">{{route('auth.affiliator',['code'=>$data->auth_code,'id' => $data->id])}}</a>
             </p>
         </td>
         </tr>

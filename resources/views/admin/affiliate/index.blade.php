@@ -1,8 +1,8 @@
 @extends('layouts.admin')
-@section('title', 'Attribute Data')
+@section('title', 'Affiliate Data')
 @section('content')
 <section>
-    <div class="container">
+    <div class="container mt-5">
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
@@ -23,29 +23,36 @@
                         @endif
                     </div>
                     <div class="card-body">
-                        <a href="{{ route('dashboard.attribute.create') }}" class="btn btn-primary mb-2">add</a>
+                        <a href="{{ route('admin.afiliate.create') }}" class="btn btn-primary mb-2">add</a>
                         <div class="table-responsive">
                             <table class="table table-bordered" id="dataTable" width="100%" cellSpacing="0">
                                 <thead>
                                     <tr>
+                                        <th>invite</th>
                                         <th>Name</th>
                                         <th>Email</th>
-                                        <th>Email</th>
+                                        <th>Affiliator code</th>
                                         <th>action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($data as $item)
                                         <tr>
-                                            <td>{{ $item->name }}</td>
-                                            <td>{{ $item->description }}</td>
                                             <td>
-                                                <a href="{{ route('dashboard.attribute.edit', $item->id) }}"
+                                                <a href="{{route('admin.afiliate.invite',$item->id)}}" class="badge badge-warning">
+                                                    invite
+                                                </a>
+                                            </td>
+                                            <td>{{ $item->name }}</td>
+                                            <td>{{ $item->email }}</td>
+                                            <td>{{ $item->code }}</td>
+                                            <td>
+                                                <a href="{{ route('admin.afiliate.edit', $item->id) }}"
                                                     class="btn btn-datatable btn-icon btn-transparent-dark mr-2"><i
                                                         data-feather="edit"></i></a>
 
                                                 <form class="d-inline"
-                                                    action="{{ route('dashboard.attribute.delete', $item->id) }}"
+                                                    action="{{ route('admin.afiliate.destroy', $item->id) }}"
                                                     method="POST"
                                                     onSubmit="return confirm('Apakah anda yakin akan menghapus data ini?');">
                                                     @csrf

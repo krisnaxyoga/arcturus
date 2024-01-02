@@ -25,8 +25,19 @@ Route::get('/callbackdoku', [\App\Http\Controllers\LandingPage\HomeController::c
 Route::get('/auth/google/callback',[\App\Http\Controllers\Auth\GoogleController::class, 'handleCallback']);
 // Route::get('/account/nonactive', [\App\Http\Controllers\LandingPage\HomeController::class, 'accountnonactive'])->name('accountnonactive.homepage');
 
+// affiliator
+
+Route::get('/auth/affiliator/login',[\App\Http\Controllers\Affiliate\AffiliatorController::class, 'login'])->name('auth.affiliator.login');
+Route::post('/auth/affiliator/dologin',[\App\Http\Controllers\Affiliate\AffiliatorController::class, 'dologin'])->name('auth.affiliator.dologin');
+Route::get('/auth/affiliator/{code}/{id}',[\App\Http\Controllers\Affiliate\AffiliatorController::class, 'index'])->name('auth.affiliator');
+Route::get('/auth/affiliator/profile/{code}/{id}',[\App\Http\Controllers\Affiliate\AffiliatorController::class, 'profile'])->name('auth.affiliator.profile');
+Route::get('/auth/affiliator/hotel/{code}/{id}',[\App\Http\Controllers\Affiliate\AffiliatorController::class, 'hotel'])->name('auth.affiliator.hotel');
+Route::get('/auth/affiliator/link/{code}/{id}',[\App\Http\Controllers\Affiliate\AffiliatorController::class, 'link'])->name('auth.affiliator.link');
+Route::get('/auth/affiliator/logout/{code}/{id}',[\App\Http\Controllers\Affiliate\AffiliatorController::class, 'logout'])->name('auth.affiliator.logout');
+
+
 //transport application
-Route::get('/auth/transport',[\App\Http\Controllers\Transport\AuthController::class, 'index']);
+Route::get('/auth/transport',[\App\Http\Controllers\Transport\AuthController::class, 'index'])->name('auth.transport');
 Route::get('/profile/transport/{token}/{id}',[\App\Http\Controllers\Transport\AuthController::class, 'profile'])->name('transport.profile');
 Route::get('/transport/dashboard/{token}/{id}',[\App\Http\Controllers\Transport\HomeController::class, 'index']);
 Route::get('/transport/addpackage/{token}/{id}',[\App\Http\Controllers\Transport\PackageController::class, 'index']);
@@ -49,6 +60,10 @@ Route::group(['middleware' => 'guest'], function() {
     Route::post('/login', [AuthController::class, 'dologin']);
     Route::post('/forgotpassword', [AuthController::class, 'sendEmail'])->name('forgotpassword');
     Route::get('/auth/verifaccount/{id}',[AuthController::class, 'verifaccount'])->name('verifaccount');
+
+    //registerwith affiliate
+    
+    Route::get('/regitervendor/{affiliate}', [AuthController::class, 'registvendoraffiliate'])->name('vendorregist.affiliate');
 });
 
 Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {
@@ -174,6 +189,15 @@ Route::group(['middleware' => ['auth', 'checkrole:1']], function() {
 
     Route::get('/admin/transport/login/{id}', [\App\Http\Controllers\Admin\Transport\TransportController::class, 'logintransport'])->name('login.transport.index');
 
+    //affilate admin
+    Route::get('/admin/afiliate', [\App\Http\Controllers\Admin\Affiliate\AffiliateController::class, 'index'])->name('admin.afiliate');
+    Route::get('/admin/afiliate/create', [\App\Http\Controllers\Admin\Affiliate\AffiliateController::class, 'create'])->name('admin.afiliate.create');
+    Route::post('/admin/afiliate/store', [\App\Http\Controllers\Admin\Affiliate\AffiliateController::class, 'store'])->name('admin.afiliate.store');
+    Route::put('/admin/afiliate/update/{id}', [\App\Http\Controllers\Admin\Affiliate\AffiliateController::class, 'update'])->name('admin.afiliate.update');
+    Route::get('/admin/afiliate/edit/{id}', [\App\Http\Controllers\Admin\Affiliate\AffiliateController::class, 'edit'])->name('admin.afiliate.edit');
+    Route::delete('/admin/afiliate/destroy/{id}', [\App\Http\Controllers\Admin\Affiliate\AffiliateController::class, 'destroy'])->name('admin.afiliate.destroy');
+    Route::get('/admin/afiliate/invite/{id}', [\App\Http\Controllers\Admin\Affiliate\AffiliateController::class, 'invite'])->name('admin.afiliate.invite');
+  
 });
 
 // untuk vendor

@@ -32,7 +32,7 @@ class TransportController extends Controller
         } else {
             $setting = new Setting;
         }
-        $data = AgentTransport::all();
+        $data = AgentTransport::orderBy('created_at','desc')->get();
         return view('admin.transport.index',compact('data','setting'));
     }
 
@@ -97,8 +97,9 @@ class TransportController extends Controller
         $model = AgentTransport::find($id);
         $data = $model;
 
+        if (env('APP_DEBUG') == 'false') {
         Mail::to($model->email)->send(new InviteTransport($data));
-
+        }
         return redirect()->back()->with('message', 'Agent Transport invite!');
     }
 

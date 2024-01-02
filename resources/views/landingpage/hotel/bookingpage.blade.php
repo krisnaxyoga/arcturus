@@ -255,7 +255,7 @@
                         <div class="col-lg-4">
                             <div class="mb-3">
                                 <label for="">Flight <span class="text-danger">*</span></label>
-                                <input type="time" class="form-control" name="flight" value="<?php echo date('H:i'); ?>">
+                                <input type="text" class="form-control" name="flight" value="">
                             </div>
                         </div>
                     </div>

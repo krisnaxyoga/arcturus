@@ -50,6 +50,10 @@
                     @endif
                     <form method="post" id="registerform" action="{{ route('vendorregist.store') }}">
                         @csrf
+                        @if ($affiliate != null)
+                        <input type="hidden" name="affiliate"
+                        class="form-control" value="{{$affiliate}}">
+                        @endif
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="form-outline mb-4">

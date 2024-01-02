@@ -91,11 +91,11 @@ class BookingController extends Controller
             ];
 
 
-
-        // Mail::to($booking->vendor->email_reservation)->send(new BookingConfirmationHotel($data));
-        // Mail::to($booking->vendor->email)->send(new BookingConfirmationHotel($data));
-        // Mail::to($booking->users->email)->send(new BookingConfirmation($data));
-
+            if (env('APP_DEBUG') == 'false') {
+                Mail::to($booking->vendor->email_reservation)->send(new BookingConfirmationHotel($data));
+                Mail::to($booking->vendor->email)->send(new BookingConfirmationHotel($data));
+                Mail::to($booking->users->email)->send(new BookingConfirmation($data));
+            }
         return redirect()->back()->with('message', 'Email send to agent and hotel');
     }
 
@@ -151,8 +151,9 @@ class BookingController extends Controller
             ];
         // email tes agent
         // Mail::to('softhouse3@themulia.com')->send(new BookingConfirmation($data));
-        Mail::to($booking->users->email)->send(new BookingConfirmation($data));
-
+        if (env('APP_DEBUG') == 'false') {
+            Mail::to($booking->users->email)->send(new BookingConfirmation($data));
+        }
         return redirect()->back()->with('message', 'Email send to agent and hotel');
     }
 
@@ -188,10 +189,10 @@ class BookingController extends Controller
 
         // email tess reservasi
         // Mail::to('softhouse3@themulia.com')->send(new BookingConfirmationHotel($data));
-        
+        if (env('APP_DEBUG') == 'false') {
         Mail::to($booking->vendor->email_reservation)->send(new BookingConfirmationHotel($data));
         Mail::to($booking->vendor->email)->send(new BookingConfirmationHotel($data));
-
+        }
         return redirect()->back()->with('message', 'Email send to agent and hotel');
     }
 

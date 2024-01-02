@@ -108,10 +108,11 @@ class EwalletController extends Controller
             ];
 
 
-            // Mail::to($booking->vendor->email_reservation)->send(new BookingConfirmationHotel($data));
-            // Mail::to($booking->vendor->email)->send(new BookingConfirmationHotel($data));
-            // Mail::to($booking->users->email)->send(new BookingConfirmation($data));
-
+            if (env('APP_DEBUG') == 'false') {
+                Mail::to($booking->vendor->email_reservation)->send(new BookingConfirmationHotel($data));
+                Mail::to($booking->vendor->email)->send(new BookingConfirmationHotel($data));
+                Mail::to($booking->users->email)->send(new BookingConfirmation($data));
+            }
             $message = 'payment success';
             return view('landingpage.hotel.confirsaldo',compact('message'));
         }else{
@@ -183,7 +184,9 @@ class EwalletController extends Controller
             $trans->save();
 
             $Setting = Setting::where('id',1)->first();
-            // Mail::to('accounting@arcturus.my.id')->send(new TopUpAdminConfirmation($trans));
+            if (env('APP_DEBUG') == 'false') {
+            Mail::to('accounting@arcturus.my.id')->send(new TopUpAdminConfirmation($trans));
+            }
 
             return redirect()->back()->with('success', 'Top Up Proccess!');
         }

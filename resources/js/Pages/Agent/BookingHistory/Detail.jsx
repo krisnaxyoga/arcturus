@@ -51,7 +51,7 @@ export default function Detail({ session, data, agent, contract, setting, roombo
 
             const pickupconfirmation = formData.pickup_confirmation || 'N/A';
 
-            const whatsappMessage = `Hello, there's an update regarding our booking. Please check. Guest Name: ${transport.guest_name}. Destination: ${transport.destination} Flight Time: ${flightTime}. Pickup Time: ${pickupTime}. Detail: ${pickupconfirmation}`;
+            const whatsappMessage = `Hello, there's an update regarding our booking. Please check. Guest Name: ${transport.guest_name}. Destination: ${transport.destination} Flight Number: ${flightTime}. Time Pickup: ${pickupTime}. Special Request: ${pickupconfirmation}`;
 
             // Checking if the agent's phone number is available before redirecting to WhatsApp
             if (agentPhoneNumber) {
@@ -457,11 +457,11 @@ export default function Detail({ session, data, agent, contract, setting, roombo
                             <div className="card">
                                 <div className="card-body">
                                     <form onSubmit={handleSubmit}>
-                                        <label htmlFor="">Time Pickup</label>
+                                        <label htmlFor="">Pickup Time</label>
                                         <input name='time_pickup' type="time" className='form-control mb-3' value={formData.time_pickup} onChange={handleChange}/>
-                                        <label htmlFor="">Time Flight</label>
-                                        <input type="time" name='flight_time' className='form-control mb-3' value={formData.flight_time} onChange={handleChange}/>
-                                        <label htmlFor="">Confirmation letter</label>
+                                        <label htmlFor="">Flight Number</label>
+                                        <input type="text" name='flight_time' className='form-control mb-3' value={formData.flight_time} onChange={handleChange}/>
+                                        <label htmlFor="">Special Request:</label>
                                         <textarea name="pickup_confirmation" className='form-control mb-3' value={formData.pickup_confirmation} onChange={handleChange}>
                                             {formData.pickup_confirmation}
                                         </textarea>

@@ -382,9 +382,10 @@ class BookingController extends Controller
 
 
             $Setting = Setting::where('id',1)->first();
-            // Mail::to($Setting->email)->send(new PaymentNotif($trans));
-            // Mail::to(auth()->user()->email)->send(new BookingConfirmation($data));
-
+            if (env('APP_DEBUG') == 'false') {
+            Mail::to($Setting->email)->send(new PaymentNotif($trans));
+            Mail::to(auth()->user()->email)->send(new BookingConfirmation($data));
+            }
             return redirect()
             ->route('agent.booking.history')
             ->with('success', 'Transaction success');
@@ -494,9 +495,10 @@ class BookingController extends Controller
                 'contract' => $contract
             ];
 
-            // Mail::to($book->vendor->email)->send(new BookingConfirmation($data));
-            // Mail::to(auth()->user()->email)->send(new BookingConfirmation($data));
-
+            if (env('APP_DEBUG') == 'false') {
+            Mail::to($book->vendor->email)->send(new BookingConfirmation($data));
+            Mail::to(auth()->user()->email)->send(new BookingConfirmation($data));
+            }
             return redirect()
             ->route('agent.booking.history')
             ->with('success', 'Data saved!');
