@@ -77,7 +77,7 @@ class BookingAllController extends Controller
             // Mail::to('yogakris.yk@gmail.com')->send(new BookingConfirmationHotel($data));
             // Mail::to('oxygenjuno@gmail.com')->send(new BookingConfirmation($data));
 
-            if (env('APP_DEBUG') == 'false') {
+            if (env('APP_ENV') == 'production') {
                 Mail::to($booking->vendor->email_reservation)->send(new BookingConfirmationHotel($data));
                 Mail::to($booking->vendor->email)->send(new BookingConfirmationHotel($data));
                 Mail::to($booking->users->email)->send(new BookingConfirmation($data));
@@ -113,7 +113,7 @@ class BookingAllController extends Controller
             ];
         // email tes agent
         // Mail::to('oxygenjuno@gmail.com')->send(new BookingConfirmation($data));
-        if (env('APP_DEBUG') == 'false') {
+        if (env('APP_ENV') == 'production') {
         Mail::to($booking->users->email)->send(new BookingConfirmation($data));
         }
 
@@ -152,7 +152,7 @@ class BookingAllController extends Controller
 
         // email tess reservasi
         // Mail::to('yogakris.yk@gmail.com')->send(new BookingConfirmationHotel($data));
-        if (env('APP_DEBUG') == 'false') {
+        if (env('APP_ENV') == 'production') {
         Mail::to($booking->vendor->email_reservation)->send(new BookingConfirmationHotel($data));
         Mail::to($booking->vendor->email)->send(new BookingConfirmationHotel($data));
         }

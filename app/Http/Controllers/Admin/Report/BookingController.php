@@ -47,7 +47,7 @@ class BookingController extends Controller
         return view('admin.booking.index',compact('setting','data'));
     }
 
-    
+
     /**
      * Show the form for creating a new resource.
      */
@@ -68,7 +68,7 @@ class BookingController extends Controller
             $tranportbookings->is_see = 0;
             $tranportbookings->save();
         }
-       
+
 
         $hotelbook = HotelRoomBooking::where('booking_id',$payment->booking_id)->get();
 
@@ -91,7 +91,7 @@ class BookingController extends Controller
             ];
 
 
-            if (env('APP_DEBUG') == 'false') {
+            if (env('APP_ENV') == 'production') {
                 Mail::to($booking->vendor->email_reservation)->send(new BookingConfirmationHotel($data));
                 Mail::to($booking->vendor->email)->send(new BookingConfirmationHotel($data));
                 Mail::to($booking->users->email)->send(new BookingConfirmation($data));
@@ -116,7 +116,7 @@ class BookingController extends Controller
             $tranportbookings->save();
 
         }
-        
+
         return redirect()->back()->with('message', 'Email send to agent and hotel');
     }
 
@@ -151,7 +151,7 @@ class BookingController extends Controller
             ];
         // email tes agent
         // Mail::to('softhouse3@themulia.com')->send(new BookingConfirmation($data));
-        if (env('APP_DEBUG') == 'false') {
+        if (env('APP_ENV') == 'production') {
             Mail::to($booking->users->email)->send(new BookingConfirmation($data));
         }
         return redirect()->back()->with('message', 'Email send to agent and hotel');
@@ -189,7 +189,7 @@ class BookingController extends Controller
 
         // email tess reservasi
         // Mail::to('softhouse3@themulia.com')->send(new BookingConfirmationHotel($data));
-        if (env('APP_DEBUG') == 'false') {
+        if (env('APP_ENV') == 'production') {
         Mail::to($booking->vendor->email_reservation)->send(new BookingConfirmationHotel($data));
         Mail::to($booking->vendor->email)->send(new BookingConfirmationHotel($data));
         }

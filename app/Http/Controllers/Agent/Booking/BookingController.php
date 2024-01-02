@@ -382,7 +382,7 @@ class BookingController extends Controller
 
 
             $Setting = Setting::where('id',1)->first();
-            if (env('APP_DEBUG') == 'false') {
+            if (env('APP_ENV') == 'production') {
             Mail::to($Setting->email)->send(new PaymentNotif($trans));
             Mail::to(auth()->user()->email)->send(new BookingConfirmation($data));
             }
@@ -495,7 +495,7 @@ class BookingController extends Controller
                 'contract' => $contract
             ];
 
-            if (env('APP_DEBUG') == 'false') {
+            if (env('APP_ENV') == 'production') {
             Mail::to($book->vendor->email)->send(new BookingConfirmation($data));
             Mail::to(auth()->user()->email)->send(new BookingConfirmation($data));
             }

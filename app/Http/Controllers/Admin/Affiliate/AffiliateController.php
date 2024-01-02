@@ -80,7 +80,7 @@ class AffiliateController extends Controller
                 $data->code = $affliatecode;
                 $data->saldo = 0;
                 $data->save();
-    
+
                 return redirect()
                 ->route('admin.afiliate')
                 ->with('message', 'Data Saved!.');
@@ -126,7 +126,7 @@ class AffiliateController extends Controller
                 $data->name = $request->name;
                 $data->email = $request->email;
                 $data->save();
-    
+
                 return redirect()
                 ->route('admin.afiliate')
                 ->with('message', 'Data Saved!.');
@@ -150,11 +150,11 @@ class AffiliateController extends Controller
 
     public function invite($id)
     {
-       
+
         $model = Affiliate::find($id);
         $data = $model;
 
-        if (env('APP_DEBUG') == 'false') {
+        if (env('APP_ENV') == 'production') {
         Mail::to($model->email)->send(new InviteAffiliate($data));
         }
         return redirect()->back()->with('message', 'Agent Transport invite!');

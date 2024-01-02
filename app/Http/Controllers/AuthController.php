@@ -122,7 +122,7 @@ class AuthController extends Controller
             $user->vendor_id = $member->id;
             $user->save();
 
-            if (env('APP_DEBUG') == 'false') {
+            if (env('APP_ENV') == 'production') {
                 Mail::to($Setting->email)->send(new RegisterNotif($data, $member));
 
                 Mail::to($request->email)->send(new AgentVerifification($data, $member));
@@ -195,7 +195,7 @@ class AuthController extends Controller
             // dd($member->id);
 
             $Setting = Setting::where('id',1)->first();
-            if (env('APP_DEBUG') == 'false') {
+            if (env('APP_ENV') == 'production') {
                 Mail::to($Setting->email)->send(new RegisterNotif($data, $member));
                 Mail::to($request->email)->send(new HotelVerifification($data, $member));
             }
@@ -227,7 +227,7 @@ class AuthController extends Controller
         $user->save();
 
         // Send an email to the user with the password reset link
-        if (env('APP_DEBUG') == 'false') {
+        if (env('APP_ENV') == 'production') {
             Mail::to($user->email)->send(new ForgotPassword($user, $token));
         }
         // Return a success response

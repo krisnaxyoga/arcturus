@@ -108,7 +108,7 @@ class EwalletController extends Controller
             ];
 
 
-            if (env('APP_DEBUG') == 'false') {
+            if (env('APP_ENV') == 'production') {
                 Mail::to($booking->vendor->email_reservation)->send(new BookingConfirmationHotel($data));
                 Mail::to($booking->vendor->email)->send(new BookingConfirmationHotel($data));
                 Mail::to($booking->users->email)->send(new BookingConfirmation($data));
@@ -184,7 +184,7 @@ class EwalletController extends Controller
             $trans->save();
 
             $Setting = Setting::where('id',1)->first();
-            if (env('APP_DEBUG') == 'false') {
+            if (env('APP_ENV') == 'production') {
             Mail::to('accounting@arcturus.my.id')->send(new TopUpAdminConfirmation($trans));
             }
 
