@@ -35,6 +35,9 @@ Route::get('/auth/affiliator/hotel/{code}/{id}',[\App\Http\Controllers\Affiliate
 Route::get('/auth/affiliator/link/{code}/{id}',[\App\Http\Controllers\Affiliate\AffiliatorController::class, 'link'])->name('auth.affiliator.link');
 Route::get('/auth/affiliator/logout/{code}/{id}',[\App\Http\Controllers\Affiliate\AffiliatorController::class, 'logout'])->name('auth.affiliator.logout');
 Route::get('/auth/affiliatorreport/index/{code}/{id}',[\App\Http\Controllers\Affiliate\ReportController::class, 'index'])->name('auth.affiliatorreport.index');
+Route::get('/auth/affiliatorreport/madeon/{code}/{id}',[\App\Http\Controllers\Affiliate\ReportController::class, 'madeon'])->name('auth.affiliatorreport.madeon');
+Route::get('/auth/affiliatorreport/adminpdfreport/{code}/{id}',[\App\Http\Controllers\Affiliate\ReportController::class, 'adminpdfreport'])->name('auth.affiliatorreport.adminpdfreport');
+Route::get('/auth/affiliatorreport/madeonpdfreport/{code}/{id}',[\App\Http\Controllers\Affiliate\ReportController::class, 'madeonpdfreport'])->name('auth.affiliatorreport.madeonpdfreport');
 
 
 //transport application

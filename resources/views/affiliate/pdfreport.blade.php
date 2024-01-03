@@ -299,6 +299,7 @@ background-color: #f7f7ff;
                                             <th class="text-right bg-primary text-light p-1">NIGHT</th>
                                             <th class="text-right bg-primary text-light p-1">RATE</th>
                                             <th class="text-right bg-primary text-light p-1">TOTAL REVENUE</th>
+                                            <th class="text-right bg-primary text-light p-1">MARKUP</th>
                                             <th class="text-right bg-primary text-light p-1">COMMISION</th>
                                         </tr>
                                     </thead>
@@ -323,12 +324,14 @@ background-color: #f7f7ff;
                                                 @endif
                                             </td>
                                             <td>
-                                                @if (is_null($item->total_ammount))
-                                                Rp. {{ number_format(($item->pricenomarkup * 0.025) ?? '0', 0, ',', '.') }}
-                                                @else
-                                                Rp. {{ number_format(($item->pricenomarkup * 0.025) ?? '0', 0, ',', '.') }}
-                                                @endif
+                                                {{$item->vendor->system_markup}}
                                             </td>
+                                            <td> @if (is_null($item->vendor->system_markup))
+                                                {{ (($item->vendor->system_markup * $item->total_room)*$item->night ) * 0.15 }}
+                                            @else
+                                                {{ (($item->vendor->system_markup * $item->total_room)*$item->night ) * 0.15 }}
+                                            @endif
+                                        </td>
 
                                         </tr>
                                         @endforeach

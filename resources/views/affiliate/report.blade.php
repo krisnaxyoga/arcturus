@@ -24,7 +24,7 @@
                     </div>
                     <div class="card-body">
                         <div class="d-flex">
-                            <form action="{{route('dashboard.report')}}" class="d-flex" method="get">
+                            <form action="{{route('auth.affiliatorreport.index',['code'=>$code,'id'=>$id])}}" class="d-flex" method="get">
                                 <select name="hotel" id="" class="form-control mr-2">
                                     <option value="">-select hotel-</option>
                                     @foreach ($hotels as $itemhotel)
@@ -38,7 +38,7 @@
                             <div class="buttons-excel mr-2">
                                 <button class="dt-button btn btn-success">Excel</button>
                             </div>
-                            <form action="{{route('dashboard.report.pdf')}}" method="get">
+                            <form action="{{route('auth.affiliatorreport.adminpdfreport',['code'=>$code,'id'=>$id])}}" method="get">
                                 <input type="date" hidden value="{{$startdate}}" name="star_tdate">
                                 <input type="date" hidden value="{{$enddate}}" name="end_date">
                                 <input type="text" hidden value="{{$hotel_select}}" name="hotelselect">
@@ -56,24 +56,24 @@
                     </div>
                     <div class="card-body">
                         <div class="d-flex">
-                            <form action="{{route('dashboard.reportmadeon')}}" class="d-flex" method="get">
+                            <form action="{{route('auth.affiliatorreport.madeon',['code'=>$code,'id'=>$id])}}" class="d-flex" method="get">
                                 <select name="hotel" id="" class="form-control mr-2">
                                     <option value="">-select hotel-</option>
                                     @foreach ($hotels as $itemhotel)
-                                    <option value="{{$itemhotel->vendor_name}}" @if($hotel_select == $itemhotel->vendor_name) selected @endif>{{$itemhotel->vendor_name}}</option>
+                                    <option value="{{$itemhotel->vendor_name}}" @if($hotel_select1 == $itemhotel->vendor_name) selected @endif>{{$itemhotel->vendor_name}}</option>
                                     @endforeach
                                 </select>
-                                <input type="date" name="startdate" id="startdate" class="form-control mr-2" value="{{$startdate}}">
-                                <input type="date" name="enddate" id="enddate" class="form-control mr-2" value="{{$enddate}}">
+                                <input type="date" name="startdate" id="startdate" class="form-control mr-2" value="{{$startdate1}}">
+                                <input type="date" name="enddate" id="enddate" class="form-control mr-2" value="{{$enddate1}}">
                                 <button class="btn btn-primary mr-2" type="submit">filter</button>
                             </form>
                             <div class="buttons-excel mr-2">
                                 <button class="dt-button btn btn-success">Excel</button>
                             </div>
-                            <form action="{{route('dashboard.madeonpdfreport.pdf')}}" method="get">
-                                <input type="date" hidden value="{{$startdate}}" name="star_tdate">
-                                <input type="date" hidden value="{{$enddate}}" name="end_date">
-                                <input type="text" hidden value="{{$hotel_select}}" name="hotelselect">
+                            <form action="{{route('auth.affiliatorreport.madeonpdfreport',['code'=>$code,'id'=>$id])}}" method="get">
+                                <input type="date" hidden value="{{$startdate1}}" name="star_tdate">
+                                <input type="date" hidden value="{{$enddate1}}" name="end_date">
+                                <input type="text" hidden value="{{$hotel_select1}}" name="hotelselect">
                                 <button class="btn btn-secondary">
                                     Pdf
                                 </button>
@@ -100,6 +100,7 @@
                                         <th>Night</th>
                                         <th>Rate</th>
                                         <th>Total Room Revenue</th>
+                                        <th>Markup</th>
                                         <th>Commision</th>
                                     </tr>
                                 </thead>
@@ -123,10 +124,13 @@
                                                     {{ $item->pricenomarkup }}
                                                 @endif
                                             </td>
-                                            <td> @if (is_null($item->pricenomarkup))
-                                                {{ $item->pricenomarkup * 0.025 }}
+                                            <td>
+                                                {{$item->vendor->system_markup}}
+                                            </td>
+                                            <td> @if (is_null($item->vendor->system_markup))
+                                                {{ (($item->vendor->system_markup * $item->total_room)*$item->night ) * 0.15 }}
                                             @else
-                                                {{ $item->pricenomarkup * 0.025 }}
+                                                {{ (($item->vendor->system_markup * $item->total_room)*$item->night ) * 0.15 }}
                                             @endif
                                         </td>
 

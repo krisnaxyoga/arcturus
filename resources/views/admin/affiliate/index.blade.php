@@ -47,6 +47,9 @@
                                             <td>{{ $item->email }}</td>
                                             <td>{{ $item->code }}</td>
                                             <td>
+                                                <a data-toggle="tooltip" data-placement="top" title="login" href="{{ route('auth.affiliator',['code'=>$item->auth_code,'id'=>$item->id]) }}"
+                                                    class="btn btn-datatable btn-icon btn-transparent-dark mr-2"><i
+                                                        data-feather="key"></i></a>
                                                 <a href="{{ route('admin.afiliate.edit', $item->id) }}"
                                                     class="btn btn-datatable btn-icon btn-transparent-dark mr-2"><i
                                                         data-feather="edit"></i></a>

@@ -350,20 +350,19 @@
                                     ?>
                                     @endforeach
 
-
                                     @foreach ($contractprice as $contprice)
                                     <?php
                                     $countNights = 0;
-                                     if($vendorcalender == $item->contractrate->vendors->id){
-                                        $countNights = $Nights - $totalDataCounttwo;
-                                        if($countNights <= 0){
-                                            $calendarpricetotal = $contprice->recom_price;
-                                        }else{
-                                            $calendarpricetotal = ($calendarprice + ($contprice->recom_price * $countNights)) / $totalNights;
+                                    //  if($vendorcalender == $item->contractrate->vendors->id){
+                                    //     $countNights = $Nights - $totalDataCounttwo;
+                                       
+                                    //     if($countNights <= 0){
+                                    //         $calendarpricetotal = $contprice->recom_price;
+                                    //     }else{
+                                    //         $calendarpricetotal = ($calendarprice + ($contprice->recom_price * $countNights)) / $totalNights;
+                                    //     }
 
-                                        }
-
-                                        }
+                                    //     }
                                     ?>
                                         @php
                                         // if($calendarpricetotal == $contprice->recom_price){
@@ -452,16 +451,16 @@
                                                                 $countNights = 0;
                                                                 $lowestPrice2 = null;
                                                                 $lowestPriceRoom = null;
-                                                                if($vendorcalender == $item->contractrate->vendors->id){
-                                                                    $countNights = $Nights - $totalDataCounttwo;
-                                                                    if($countNights <= 0){
-                                                                        $calendarpricetotal = $contprice->recom_price;
-                                                                    }else{
-                                                                        $calendarpricetotal = ($calendarprice + ($contprice->recom_price * $countNights)) / $totalNights;
+                                                                // if($vendorcalender == $item->contractrate->vendors->id){
+                                                                //     $countNights = $Nights - $totalDataCounttwo;
+                                                                //     if($countNights <= 0){
+                                                                //         $calendarpricetotal = $contprice->recom_price;
+                                                                //     }else{
+                                                                //         $calendarpricetotal = ($calendarprice + ($contprice->recom_price * $countNights)) / $totalNights;
 
-                                                                    }
+                                                                //     }
 
-                                                                    }
+                                                                //     }
                                                                 ?>
                                                                     @php
                                                                     // if($calendarpricetotal == $contprice->recom_price){
