@@ -99,8 +99,8 @@
                                         <th>Total Room</th>
                                         <th>Night</th>
                                         <th>Rate</th>
-                                        <th>Total Room Revenue</th>
-                                        <th>Markup</th>
+                                        <th>Total Room Revenue (contract)</th>
+                                        <th>Total Room Revenue (selling)</th>
                                         <th>Commision</th>
                                     </tr>
                                 </thead>
@@ -125,12 +125,12 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                {{$item->vendor->system_markup}}
+                                                {{$item->price}}
                                             </td>
                                             <td> @if (is_null($item->vendor->system_markup))
-                                                {{ (($item->vendor->system_markup * $item->total_room)*$item->night ) * 0.15 }}
+                                                {{ ($item->price - $item->pricenomarkup ) * 0.15 }}
                                             @else
-                                                {{ (($item->vendor->system_markup * $item->total_room)*$item->night ) * 0.15 }}
+                                                {{ ($item->price - $item->pricenomarkup  ) * 0.15 }}
                                             @endif
                                         </td>
 

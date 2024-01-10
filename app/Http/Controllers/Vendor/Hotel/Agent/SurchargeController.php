@@ -462,26 +462,26 @@ class SurchargeController extends Controller
             'start_date' => 'required',
             'end_date' => 'required',
         ]);
-
+    
         $userid = Auth::id();
-
+    
         $vendor = Vendor::query()->where('user_id', $userid)->with('users')->first();
         $code = Str::random(8);
         $start_date = date('Y-m-d', strtotime($request->start_date));
         $end_date = date('Y-m-d', strtotime($request->end_date));
-
+    
+        // Hapus data yang berkaitan dengan rentang tanggal yang akan diedit
+        $surchargeallroomarray = SurchargeAllRoom::where('code',$request->code)
+            ->get();
+        foreach($surchargeallroomarray as $itemdate){
+            $itemdate->delete();
+        }
+    
         $current_date = $start_date;
-
+    
         while ($current_date <= $end_date) {
-            $hotel_room_surcharge = SurchargeAllRoom::query()
-                ->where('vendor_id', $vendor->id)
-                ->where('start_date', $current_date)
-                ->first();
-
-            if (! $hotel_room_surcharge) {
-                $hotel_room_surcharge = new SurchargeAllRoom();
-            }
-
+            $hotel_room_surcharge = new SurchargeAllRoom();
+    
             $hotel_room_surcharge->user_id = $userid;
             $hotel_room_surcharge->vendor_id = $vendor->id;
             $hotel_room_surcharge->stayperiod_start = $request->start_date;
@@ -493,11 +493,10 @@ class SurchargeController extends Controller
             $hotel_room_surcharge->code = $code;
     
             $hotel_room_surcharge->save();
-
+    
             $current_date = date('Y-m-d', strtotime($current_date . ' +1 day')); // Move to the next day
         }
-
-        
+    
         return redirect()->back()->with('success', 'Data Saved!');
     }
 

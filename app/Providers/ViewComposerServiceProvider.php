@@ -67,5 +67,32 @@ class ViewComposerServiceProvider extends ServiceProvider
                  ->with('slider',$slider);
         });
 
+        View::composer('landingpage.agent.layouts.app', function ($view) {
+            $settings = Setting::first();
+            $vendor = null; // Default value
+            
+            if(auth()->check()){
+                $iduser = auth()->user()->id;
+                $vendor = Vendor::where('user_id', $iduser)->first();
+
+                $user = User::where('id',$iduser)->first();
+    
+                if($user->role_id == 2){
+    
+                    $slider = Slider::where('user_id',$iduser)->get();
+                }else{
+                    $slider = Slider::where('user_id',1)->get();
+                }
+    
+            }else{
+                $slider = Slider::where('user_id',1)->get();
+            }
+            
+            
+            $view->with('settings', $settings)
+                 ->with('vendor', $vendor)
+                 ->with('slider',$slider);
+        });
+
     }
 }

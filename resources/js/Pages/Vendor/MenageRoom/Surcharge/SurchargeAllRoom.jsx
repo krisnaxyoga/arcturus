@@ -10,6 +10,7 @@ import { Inertia } from "@inertiajs/inertia";
 
 export default function SurchargeAllRoom({ session, vendor, surchargeallroom }) {
     const { url } = usePage();
+    const [iditem, setIditem] = useState('');
     const [startdate, setStartDate] = useState('');
     const [enddate, setEndDate] = useState('');
     const [surchargeprice, setSurcharge] = useState('');
@@ -32,6 +33,7 @@ export default function SurchargeAllRoom({ session, vendor, surchargeallroom }) 
       const handleEdit = (item) => {
         // Ketika tombol "Edit" diklik, isi editData dengan data yang akan diedit
         setEditData(item);
+        setIditem(item.code);
         setStartDate(item.stayperiod_start); // Isi nilai awal Start Date
         setEndDate(item.stayperiod_end); // Isi nilai awal End Date
         setSurcharge(item.surcharge_price); // Isi nilai awal Surcharge
@@ -44,6 +46,7 @@ export default function SurchargeAllRoom({ session, vendor, surchargeallroom }) 
         formData.append('start_date', startdate);
         formData.append('end_date', enddate);
         formData.append('surchargeprice', surchargeprice);
+        formData.append('code', iditem);
         Inertia.post('/room/surcharge/surchargeallroomstore', formData, {
             onSuccess: () => {
                 // Lakukan aksi setelah gambar berhasil diunggah

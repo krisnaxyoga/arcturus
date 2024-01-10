@@ -95,6 +95,10 @@ function Layout({ children, page, agent }) {
                                             <div className="nav-link-icon">  <i className="fas fa-fw fa-chart-area"></i></div>
                                             Booking Report
                                         </Link>
+                                        <Link className={`nav-link ${page === '/agent/hotelmarkup' ? 'active' : ''}`} href="/agent/hotelmarkup">
+                                            <div className="nav-link-icon">  <i className="fas fa-fw fa-building"></i></div>
+                                            Agent Markup
+                                        </Link>
                                         {/* <Link className={`nav-link ${page === '/agent-enquiryreport' ? 'active' : ''}`} href="/agent-enquiryreport">
                                             <div className="nav-link-icon"><i className="fa fa-book" aria-hidden="true"></i></div>
                                             Enquiry Report

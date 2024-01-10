@@ -977,6 +977,12 @@ class ContractController extends Controller
         $start_date = date('Y-m-d', strtotime($request->start_date));
         $end_date = date('Y-m-d', strtotime($request->end_date));
 
+        $BlackoutContractRatearray = BlackoutContractRate::where('code',$request->code)
+            ->get();
+        foreach($BlackoutContractRatearray as $itemdate){
+            $itemdate->delete();
+        }
+
         $current_date = $start_date;
 
         while ($current_date <= $end_date) {
@@ -984,6 +990,7 @@ class ContractController extends Controller
                 ->where('vendor_id', $vendor->id)
                 ->where('start_date', $current_date)
                 ->where('contract_id', $request->contractid)
+                ->where('code', $request->code)
                 ->first();
 
             if (! $hotel_blackoutdate) {

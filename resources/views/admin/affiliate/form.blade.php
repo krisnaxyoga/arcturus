@@ -32,7 +32,7 @@
                                         <div class="mb-3">
                                             <label for="name" class="form-label">Name</label>
                                             <input type="text" name="name" class="form-control" id="vendor_name"
-                                                value="{{ $model->name }}" placeholder="Attribute Name">
+                                                value="{{ $model->name }}" placeholder="Name">
                                         </div>
                                     </div>
 

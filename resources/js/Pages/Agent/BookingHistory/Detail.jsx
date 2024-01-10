@@ -120,7 +120,7 @@ export default function Detail({ session, data, agent, contract, setting, roombo
 
     console.log(formData);
     return (
-        <Layout page={url} agent={agent}>
+        <Layout page={'/agent/bookinghistory'} agent={agent}>
 
           <div className="container">
                 <div className="row mb-3">

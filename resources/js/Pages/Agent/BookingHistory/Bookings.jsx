@@ -18,7 +18,7 @@ export default function Bookings({ bookings, transports }) {
     return (
         <tr key={`booking_${index}`}>
             <td>{index + 1}</td>
-            <td>{booking.vendor.vendor_name} {booking.id}</td>
+            <td>{booking.vendor.vendor_name}</td>
             <td>{booking.booking_date}</td>
             <td>{booking.checkin_date}</td>
             <td>{booking.checkout_date}</td>

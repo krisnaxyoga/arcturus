@@ -324,14 +324,15 @@ background-color: #f7f7ff;
                                                 @endif
                                             </td>
                                             <td>
-                                                {{$item->vendor->system_markup}}
+                                                {{$item->price}}
                                             </td>
-                                            <td> @if (is_null($item->vendor->system_markup))
-                                                {{ (($item->vendor->system_markup * $item->total_room)*$item->night ) * 0.15 }}
-                                            @else
-                                                {{ (($item->vendor->system_markup * $item->total_room)*$item->night ) * 0.15 }}
-                                            @endif
-                                        </td>
+                                            <td> 
+                                                @if (is_null($item->vendor->system_markup))
+                                                    {{ ($item->price - $item->pricenomarkup ) * 0.15 }}
+                                                @else
+                                                    {{ ($item->price - $item->pricenomarkup  ) * 0.15 }}
+                                                @endif
+                                            </td>
 
                                         </tr>
                                         @endforeach

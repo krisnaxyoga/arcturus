@@ -378,5 +378,17 @@ Route::group(['middleware' => ['auth', 'checkrole:3']], function() {
     Route::get('/agent/wallet',[\App\Http\Controllers\Agent\Wallet\EwalletController::class, 'index'])->name('agent.wallet');
     Route::post('/agent/wallet/topup',[\App\Http\Controllers\Agent\Wallet\EwalletController::class, 'store'])->name('agent.wallet.topup');
     Route::get('/agent/wallet/pay/{id}',[\App\Http\Controllers\Agent\Wallet\EwalletController::class, 'pay'])->name('agent.wallet.pay');
+
+    // markup hotel
+    Route::get('/agent/hotelmarkup',[\App\Http\Controllers\Agent\HotelMarkup\MarkupHotelController::class, 'index'])->name('agent.hotelmarkup');
+    Route::post('/agent/hotelmarkup/markupaddagent',[\App\Http\Controllers\Agent\HotelMarkup\MarkupHotelController::class, 'markupaddagent'])->name('agent.hotelmarkup.markupaddagent');
+    Route::get('/agent/hotelmarkup/homehotel',[\App\Http\Controllers\Agent\HotelMarkup\MarkupHotelController::class, 'homehotel'])->name('agent.hotelmarkup.homehotel');
+    Route::get('/agent/hotelmarkup/hoteldetail/{id}',[\App\Http\Controllers\Agent\HotelMarkup\MarkupHotelController::class, 'hoteldetail'])->name('agent.hotelmarkup.hoteldetail');
+    
+    Route::post('/agent/hotelmarkup/create',[\App\Http\Controllers\Agent\HotelMarkup\BookingController::class, 'create'])->name('agent.hotelmarkup.create');
+    Route::get('/agent/hotelmarkup/detail/{id}',[\App\Http\Controllers\Agent\HotelMarkup\BookingController::class, 'detail'])->name('agent.hotelmarkup.detail');
+    Route::post('/agent/hotelmarkup/bookingstore/{id}',[\App\Http\Controllers\Agent\HotelMarkup\BookingController::class, 'bookingstore'])->name('agent.hotelmarkup.bookingstore');
+    Route::get('/agent/hotelmarkup/pay/{id}',[\App\Http\Controllers\Agent\HotelMarkup\BookingController::class, 'pay'])->name('agent.hotelmarkup.pay');
+   
 });
 

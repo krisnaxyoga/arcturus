@@ -13,6 +13,7 @@ function Index({vendor,data,session,contractid}) {
 
     const [startdate, setStartDate] = useState('');
     const [enddate, setEndDate] = useState('');
+    const [code, setCode] = useState('');
     const [editData, setEditData] = useState(null); // Menyimpan data yang akan diedit
 
     const formatDate = (dateString) => {
@@ -27,6 +28,7 @@ function Index({vendor,data,session,contractid}) {
       const handleEdit = (item) => {
         // Ketika tombol "Edit" diklik, isi editData dengan data yang akan diedit
         setEditData(item);
+        setCode(item.code);
         setStartDate(item.stayperiod_start); // Isi nilai awal Start Date
         setEndDate(item.stayperiod_end); // Isi nilai awal End Date
         setSurcharge(item.surcharge_price); // Isi nilai awal Surcharge
@@ -39,6 +41,7 @@ function Index({vendor,data,session,contractid}) {
         formData.append('start_date', startdate);
         formData.append('end_date', enddate);
         formData.append('contractid', contractid);
+        formData.append('code', code);
         Inertia.post('/room/contract/blackoutcontractstore', formData, {
             onSuccess: () => {
                 // Lakukan aksi setelah gambar berhasil diunggah
