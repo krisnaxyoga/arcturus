@@ -50,10 +50,6 @@
                     @endif
                     <form method="post" id="registerform" action="{{ route('vendorregist.store') }}">
                         @csrf
-                        @if ($affiliate != null)
-                        <input type="hidden" name="affiliate"
-                        class="form-control" value="{{$affiliate}}">
-                        @endif
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="form-outline mb-4">
@@ -65,7 +61,7 @@
                                             {{ $message }}
                                         </div>
                                     @enderror
-                                    <label for="name" class="form-label">First Name</label>
+                                    <label for="name" class="form-label">First Name <span class="text-danger">*</span></label>
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -89,7 +85,7 @@
                                     {{ $message }}
                                 </div>
                             @enderror
-                        <label for="name" class="form-label">Hotel Name</label>
+                        <label for="name" class="form-label">Hotel Name <span class="text-danger">*</span></label>
                         <!--<label for="name" class="form-label">Company Name</label>-->
                         <!--<input type="text" name="company_name"-->
                         <!--    class="form-control @error('company_name') is-invalid @enderror" id="name">-->
@@ -120,7 +116,7 @@
                                     {{ $message }}
                                 </div>
                             @enderror
-                            <label for="email" class="form-label">Email</label>
+                            <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
                         </div>
                         <div class="form-outline mb-4">
                             
@@ -131,7 +127,7 @@
                                     {{ $message }}
                                 </div>
                             @enderror
-                            <label for="name" class="form-label">Phone</label>
+                            <label for="name" class="form-label">Phone <span class="text-danger">*</span></label>
                         </div>
                         <div class="form-outline mb-4">
                             

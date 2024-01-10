@@ -58,37 +58,37 @@
                             
                             <input type="text" name="first_name"
                                 class="form-control @error('first_name') is-invalid @enderror"
-                                id="name">
+                                id="name" required>
                             @error('first_name')
                                 <div class="invalid-feedback">
                                     {{ $message }}
                                 </div>
                             @enderror
-                            <label for="name" class="form-label">First Name</label>
+                            <label for="name" class="form-label">First Name  <span class="text-danger">*</span></label>
                         </div>
                     </div>
                     <div class="col-lg-6">
                       
                         <input type="text" name="last_name"
-                            class="form-control @error('last_name') is-invalid @enderror" id="name">
+                            class="form-control @error('last_name') is-invalid @enderror" id="name" required>
                         @error('last_name')
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
                         @enderror
-                        <label for="name" class="form-label">Last Name</label>
+                        <label for="name" class="form-label">Last Name </label>
                     </div>
                 </div>
                 <div class="form-outline mb-4">
                     
                     <input type="text" name="busisnes_name"
-                        class="form-control @error('busisnes_name') is-invalid @enderror" id="name">
+                        class="form-control @error('busisnes_name') is-invalid @enderror" id="name" required>
                     @error('busisnes_name')
                         <div class="invalid-feedback">
                             {{ $message }}
                         </div>
                     @enderror
-                    <label for="name" class="form-label">Agent Name</label>
+                    <label for="name" class="form-label">Agent Name  <span class="text-danger">*</span></label>
                 </div>
                 {{-- <div class="form-outline mb-4">
                     <label for="name" class="form-label">Company Name</label>
@@ -109,7 +109,7 @@
                             {{ $message }}
                         </div>
                     @enderror
-                    <label for="name" class="form-label">Address</label>
+                    <label for="name" class="form-label">Address  <span class="text-danger">*</span></label>
                 </div>
                 <div class="form-outline mb-4">
                    
@@ -121,7 +121,7 @@
                             {{ $message }}
                         </div>
                     @enderror
-                    <label for="email" class="form-label">Email</label>
+                    <label for="email" class="form-label">Email  <span class="text-danger">*</span></label>
                 </div>
                 <div class="form-outline mb-4">
                     
@@ -132,7 +132,7 @@
                             {{ $message }}
                         </div>
                     @enderror
-                    <label for="name" class="form-label">Phone</label>
+                    <label for="name" class="form-label">Phone  <span class="text-danger">*</span></label>
                 </div>
                 <div class="form-outline mb-4">
                     
@@ -179,7 +179,7 @@
                     </div>
                 </div>
                 <div class="form-outline mb-4">
-                    <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" id="password">
+                    <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" id="password" required>
                     <label class="form-label" for="password">Password</label>
                     <span toggle="#password" class="toggle-password field-icon"><i class="fa fa-fw fa-eye toggle-icon"></i></span>
                     @error('password')
