@@ -95,12 +95,14 @@ class TransportController extends Controller
     {
 
         $model = AgentTransport::find($id);
+        $model->invite = 1;
+        $model->save();
         $data = $model;
 
         if (env('APP_ENV') == 'production') {
         Mail::to($model->email)->send(new InviteTransport($data));
         }
-        return redirect()->back()->with('message', 'Agent Transport invite!');
+        return redirect()->back()->with('message', 'Agent Transport invited!');
     }
 
     public function is_active($id,$ac)

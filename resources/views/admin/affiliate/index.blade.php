@@ -39,8 +39,10 @@
                                     @foreach ($data as $item)
                                         <tr>
                                             <td>
-                                                <a href="{{route('admin.afiliate.invite',$item->id)}}" class="badge badge-warning">
-                                                    invite
+                                                @if($item->invite == 1)
+                                                    <span class="badge badge-success">invited</span>
+                                                @endif
+                                                <a href="{{route('admin.afiliate.invite',$item->id)}}" data-toggle="tooltip" data-placement="top" title="Send invite email" class="btn btn-datatable btn-icon btn-transparent-dark mr-2"> <i data-feather="send"></i>
                                                 </a>
                                             </td>
                                             <td>{{ $item->name }}</td>

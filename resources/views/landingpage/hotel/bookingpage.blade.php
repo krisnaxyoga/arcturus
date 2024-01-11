@@ -151,8 +151,8 @@
                         <img onerror="this.onerror=null; this.src='https://semantic-ui.com/images/wireframe/white-image.png';" onerror="this.onerror=null; this.src='https://semantic-ui.com/images/wireframe/white-image.png';" class="img-fluid" style="width:100px" src="{{$data->vendor->logo_img}}" alt="">
                         <hr>
                         <ul class="p-0">
-                            <li class="d-flex justify-content-between"><span>Check in :</span> <span>{{$data->checkin_date}}</span></li>
-                            <li class="d-flex justify-content-between"><span>Check out :</span> <span>{{$data->checkout_date}}</span></li>
+                            <li class="d-flex justify-content-between"><span>Check in :</span> <span>{{date('m/d/Y', strtotime($data->checkin_date))}}</span></li>
+                            <li class="d-flex justify-content-between"><span>Check out :</span> <span>{{date('m/d/Y', strtotime($data->checkout_date))}}</span></li>
                             <li class="d-flex justify-content-between"><span>Night :</span> <span>{{$data->night}}</span></li>
                             <li class="d-flex justify-content-between"><span>Person:</span> <span>{{$data->total_guests}}</span></li>
                         </ul>

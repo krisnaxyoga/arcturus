@@ -39,7 +39,11 @@
                                     @foreach ($data as $item)
                                         <tr>
                                             <td>
+                                                @if($item->invite == 1)
+                                                    <span class="badge badge-success">invited</span>
+                                                @endif
                                                 <a data-toggle="tooltip" data-placement="top" title="Send invite email" href="{{route('dashboard.transportdestination.invite',$item->id)}}" class="btn btn-datatable btn-icon btn-transparent-dark mr-2"> <i data-feather="send"></i></a>
+
                                                 @if($item->status != 1)
                                                     <a data-toggle="tooltip" data-placement="top" title="active button" href="{{route('dashboard.transport.isactive',['id' => $item->id,'ac' => 1])}}" class="btn btn-datatable btn-icon btn-transparent-dark mr-2"><i data-feather="toggle-left"></i></a>
                                                 @else

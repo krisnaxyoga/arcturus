@@ -229,6 +229,7 @@ export default function BookingDetail({ token, user, iddata }) {
                                             <>
                                             <form onSubmit={handleSubmitpickup}>
                                                 <div className="form-group">
+                                                <label htmlFor="">Guests at Airport</label>
                                                     <input type="file" name="pickup" onChange={handleFileChange} className="form-control mb-3"/>
                                                 </div>
                                                 <div className="form-group">
@@ -253,7 +254,7 @@ export default function BookingDetail({ token, user, iddata }) {
                                             <>
                                             <form onSubmit={handleSubmitcheckin}>
                                                 <div className="form-group">
-                                                    <label htmlFor="">add a confirmation photo when you arrive</label>
+                                                    <label htmlFor="">Guests at Hotel</label>
                                                     <input type="file" name="checkin" onChange={handleFileChange} className="form-control mb-3"/>
                                                 </div>
                                                 <div className="form-group">
@@ -291,7 +292,7 @@ export default function BookingDetail({ token, user, iddata }) {
                                 <>
                                 <div className="card mt-3">
                                     <div className="card-header">
-                                        Widraw Transfer
+                                        Withdraw Transfer
                                     </div>
                                     <div className="card-body">
                                         <img src={`/images/${widraw.image}`} alt="" className="img-fluid"/>

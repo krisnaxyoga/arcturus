@@ -917,11 +917,15 @@
 <script>
     // Inisialisasi Date Range Picker
     $('input[name="dates"]').daterangepicker({
-        startDate: moment().format('YYYY-MM-DD'), // Tanggal checkin (hari ini)
-        endDate: moment().add(1, 'days').format('YYYY-MM-DD'), // Tanggal checkout (besok)
+        startDate: moment().format('MM/DD/YYYY'), // Tanggal checkin (hari ini)
+        endDate: moment().add(1, 'days').format('MM/DD/YYYY'), // Tanggal checkout (besok)
         autoUpdateInput: false, // Menonaktifkan pembaruan otomatis
         locale: {
-            format: 'YYYY-MM-DD', // Format tanggal yang diharapkan
+            format: 'MM/DD/YYYY', // Format tanggal yang diharapkan
+        },
+        isInvalidDate: function(date) {
+            // Nonaktifkan tanggal sebelum hari ini
+            return date.isBefore(moment(), 'day');
         }
     });
 
@@ -930,13 +934,14 @@
         // Mengambil tanggal checkin dan checkout dari Date Range Picker
         const checkin = picker.startDate.format('YYYY-MM-DD');
         const checkout = picker.endDate.format('YYYY-MM-DD');
-        
+        const checkin1 = picker.startDate.format('MM/DD/YYYY');
+        const checkout1 = picker.endDate.format('MM/DD/YYYY');
         // Memperbarui nilai input tanggal checkin dan checkout
         $('input[name="checkin"]').val(checkin);
         $('input[name="checkout"]').val(checkout);
 
         // Memperbarui nilai input dengan tampilan tanggal
-        $(this).val(checkin + ' - ' + checkout);
+        $(this).val(checkin1 + ' - ' + checkout1);
     });
 </script>
 @endsection

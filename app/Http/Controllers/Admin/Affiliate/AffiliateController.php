@@ -8,6 +8,7 @@ use App\Models\Affiliate;
 use App\Models\Vendor;
 use App\Models\User;
 use App\Models\Setting;
+use App\Models\VendorAffiliate;
 use App\Mail\InviteAffiliate;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
@@ -145,6 +146,11 @@ class AffiliateController extends Controller
         // Lakukan tindakan lain sebelum penghapusan jika diperlukan
         $data->delete();
 
+        $VendorAffiliate = VendorAffiliate::where('affiliate_id',$id)->get();
+        foreach($VendorAffiliate as $item){
+            $item->delete();
+        }
+
         return redirect()
             ->route('admin.afiliate')
             ->with('message', 'Data Deleted.');
@@ -154,11 +160,13 @@ class AffiliateController extends Controller
     {
 
         $model = Affiliate::find($id);
+        $model->invite = 1;
+        $model->save();
         $data = $model;
 
         if (env('APP_ENV') == 'production') {
         Mail::to($model->email)->send(new InviteAffiliate($data));
         }
-        return redirect()->back()->with('message', 'Agent Transport invite!');
+        return redirect()->back()->with('message', 'Affiliate invited!');
     }
 }

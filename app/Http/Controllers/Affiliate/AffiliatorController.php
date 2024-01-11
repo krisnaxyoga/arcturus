@@ -29,7 +29,7 @@ class AffiliatorController extends Controller
 
             $hotel = Vendor::where('affiliate',$user->code)->get();
 
-            $vendoraffiliate = VendorAffiliate::orderBy('created_at')->get();
+            $vendoraffiliate = VendorAffiliate::where('affiliate_id',$id)->orderBy('created_at')->get();
             return view('affiliate.home',compact('user','hotel','vendoraffiliate'));
 
         }else{
@@ -50,7 +50,7 @@ class AffiliatorController extends Controller
         if($be_code == $fo_code){
             $hotel = Vendor::where('affiliate',$user->code)->get();
             $settings = Setting::first();
-            $vendoraffiliate = VendorAffiliate::orderBy('created_at')->get();
+            $vendoraffiliate = VendorAffiliate::where('affiliate_id',$id)->orderBy('created_at')->get();
             return view('affiliate.profile',compact('user','hotel','vendoraffiliate','settings','be_code'));
 
         }else{
@@ -91,7 +91,7 @@ class AffiliatorController extends Controller
         if($be_code == $fo_code){
             $hotel = Vendor::where('affiliate',$user->code)->get();
 
-            $vendoraffiliate = VendorAffiliate::orderBy('created_at')->get();
+            $vendoraffiliate = VendorAffiliate::where('affiliate_id',$id)->orderBy('created_at')->get();
             return view('affiliate.hotel',compact('user','hotel','vendoraffiliate'));
 
         }else{

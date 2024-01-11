@@ -712,20 +712,28 @@
     }
     </script>
     <script>
-        $('input[name="dates"]').daterangepicker();
+        $('input[name="dates"]').daterangepicker({
+           
+            isInvalidDate: function(date) {
+            // Nonaktifkan tanggal sebelum hari ini
+            return date.isBefore(moment(), 'day');
+        }
+        });
 
             // Tambahkan event listener untuk deteksi klik tombol "Apply"
         $('input[name="dates"]').on('apply.daterangepicker', function(ev, picker) {
             // Mengambil tanggal checkin dan checkout dari Date Range Picker
             const checkin = picker.startDate.format('YYYY-MM-DD');
             const checkout = picker.endDate.format('YYYY-MM-DD');
+            const checkin1 = picker.startDate.format('MM/DD/YYYY');
+            const checkout1 = picker.endDate.format('MM/DD/YYYY');
 
             // Memperbarui nilai input tanggal checkin dan checkout
             $('input[name="checkin"]').val(checkin);
             $('input[name="checkout"]').val(checkout);
 
             // Memperbarui nilai input dengan tampilan tanggal
-            $(this).val(checkin + ' - ' + checkout);
+            $(this).val(checkin1 + ' - ' + checkout1);
         });
     </script>
     <script>
