@@ -139,6 +139,8 @@ function Index({token, user}) {
                                                                 {
                                                                     post.destination
                                                                 }
+                                                                 &nbsp;
+                                                                ({post.booking.vendor.vendor_name})
                                                             </p>
                                                             <p>
                                                                 {

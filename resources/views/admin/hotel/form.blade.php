@@ -17,6 +17,11 @@
                             </h1>
                         </div>
                         <div class="card-body">
+                            @if (session('message'))
+                                <div class="alert alert-success">
+                                    {{ session('message') }}
+                                </div>
+                            @endif
                             <form
                                 action="@if ($model->exists) {{ route('dashboard.hotel.update', $model->id) }} @else {{ route('dashboard.hotel.store') }} @endif"
                                 method="POST" enctype="multipart/form-data">
@@ -45,7 +50,7 @@
                                             <div class="mb-3 mx-3">
                                                 <label for="affiliate" class="form-label">Affiliate Code</label>
                                                 <input type="text" name="affiliate" class="form-control" id="lastname"
-                                                    value="@if ($model->exists) {{ $model->affiliate }} @else {{ $user->affiliate }} @endif"
+                                                    value="{{ $model->affiliate }}"
                                                     placeholder="affiliate">
                                             </div>
                                         </div>

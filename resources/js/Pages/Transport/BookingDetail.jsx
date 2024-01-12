@@ -150,7 +150,6 @@ export default function BookingDetail({ token, user, iddata }) {
             // Tangani kesalahan jika POST gagal
         }
     };
-
     const imagepreview = formDatapickup.pickup ? URL.createObjectURL(formDatapickup.pickup) : null;
 
     return (
@@ -203,7 +202,8 @@ export default function BookingDetail({ token, user, iddata }) {
                                                 
                                                 </li>
                                                 <li>
-                                                    destination : {data.destination}
+                                                    destination : {data.destination} &nbsp;
+                                                                ({data.booking?.vendor?.vendor_name})
                                                 </li>
                                                 <li>time : {data.time_pickup}</li>
                                                 <li>Date : {data.pickup_date}</li>

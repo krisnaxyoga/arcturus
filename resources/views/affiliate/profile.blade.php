@@ -5,7 +5,7 @@
     <section class="vh-100" style="background-color: #eee;">
         <div class="container py-5 h-100">
           <div class="row d-flex h-100">
-            <div class="col-md-12 col-xl-4">
+            <div class="col-md-12 col-xl-4 mb-3">
       
               <div class="card" style="border-radius: 15px;">
                 <div class="card-body text-center">
@@ -46,6 +46,23 @@
                 </div>
               </div>
       
+            </div>
+            <div class="col-xl-6">
+              <div class="card">
+                <div class="card-body">
+                  <form action="">
+                    <label for="" class="text-danger" style="font-weight: 700; font-size:13px">If you want to change the
+                      password, you can fill in here,
+                      if you don't want to change the
+                      password, please leave it blank.</label>
+                    <input type="password" class="form-control mb-3">
+                    <!-- Pastikan untuk mengganti "your-site-key" dengan Site Key yang Anda dapatkan -->
+                  <script src="https://www.google.com/recaptcha/api.js?render=6Ldxgk4pAAAAAN1ktD9C8WWq2QSSXXv2x_PWQpR2"></script>
+                  <div class="g-recaptcha" data-sitekey="your-site-key"></div>
+                    <button class="btn btn-primary" type="submit">save</button>
+                  </form>
+                </div>
+              </div>
             </div>
           </div>
         </div>

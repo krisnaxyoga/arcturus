@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Models\Vendor;
 use App\Models\ContractPrice;
 use App\Models\Setting;
+use App\Models\VendorAffiliate;
+use App\Models\Affiliate;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -102,8 +104,22 @@ class HotelController extends Controller
                 $vendor->city = $request->city;
                 $vendor->system_markup = $request->markup;
                 $vendor->hotel_star = $request->hotel_star;
-                $vendor->recomend = $request->recomend;
+                $vendor->recomend = $request->recomend; 
                 $vendor->affiliate = $request->affiliate;
+                if($request->affiliate){
+                   
+                    $Affiliate = Affiliate::where('code',$request->affiliate)->first();
+                    $Affiliate->hotelaffiliate = $Affiliate->hotelaffiliate + 1;
+                    $Affiliate->save();
+                }
+    
+                if($request->affiliate){
+                    $Affiliate = Affiliate::where('code',$request->affiliate)->first();
+                    $VendorAffiliate = new VendorAffiliate;
+                    $VendorAffiliate->vendor_id = $vendor->id;
+                    $VendorAffiliate->affiliate_id = $Affiliate->id;
+                    $VendorAffiliate->save();
+                }
                 $vendor->save();
     
                 //get vendor by user_id 
@@ -115,7 +131,7 @@ class HotelController extends Controller
 
                 return redirect()
                 ->route('dashboard.hotel')
-                ->with('message', 'Data berhasil disimpan.');
+                ->with('message', 'Data Saved!.');
             }
     }
 
@@ -154,8 +170,8 @@ class HotelController extends Controller
         $country = get_country_lists();
         //dd($request);
         $validator =  Validator::make($request->all(), [
-            'vendor_name' => 'required',
-            'email' => 'required'
+            'vendor_name' => 'nullable',
+            'email' => 'nullable'
         ]);
 
         if($validator->fails()) return redirect()->back()->withInput()->withErrors($validator);
@@ -174,8 +190,22 @@ class HotelController extends Controller
         $vendor->system_markup = $request->markup;
         $vendor->hotel_star = $request->hotel_star;
         $vendor->recomend = $request->recomend;
-        $vendor->affiliate = $request->affiliate;
-        $vendor->update();
+       
+        if($request->affiliate || $vendor->affiliate != $request->affiliate){
+            $vendor->affiliate = $request->affiliate;
+            $Affiliate = Affiliate::where('code',$request->affiliate)->first();
+            $Affiliate->hotelaffiliate = $Affiliate->hotelaffiliate + 1;
+            $Affiliate->save();
+        }
+
+        if($request->affiliate || $vendor->affiliate = $request->affiliate){
+            $Affiliate = Affiliate::where('code',$request->affiliate)->first();
+            $VendorAffiliate = new VendorAffiliate;
+            $VendorAffiliate->vendor_id = $vendor->id;
+            $VendorAffiliate->affiliate_id = $Affiliate->id;
+            $VendorAffiliate->save();
+        }
+        $vendor->save();
 
        // Mengecek apakah ada ContractPrice yang sesuai dengan user_id vendor
         $contractPrices = ContractPrice::where('user_id', $vendor->user_id)->get();
@@ -195,7 +225,7 @@ class HotelController extends Controller
         
         return redirect()
             ->route('dashboard.hotel.edit', ['id' => $id])
-            ->with('message', 'Data Hotel berhasil diupdate.');
+            ->with('message', 'Data Hotel updated!.');
 
     }
 
@@ -213,7 +243,7 @@ class HotelController extends Controller
 
         return redirect()
             ->route('dashboard.hotel')
-            ->with('message', 'Data Hotel berhasil dihapus.');
+            ->with('message', 'Data deleted.');
     }
 
     public function loginhotel($id){

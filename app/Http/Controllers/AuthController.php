@@ -99,6 +99,7 @@ class AuthController extends Controller
             $data->departement = '-';
             $data->position = '-';
             $data->is_see = 0;
+            $data->is_active = 0;
             $data->save();
 
             // add new agents
@@ -123,9 +124,9 @@ class AuthController extends Controller
             $user->save();
 
             if (env('APP_DEBUG') == 'false') {
-                // mail::to($Setting->email)->send(new RegisterNotif($data, $member));
+                mail::to($Setting->email)->send(new RegisterNotif($data, $member));
 
-                // mail::to($request->email)->send(new AgentVerifification($data, $member));
+                mail::to($request->email)->send(new AgentVerifification($data, $member));
             }
             return redirect()
                 ->route('login')
@@ -158,6 +159,7 @@ class AuthController extends Controller
             $data->title = Str::random(8);
             $data->role_id = 2;
             $data->is_see = 0;
+            $data->is_active = 0;
             $data->save();
 
             $member = new Vendor();
@@ -181,7 +183,6 @@ class AuthController extends Controller
             $member->save();
 
             if($request->affiliate){
-                $member->affiliate = $request->affiliate;
                 $Affiliate = Affiliate::where('code',$request->affiliate)->first();
                 $VendorAffiliate = new VendorAffiliate;
                 $VendorAffiliate->vendor_id = $member->id;
@@ -196,8 +197,8 @@ class AuthController extends Controller
 
             $Setting = Setting::where('id',1)->first();
             if (env('APP_DEBUG') == 'false') {
-                // mail::to($Setting->email)->send(new RegisterNotif($data, $member));
-                // mail::to($request->email)->send(new HotelVerifification($data, $member));
+                mail::to($Setting->email)->send(new RegisterNotif($data, $member));
+                mail::to($request->email)->send(new HotelVerifification($data, $member));
             }
 
             return redirect()
@@ -228,7 +229,7 @@ class AuthController extends Controller
 
         // Send an email to the user with the password reset link
         if (env('APP_DEBUG') == 'false') {
-            // mail::to($user->email)->send(new ForgotPassword($user, $token));
+            mail::to($user->email)->send(new ForgotPassword($user, $token));
         }
         // Return a success response
         return redirect()

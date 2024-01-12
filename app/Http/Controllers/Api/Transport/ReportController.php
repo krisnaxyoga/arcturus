@@ -12,14 +12,32 @@ class ReportController extends Controller
 {
     public function index(){
         $iduser = auth()->guard('agent_transport')->id();
-        $data = OrderTransport::where('transport_id',$iduser)->orderBy('created_at','desc')->get();
+        $data = OrderTransport::where('transport_id',$iduser)->with([
+            'booking' => function ($query) {
+                // Pilih kolom-kolom yang Anda inginkan dari relasi booking
+                $query->select('id', 'vendor_id', /* tambahkan kolom lain jika diperlukan */);
+            },
+            'booking.vendor' => function ($query) {
+                // Pilih kolom-kolom yang Anda inginkan dari relasi vendor
+                $query->select('id', 'vendor_name', /* tambahkan kolom lain jika diperlukan */);
+            }
+        ])->orderBy('created_at','desc')->get();
 
         return new PostResource(true, 'List Data report', $data);
     }
 
     public function detail($id){
 
-        $data = OrderTransport::find($id);
+        $data = OrderTransport::where('id',$id)->with([
+            'booking' => function ($query) {
+                // Pilih kolom-kolom yang Anda inginkan dari relasi booking
+                $query->select('id', 'vendor_id', /* tambahkan kolom lain jika diperlukan */);
+            },
+            'booking.vendor' => function ($query) {
+                // Pilih kolom-kolom yang Anda inginkan dari relasi vendor
+                $query->select('id', 'vendor_name', /* tambahkan kolom lain jika diperlukan */);
+            }
+        ])->first();
 
         return new PostResource(true, 'Detail Data report', $data);
     }
