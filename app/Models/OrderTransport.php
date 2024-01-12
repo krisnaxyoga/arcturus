@@ -24,4 +24,12 @@ class OrderTransport extends Model
     public function package() {
         return $this->belongsTo(PackageTransport::class, 'package_id');
     }
+
+    public function transportpickup(){
+        return $this->hasOne(TransportPickup::class, 'ordertransport_id');
+    }
+
+    public function widrawtransport() {
+        return $this->hasOne(WidrawTransport::class, 'ordertransport_id');
+    }
 }

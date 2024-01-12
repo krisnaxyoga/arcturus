@@ -8,11 +8,13 @@ use App\Models\Agent;
 use App\Models\Vendor;
 use App\Models\Role;
 use App\Models\Setting;
+use App\Models\VendorAffiliate;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
+use App\Models\Affiliate;
 use App\Mail\ForgotPassword;
 use App\Mail\RegisterNotif;
 use App\Mail\AgentVerifification;
@@ -65,7 +67,13 @@ class AuthController extends Controller
     }
 
     public function registvendor(Request $request){
-        return view('auth.registervendor');
+        $affiliate = null;
+        return view('auth.registervendor',compact('affiliate'));
+    }
+
+    // affiliator register
+    public function registvendoraffiliate(Request $request,$affiliate){
+        return view('auth.registervendor',compact('affiliate'));
     }
 
     public function agentstore(Request $request){
@@ -91,7 +99,6 @@ class AuthController extends Controller
             $data->departement = '-';
             $data->position = '-';
             $data->is_see = 0;
-            $data->is_active = 0;
             $data->save();
 
             // add new agents
@@ -115,13 +122,14 @@ class AuthController extends Controller
             $user->vendor_id = $member->id;
             $user->save();
 
-            Mail::to($Setting->email)->send(new RegisterNotif($data, $member));
+            if (env('APP_DEBUG') == 'false') {
+                // mail::to($Setting->email)->send(new RegisterNotif($data, $member));
 
-            Mail::to($request->email)->send(new AgentVerifification($data, $member));
-
+                // mail::to($request->email)->send(new AgentVerifification($data, $member));
+            }
             return redirect()
                 ->route('login')
-                ->with('message', 'register success.');
+                ->with('message', 'please check your email to activate your account.');
                 // ->with('message', 'Please wait max 1x24 hours for ADMIN to verify your account');
         }
     }
@@ -150,7 +158,6 @@ class AuthController extends Controller
             $data->title = Str::random(8);
             $data->role_id = 2;
             $data->is_see = 0;
-            $data->is_active = 0;
             $data->save();
 
             $member = new Vendor();
@@ -165,7 +172,22 @@ class AuthController extends Controller
             $member->phone = $request->phone;
             $member->type_vendor = $request->type_vendor;
             $member->is_active = 0;
+            if($request->affiliate){
+                $member->affiliate = $request->affiliate;
+                $Affiliate = Affiliate::where('code',$request->affiliate)->first();
+                $Affiliate->hotelaffiliate = $Affiliate->hotelaffiliate + 1;
+                $Affiliate->save();
+            }
             $member->save();
+
+            if($request->affiliate){
+                $member->affiliate = $request->affiliate;
+                $Affiliate = Affiliate::where('code',$request->affiliate)->first();
+                $VendorAffiliate = new VendorAffiliate;
+                $VendorAffiliate->vendor_id = $member->id;
+                $VendorAffiliate->affiliate_id = $Affiliate->id;
+                $VendorAffiliate->save();
+            }
 
             $user = User::find($data->id);
             $user->vendor_id = $member->id;
@@ -173,12 +195,14 @@ class AuthController extends Controller
             // dd($member->id);
 
             $Setting = Setting::where('id',1)->first();
-            Mail::to($Setting->email)->send(new RegisterNotif($data, $member));
-            Mail::to($request->email)->send(new HotelVerifification($data, $member));
+            if (env('APP_DEBUG') == 'false') {
+                // mail::to($Setting->email)->send(new RegisterNotif($data, $member));
+                // mail::to($request->email)->send(new HotelVerifification($data, $member));
+            }
 
             return redirect()
                 ->route('login')
-                ->with('message', 'register success');
+                ->with('message', 'please check your email to activate your account.');
         }
     }
     public function forgetpassword(){
@@ -203,8 +227,9 @@ class AuthController extends Controller
         $user->save();
 
         // Send an email to the user with the password reset link
-        Mail::to($user->email)->send(new ForgotPassword($user, $token));
-
+        if (env('APP_DEBUG') == 'false') {
+            // mail::to($user->email)->send(new ForgotPassword($user, $token));
+        }
         // Return a success response
         return redirect()
                 ->route('login')

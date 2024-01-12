@@ -227,7 +227,9 @@ class TransportController extends Controller
                     // Tidak perlu menambahkan kondisi di sini karena tidak ada filter tambahan yang perlu ditambahkan
                 }
             });
-        })->get();
+        })
+        ->with('transportpickup')
+        ->orderBy('created_at','desc')->get();
 
         $transport = TransportPickup::all();
         $bankAccount = TransportBankAccount::all();

@@ -1,6 +1,8 @@
 @extends('layouts.admin')
 @section('title', 'Transport Report Data')
 @section('content')
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <section>
     <div class="container">
         <div class="row">
@@ -85,72 +87,67 @@
                                                 </td>
                                             <td>{{$item->total_price_nomarkup}}</td>
                                             <td>
-                                        
-                                            @if ($trans && $trans->status == 'success')
-                                            @php
-                                                $bank = $bankAccount->where('transport_id', $item->id)->first();
-                                            @endphp
-                                                @if ($bank)
-                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{$item->transport_id}}{{$item->id}}">
-                                                        <i data-feather="eye"></i>
-                                                </button>
-
-                                            <!-- Modal -->
-                                                <div class="modal fade" id="exampleModal{{$item->transport_id}}{{$item->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                        <h1 class="modal-title fs-5" id="exampleModalLabel">{{$item->agenttransport->company_name}}</h1>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                @if ($item->transportpickup && $item->transportpickup->status == 'success')
+                                                    @if ($item->agenttransport->transportBankAccount && $item->agenttransport->transportBankAccount->exists())
+                                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{$key+1}}{{$item->transport_id}}{{$item->id}}">
+                                                            <i data-feather="eye"></i>
+                                                        </button>
+                                            
+                                                        <!-- Modal -->
+                                                        <div class="modal fade" id="exampleModal{{$key+1}}{{$item->transport_id}}{{$item->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h1 class="modal-title fs-5" id="exampleModalLabel">{{$item->agenttransport->company_name}}</h1>
+                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <ul>
+                                                                            <li> Bank name : {{$item->agenttransport->transportBankAccount->bank_name}}</li>
+                                                                            <li> Bank account : {{$item->agenttransport->transportBankAccount->account_number}}</li>
+                                                                            <li> swif_code : {{$item->agenttransport->transportBankAccount->swif_code}}</li>
+                                                                        </ul>
+                                            
+                                                                        @if ($item->widrawtransport)
+                                                                            @if ($item->widrawtransport->ordertransport_id == $item->id)
+                                                                             <img src="{{ asset('/images/'.$item->widrawtransport->image) }}" alt="" class="img-fluid">
+                                                                            @else
+                                                                               <form action="{{ route('dashboard.transport.widraw') }}" method="POST" enctype="multipart/form-data">
+                                                                                    @csrf
+                                                                                    @method('POST')
+                                                                                    <input type="hidden" name="transport_id" value="{{ $item->transport_id }}">
+                                                                                    <input type="hidden" name="ordertransport_id" value="{{ $item->id }}">
+                                                                                    <input type="hidden" name="total" value="{{ $item->total_price_nomarkup }}">
+                                                                                
+                                                                                    <input type="file" id="image-input1" class="form-control mb-2 image-input" name="widraw">
+                                                                                    <img onerror="this.onerror=null; this.src='https://semantic-ui.com/images/wireframe/white-image.png';" id="image-preview1" class="mt-3 img-fluid image-preview" style="width: 500px" src="#" alt="Preview">
+                                                                                    <button type="submit" class="btn btn-primary">upload</button>
+                                                                                </form>
+                                                                            @endif
+                                                                        @else
+                                                                            <form action="{{ route('dashboard.transport.widraw') }}" method="POST" enctype="multipart/form-data">
+                                                                                @csrf
+                                                                                @method('POST')
+                                                                                <input type="hidden" name="transport_id" value="{{ $item->transport_id }}">
+                                                                                <input type="hidden" name="ordertransport_id" value="{{ $item->id }}">
+                                                                                <input type="hidden" name="total" value="{{ $item->total_price_nomarkup }}">
+                                                                            
+                                                                                <input type="file" id="image-input" class="form-control mb-2 image-input" name="widraw">
+                                                                                <img onerror="this.onerror=null; this.src='https://semantic-ui.com/images/wireframe/white-image.png';" id="image-preview" class="mt-3 img-fluid image-preview" style="width: 500px" src="#" alt="Preview">
+                                                                                <button type="submit" class="btn btn-primary">upload</button>
+                                                                            </form>
+                                                                        @endif
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                        <div class="modal-body">
-                                                            <ul>
-                                                                <li> Bank name : {{$bank->bank_name}}</li>
-                                                                <li> Bank account : {{$bank->account_number}}</li>
-                                                                <li> swif_code : {{$bank->swif_code}}</li>
-                                                            </ul>
-                                                            @if($widrawa->count() == 0)
-                                                            <form action="{{route('dashboard.transport.widraw')}}" method="POST" enctype="multipart/form-data">
-                                                                @csrf
-                                                                @method('POST')
-                                                                <input type="hidden" name="transport_id" value="{{$item->transport_id}}">
-                                                                <input type="hidden" name="ordertransport_id" value="{{$item->id}}">
-                                                                <input type="hidden" name="total" value="{{$item->total_price_nomarkup}}">
-                                                            
-                                                                <input type="file" class="form-control mb-2" name="widraw">
-                                                                <button type="submit" class="btn btn-primary">upload</button>
-                                                            </form>
-                                                            @else
-                                                                @foreach ($widrawa as  $widraw)
-                                                                    @if($widraw->ordertransport_id == $item->id)
-                                                                <img src="{{asset('/images/'.$widraw->image)}}" alt="" class="img-fluid">
-                                                                    @else
-                                                                <form action="{{route('dashboard.transport.widraw')}}" method="POST" enctype="multipart/form-data">
-                                                                        @csrf
-                                                                        @method('POST')
-                                                                        <input type="hidden" name="transport_id" value="{{$item->transport_id}}">
-                                                                        <input type="hidden" name="ordertransport_id" value="{{$item->id}}">
-                                                                        <input type="hidden" name="total" value="{{$item->total_price_nomarkup}}">
-                                                                    
-                                                                        <input type="file" class="form-control mb-2" name="widraw">
-                                                                        <button type="submit" class="btn btn-primary">upload</button>
-                                                                    </form>
-                                                                    @endif
-                                                                @endforeach
-                                                            @endif
-                                                            
-                                                            
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                        </div>
-                                                    </div>
-                                                    </div>
-                                                </div>
+                                                    @endif
                                                 @endif
-                                            @endif
-                                               
                                             </td>
+
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -162,4 +159,23 @@
         </div>
     </div>
 </section>
+<script>
+    $(document).ready(function() {
+      // Mengaktifkan event change pada input file
+      $('.image-input').change(function() {
+        // Mengecek apakah ada file yang dipilih
+        if (this.files && this.files[0]) {
+          var reader = new FileReader();
+
+          reader.onload = function(e) {
+            // Menampilkan pratinjau gambar pada elemen img
+            $('.image-preview').attr('src', e.target.result);
+          }
+
+          reader.readAsDataURL(this.files[0]);
+        }
+      });
+    });
+
+    </script>
 @endsection

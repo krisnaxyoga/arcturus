@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class WidrawTransport extends Model
 {
     use HasFactory;
+
+    public function agenttransport() {
+        return $this->belongsTo(AgentTransport::class, 'transport_id');
+    }
 }

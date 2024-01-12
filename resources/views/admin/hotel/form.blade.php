@@ -42,6 +42,12 @@
                                                     value="@if ($model->exists) {{ $model->users->last_name }} @else {{ $user->last_name }} @endif"
                                                     placeholder="Last Name">
                                             </div>
+                                            <div class="mb-3 mx-3">
+                                                <label for="affiliate" class="form-label">Affiliate Code</label>
+                                                <input type="text" name="affiliate" class="form-control" id="lastname"
+                                                    value="@if ($model->exists) {{ $model->affiliate }} @else {{ $user->affiliate }} @endif"
+                                                    placeholder="affiliate">
+                                            </div>
                                         </div>
                                         
                                         <div class="mb-3">

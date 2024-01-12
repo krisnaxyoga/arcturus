@@ -103,6 +103,7 @@ class HotelController extends Controller
                 $vendor->system_markup = $request->markup;
                 $vendor->hotel_star = $request->hotel_star;
                 $vendor->recomend = $request->recomend;
+                $vendor->affiliate = $request->affiliate;
                 $vendor->save();
     
                 //get vendor by user_id 
@@ -173,6 +174,7 @@ class HotelController extends Controller
         $vendor->system_markup = $request->markup;
         $vendor->hotel_star = $request->hotel_star;
         $vendor->recomend = $request->recomend;
+        $vendor->affiliate = $request->affiliate;
         $vendor->update();
 
        // Mengecek apakah ada ContractPrice yang sesuai dengan user_id vendor

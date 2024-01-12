@@ -31,10 +31,14 @@ class AgentTransport extends Authenticatable implements JWTSubject
     }
 
     public function ordertransport() {
-        return $this->hasMany(OrderTransport::class);
+        return $this->hasMany(OrderTransport::class, 'transport_id');
     }
 
     public function transportBankAccount() {
-        return $this->hasMany(TransportBankAccount::class);
+        return $this->hasOne(TransportBankAccount::class, 'transport_id');
+    }
+
+    public function widrawtransport() {
+        return $this->hasOne(WidrawTransport::class, 'transport_id');
     }
 }
