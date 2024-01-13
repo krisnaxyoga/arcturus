@@ -4,9 +4,15 @@
 <section>
     <section class="vh-100" style="background-color: #eee;">
         <div class="container py-5 h-100">
+            @if (session()->has('message'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('message') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
           <div class="row d-flex h-100">
             <div class="col-md-12 col-xl-4 mb-3">
-      
+
               <div class="card" style="border-radius: 15px;">
                 <div class="card-body text-center">
                   <div class="mt-3 mb-4">
@@ -17,7 +23,7 @@
                   <p class="text-muted mb-4">Email <span class="mx-2">|</span> <a
                       href="#!">{{$user->email}}</a></p>
                   <div>
-                    <p>Password: 
+                    <p>Password:
                         <span id="password" class="badge badge-primary">
                             <?php
                                 // $be_code adalah variabel yang berisi password
@@ -36,29 +42,31 @@
                     </button>
                   </div>
                   <div class="d-flex justify-content-center text-center mt-5 mb-2">
-                   
+
                     <div class="px-3">
                       <p class="mb-2 h5">{{$vendoraffiliate->count()}}</p>
                       <p class="text-muted mb-0">Hotel amounts</p>
                     </div>
-                  
+
                   </div>
                 </div>
               </div>
-      
+
             </div>
             <div class="col-xl-6">
               <div class="card">
                 <div class="card-body">
-                  <form action="">
+                  <form action="{{ route('auth.affiliator.changepassword',['code'=>$code,'id'=>$id]) }}" method="post"enctype="multipart/form-data">
+                    @csrf
+                    @method('POST')
                     <label for="" class="text-danger" style="font-weight: 700; font-size:13px">If you want to change the
                       password, you can fill in here,
                       if you don't want to change the
                       password, please leave it blank.</label>
-                    <input type="password" class="form-control mb-3">
+                    <input type="password" class="form-control mb-3" name="Ldxgk4pAAAAAN1ktD9C8WWq2QSSXXv2x_PWQpR2">
                     <!-- Pastikan untuk mengganti "your-site-key" dengan Site Key yang Anda dapatkan -->
-                  <script src="https://www.google.com/recaptcha/api.js?render=6Ldxgk4pAAAAAN1ktD9C8WWq2QSSXXv2x_PWQpR2"></script>
-                  <div class="g-recaptcha" data-sitekey="your-site-key"></div>
+                  {{-- <script src="https://www.google.com/recaptcha/api.js?render=6Ldxgk4pAAAAAN1ktD9C8WWq2QSSXXv2x_PWQpR2"></script>
+                  <div class="g-recaptcha" data-sitekey="your-site-key"></div> --}}
                     <button class="btn btn-primary" type="submit">save</button>
                   </form>
                 </div>

@@ -31,6 +31,8 @@ Route::get('/auth/affiliator/login',[\App\Http\Controllers\Affiliate\AffiliatorC
 Route::post('/auth/affiliator/dologin',[\App\Http\Controllers\Affiliate\AffiliatorController::class, 'dologin'])->name('auth.affiliator.dologin');
 Route::get('/auth/affiliator/{code}/{id}',[\App\Http\Controllers\Affiliate\AffiliatorController::class, 'index'])->name('auth.affiliator');
 Route::get('/auth/affiliator/profile/{code}/{id}',[\App\Http\Controllers\Affiliate\AffiliatorController::class, 'profile'])->name('auth.affiliator.profile');
+Route::post('/auth/affiliator/changepassword/{code}/{id}',[\App\Http\Controllers\Affiliate\AffiliatorController::class, 'changepassword'])->name('auth.affiliator.changepassword');
+
 Route::get('/auth/affiliator/hotel/{code}/{id}',[\App\Http\Controllers\Affiliate\AffiliatorController::class, 'hotel'])->name('auth.affiliator.hotel');
 Route::get('/auth/affiliator/link/{code}/{id}',[\App\Http\Controllers\Affiliate\AffiliatorController::class, 'link'])->name('auth.affiliator.link');
 Route::get('/auth/affiliator/logout/{code}/{id}',[\App\Http\Controllers\Affiliate\AffiliatorController::class, 'logout'])->name('auth.affiliator.logout');
@@ -384,11 +386,11 @@ Route::group(['middleware' => ['auth', 'checkrole:3']], function() {
     Route::post('/agent/hotelmarkup/markupaddagent',[\App\Http\Controllers\Agent\HotelMarkup\MarkupHotelController::class, 'markupaddagent'])->name('agent.hotelmarkup.markupaddagent');
     Route::get('/agent/hotelmarkup/homehotel',[\App\Http\Controllers\Agent\HotelMarkup\MarkupHotelController::class, 'homehotel'])->name('agent.hotelmarkup.homehotel');
     Route::get('/agent/hotelmarkup/hoteldetail/{id}',[\App\Http\Controllers\Agent\HotelMarkup\MarkupHotelController::class, 'hoteldetail'])->name('agent.hotelmarkup.hoteldetail');
-    
+
     Route::post('/agent/hotelmarkup/create',[\App\Http\Controllers\Agent\HotelMarkup\BookingController::class, 'create'])->name('agent.hotelmarkup.create');
     Route::get('/agent/hotelmarkup/detail/{id}',[\App\Http\Controllers\Agent\HotelMarkup\BookingController::class, 'detail'])->name('agent.hotelmarkup.detail');
     Route::post('/agent/hotelmarkup/bookingstore/{id}',[\App\Http\Controllers\Agent\HotelMarkup\BookingController::class, 'bookingstore'])->name('agent.hotelmarkup.bookingstore');
     Route::get('/agent/hotelmarkup/pay/{id}',[\App\Http\Controllers\Agent\HotelMarkup\BookingController::class, 'pay'])->name('agent.hotelmarkup.pay');
-   
+
 });
 

@@ -51,7 +51,7 @@ class AffiliatorController extends Controller
             $hotel = Vendor::where('affiliate',$user->code)->get();
             $settings = Setting::first();
             $vendoraffiliate = VendorAffiliate::where('affiliate_id',$id)->orderBy('created_at')->get();
-            return view('affiliate.profile',compact('user','hotel','vendoraffiliate','settings','be_code'));
+            return view('affiliate.profile',compact('user','hotel','vendoraffiliate','settings','be_code','code','id'));
 
         }else{
             return response()->json(['message' => 'sorry Unauthorized']);
@@ -116,7 +116,7 @@ class AffiliatorController extends Controller
 
            return redirect()
            ->route('auth.affiliator.login')
-           ->with('message', 'Logout!.'); 
+           ->with('message', 'Logout!.');
         }else{
             return response()->json(['message' => 'sorry Unauthorized']);
         }
@@ -131,7 +131,7 @@ class AffiliatorController extends Controller
         $user = Affiliate::where('email',$request->email)->first();
 
         $password = Crypt::decrypt($user->auth_code);
-        
+
         if($request->password == $password){
             $id = $user->id;
             $code = Crypt::encrypt($request->password);
@@ -143,8 +143,8 @@ class AffiliatorController extends Controller
         }else{
             return back()->with('error', 'email or password wrong');
         }
-        
-       
+
+
     }
 
     /**
@@ -153,5 +153,28 @@ class AffiliatorController extends Controller
     public function login()
     {
         return view('affiliate.login');
+    }
+
+    public function changepassword(Request $request,$code,$id)
+    {
+
+        $user = Affiliate::where('id',$id)->first();
+        $be_code = Crypt::decrypt($user->auth_code);
+        $fo_code = Crypt::decrypt($code);
+
+        if($be_code == $fo_code){
+            $data = Affiliate::find($id);
+            $data->auth_code = Crypt::encrypt($request->Ldxgk4pAAAAAN1ktD9C8WWq2QSSXXv2x_PWQpR2);
+            $data->save();
+
+            $hotel = Vendor::where('affiliate',$data->code)->get();
+            $settings = Setting::first();
+            $vendoraffiliate = VendorAffiliate::where('affiliate_id',$id)->orderBy('created_at')->get();
+            return view('affiliate.profile',compact('user','hotel','vendoraffiliate','settings','be_code','code','id'));
+
+        }else{
+            return response()->json(['message' => 'sorry Unauthorized']);
+        }
+
     }
 }
