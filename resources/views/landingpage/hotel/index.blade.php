@@ -338,6 +338,8 @@
                                         $largestPercentage = null;
                                         $roomrecom = null;
                                         $nightrecom = null;
+
+                                        $markupsystem = $item->contractrate->vendors->system_markup;
                                     @endphp
 
                                     @foreach ($HotelCalendar as $calendar)
@@ -380,14 +382,14 @@
                                                     }
                                                 }
                                             }
-                                            // var_dump($advprice+ $item->contractrate->vendors->system_markup);
+                                            // var_dump($advprice+ $markupsystem);
                                         @endphp
                                         @if ($contprice->user_id == $item->user_id && $contprice->vendor_id == $item->vendor_id)
                                             @php
                                             if($surchargepricetotal > 0){
-                                                $price = $advprice + $item->contractrate->vendors->system_markup + $surchargepricetotal;
+                                                $price = $advprice + $markupsystem + $surchargepricetotal;
                                             }else{
-                                                $price = $advprice + $item->contractrate->vendors->system_markup;
+                                                $price = $advprice + $markupsystem;
                                             }
                                             $percentage = $contprice->contractrate->percentage;
 
@@ -478,14 +480,14 @@
                                                                                 }
                                                                             }
                                                                         }
-                                                                        // var_dump($advprice+ $item->contractrate->vendors->system_markup);
+                                                                        // var_dump($advprice+ $markupsystem);
                                                                     @endphp
                                                                     @if ($contprice->user_id == $item->user_id && $contprice->vendor_id == $item->vendor_id)
                                                                         <?php
                                                                         if($surchargepricetotal > 0){
-                                                                            $price = $advprice + $item->contractrate->vendors->system_markup + $surchargepricetotal;
+                                                                            $price = $advprice + $markupsystem + $surchargepricetotal;
                                                                         }else{
-                                                                            $price = $advprice + $item->contractrate->vendors->system_markup;
+                                                                            $price = $advprice + $markupsystem;
                                                                         }
                                                                         $percentage = $contprice->contractrate->percentage;
 
@@ -556,7 +558,7 @@
                                                                                 <span>
                                                                                     <p class="badge badge-light m-0">{{ date("d/m/Y", strtotime($hct->start_date)) }}</p>
                                                                                     <?php
-                                                                                    $price = $hct->recom_price + $item->contractrate->vendors->system_markup;
+                                                                                    $price = $hct->recom_price + $markupsystem;
 
                                                                                      if($surchargepricetotal > 0){
                                                                                         $price = $price + $surchargepricetotal;

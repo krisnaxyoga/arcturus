@@ -206,6 +206,7 @@
                                                                             @php
                                                                             // ========================================================= START CALENDAR ====================================
 
+                                                                            $markupsystem = $itemprice->contractrate->vendors->system_markup;
                                                                             $status = 1;
                                                                             $room_allow = 0;
                                                                             $no_checkout = 0;
@@ -543,7 +544,7 @@
                                                                             <div class="col-lg">
                                                                                 <span class="price text-primary"
                                                                                     style="font-weight: 600">Rp.
-                                                                                    {{ number_format(($price + $itemprice->contractrate->vendors->system_markup) + $surchargepricetotalx, 0, ',', '.') }}
+                                                                                    {{ number_format(($price + $markupsystem) + $surchargepricetotalx, 0, ',', '.') }}
                                                                                     / night
                                                                                 </span>
                                                                                 <p class="m-0">Benefits :</p>
@@ -595,7 +596,7 @@
                                                                                                     data-contprice=' . $itemprice->id . '
                                                                                                     data-contractid=' . $itemprice->contract_id . '
                                                                                                     data-roomid=' . $itemprice->room->id . '
-                                                                                                    data-price="' . $i * (($price + $itemprice->contractrate->vendors->system_markup) + $surchargepricetotalx) . '"
+                                                                                                    data-price="' . $i * (($price + $markupsystem) + $surchargepricetotalx) . '"
                                                                                                     data-pricenomarkup="' . $i * $price . '"
                                                                                                     value="' . $i . '">
                                                                                                     ' . $i . ' ' . ($i == 1 ? 'room' : 'rooms') . '
@@ -634,7 +635,7 @@
                                                                                                     data-contprice={{ $itemprice->id }}
                                                                                                     data-contractid={{ $itemprice->contract_id }}
                                                                                                     data-roomid={{ $itemprice->room->id }}
-                                                                                                    data-price="{{ $i * (($price + $itemprice->contractrate->vendors->system_markup) + $surchargepricetotalx) }}"
+                                                                                                    data-price="{{ $i * (($price + $markupsystem) + $surchargepricetotalx) }}"
                                                                                                     data-pricenomarkup="{{ $i * $price }}"
                                                                                                     value="{{ $i }}">
                                                                                                     {{ $i }}

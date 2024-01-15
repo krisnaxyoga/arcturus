@@ -335,6 +335,8 @@ class HomeController extends Controller
 
         // return view('landingpage.hotel.index',compact('data','requestdata','blackoutVendorIds','surchargesDetail','surcharprice'));
         $acyive = auth()->user()->is_active;
+        // $agentaffiliate = Vendor::where('vendor')
+        // $affiliate = 
         if($acyive == 1){
           return view('landingpage.hotel.index', compact('data',
           'HotelCalendar',

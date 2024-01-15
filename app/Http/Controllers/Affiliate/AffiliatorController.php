@@ -13,6 +13,7 @@ use App\Mail\InviteAffiliate;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class AffiliatorController extends Controller
 {
@@ -216,5 +217,41 @@ class AffiliatorController extends Controller
             return response()->json(['message' => 'sorry Unauthorized']);
         }
 
+    }
+
+    public function travelAgent(Request $request,$code,$id){
+        $user = Affiliate::where('id',$id)->first();
+        $be_code = Crypt::decrypt($user->auth_code);
+        $fo_code = Crypt::decrypt($code);
+
+        if($be_code == $fo_code){
+
+            $vendor = Vendor::where('affiliate',$user->code)->where('type_vendor','agent')->first();
+            return view('affiliate.travelagent',compact('user','vendor','id','code'));
+
+        }else{
+            return response()->json(['message' => 'sorry Unauthorized']);
+        }
+    }
+
+    public function travelAgentLogin($code,$id){
+        $user = Affiliate::where('id',$id)->first();
+        $be_code = Crypt::decrypt($user->auth_code);
+        $fo_code = Crypt::decrypt($code);
+
+        if($be_code == $fo_code){
+
+            $vendor = Vendor::where('affiliate',$user->code)->where('type_vendor','agent')->first();
+
+            // Lakukan otentikasi sebagai akun hotel
+            Auth::loginUsingId($vendor->user_id);
+
+            // Redirect ke halaman hotel
+            return redirect('/vendordashboard');
+            
+
+        }else{
+            return response()->json(['message' => 'sorry Unauthorized']);
+        }
     }
 }

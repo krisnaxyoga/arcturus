@@ -90,6 +90,10 @@
                             <div class="nav-link-icon"><i data-feather="activity"></i></div>
                             Dashboard
                         </a>
+                        <a class="nav-link {{ request()->routeIs('auth.affiliator.travelagent',['code'=>$code,'id'=>$id]) ? 'active' : '' }}" href="{{ route('auth.affiliator.travelagent',['code'=>$code,'id'=>$id]) }}">
+                            <div class="nav-link-icon"><i data-feather="gitlab"></i></div>
+                            Travel Agent Dashboard
+                        </a>
                         <a class="nav-link {{ request()->routeIs('auth.affiliator.link',['code'=>$code,'id'=>$id]) ? 'active' : '' }}" href="{{ route('auth.affiliator.link',['code'=>$code,'id'=>$id]) }}">
                             <div class="nav-link-icon"><i class="fas fa-fw fa-link"></i></div>
                             Link Affiliate
@@ -102,6 +106,7 @@
                             <div class="nav-link-icon"><i class="fas fa-fw fa-chart-area"></i></div>
                             Report
                         </a>
+
                         <a class="nav-link {{ request()->routeIs('auth.affiliator.profile',['code'=>$code,'id'=>$id]) ? 'active' : '' }}" href="{{ route('auth.affiliator.profile',['code'=>$code,'id'=>$id]) }}">
                             <div class="nav-link-icon"><i class="fas fa-fw fa-user"></i></div>
                             Profile

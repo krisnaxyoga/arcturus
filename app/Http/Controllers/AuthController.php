@@ -115,6 +115,9 @@ class AuthController extends Controller
             $member->country = $request->country;
             $member->type_vendor = 'agent';
             $member->is_active = 0;
+            if($request->affiliate){
+                $member->affiliate = $request->affiliate;
+            }
             $member->save();
 
             $Setting = Setting::where('id',1)->first();
@@ -123,7 +126,7 @@ class AuthController extends Controller
             $user->vendor_id = $member->id;
             $user->save();
 
-            if (env('APP_DEBUG') == 'false') {
+            if (env('APP_ENV') == 'production') {
                 mail::to($Setting->email)->send(new RegisterNotif($data, $member));
 
                 mail::to($request->email)->send(new AgentVerifification($data, $member));

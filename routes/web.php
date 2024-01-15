@@ -35,7 +35,9 @@ Route::post('/auth/affiliator/forgotpasswordsend',[\App\Http\Controllers\Affilia
 Route::get('/auth/affiliator/{code}/{id}',[\App\Http\Controllers\Affiliate\AffiliatorController::class, 'index'])->name('auth.affiliator');
 Route::get('/auth/affiliator/profile/{code}/{id}',[\App\Http\Controllers\Affiliate\AffiliatorController::class, 'profile'])->name('auth.affiliator.profile');
 Route::post('/auth/affiliator/changepassword/{code}/{id}',[\App\Http\Controllers\Affiliate\AffiliatorController::class, 'changepassword'])->name('auth.affiliator.changepassword');
+Route::get('/auth/affiliator/travelAgentLogin/{code}/{id}',[\App\Http\Controllers\Affiliate\AffiliatorController::class, 'travelAgentLogin'])->name('auth.affiliator.travelAgentLogin');
 
+Route::get('/auth/affiliator/travelagent/{code}/{id}',[\App\Http\Controllers\Affiliate\AffiliatorController::class, 'travelAgent'])->name('auth.affiliator.travelagent');
 Route::get('/auth/affiliator/hotel/{code}/{id}',[\App\Http\Controllers\Affiliate\AffiliatorController::class, 'hotel'])->name('auth.affiliator.hotel');
 Route::get('/auth/affiliator/link/{code}/{id}',[\App\Http\Controllers\Affiliate\AffiliatorController::class, 'link'])->name('auth.affiliator.link');
 Route::get('/auth/affiliator/logout/{code}/{id}',[\App\Http\Controllers\Affiliate\AffiliatorController::class, 'logout'])->name('auth.affiliator.logout');

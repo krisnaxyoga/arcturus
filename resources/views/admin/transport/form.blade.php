@@ -72,7 +72,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-12 mb-3">
-                                        <label for="address">address</label>
+                                        <label for="address">Descriptions</label>
                                         <textarea class="form-control" name="address" id="" cols="30" rows="10">
                                             {{ $model->address }}
                                         </textarea>

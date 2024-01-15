@@ -209,7 +209,7 @@ function Profile({ token, user }) {
                                             </p>
                                         </div>
                                         <div className="form-group mb-3">
-                                            <label htmlFor="">Address</label>
+                                            <label htmlFor="">Descriptions</label>
                                             <textarea
                                                 className="form-control"
                                                 name="address"
