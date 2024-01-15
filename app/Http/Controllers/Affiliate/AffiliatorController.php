@@ -9,6 +9,10 @@ use App\Models\Affiliate;
 use App\Models\Vendor;
 use App\Models\Setting;
 use App\Models\VendorAffiliate;
+use App\Mail\InviteAffiliate;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class AffiliatorController extends Controller
 {
@@ -155,6 +159,34 @@ class AffiliatorController extends Controller
         return view('affiliate.login');
     }
 
+    public function forgotpassword()
+    {
+        return view('affiliate.forgetpassword');
+    }
+
+    public function forgotpasswordsend(Request $request)
+    {
+        $authcode = Str::random(8);
+
+        $model = Affiliate::where('email',$request->email)->first();
+        if($model){
+            $model->auth_code = Crypt::encrypt($authcode);
+            $model->save();
+    
+            $data = $model;
+    
+            if (env('APP_ENV') == 'production') {
+                Mail::to($model->email)->send(new InviteAffiliate($data));
+            }
+    
+            return redirect()->back()->with('message', 'The password has been updated successfully, you can check your email for a new password');
+        }else{
+
+            return redirect()->back()->with('message', 'Email Not Found!');
+        }
+     
+    }
+
     public function changepassword(Request $request,$code,$id)
     {
 
@@ -167,10 +199,18 @@ class AffiliatorController extends Controller
             $data->auth_code = Crypt::encrypt($request->Ldxgk4pAAAAAN1ktD9C8WWq2QSSXXv2x_PWQpR2);
             $data->save();
 
-            $hotel = Vendor::where('affiliate',$data->code)->get();
-            $settings = Setting::first();
-            $vendoraffiliate = VendorAffiliate::where('affiliate_id',$id)->orderBy('created_at')->get();
-            return view('affiliate.profile',compact('user','hotel','vendoraffiliate','settings','be_code','code','id'));
+            // $hotel = Vendor::where('affiliate',$data->code)->get();
+            // $settings = Setting::first();
+            // $vendoraffiliate = VendorAffiliate::where('affiliate_id',$id)->orderBy('created_at')->get();
+            // return view('affiliate.profile',compact('user','hotel','vendoraffiliate','settings','be_code','code','id'));
+
+            session()->forget('auth_code');
+            session()->forget('id_affiliate');
+            session()->forget('name_affiliate');
+
+           return redirect()
+           ->route('auth.affiliator.login')
+           ->with('message', 'Please Login to verify change password!.');
 
         }else{
             return response()->json(['message' => 'sorry Unauthorized']);

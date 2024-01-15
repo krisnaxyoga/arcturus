@@ -191,19 +191,58 @@ class HotelController extends Controller
         $vendor->hotel_star = $request->hotel_star;
         $vendor->recomend = $request->recomend;
        
-        if($request->affiliate || $vendor->affiliate != $request->affiliate){
-            $vendor->affiliate = $request->affiliate;
+        if($request->affiliate && $vendor->affiliate != $request->affiliate){
+
             $Affiliate = Affiliate::where('code',$request->affiliate)->first();
-            $Affiliate->hotelaffiliate = $Affiliate->hotelaffiliate + 1;
-            $Affiliate->save();
+            if($Affiliate){
+                $Affiliate1 = Affiliate::where('code',$vendor->affiliate)->first();
+                if($Affiliate1){
+                    $Affiliate1->hotelaffiliate = $Affiliate1->hotelaffiliate - 1;
+                    $Affiliate1->save();
+                    
+                    $VendorAffiliate = VendorAffiliate::where('vendor_id',$vendor->id)->where('affiliate_id', $Affiliate1->id)->first();
+                    if($VendorAffiliate){
+                        $VendorAffiliate->delete(); 
+                    }
+                   
+                }
+                $Affiliate->hotelaffiliate = $Affiliate->hotelaffiliate + 1;
+                $Affiliate->save();
+
+                $VendorAffiliate1 = new VendorAffiliate;
+                $VendorAffiliate1->vendor_id = $vendor->id;
+                $VendorAffiliate1->affiliate_id = $Affiliate->id;
+                $VendorAffiliate1->save();
+
+                $vendor->affiliate = $request->affiliate;
+            }else{
+                return redirect()
+                ->route('dashboard.hotel.edit', ['id' => $id])
+                ->with('message', 'Affilate not found!.');
+            }
+            
         }
 
-        if($request->affiliate || $vendor->affiliate = $request->affiliate){
+        if($request->affiliate && $vendor->affiliate == $request->affiliate){
             $Affiliate = Affiliate::where('code',$request->affiliate)->first();
-            $VendorAffiliate = new VendorAffiliate;
-            $VendorAffiliate->vendor_id = $vendor->id;
-            $VendorAffiliate->affiliate_id = $Affiliate->id;
-            $VendorAffiliate->save();
+            $VendorAffiliate = VendorAffiliate::where('vendor_id',$vendor->id)->where('affiliate_id', $Affiliate->id)->first();
+            if($VendorAffiliate){
+
+                $VendorAffiliate->delete();
+
+                $datAffiliate = new VendorAffiliate;
+                $datAffiliate->vendor_id = $vendor->id;
+                $datAffiliate->affiliate_id = $Affiliate->id;
+                $datAffiliate->save();
+
+            }else{
+                $VendorAffiliate = new VendorAffiliate;
+                $VendorAffiliate->vendor_id = $vendor->id;
+                $VendorAffiliate->affiliate_id = $Affiliate->id;
+                $VendorAffiliate->save();
+            }
+           
+           
         }
         $vendor->save();
 

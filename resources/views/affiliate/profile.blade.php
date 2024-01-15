@@ -59,15 +59,35 @@
                   <form action="{{ route('auth.affiliator.changepassword',['code'=>$code,'id'=>$id]) }}" method="post"enctype="multipart/form-data">
                     @csrf
                     @method('POST')
-                    <label for="" class="text-danger" style="font-weight: 700; font-size:13px">If you want to change the
-                      password, you can fill in here,
-                      if you don't want to change the
-                      password, please leave it blank.</label>
-                    <input type="password" class="form-control mb-3" name="Ldxgk4pAAAAAN1ktD9C8WWq2QSSXXv2x_PWQpR2">
-                    <!-- Pastikan untuk mengganti "your-site-key" dengan Site Key yang Anda dapatkan -->
-                  {{-- <script src="https://www.google.com/recaptcha/api.js?render=6Ldxgk4pAAAAAN1ktD9C8WWq2QSSXXv2x_PWQpR2"></script>
-                  <div class="g-recaptcha" data-sitekey="your-site-key"></div> --}}
-                    <button class="btn btn-primary" type="submit">save</button>
+                    <label for="" class="text-danger" style="font-weight: 700; font-size:13px">Change
+                      password</label>
+
+                     
+                      <!-- Tambahkan icon eye untuk menampilkan/hide password -->
+                      <div class="input-group mb-3">
+                          <input type="password" name="Ldxgk4pAAAAAN1ktD9C8WWq2QSSXXv2x_PWQpR2" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="basic-addon2" id="password1">
+                          <div class="input-group-append">
+                              <span class="input-group-text" id="basic-addon2" onclick="togglePasswordVisibility('password1')">
+                                  <i class="fa fa-eye" id="eyeIcon1"></i>
+                              </span>
+                          </div>
+                      </div>
+
+                      <div class="input-group mb-3">
+                          <input type="password" class="form-control" placeholder="Confirm Password" aria-label="Confirm Password" aria-describedby="basic-addon2" id="password2">
+                          <div class="input-group-append">
+                              <span class="input-group-text" id="basic-addon2" onclick="togglePasswordVisibility('password2')">
+                                  <i class="fa fa-eye" id="eyeIcon2"></i>
+                              </span>
+                          </div>
+                      </div>
+                      <!-- Tambahkan div untuk menampilkan pesan kesalahan -->
+                      <div id="passwordError" class="text-danger"></div>
+                       <!-- Pastikan untuk mengganti "your-site-key" dengan Site Key yang Anda dapatkan -->
+                       <script src="https://www.google.com/recaptcha/api.js?render=6Ldxgk4pAAAAAN1ktD9C8WWq2QSSXXv2x_PWQpR2"></script>
+                       <div class="g-recaptcha" data-sitekey="your-site-key"></div>
+ 
+                    <button class="btn btn-primary" type="submit" onclick="return validatePassword()">save</button>
                   </form>
                 </div>
               </div>
@@ -78,6 +98,38 @@
 </section>
 @endsection
 @push('script')
+<script>
+  function togglePasswordVisibility(passwordId) {
+      var passwordInput = document.getElementById(passwordId);
+      var eyeIcon = document.getElementById('eyeIcon' + passwordId.slice(-1));
+
+      if (passwordInput.type === 'password') {
+          passwordInput.type = 'text';
+          eyeIcon.className = 'fa fa-eye-slash';
+      } else {
+          passwordInput.type = 'password';
+          eyeIcon.className = 'fa fa-eye';
+      }
+  }
+
+  function validatePassword() {
+      var password1 = document.getElementById('password1').value;
+      var password2 = document.getElementById('password2').value;
+      var passwordError = document.getElementById('passwordError');
+
+      if (password1 !== password2) {
+          passwordError.innerHTML = 'Passwords do not match!';
+          document.getElementById('password1').style.border = '1px solid red';
+          document.getElementById('password2').style.border = '1px solid red';
+          return false;
+      } else {
+          passwordError.innerHTML = '';
+          document.getElementById('password1').style.border = '';
+          document.getElementById('password2').style.border = '';
+          return true;
+      }
+  }
+</script>
 <script>
 function myFunction() {
     /* Get the text field */

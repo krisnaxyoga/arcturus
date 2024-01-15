@@ -54,7 +54,7 @@
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-xl-5 col-md-8">
-            <form class="bg-white rounded shadow-5-strong p-5" action="{{route('auth.affiliator.dologin')}}" method="POST">
+            <form class="bg-white rounded shadow-5-strong p-5" action="{{route('auth.affiliator.forgotpasswordsend')}}" method="POST">
                 @csrf
                 @if (session()->has('message'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -70,26 +70,14 @@
                 @endif
               <!-- Email input -->
               <h1 class="text-center">
-                Login
+                Forget Password
               </h1>
               <div class="form-outline mb-4" data-mdb-input-init>
                 <input type="email" id="form1Example1" class="form-control" name="email"/>
                 <label class="form-label" for="form1Example1">Email address</label>
               </div>
-
-              <!-- Password input -->
-              <div class="form-outline mb-4" data-mdb-input-init>
-                <input type="password" id="form1Example2" class="form-control" name="password"/>
-                <div class="d-flex justify-content-between">
-                  <label class="form-label" for="form2Example28">Password</label>
-                  <p class="small"><a class="text-muted" href="{{route('auth.affiliator.forgotpassword')}}">Forgot password?</a></p>
-              </div>
-              </div>
-              <!-- 2 column grid layout for inline styling -->
-
-
               <!-- Submit button -->
-              <button type="submit" class="btn btn-primary btn-block" data-mdb-ripple-init>Sign in</button>
+              <button type="submit" class="btn btn-primary btn-block" data-mdb-ripple-init>Send Email</button>
             </form>
           </div>
         </div>

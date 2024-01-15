@@ -29,6 +29,9 @@ Route::get('/auth/google/callback',[\App\Http\Controllers\Auth\GoogleController:
 
 Route::get('/auth/affiliator/login',[\App\Http\Controllers\Affiliate\AffiliatorController::class, 'login'])->name('auth.affiliator.login');
 Route::post('/auth/affiliator/dologin',[\App\Http\Controllers\Affiliate\AffiliatorController::class, 'dologin'])->name('auth.affiliator.dologin');
+Route::get('/auth/affiliator/forgotpassword',[\App\Http\Controllers\Affiliate\AffiliatorController::class, 'forgotpassword'])->name('auth.affiliator.forgotpassword');
+Route::post('/auth/affiliator/forgotpasswordsend',[\App\Http\Controllers\Affiliate\AffiliatorController::class, 'forgotpasswordsend'])->name('auth.affiliator.forgotpasswordsend');
+
 Route::get('/auth/affiliator/{code}/{id}',[\App\Http\Controllers\Affiliate\AffiliatorController::class, 'index'])->name('auth.affiliator');
 Route::get('/auth/affiliator/profile/{code}/{id}',[\App\Http\Controllers\Affiliate\AffiliatorController::class, 'profile'])->name('auth.affiliator.profile');
 Route::post('/auth/affiliator/changepassword/{code}/{id}',[\App\Http\Controllers\Affiliate\AffiliatorController::class, 'changepassword'])->name('auth.affiliator.changepassword');
