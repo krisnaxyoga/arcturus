@@ -340,6 +340,15 @@
                                         $nightrecom = null;
 
                                         $markupsystem = $item->contractrate->vendors->system_markup;
+
+                                        if($affiliate == $item->contractrate->vendors->affiliate){
+                                            $markupsystem = 0;
+                                        }
+
+                                        if ($affiliate == null || $affiliate != $item->contractrate->vendors->affiliate) {
+                                            $markupsystem = $item->contractrate->vendors->system_markup;
+                                        }
+                                        
                                     @endphp
 
                                     @foreach ($HotelCalendar as $calendar)

@@ -335,8 +335,9 @@ class HomeController extends Controller
 
         // return view('landingpage.hotel.index',compact('data','requestdata','blackoutVendorIds','surchargesDetail','surcharprice'));
         $acyive = auth()->user()->is_active;
-        // $agentaffiliate = Vendor::where('vendor')
-        // $affiliate = 
+        $agentaffiliate = Vendor::where('user_id',auth()->user()->id)->first();
+
+        $affiliate = $agentaffiliate->affiliate;
         if($acyive == 1){
           return view('landingpage.hotel.index', compact('data',
           'HotelCalendar',
@@ -346,6 +347,7 @@ class HomeController extends Controller
            'advancepurchase',
            'country',
            'surchargeAllRoom',
+           'affiliate',
            'Nights'));
         }else{
             return view('landingpage.pagenotfound.isactiveaccount');
@@ -582,7 +584,9 @@ class HomeController extends Controller
             $data = $vendor;
             // dd($contractprice);
             // return view('landingpage.hotel.detail',compact('data','roomtype','service','vendordetail','datareq','surcharprice','surchargesVendorIds','blackoutVendorIds'));
+            $agentaffiliate = Vendor::where('user_id',auth()->user()->id)->first();
 
+            $affiliate = $agentaffiliate->affiliate;
             return view('landingpage.hotel.detail',
             compact(
                 'data',
@@ -597,6 +601,7 @@ class HomeController extends Controller
                 'contractprice',
                 'HotelRoomBooking',
                 'surchargeAllRoom',
+                'affiliate',
                 'blackoutdate'
             ));
         }

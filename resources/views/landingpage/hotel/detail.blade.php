@@ -207,6 +207,14 @@
                                                                             // ========================================================= START CALENDAR ====================================
 
                                                                             $markupsystem = $itemprice->contractrate->vendors->system_markup;
+                                                                            if($affiliate == $item->contractrate->vendors->affiliate){
+                                                                                $markupsystem = 0;
+                                                                            }
+
+                                                                            if ($affiliate == null || $affiliate != $item->contractrate->vendors->affiliate) {
+                                                                                $markupsystem = $item->contractrate->vendors->system_markup;
+                                                                            }
+                                                                            
                                                                             $status = 1;
                                                                             $room_allow = 0;
                                                                             $no_checkout = 0;
