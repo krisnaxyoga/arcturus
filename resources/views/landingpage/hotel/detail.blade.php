@@ -617,12 +617,30 @@
                                                                                         <span class="badge badge-danger">Sold</span>
                                                                                     @else
                                                                                         @if (!empty($selectOptions))
-                                                                                            <select class="form-control room-quantity" name="room_quantity" style="width:200px" onchange="calculateTotal()">
+                                                                                            <select class="form-control room-quantity mb-2" name="room_quantity" style="width:200px" onchange="calculateTotal()">
                                                                                                 <option data-price="0" value="0" data-pricenomarkup="0">0</option>
                                                                                                 {!! $selectOptions !!}
                                                                                             </select>
                                                                                         @endif
+
+                                                                                        @if($itemprice->room->extra_bed > 0)
+                                                                                            <select name="" id="" class="form-control mb-2" style="width:200px">
+                                                                                                <option value="0">0</option>
+                                                                                                @for ($i = 1; $i <= $itemprice->room->extra_bed; $i++)
+                                                                                                <option
+                                                                                                    value="{{ $i }}">
+                                                                                                    {{ $i }}
+                                                                                                    @if ($i == 1)
+                                                                                                        Extra bed
+                                                                                                    @else
+                                                                                                        Extra beds
+                                                                                                    @endif
+                                                                                                </option>
+                                                                                            @endfor
+                                                                                            </select>
+                                                                                        @endif
                                                                                     @endif
+                                                                                    
 
                                                                                 {{-- @if ($RoomAllowment <= 0 || $isSold = true)
                                                                                     <span class="badge badge-danger">Sold</span>

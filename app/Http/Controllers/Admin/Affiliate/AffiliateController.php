@@ -143,14 +143,22 @@ class AffiliateController extends Controller
     {
         $data = Affiliate::find($id);
 
-        // Lakukan tindakan lain sebelum penghapusan jika diperlukan
-        $data->delete();
+        
 
         $VendorAffiliate = VendorAffiliate::where('affiliate_id',$id)->get();
         foreach($VendorAffiliate as $item){
             $item->delete();
         }
 
+        $vendors = Vendor::where('affiliate',$data->code)->get();
+        foreach($vendors as $vendor){
+            $vendor->affiliate = null;
+            $vendor->save();
+        }
+
+        // Lakukan tindakan lain sebelum penghapusan jika diperlukan
+        $data->delete();
+        
         return redirect()
             ->route('admin.afiliate')
             ->with('message', 'Data Deleted.');

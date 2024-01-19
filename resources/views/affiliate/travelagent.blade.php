@@ -11,7 +11,14 @@
                 @if($vendor)
                 <div class="card">
                     <div class="card-body">
-                    <a href="{{route('auth.affiliator.travelAgentLogin',['code'=>$code,'id'=>$id])}}" class="btn btn-primary">GO!!!</a>
+                        <div class="d-flex justify-content-between">
+                            <span>
+                               <p>{{$vendor->vendor_name}}</p>
+                            </span>
+                            <span>
+                                <a href="{{route('auth.affiliator.travelAgentLogin',['code'=>$code,'id'=>$id])}}" class="btn btn-primary">Click</a>
+                            </span>
+                        </div>
                     </div>
                 </div>
                 @else
@@ -84,6 +91,7 @@
                                                 value="{{ $name }}">{{ $name }}</option>
                                         @endforeach
                                     </select>
+                                    <p class="text-danger" style="font-size:11px">agent verifications</p>
                                 </div>
                             </div>
                             <div class="row mb-3">

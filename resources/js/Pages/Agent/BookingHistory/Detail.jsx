@@ -367,6 +367,12 @@ export default function Detail({ session, data, agent, contract, setting, roombo
                                                                                     <p style={{ padding: "5px 0",margin:'0px',fontSize:'18px',fontWeight:'700' }}>Benefits :</p>
                                                                                         <div dangerouslySetInnerHTML={{ __html: contract.benefit_policy.substring(0, 250) }}></div>
                                                                                 </div>
+                                                                                <div>
+                                                                                    <p style={{ padding: "5px 0",margin:'0px',fontSize:'18px',fontWeight:'700' }}>Other Conditions :</p>
+                                                                                    {contract.other_policy && (
+                                                                                        <div dangerouslySetInnerHTML={{ __html: contract.other_policy.substring(0, 250) }}></div>
+                                                                                        )}
+                                                                                </div>
                                                                                 </div>
 
                                                                                 <div className="col-12 col-sm-5 text-grey text-90 order-first order-sm-last">

@@ -161,7 +161,7 @@ Route::group(['middleware' => ['auth', 'checkrole:1']], function() {
 
     Route::get('/admin/bookingall', [\App\Http\Controllers\Admin\Report\BookingAllController::class, 'index'])->name('bookingall.admin.dashboard');
     Route::get('/admin/bookingall/confirmation/{id}', [\App\Http\Controllers\Admin\Report\BookingAllController::class, 'confirmation'])->name('admin.bookingall.confirmation');
-    Route::get('/admin/bookingall/sendconfirmationtohotel/{id}', [\App\Http\Controllers\Admin\Report\bookingAllController::class, 'sendconfirmationtohotel'])->name('admin.bookingall.sendconfirmationtohotel');
+    Route::get('/admin/bookingall/sendconfirmationtohotel/{id}', [\App\Http\Controllers\Admin\Report\BookingAllController::class, 'sendconfirmationtohotel'])->name('admin.bookingall.sendconfirmationtohotel');
     Route::get('/admin/bookingall/sendconfirmationtoagent/{id}', [\App\Http\Controllers\Admin\Report\BookingAllController::class, 'sendconfirmationtoagent'])->name('admin.bookingall.sendconfirmationtoagent');
 
 

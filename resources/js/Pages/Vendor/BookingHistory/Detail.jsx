@@ -151,7 +151,24 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                                                 <div className="my-2"><i className="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span className="text-600 text-90">ID:</span> {data.booking_code}</div>
 
 
-                                                                                <div className="my-2"><i className="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span className="text-600 text-90">Agent Name:</span> {data.users.first_name} {data.users.last_name}</div>
+                                                                                <div className="my-2"><i className="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span className="text-600 text-90">Agent Name:</span> {data.users.first_name} {data.users.last_name}
+                                                                                <br />
+                                                                                {
+                                                                                    data.users.vendors.affiliate == data.vendor.affiliate ? (
+                                                                                        <>
+                                                                                        <span className='badge badge-success badge-pill px-25'>
+                                                                                            powered by {data.users.vendors.vendor_name}
+                                                                                        </span>
+                                                                                        </>
+                                                                                    ) : (
+                                                                                        <>
+                                                                                        <span className='badge badge-success badge-pill px-25'>
+                                                                                             powered by ARCTURUS
+                                                                                        </span>
+                                                                                        </>
+                                                                                    )
+                                                                                }
+                                                                                </div>
                                                                                 <div className="my-2"><i className="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span className="text-600 text-90">Booking Date:</span> {formatDate(data.booking_date)}</div>
 
                                                                                 <div className="my-2"><i className="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span className="text-600 text-90">Status: </span>
@@ -217,6 +234,14 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                                                                     <div className='m-0'>
                                                                                                         <p style={{ padding: "5px 0",margin:'0px',fontSize:'18px',fontWeight:'700' }}>Benefits :</p> 
                                                                                                         <div className='m-0' dangerouslySetInnerHTML={{ __html: item.contractrate.benefit_policy.substring(0, 1550) }}></div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div> 
+                                                                                                    <div className='m-0'>
+                                                                                                        <p style={{ padding: "5px 0",margin:'0px',fontSize:'18px',fontWeight:'700' }}>Other Conditions :</p>
+                                                                                                        {item.contractrate.other_policy && (
+                                                                                                            <div dangerouslySetInnerHTML={{ __html: item.contractrate.other_policy.substring(0, 250) }}></div>
+                                                                                                            )}
                                                                                                     </div>
                                                                                                 </div>
                                                                                             </div>

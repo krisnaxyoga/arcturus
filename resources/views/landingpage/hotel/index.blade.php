@@ -724,7 +724,9 @@
     </script>
     <script>
         $('input[name="dates"]').daterangepicker({
-           
+            autoApply: true, // Secara otomatis menerapkan perubahan ketika pengguna memilih tanggal
+        showDropdowns: true, // Menampilkan dropdown untuk memilih bulan dan tahun
+       
             isInvalidDate: function(date) {
             // Nonaktifkan tanggal sebelum hari ini
             return date.isBefore(moment(), 'day');

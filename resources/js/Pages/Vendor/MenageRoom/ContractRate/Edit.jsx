@@ -27,6 +27,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
     const [depositPolicy, setDepositPolicy] = useState('');
     const [benefitPolicy, setBenefitPolicy] = useState('');
 
+    const [otherpolicy, setOtherPolicy] = useState('');
     const [minPrice, setMinPrice] = useState('');
     const [sellingPrice, setSellingPrice] = useState('');
     const [advanceprice, setAdvPrice] = useState('');
@@ -283,6 +284,10 @@ const handlePercentageAdv = (e,itemId) => {
         setBenefitPolicy(editor.getData());
     };
 
+    const handleOthertPolicyChange = (event, editor) => {
+        setOtherPolicy(editor.getData());
+    };
+
     const storePost = async (e) => {
         e.preventDefault();
 
@@ -310,6 +315,7 @@ const handlePercentageAdv = (e,itemId) => {
         formData.append('cencellation_policy', cancelPolicy ? cancelPolicy : contract.cencellation_policy);
         formData.append('deposit_policy', depositPolicy ? depositPolicy : contract.deposit_policy);
         formData.append('benefit_policy', benefitPolicy ? benefitPolicy : contract.benefit_policy);
+        formData.append('other_policy', otherpolicy ? otherpolicy : contract.other_policy);
 
         formData.append('percentage',percentage ? percentage:contract.percentage);
 
@@ -746,6 +752,26 @@ const handlePercentageAdv = (e,itemId) => {
                                                                                     console.log('Editor is ready to use!', editor);
                                                                                 }}
                                                                                 onChange={handleDepositPolicyChange}
+                                                                                onBlur={(event, editor) => {
+                                                                                    console.log('Blur.', editor);
+                                                                                }}
+                                                                                onFocus={(event, editor) => {
+                                                                                    console.log('Focus.', editor);
+                                                                                }}
+                                                                            />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="col-lg-12">
+                                                                        <div className="mb-3">
+                                                                            <label className="form-label fw-bold">Other Conditions</label>
+                                                                              <CKEditor
+                                                                                editor={ClassicEditor}
+                                                                                data={contract.other_policy}
+                                                                                onReady={editor => {
+                                                                                    // You can store the "editor" and use when it is needed.
+                                                                                    console.log('Editor is ready to use!', editor);
+                                                                                }}
+                                                                                onChange={handleOthertPolicyChange}
                                                                                 onBlur={(event, editor) => {
                                                                                     console.log('Blur.', editor);
                                                                                 }}

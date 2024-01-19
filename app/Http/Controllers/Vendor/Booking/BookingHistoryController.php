@@ -35,7 +35,18 @@ class BookingHistoryController extends Controller
     {
         $userid = auth()->user()->id;
         $vendor = Vendor::where('user_id',$userid)->with('users')->first();
-        $data = Booking::where('id',$id)->whereNotIn('booking_status', ['-', ''])->with('vendor')->with('users')->first();
+        $data = Booking::where('id',$id)->whereNotIn('booking_status', ['-', ''])
+        ->with([
+            'users' => function ($query) {
+                // Pilih kolom-kolom yang Anda inginkan dari relasi booking
+                $query->select('*');
+            },
+            'users.vendors' => function ($query) {
+                // Pilih kolom-kolom yang Anda inginkan dari relasi vendor
+                $query->select('*');
+            }
+        ])
+        ->with('vendor')->first();
         $hotelroombooking = HotelRoomBooking::where('booking_id',$id)->with('room')->with('contractprice')->with('contractrate')->get();
         $cont_id = HotelRoomBooking::where('booking_id',$id)->first();
         $conttract = ContractRate::where('id',$cont_id->contract_id)->first();

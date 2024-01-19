@@ -156,17 +156,25 @@ class ContractController extends Controller
                 }else{
                     $data->cencellation_policy = $request->cencellation_policy;
                 }
+
                 if ($request->deposit_policy == null){
                     $data->deposit_policy = "<li>Full payment is required upon booking received</li>";
                 }else{
                     $data->deposit_policy = $request->deposit_policy;
                 }
+
                 if ($request->benefit_policy == null){
                     $data->benefit_policy = "<li>Include daily breakfast for 2 pax</li>";
                 }else{
                     $data->benefit_policy = $request->benefit_policy;
                 }
                 
+                if ($request->other_policy == null){
+                    $data->other_policy = "";
+                }else{
+                    $data->other_policy = $request->other_policy;
+                }
+
                 $data->except = explode(",",$request->except);
                 
                 if($request->percentage == null){
@@ -633,55 +641,59 @@ class ContractController extends Controller
                 $data->cencellation_policy = $request->cencellation_policy;
                 $data->deposit_policy = $request->deposit_policy;
                 $data->benefit_policy = $request->benefit_policy;
+                $data->other_policy = $request->other_policy;
                 $data->except = explode(",",$request->except);
                 $data->distribute = explode(",",$request->distribute);
                 $data->percentage = $request->percentage;
 
-                $data->save();
+               
 
-                // Mengumpulkan data yang dibutuhkan sebelumnya
-                $contprice = ContractPrice::where('contract_id', $id)->get();
-                $advancepurchase = AdvancePurchase::where('contract_id',$id)->get();
-                foreach($advancepurchase as $key=>$item){
-                    $nilai = [
-                        0 => 0.962,
-                        1 => 0.925444,
-                        2 => 0.890277128,
-                        3 => 0.856446597136,
-                        4 => 0.823901626444832,
-                        5 => 0.792593364639928,
-                    ];
+                if($request->percentage != $data->percentage){
+                    // Mengumpulkan data yang dibutuhkan sebelumnya
+                    $contprice = ContractPrice::where('contract_id', $id)->get();
+                    $advancepurchase = AdvancePurchase::where('contract_id',$id)->get();
+                    foreach($advancepurchase as $key=>$item){
+                        $nilai = [
+                            0 => 0.962,
+                            1 => 0.925444,
+                            2 => 0.890277128,
+                            3 => 0.856446597136,
+                            4 => 0.823901626444832,
+                            5 => 0.792593364639928,
+                        ];
 
-                    foreach($contprice as $denden){
-                        $advanceprice = new AdvancePurchasePrice;
-                        $advanceprice->room_id = $denden->room_id;
-                        $advanceprice->user_id = $userid;
-                        $advanceprice->vendor_id = $item->vendor_id;
-                        $advanceprice->contract_id = $id;
-                        $advanceprice->advance_id = $item->id;
-                        $advanceprice->price = $denden->recom_price * $nilai[$key];
-                        $advanceprice->rolerate = 2;
-                        $advanceprice->is_active = $item->is_active;
+                        foreach($contprice as $denden){
+                            $advanceprice = new AdvancePurchasePrice;
+                            $advanceprice->room_id = $denden->room_id;
+                            $advanceprice->user_id = $userid;
+                            $advanceprice->vendor_id = $item->vendor_id;
+                            $advanceprice->contract_id = $id;
+                            $advanceprice->advance_id = $item->id;
+                            $advanceprice->price = $denden->recom_price * $nilai[$key];
+                            $advanceprice->rolerate = 2;
+                            $advanceprice->is_active = $item->is_active;
 
-                        $existingPrice = AdvancePurchasePrice::where('room_id', $advanceprice->room_id)
-                            ->where('user_id', $advanceprice->user_id)
-                            ->where('vendor_id', $advanceprice->vendor_id)
-                            ->where('contract_id', $advanceprice->contract_id)
-                            ->where('advance_id', $advanceprice->advance_id)
-                            ->first();
+                            $existingPrice = AdvancePurchasePrice::where('room_id', $advanceprice->room_id)
+                                ->where('user_id', $advanceprice->user_id)
+                                ->where('vendor_id', $advanceprice->vendor_id)
+                                ->where('contract_id', $advanceprice->contract_id)
+                                ->where('advance_id', $advanceprice->advance_id)
+                                ->first();
 
-                        if (!$existingPrice) {
-                            $advanceprice->save();
+                            if (!$existingPrice) {
+                                $advanceprice->save();
+                            }
                         }
+                        // Hitung persentase
+                        $pecentage1 = 1 - $nilai[$key];
+                        $pecentage2 = $pecentage1 * 100;
+    
+                        // Tetapkan persentase pada $advancepurchase atau $item
+                        $item->percentage = $pecentage2;
+                        $item->save();
                     }
-                     // Hitung persentase
-                     $pecentage1 = 1 - $nilai[$key];
-                     $pecentage2 = $pecentage1 * 100;
- 
-                     // Tetapkan persentase pada $advancepurchase atau $item
-                     $item->percentage = $pecentage2;
-                     $item->save();
                 }
+                $data->save();
 
                 // Perulangan pada AdvancePurchasePrice
 

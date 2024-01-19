@@ -27,6 +27,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
     const [cancelPolicy, setCancellationPolicy] = useState('');
     const [depositPolicy, setDepositPolicy] = useState('');
     const [benefitPolicy, setBenefitPolicy] = useState('');
+    const [otherpolicy, setOtherPolicy] = useState('');
 
     const [minPrice, setMinPrice] = useState('');
     const [sellingPrice, setSellingPrice] = useState('');
@@ -158,6 +159,10 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
         setBenefitPolicy(editor.getData());
     };
 
+    const handleOthertPolicyChange = (event, editor) => {
+        setOtherPolicy(editor.getData());
+    };
+
     const [checkboxes, setCheckboxes] = useState({
         sunday: false,
         monday: false,
@@ -230,6 +235,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
         formData.append('cencellation_policy', cancelPolicy);
         formData.append('deposit_policy', depositPolicy);
         formData.append('benefit_policy', benefitPolicy);
+        formData.append('other_policy', otherpolicy);
 
         formData.append('distribute',selectedDistribute);
         formData.append('except',selectedExclude);
@@ -575,7 +581,26 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                             />
                                                                         </div>
                                                                     </div>
-
+                                                                    <div className="col-lg-12">
+                                                                        <div className="mb-3">
+                                                                            <label className="form-label fw-bold">Other Conditions</label>
+                                                                            <CKEditor
+                                                                                editor={ClassicEditor}
+                                                                                data=""
+                                                                                onReady={editor => {
+                                                                                    // You can store the "editor" and use when it is needed.
+                                                                                    console.log('Editor is ready to use!', editor);
+                                                                                }}
+                                                                                onChange={handleOthertPolicyChange}
+                                                                                onBlur={(event, editor) => {
+                                                                                    console.log('Blur.', editor);
+                                                                                }}
+                                                                                onFocus={(event, editor) => {
+                                                                                    console.log('Focus.', editor);
+                                                                                }}
+                                                                            />
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </Tab>
                                                         </Tabs>

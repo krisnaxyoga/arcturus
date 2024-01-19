@@ -29,7 +29,15 @@
         </tr>
         <tr>
           <td style="width:50%;padding:20px;vertical-align:top">
-                <p style="margin:0 0 10px 0;padding:0;font-size:14px;"><span style="display:block;font-weight:bold;font-size:13px">Guest Name</span> {{$booking->first_name}} {{$booking->last_name}}</p>
+            <p style="margin:0 0 10px 0;padding:0;font-size:14px;"><span style="display:block;font-weight:bold;font-size:13px">Travel Agent</span>
+              {{$booking->users->vendors->vendor_name}} <br>
+              <?php if($booking->users->vendors->affiliate == $booking->vendor->affiliate){?>
+                <b style="color:green;font-weight:normal;margin:0"> powered by {{$booking->users->vendors->vendor_name}} </b>
+                <?php } else { ?>
+                  <b style="color:green;font-weight:normal;margin:0"> powered by ARCTURUS </b>
+                  <?php } ?>
+              </p>
+                    <p style="margin:0 0 10px 0;padding:0;font-size:14px;"><span style="display:block;font-weight:bold;font-size:13px">Guest Name</span> {{$booking->first_name}} {{$booking->last_name}}</p>
                     <p style="margin:0 0 10px 0;padding:0;font-size:14px;"><span style="display:block;font-weight:bold;font-size:13px;">Email</span> {{$booking->email}}</p>
                     <p style="margin:0 0 10px 0;padding:0;font-size:14px;"><span style="display:block;font-weight:bold;font-size:13px;">Phone</span> {{$booking->phone}}</p>
                     <p style="margin:0 0 10px 0;padding:0;font-size:14px;"><span style="display:block;font-weight:bold;font-size:13px;">Address</span> {{$booking->address_line1}}</p>
@@ -52,9 +60,12 @@
         <tr>
           <td colspan="2" style="padding:15px;">
             <?php foreach ($hotelbook as $key => $item) { ?>
-                <p style="font-size:14px;margin:0;padding:10px;border:solid 1px #ddd;font-weight:bold;">
-                  <span style="display:block;font-size:13px;font-weight:normal;"> {{ $item->total_room}}</span> | <span style="display:block;font-size:13px;font-weight:normal;">{{ $item->room->ratedesc}}</span> Rp. {{ number_format($item->pricenomarkup, 0, ',', '.')}} / Night <b style="font-size:12px;font-weight:300;"> </b>
-                  </p>
+              <table cellspacing="0" cellpadding="0" border="0" style="font-size: 14px; margin: 0; padding: 10px; border: solid 1px #ddd; font-weight: bold; width: 100%;">
+                <tr>
+                    <td style="width: 50%;"><span style="display: block; font-size: 13px; font-weight: normal;">{{ $item->total_room}} &nbsp; | &nbsp;{{ $item->room->ratedesc}}</span></td>
+                    <td style="text-align: right;"><span style="font-size: 13px; font-weight: normal;">Rp. {{ number_format($item->pricenomarkup, 0, ',', '.')}} / Night</span></td>
+                </tr>
+            </table>
             <?php } ?>
 
             <p style="font-size:14px;margin:0;padding:10px;border:solid 1px #ddd;font-weight:bold;">Total amount : </span> Rp. {{ number_format($booking->pricenomarkup, 0, ',', '.')}}</p>

@@ -898,7 +898,10 @@
         }
     </script>
  <script>
-    $('input[name="dates"]').daterangepicker();
+    $('input[name="dates"]').daterangepicker({
+        autoApply: true, // Secara otomatis menerapkan perubahan ketika pengguna memilih tanggal
+        showDropdowns: true, // Menampilkan dropdown untuk memilih bulan dan tahun
+    });
 
         // Tambahkan event listener untuk deteksi klik tombol "Apply"
     $('input[name="dates"]').on('apply.daterangepicker', function(ev, picker) {
@@ -917,6 +920,8 @@
 <script>
     // Inisialisasi Date Range Picker
     $('input[name="dates"]').daterangepicker({
+        autoApply: true, // Secara otomatis menerapkan perubahan ketika pengguna memilih tanggal
+        showDropdowns: true, // Menampilkan dropdown untuk memilih bulan dan tahun
         startDate: moment().format('MM/DD/YYYY'), // Tanggal checkin (hari ini)
         endDate: moment().add(1, 'days').format('MM/DD/YYYY'), // Tanggal checkout (besok)
         autoUpdateInput: false, // Menonaktifkan pembaruan otomatis
