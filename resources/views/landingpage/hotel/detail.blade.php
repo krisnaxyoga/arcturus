@@ -621,23 +621,25 @@
                                                                                                 <option data-price="0" value="0" data-pricenomarkup="0">0</option>
                                                                                                 {!! $selectOptions !!}
                                                                                             </select>
-                                                                                        @endif
-
-                                                                                        @if($itemprice->room->extra_bed > 0)
-                                                                                            <select name="" id="" class="form-control mb-2" style="width:200px">
-                                                                                                <option value="0">0</option>
-                                                                                                @for ($i = 1; $i <= $itemprice->room->extra_bed; $i++)
-                                                                                                <option
-                                                                                                    value="{{ $i }}">
-                                                                                                    {{ $i }}
-                                                                                                    @if ($i == 1)
-                                                                                                        Extra bed
-                                                                                                    @else
-                                                                                                        Extra beds
-                                                                                                    @endif
-                                                                                                </option>
-                                                                                            @endfor
-                                                                                            </select>
+                                                                                            @if($itemprice->room->extra_bed > 0)
+                                                                                            <label for="" class="extras">Extra bed</label>
+                                                                                                <select name="" id="" class="form-control bed-quantity mb-2" style="width:200px" onchange="caclulateextrabed()">
+                                                                                                    <option value="0">0</option>
+                                                                                                    @for ($i = 1; $i <= $itemprice->room->extra_bed; $i++)
+                                                                                                        <option
+                                                                                                            data-bedprice="100000"
+                                                                                                            data-bedid="9"
+                                                                                                            value="{{ $i }}">
+                                                                                                            {{ $i }}
+                                                                                                            @if ($i == 1)
+                                                                                                                Extra bed
+                                                                                                            @else
+                                                                                                                Extra beds
+                                                                                                            @endif
+                                                                                                        </option>
+                                                                                                    @endfor
+                                                                                                </select>
+                                                                                            @endif
                                                                                         @endif
                                                                                     @endif
                                                                                     
@@ -951,7 +953,41 @@
             }
 
         }
+        // calculate extrabed
+        function caclulateextrabed(){
+            
+            var bedQuantity = document.getElementsByClassName('bed-quantity');
+           
+            var totalPricebed = 0;
+            var totalbed = 0;
+            var totalPrice = 0;
+            
+            for (var i = 0; i < bedQuantity.length; i++) {
+                var selectedOption = bedQuantity[i].options[bedQuantity[i].selectedIndex];
+                
+                // Pastikan dataset.bedprice ada pada opsi yang dipilih
+                if (selectedOption && selectedOption.dataset.bedprice !== undefined) {
+                    var quantity = parseInt(bedQuantity[i].value);
+                    var price = parseInt(selectedOption.dataset.bedprice);
+                    
+                    var bedit = parseInt(selectedOption.dataset.bedid);
+                    totalbed += quantity;
+                    totalPricebed += price;
 
+                } else {
+                    console.log("Dataset bedprice tidak ditemukan pada opsi yang dipilih");
+                }
+            }
+            
+            console.log(totalPricebed,">>>>>>Bedprice");
+            var encryptionKey = 'KunciEnkripsiRahasia';
+            var decryptedData = getDecryptedDataFromLocalStorage(encryptionKey);
+            
+            console.log(decryptedData,">>>>>>DATA");
+
+        }
+
+        // caculate total room price
         function calculateTotal() {
             var roomQuantities = document.getElementsByClassName('room-quantity');
             var totalRoomElement = document.getElementById('totalRoom');
@@ -1097,6 +1133,22 @@
         $(document).ready(function() {
             // Cek apakah ada data di local storage
 
+               // Disable bed-quantity initially
+            $(".bed-quantity").prop('hidden', true);
+            $(".extras").prop('hidden', true);
+
+            // Handler for room-quantity change
+            $(".room-quantity").on('change', function() {
+                // Enable bed-quantity if room-quantity is selected
+                if ($(this).val() !== '0') {
+                    $(".bed-quantity").prop('hidden', false);
+                    $(".extras").prop('hidden', false);
+                } else {
+                    // Disable bed-quantity if room-quantity is not selected
+                    $(".bed-quantity").prop('hidden', true);
+                    $(".extras").prop('hidden', true);
+                }
+            });
             // Ambil data terenkripsi dari local storage
             var encryptionKey = 'KunciEnkripsiRahasia';
             var decryptedData = getDecryptedDataFromLocalStorage(encryptionKey);

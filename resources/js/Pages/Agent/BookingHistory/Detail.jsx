@@ -325,6 +325,7 @@ export default function Detail({ session, data, agent, contract, setting, roombo
                                                                        <>
                                                                        <div className='row' key={index}>
                                                                                     <div className="col-12">
+                                                                                        <p className='m-0'>{item.room.ratedesc}</p>
                                                                                         <p className='badge badge-dark'>{item.contractrate.codedesc}</p>
                                                                                     </div>
                                                                                     <div className="col-12 col-sm-7 text-grey-d2 text-95 mt-2 mt-lg-0">
@@ -333,6 +334,12 @@ export default function Detail({ session, data, agent, contract, setting, roombo
                                                                                                 <p style={{ padding: "5px 0",margin:'0px',fontSize:'18px',fontWeight:'700' }}>Benefits :</p>
                                                                                                 <div className='m-0' dangerouslySetInnerHTML={{ __html: item.contractrate.benefit_policy.substring(0, 1500) }}></div>
                                                                                             </div>
+                                                                                        </div>
+                                                                                        <div>
+                                                                                            <p style={{ padding: "5px 0",margin:'0px',fontSize:'18px',fontWeight:'700' }}>Other Conditions :</p>
+                                                                                            {item.contractrate.other_policy && (
+                                                                                                <div dangerouslySetInnerHTML={{ __html: item.contractrate.other_policy.substring(0, 250) }}></div>
+                                                                                                )}
                                                                                         </div>
                                                                                     </div>
 
