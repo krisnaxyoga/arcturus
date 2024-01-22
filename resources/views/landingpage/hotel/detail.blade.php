@@ -752,6 +752,7 @@
                                                 <p>Total Price: <span class="text-danger fs-3 fw-bold">Rp.<span
                                                             id="totalPrice">0</span></span> </p>
                                                 <input type="text" name="totalprice" value="" hidden>
+                                                <input type="text" name="totalpricebeforebedroom" value="" hidden>
                                                 <input type="text" name="totalpricenomarkup" value="" hidden>
                                                 <span style="display: none" id="totalPricenomarkup"></span>
                                                 <a id="booking" class="btn btn-primary" href="#">Book Now</a>
@@ -980,11 +981,76 @@
             }
             
             console.log(totalPricebed,">>>>>>Bedprice");
+            // Dapatkan data terenkripsi dari localStorage
             var encryptionKey = 'KunciEnkripsiRahasia';
             var decryptedData = getDecryptedDataFromLocalStorage(encryptionKey);
-            
-            console.log(decryptedData,">>>>>>DATA");
+            // Dapatkan elemen input dengan name "totalprice"
+            var totalpriceInput = document.getElementsByName("totalprice")[0];
+            var totalpricebeforebedroom = document.getElementsByName("totalpricebeforebedroom")[0];
 
+            var totalNight = document.querySelector('input[name="totalnight"]');
+            
+            // Cek apakah data ditemukan
+            if (decryptedData && decryptedData.length > 0) {
+                // var totalPrice = 0;
+
+                // Iterasi melalui setiap objek dalam array
+                for (var i = 0; i < decryptedData.length; i++) {
+                    // Tambahkan properti pricebed dengan nilai totalPricebed
+                    decryptedData[i].pricebed = totalPricebed;
+                }
+
+                  // Ambil nilai dari elemen input
+                  var inputValue = totalpriceInput.value;
+
+                // Hilangkan koma dan ruang dari nilai input
+                var formattedValue = inputValue.replace(/,/g, '').trim();
+
+                // Ubah nilai input menjadi angka
+                var numericValue = parseInt(formattedValue);
+
+                // Tambahkan numericValue dengan totalPricebed
+                totalPrice = numericValue + totalPricebed;
+                 // Tampilkan data yang sudah diupdate
+                    console.log(decryptedData, ">>>>>> Data setelah diupdate");
+
+                    console.log(totalNight.value,">>>>>>>NIGHT");
+                     // Cek apakah totalPricebed lebih dari 0
+                    if (totalPricebed > 0) {
+                        console.log(totalPrice,">>>>>>>>> TOTAL PRICE");
+                        // Update nilai elemen input dengan format koma
+                        totalpriceInput.value = formatNumber(totalPrice * totalNight.value);
+
+                        // Update nilai elemen span dengan format koma
+                        document.getElementById("totalPrice").textContent = formatNumber(totalPrice * totalNight.value);
+                    } else {
+                        // Jika totalPricebed tidak lebih dari 0, kembalikan nilai ke nilai sebelumnya
+                        // Anda perlu menyimpan nilai sebelumnya sebelum mengupdate nilai totalPricebed
+
+                         // Ambil nilai dari elemen input
+                        var totalpricebeforebedroomValue = totalpricebeforebedroom.value;
+
+                        // Hilangkan koma dan ruang dari nilai input
+                        var formattedtotalpricebeforebedroomValue = totalpricebeforebedroomValue.replace(/,/g, '').trim();
+
+                        // Ubah nilai input menjadi angka
+                        var numerictotalpricebeforebedroomValue = parseInt(formattedtotalpricebeforebedroomValue);
+
+                        totalpriceInput.value = formatNumber(numerictotalpricebeforebedroomValue * totalNight.value);
+                        document.getElementById("totalPrice").textContent = formatNumber(numerictotalpricebeforebedroomValue * totalNight.value);
+
+                    }
+
+                // Simpan kembali data yang sudah diupdate ke localStorage
+                saveEncryptedDataToLocalStorage(decryptedData, encryptionKey);
+            } else {
+                console.log("Data tidak ditemukan atau kosong");
+            }
+        }
+
+        // Fungsi untuk memformat angka dengan koma
+        function formatNumber(number) {
+            return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         }
 
         // caculate total room price
@@ -1045,8 +1111,10 @@
             totalPriceElement.textContent = priceintext.toLocaleString();
             var totalRoomInput = document.querySelector('input[name="totalroom"]');
             totalRoomInput.value = totalRoom;
+            var totalpricebeforebedroom = document.querySelector('input[name="totalpricebeforebedroom"]');
             var totalPriceInput = document.querySelector('input[name="totalprice"]');
             totalPriceInput.value = totalPrice.toLocaleString();
+            totalpricebeforebedroom.value = totalPrice.toLocaleString();
 
             // Perhitungan untuk totalPricenomarkupInput
             var pricenomarkupintext = parseInt(totalPricenomarkup * totalNight.value);

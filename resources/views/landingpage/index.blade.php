@@ -85,16 +85,23 @@
                                                             </select> --}}
                                                             </div>
                                                         </div>
-                                                        {{-- <div class="col-md d-flex">
+                                                        <div class="col-md d-flex">
                                                             <div class="form-group mb-3 mt-2 mx-2">
-                                                                <label class="pl-3 mt-3" for="#">State</label>
-                                                                <div class="form-field"> --}}
+                                                                <label class="pl-3 mt-3" for="#">Market</label>
+                                                                <div class="form-field">
                                                                     {{-- <div class="icon"><span class="fa fa-search"></span></div> --}}
-                                                                    {{-- <input type="text" name="state" class="form-control"
-                                                                        placeholder="state...">
+                                                                    <select name="country" id="" class="form-control ">
+                                                                    @foreach ($user->vendors->marketcountry as $name)
+                                                                    
+                                                                        <option
+                                                                            @if (($user->vendors->country ?? '') == $name) selected @endif
+                                                                            value="{{ $name }}">
+                                                                            {{ $name }}</option>
+                                                                        @endforeach
+                                                                    </select>
                                                                 </div>
                                                             </div>
-                                                        </div> --}}
+                                                        </div>
                                                         <div class="col-md d-flex">
                                                            
                                                             <div class="form-group mb-3 mt-2 mx-2">

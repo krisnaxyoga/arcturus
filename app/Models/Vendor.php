@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Vendor extends Model
 {
     use HasFactory;
+    protected $casts = [
+        'marketcountry' => 'array'
+    ];
+
 
     public function users() {
         return $this->belongsTo(User::class, 'user_id');
