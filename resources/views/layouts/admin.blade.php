@@ -126,7 +126,9 @@
                         <a class="nav-link {{ request()->Is('#') ? 'active' : '' }}" href="#" data-toggle="collapse" data-target="#TransportCollapse"
                             aria-expanded="false" aria-controls="TransportCollapse">
                             <div class="nav-link-icon"><i data-feather="truck"></i></div>
-                            Transport
+                            Transport @if($orderTransport > 0) 
+                            <span class="badge badge-danger mx-2 debardebar">{{$orderTransport}}</span>
+                            @endif
                         </a>
                         <div id="TransportCollapse" class="collapse">
                             <!-- Isi menu -->
@@ -146,7 +148,9 @@
                                 </li>
                                 <li class="list-unstyled">
                                     <a class="nav-link {{ request()->routeIs('dashboard.transport.report') ? 'active' : '' }}" href="{{ route('dashboard.transport.report') }}">
-                                        Transport Booking
+                                        Transport Booking @if($orderTransport > 0) 
+                                        <span class="badge badge-danger mx-2 debardebar">{{$orderTransport}}</span>
+                                        @endif
                                     </a>
                                 </li>
                             </ul>

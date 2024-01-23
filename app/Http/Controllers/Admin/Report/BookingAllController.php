@@ -153,8 +153,8 @@ class BookingAllController extends Controller
         // email tess reservasi
         // Mail::to('yogakris.yk@gmail.com')->send(new BookingConfirmationHotel($data));
         if (env('APP_ENV') == 'production') {
-        Mail::to($booking->vendor->email_reservation)->send(new BookingConfirmationHotel($data));
-        Mail::to($booking->vendor->email)->send(new BookingConfirmationHotel($data));
+            Mail::to($booking->vendor->email_reservation)->send(new BookingConfirmationHotel($data));
+            Mail::to($booking->vendor->email)->send(new BookingConfirmationHotel($data));
         }
         return redirect()->back()->with('message', 'Email sent to hotel');
 

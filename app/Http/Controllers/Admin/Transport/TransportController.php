@@ -199,6 +199,12 @@ class TransportController extends Controller
 
     public function report(Request $request){
 
+        $isee = OrderTransport::where('is_see',0)->get();
+        foreach($isee as $show){
+            $show->is_see = 1;
+            $show->save();
+        }
+
         $settingExists = Setting::exists();
 
         if ($settingExists) {

@@ -102,7 +102,7 @@ export default function Detail({ session, data, agent, contract, setting, roombo
                     unit: 'mm',
                     format: 'a4'
                 });
-                pdf.addImage(imgData, 'PNG', 10, 10, 180, 150); // Menambahkan gambar tangkapan layar ke PDF
+                pdf.addImage(imgData, 'PNG', 10, 10, 180, 200); // Menambahkan gambar tangkapan layar ke PDF
                 pdf.save('document.pdf'); // Simpan PDF dengan nama "document.pdf"
             });
         }
@@ -226,18 +226,18 @@ export default function Detail({ session, data, agent, contract, setting, roombo
 
                                                                 <div className="my-2"><i className="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span className="text-600 text-90">Status: </span>
                                                                 {data.booking_status === 'paid' ? (
-                                                                                                            <>
-                                                                                                                <span style={{padding:'6px'}} className="badge badge-success badge-pill px-25">
-                                                                                                                    {data.booking_status}
-                                                                                                                </span>
-                                                                                                            </>
-                                                                                                        ) : (
-                                                                                                            <>
-                                                                                                                <span style={{padding:'6px'}} className="badge badge-warning badge-pill px-25">
-                                                                                                                    {data.booking_status}
-                                                                                                                </span>
-                                                                                                            </>
-                                                                                                        )}
+                                                                                                    <>
+                                                                                                        <span style={{padding:'6px'}} className="badge badge-success badge-pill px-25">
+                                                                                                            {data.booking_status}
+                                                                                                        </span>
+                                                                                                    </>
+                                                                                                ) : (
+                                                                                                    <>
+                                                                                                        <span style={{padding:'6px'}} className="badge badge-warning badge-pill px-25">
+                                                                                                            {data.booking_status}
+                                                                                                        </span>
+                                                                                                    </>
+                                                                                                )}
                                                                 </div>
 
 
@@ -324,9 +324,12 @@ export default function Detail({ session, data, agent, contract, setting, roombo
                                                                         {roombooking.map((item, index) => (
                                                                        <>
                                                                        <div className='row' key={index}>
-                                                                                    <div className="col-12">
-                                                                                        <p className='m-0'>{item.room.ratedesc}</p>
-                                                                                        <p className='badge badge-dark'>{item.contractrate.codedesc}</p>
+                                                                                    <div className="col-12 mt-2">
+                                                                                        <div className="d-flex">
+                                                                                             <p className='m-0 text-primary' style={{fontWeight:'700'}}>{item.room.ratedesc}</p>
+                                                                                        <p className='badge badge-dark mx-2 mt-1'>{item.contractrate.codedesc}</p>
+                                                                                        </div>
+                                                                                       
                                                                                     </div>
                                                                                     <div className="col-12 col-sm-7 text-grey-d2 text-95 mt-2 mt-lg-0">
                                                                                         <div>

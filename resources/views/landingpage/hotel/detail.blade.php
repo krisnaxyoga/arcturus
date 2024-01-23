@@ -112,21 +112,7 @@
                         @csrf
                         <div class="search-property-1" style="border-top: 1px solid rgba(0, 0, 0, 0.1);">
                             <div class="row no-gutters">
-                                <div class="col-md d-flex">
-                                    <?php
-                                    $checkin = date('m/d/Y', strtotime($datareq['checkin']));
-                                    $checkout = date('m/d/Y', strtotime($datareq['checkout']));
-                                    ?>
-                                    <div class="form-group p-4">
-                                        <label for="">CheckIn - CheckOut</label>
-                                        <input class="form-control checkindate" type="text" name="dates"
-                                            value="{{ $checkin }} - {{ $checkout }}" />
-                                    </div>
-                                    <input value="{{ $datareq['checkin'] }}" id="checkin" type="hidden" name="checkin"
-                                        class="form-control checkindate" placeholder="Check In Date">
-                                    <input value="{{ $datareq['checkout'] }}" id="checkout" type="hidden" name="checkout"
-                                        class="form-control checkoutdate" placeholder="Check Out Date">
-                                </div>
+                              
                                 {{-- <div class="col-md d-flex">
                                     <div class="form-group p-4">
                                         <label for="#">Check-in</label>
@@ -148,6 +134,22 @@
                                     </div>
                                 </div> --}}
                                 <div class="col-md d-flex">
+                                    <div class="form-group p-4">
+                                        <label for="#">Market</label>
+                                        <div class="date-input-wrapper">
+                                            <select name="country" id="market" class="form-control ">
+                                                @foreach ($user->vendors->marketcountry as $name)
+                                                
+                                                    <option
+                                                        @if (($agentCountry ?? '') == $name) selected @endif
+                                                        value="{{ $name }}">
+                                                        {{ $name }}</option>
+                                                    @endforeach
+                                                </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md d-flex">
                                     <div class="form-group p-4" style="    border-right: 1px solid rgba(0, 0, 0, 0.1);">
                                         <label for="#">Person</label>
                                         <div class="">
@@ -164,7 +166,21 @@
                                         </div>
                                     </div>
                                 </div>
-
+                                <div class="col-md d-flex">
+                                    <?php
+                                    $checkin = date('m/d/Y', strtotime($datareq['checkin']));
+                                    $checkout = date('m/d/Y', strtotime($datareq['checkout']));
+                                    ?>
+                                    <div class="form-group p-4" style="    border-right: 1px solid rgba(0, 0, 0, 0.1);">
+                                        <label for="">CheckIn - CheckOut</label>
+                                        <input class="form-control checkindate" type="text" name="dates"
+                                            value="{{ $checkin }} - {{ $checkout }}" />
+                                    </div>
+                                    <input value="{{ $datareq['checkin'] }}" id="checkin" type="hidden" name="checkin"
+                                        class="form-control checkindate" placeholder="Check In Date">
+                                    <input value="{{ $datareq['checkout'] }}" id="checkout" type="hidden" name="checkout"
+                                        class="form-control checkoutdate" placeholder="Check Out Date">
+                                </div>
                             </div>
                         </div>
 
@@ -895,6 +911,7 @@
 
 
             var person = $('#person').val();
+            var market = $('#market').val();
 
             // Ubah format tanggal menjadi YYYY-MM-DD
             var formattedCheckin = checkinDate.toISOString().slice(0, 10);
@@ -905,7 +922,8 @@
             var url = '/homepage/hotel/' + contractId +
                 '?checkin=' + formattedCheckin +
                 '&checkout=' + formattedCheckout +
-                '&person=' + person;
+                '&person=' + person +
+                '&country='+ market;
 
             // Lakukan pengalihan ke halaman yang diinginkan
             window.location.href = url;

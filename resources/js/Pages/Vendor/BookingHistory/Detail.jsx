@@ -227,7 +227,10 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                                             <>
                                                                             <div className='row' key={index}>
                                                                                             <div className="col-12">
-                                                                                                <p className='badge badge-dark'>{item.contractrate.codedesc}</p>
+                                                                                                <div className="d-flex">
+                                                                                                    <p className='m-0 text-primary' style={{fontWeight:'700'}}>{item.room.ratedesc}</p>
+                                                                                                    <p className='badge badge-dark mx-2 mt-1'>{item.contractrate.codedesc}</p>
+                                                                                                </div>
                                                                                             </div>
                                                                                             <div className="col-12 col-sm-7 text-grey-d2 text-95 mt-2 mt-lg-0">
                                                                                                 <div> 

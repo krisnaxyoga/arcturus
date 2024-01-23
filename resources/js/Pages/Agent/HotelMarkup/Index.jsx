@@ -69,8 +69,8 @@ function Index({ agent }) {
                     <div className="card">
                         <img src="https://d1kqpi55383ont.cloudfront.net/ecommerceloka/blog-images/2112231640264422gmNYu9HRJ.jpg" className="card-img-top img-fluid" alt="https://d1kqpi55383ont.cloudfront.net/ecommerceloka/blog-images/2112231640264422gmNYu9HRJ.jpg"/>
                         <div className="card-body">
-                            <h5 className="card-title">Public Monitor</h5>
-                             <a href="/agent/hotelmarkup/homehotel" target="_blank" className="btn btn-primary">Go somewhere</a>
+                            {/* <h5 className="card-title">Public Monitor</h5> */}
+                             <a href="/agent/hotelmarkup/homehotel" target="_blank" className="btn btn-primary">Customers View</a>
                         </div>
                         </div>
                     </div>

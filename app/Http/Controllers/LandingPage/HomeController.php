@@ -32,7 +32,6 @@ class HomeController extends Controller
     public function index()
     {
 
-        $user = '';
         if (auth()->check()) {
 
             $iduser = auth()->user()->id;
@@ -57,7 +56,7 @@ class HomeController extends Controller
         ->select('country')
         ->get();
 
-        return view('landingpage.index', compact('slider','user', 'hotel', 'agent','country'));
+        return view('landingpage.index', compact('slider', 'hotel', 'agent','country'));
     }
 
     public function hotel(Request $request)
@@ -336,9 +335,8 @@ class HomeController extends Controller
 
         // return view('landingpage.hotel.index',compact('data','requestdata','blackoutVendorIds','surchargesDetail','surcharprice'));
         $acyive = auth()->user()->is_active;
-        $iduser = auth()->user()->id;
         $agentaffiliate = Vendor::where('user_id',auth()->user()->id)->first();
-        $user = User::where('id', $iduser)->first();
+
         $affiliate = $agentaffiliate->affiliate;
         if($acyive == 1){
           return view('landingpage.hotel.index', compact('data',
@@ -350,8 +348,7 @@ class HomeController extends Controller
            'country',
            'surchargeAllRoom',
            'affiliate',
-           'Nights',
-           'user'));
+           'Nights'));
         }else{
             return view('landingpage.pagenotfound.isactiveaccount');
         }
@@ -369,9 +366,16 @@ class HomeController extends Controller
             return view('auth.login');
         }else{
             $iduser = auth()->user()->id;
+            $user = User::where('id', $iduser)->first();
             $agent_country = Vendor::where('user_id', $iduser)->first();
-            // $agentCountry = $agent_country->country;)
-            $agentCountry = $request->country;
+            if($request->country == null){
+                $agentCountry = $agent_country->country;
+            }else{
+                $agentCountry = $request->country;
+            }
+            
+            
+
             $category = $request->input('data.category');
             $datareq = $request->all();
             // dd($datareq['checkin']);
@@ -606,10 +610,13 @@ class HomeController extends Controller
                 'HotelRoomBooking',
                 'surchargeAllRoom',
                 'affiliate',
-                'blackoutdate'
+                'blackoutdate',
+                'user',
+                'agentCountry'
             ));
         }
     }
+
 
 
 

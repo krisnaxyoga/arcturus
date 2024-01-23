@@ -30,7 +30,7 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Destination</th>
-                                        <th>date</th>
+                                        {{-- <th>date</th> --}}
                                         <th>action</th>
                                     </tr>
                                 </thead>
@@ -39,7 +39,7 @@
                                         <tr>
                                             <td>{{$key+1}}</td>
                                             <td>{{ $item->destination }}</td>
-                                            <td>{{ $item->created_at }}</td>
+                                            {{-- <td>{{ $item->created_at }}</td> --}}
                                             <td>
                                                 <a href="{{ route('dashboard.transportdestination.edit', $item->id) }}"
                                                     class="btn btn-datatable btn-icon btn-transparent-dark mr-2"><i
