@@ -182,7 +182,7 @@
                     <div>
                         <div class="row">
                             <div class="col-lg-4">
-                                <div class="card mb-2 border-0 shadow" style="border-radius: 10px;width:200px">
+                                <div class="card mb-2 border-0 shadow" style="border-radius: 10px;width:auto">
                                     <div class="card-body">
                                             <div class="form-goup mb-1">
                                                 <label for="destination">Destination</label>

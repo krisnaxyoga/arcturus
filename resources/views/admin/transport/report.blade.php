@@ -35,8 +35,8 @@
                                         <th>Time pickup</th>
                                         <th>Date pickup</th>
                                         <th>Booking status</th>
-                                        <th>price </th>
-                                        <th>widraw</th>
+                                        <th>Price </th>
+                                        <th>Withdraw</th>
                                     </tr>
                                 </thead>
                                 <tbody>

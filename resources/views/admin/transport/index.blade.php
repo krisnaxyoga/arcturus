@@ -66,7 +66,7 @@
 
                                                 <form class="d-inline"
                                                     action="{{ route('dashboard.transport.destroy', $item->id) }}"
-                                                    method="POST"
+                                                    method="GET"
                                                     onSubmit="return confirm('Apakah anda yakin akan menghapus data ini?');">
                                                     @csrf
                                                     @method('delete')

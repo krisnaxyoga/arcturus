@@ -133,11 +133,12 @@
                                         </div>
                                     </div>
                                 </div> --}}
+                                @if($user->vendors->marketcountry != null)
                                 <div class="col-md d-flex">
                                     <div class="form-group p-4">
                                         <label for="#">Market</label>
                                         <div class="date-input-wrapper">
-                                            <select name="country" id="market" class="form-control ">
+                                            <select name="country" id="market" class="form-control " onchange="checknight()">
                                                 @foreach ($user->vendors->marketcountry as $name)
                                                 
                                                     <option
@@ -149,6 +150,8 @@
                                         </div>
                                     </div>
                                 </div>
+                                @endif
+                               
                                 <div class="col-md d-flex">
                                     <div class="form-group p-4" style="    border-right: 1px solid rgba(0, 0, 0, 0.1);">
                                         <label for="#">Person</label>
@@ -633,17 +636,17 @@
                                                                                         <span class="badge badge-danger">Sold</span>
                                                                                     @else
                                                                                         @if (!empty($selectOptions))
-                                                                                            <select class="form-control room-quantity mb-2" name="room_quantity" style="width:200px" onchange="calculateTotal()">
+                                                                                            <select class="form-control room-quantity mb-2" name="room_quantity" data-roomid="{{$itemprice->room_id}}" style="width:200px" onchange="calculateTotal()">
                                                                                                 <option data-price="0" value="0" data-pricenomarkup="0">0</option>
                                                                                                 {!! $selectOptions !!}
                                                                                             </select>
                                                                                             @if($itemprice->room->extra_bed > 0)
                                                                                             <label for="" class="extras">Extra bed</label>
-                                                                                                <select name="" id="" class="form-control bed-quantity mb-2" style="width:200px" onchange="caclulateextrabed()">
+                                                                                                <select data-roomid="{{$itemprice->room_id}}" name="" id="" class="form-control bed-quantity mb-2" style="width:200px" onchange="caclulateextrabed()">
                                                                                                     <option value="0">0</option>
                                                                                                     @for ($i = 1; $i <= $itemprice->room->extra_bed; $i++)
                                                                                                         <option
-                                                                                                            data-bedprice="100000"
+                                                                                                            data-bedprice="{{$i * 100000}}"
                                                                                                             data-bedid="9"
                                                                                                             value="{{ $i }}">
                                                                                                             {{ $i }}
@@ -767,6 +770,7 @@
                                             <div class="col-lg-6 text-right" style="border-left: 1px solid #ccc;">
                                                 <p>Total Price: <span class="text-danger fs-3 fw-bold">Rp.<span
                                                             id="totalPrice">0</span></span> </p>
+                                                <input type="text" name="totalpriceandnight" value="" hidden>
                                                 <input type="text" name="totalprice" value="" hidden>
                                                 <input type="text" name="totalpricebeforebedroom" value="" hidden>
                                                 <input type="text" name="totalpricenomarkup" value="" hidden>
@@ -976,7 +980,10 @@
         function caclulateextrabed(){
             
             var bedQuantity = document.getElementsByClassName('bed-quantity');
-           
+           // Mendapatkan data-roomid dari room-quantity
+            var roomQuantityRoomId = $('.room-quantity').data('roomid');
+            var bedQuantityRoomId = $('.bed-quantity').data('roomid');
+            console.log(roomQuantityRoomId,">>>>roomQuantityRoomId");
             var totalPricebed = 0;
             var totalbed = 0;
             var totalPrice = 0;
@@ -992,22 +999,25 @@
                     var bedit = parseInt(selectedOption.dataset.bedid);
                     totalbed += quantity;
                     totalPricebed += price;
-
+                    
                 } else {
                     console.log("Dataset bedprice tidak ditemukan pada opsi yang dipilih");
                 }
             }
             
-            console.log(totalPricebed,">>>>>>Bedprice");
+            
             // Dapatkan data terenkripsi dari localStorage
             var encryptionKey = 'KunciEnkripsiRahasia';
             var decryptedData = getDecryptedDataFromLocalStorage(encryptionKey);
             // Dapatkan elemen input dengan name "totalprice"
             var totalpriceInput = document.getElementsByName("totalprice")[0];
-            var totalpricebeforebedroom = document.getElementsByName("totalpricebeforebedroom")[0];
+            var totalpricebeforebedroom = document.getElementsByName("totalpriceandnight")[0];
 
             var totalNight = document.querySelector('input[name="totalnight"]');
             
+            totalPricebed = totalPricebed * totalNight.value;
+
+            console.log(totalPricebed,">>>>>>Bedprice");
             // Cek apakah data ditemukan
             if (decryptedData && decryptedData.length > 0) {
                 // var totalPrice = 0;
@@ -1019,7 +1029,7 @@
                 }
 
                   // Ambil nilai dari elemen input
-                  var inputValue = totalpriceInput.value;
+                  var inputValue = totalpricebeforebedroom.value;
 
                 // Hilangkan koma dan ruang dari nilai input
                 var formattedValue = inputValue.replace(/,/g, '').trim();
@@ -1037,10 +1047,10 @@
                     if (totalPricebed > 0) {
                         console.log(totalPrice,">>>>>>>>> TOTAL PRICE");
                         // Update nilai elemen input dengan format koma
-                        totalpriceInput.value = formatNumber(totalPrice * totalNight.value);
+                        totalpriceInput.value = formatNumber(totalPrice);
 
                         // Update nilai elemen span dengan format koma
-                        document.getElementById("totalPrice").textContent = formatNumber(totalPrice * totalNight.value);
+                        document.getElementById("totalPrice").textContent = formatNumber(totalPrice);
                     } else {
                         // Jika totalPricebed tidak lebih dari 0, kembalikan nilai ke nilai sebelumnya
                         // Anda perlu menyimpan nilai sebelumnya sebelum mengupdate nilai totalPricebed
@@ -1054,8 +1064,8 @@
                         // Ubah nilai input menjadi angka
                         var numerictotalpricebeforebedroomValue = parseInt(formattedtotalpricebeforebedroomValue);
 
-                        totalpriceInput.value = formatNumber(numerictotalpricebeforebedroomValue * totalNight.value);
-                        document.getElementById("totalPrice").textContent = formatNumber(numerictotalpricebeforebedroomValue * totalNight.value);
+                        totalpriceInput.value = formatNumber(numerictotalpricebeforebedroomValue);
+                        document.getElementById("totalPrice").textContent = formatNumber(numerictotalpricebeforebedroomValue);
 
                     }
 
@@ -1127,6 +1137,8 @@
             totalRoomElement.textContent = totalRoom;
             var priceintext = parseInt(totalPrice * totalNight.value);
             totalPriceElement.textContent = priceintext.toLocaleString();
+            $('[name="totalpriceandnight"]').val(priceintext);
+
             var totalRoomInput = document.querySelector('input[name="totalroom"]');
             totalRoomInput.value = totalRoom;
             var totalpricebeforebedroom = document.querySelector('input[name="totalpricebeforebedroom"]');
@@ -1220,21 +1232,21 @@
             // Cek apakah ada data di local storage
 
                // Disable bed-quantity initially
-            $(".bed-quantity").prop('hidden', true);
-            $(".extras").prop('hidden', true);
+            // $(".bed-quantity").prop('hidden', true);
+            // $(".extras").prop('hidden', true);
 
             // Handler for room-quantity change
-            $(".room-quantity").on('change', function() {
-                // Enable bed-quantity if room-quantity is selected
-                if ($(this).val() !== '0') {
-                    $(".bed-quantity").prop('hidden', false);
-                    $(".extras").prop('hidden', false);
-                } else {
-                    // Disable bed-quantity if room-quantity is not selected
-                    $(".bed-quantity").prop('hidden', true);
-                    $(".extras").prop('hidden', true);
-                }
-            });
+            // $(".room-quantity").on('change', function() {
+            //     // Enable bed-quantity if room-quantity is selected
+            //     if ($(this).val() !== '0') {
+            //         $(".bed-quantity").prop('hidden', false);
+            //         $(".extras").prop('hidden', false);
+            //     } else {
+            //         // Disable bed-quantity if room-quantity is not selected
+            //         $(".bed-quantity").prop('hidden', true);
+            //         $(".extras").prop('hidden', true);
+            //     }
+            // });
             // Ambil data terenkripsi dari local storage
             var encryptionKey = 'KunciEnkripsiRahasia';
             var decryptedData = getDecryptedDataFromLocalStorage(encryptionKey);

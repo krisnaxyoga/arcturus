@@ -207,6 +207,7 @@ export default function BookingDetail({ token, user, iddata }) {
                                                 </li>
                                                 <li>time : {data.time_pickup}</li>
                                                 <li>Date : {data.pickup_date}</li>
+                                                <li>Flight Number: {data.flight_time}</li>
                                             </ul>
                                         </div>
                                        

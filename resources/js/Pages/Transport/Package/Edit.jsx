@@ -144,6 +144,7 @@ export default function Edit({token, user, iddata}) {
                                     <div className="form-group mb-3">
                                         <label>Destination:</label>
                                         <select className="form-control" name="destination" id="" onChange={handleChange}>
+                                        <option value="">-select-</option>
                                         {destination ? (
                                             destination.map((post, index) => (
                                                 <>
