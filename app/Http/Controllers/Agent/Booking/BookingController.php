@@ -156,8 +156,10 @@ class BookingController extends Controller
     {
         $data = Booking::where('id',$id)->with('users')->with('vendor')->first();
 
-        $transport = PackageTransport::with('transportdestination')->get();
-        $destination = TransportDestination::all();
+        $transport = PackageTransport::with('transportdestination')->with('agenttransport')->whereHas('agenttransport', function ($query) {
+            $query->where('status', 1);
+        })->get();
+        $destination = TransportDestination::where('state',$data->vendor->state)->get();
         $hotelbooking = HotelRoomBooking::where('booking_id',$id)->get();
 
         return view('landingpage.hotel.bookingpage',compact('data','hotelbooking','transport','destination'));

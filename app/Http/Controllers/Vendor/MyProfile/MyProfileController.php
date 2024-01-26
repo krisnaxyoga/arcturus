@@ -31,6 +31,7 @@ class MyProfileController extends Controller
         $country = get_country_lists();
         $property = type_property();
         $iduser = auth()->user()->id;
+        $indonesiaprovinsi = getindonesiaprovinsi();
         $data = Vendor::with('users')->where('user_id',$iduser)->get();
         // dd($data, $iduser);
         $markup = AgentMarkupSetup::where('user_id',$iduser)->first();
@@ -44,6 +45,7 @@ class MyProfileController extends Controller
             'banner' => $slider,
             'vendor' => $vendor,
             'property' => $property,
+            'indonesiaprovinsi' => $indonesiaprovinsi,
         ]);
     }
 
@@ -131,6 +133,8 @@ class MyProfileController extends Controller
             $member->description = $request->description;
             $member->type_property = $request->type_property;
             // $member->email = $request->email;
+            
+            $member->marketcountry = explode(",",$request->distribute);
             $member->save();
 
             $markup = AgentMarkupSetup::where('user_id',$id)->exists();

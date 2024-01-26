@@ -175,6 +175,8 @@
             </div>
         </div>
         <div>
+            {{-- {{dd($transport)}} --}}
+            @if($transport->count() > 0)
             <div class="mb-3">
                 <h4>Transport</h4>
                 <hr>
@@ -235,6 +237,7 @@
                     </div>
                 </div>
             </div>
+            @endif
         </div>
         <div class="row">
             <div class="col-lg-12">
@@ -423,7 +426,7 @@
 }
 
 .switch input:checked + .slider {
-  background-color: #fa7d2a;
+  background-color: #00a6fb;
 }
 
 .switch input:focus + .slider {

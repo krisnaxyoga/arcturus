@@ -39,8 +39,9 @@ class DestinationController extends Controller
             $setting = new Setting;
         }
 
+        $indonesiaprovinsi = getindonesiaprovinsi();
         $model = new TransportDestination;
-        return view('admin.transport.formdestination',compact('model','setting'));
+        return view('admin.transport.formdestination',compact('model','setting','indonesiaprovinsi'));
     }
 
     /**
@@ -61,6 +62,7 @@ class DestinationController extends Controller
         } else {
             $data =  new TransportDestination();
             $data->destination = $request->destination;
+            $data->state = $request->state;
             $data->save();
 
             return redirect()
@@ -90,8 +92,9 @@ class DestinationController extends Controller
             $setting = new Setting;
         }
 
+        $indonesiaprovinsi = getindonesiaprovinsi();
         $model = TransportDestination::find($id);
-        return view('admin.transport.formdestination',compact('model','setting'));
+        return view('admin.transport.formdestination',compact('model','setting','indonesiaprovinsi'));
     }
 
     /**
@@ -112,6 +115,7 @@ class DestinationController extends Controller
         } else {
             $data = TransportDestination::find($id);
             $data->destination = $request->destination;
+            $data->state = $request->state;
             $data->save();
 
             return redirect()

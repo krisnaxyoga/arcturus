@@ -245,7 +245,7 @@ const logoPreview = logo ? URL.createObjectURL(logo) : null;
                                                         </div>
                                                         <div className="md-3">
                                                         <>
-                                                            <label htmlFor="">Market</label>
+                                                            {/* <label htmlFor="">Market</label>
                                                             <select
                                                                 name=""
                                                                 id=""
@@ -271,7 +271,7 @@ const logoPreview = logo ? URL.createObjectURL(logo) : null;
                                                                     </span>
                                                                 ))}
                                                                 </span>
-                                                            </p>
+                                                            </p> */}
 
                                                         </>
                                                         </div>

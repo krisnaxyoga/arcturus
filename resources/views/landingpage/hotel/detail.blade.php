@@ -65,7 +65,7 @@
 
                                 </div>
                                 <div class="col-lg-3">
-                                    <div class="card mb-3">
+                                    <div class="card border-0 mb-3" style="border-radius: 1rem">
                                         <div class="card-body">
 
                                             <img onerror="this.onerror=null; this.src='https://semantic-ui.com/images/wireframe/white-image.png';"
@@ -110,7 +110,7 @@
                 <div class="col-lg-12">
                     <form id="bookingForm" enctype="multipart/form-data">
                         @csrf
-                        <div class="search-property-1" style="border-top: 1px solid rgba(0, 0, 0, 0.1);">
+                        <div class="search-property-1">
                             <div class="row no-gutters">
                               
                                 {{-- <div class="col-md d-flex">
@@ -133,13 +133,13 @@
                                         </div>
                                     </div>
                                 </div> --}}
-                                @if($user->vendors->marketcountry != null)
-                                <div class="col-md d-flex">
-                                    <div class="form-group p-4">
+                                @if($vendordetail->marketcountry != null)
+                                <div class="col-md d-flex card border-0 shadow mx-1 mb-2" style="border-radius: 1rem">
+                                    <div class="form-group card-body border-0">
                                         <label for="#">Market</label>
                                         <div class="date-input-wrapper">
                                             <select name="country" id="market" class="form-control " onchange="checknight()">
-                                                @foreach ($user->vendors->marketcountry as $name)
+                                                @foreach ($vendordetail->marketcountry as $name)
                                                 
                                                     <option
                                                         @if (($agentCountry ?? '') == $name) selected @endif
@@ -152,8 +152,8 @@
                                 </div>
                                 @endif
                                
-                                <div class="col-md d-flex">
-                                    <div class="form-group p-4" style="    border-right: 1px solid rgba(0, 0, 0, 0.1);">
+                                <div class="col-md d-flex card border-0 shadow mx-1 mb-2" style="border-radius: 1rem">
+                                    <div class="form-group card-body border-0">
                                         <label for="#">Person</label>
                                         <div class="">
                                             <select name="person" id="person" class="form-control" required>
@@ -169,12 +169,12 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md d-flex">
+                                <div class="col-md d-flex card border-0 shadow mx-1 mb-2" style="border-radius: 1rem">
                                     <?php
                                     $checkin = date('m/d/Y', strtotime($datareq['checkin']));
                                     $checkout = date('m/d/Y', strtotime($datareq['checkout']));
                                     ?>
-                                    <div class="form-group p-4" style="    border-right: 1px solid rgba(0, 0, 0, 0.1);">
+                                    <div class="form-group card-body border-0">
                                         <label for="">CheckIn - CheckOut</label>
                                         <input class="form-control checkindate" type="text" name="dates"
                                             value="{{ $checkin }} - {{ $checkout }}" />
@@ -186,17 +186,23 @@
                                 </div>
                             </div>
                         </div>
-
+                        @if($vendordetail->marketcountry != null)
+                        <div class="row">
+                            <div class="col">
+                                <p class="text-danger m-0 font-weight-bold">* Guest ID Card = Market, ID Card is required upon check-in</p>
+                            </div>
+                        </div>
+                        @endif
                         <div class="row">
                             @foreach ($data as $keyup => $item)
 
                                 <div class="col-md-12 ftco-animate">
-                                    <div class="card mb-3">
+                                    <div class="card border-0 shadow mb-3" style="border-radius: 1rem">
                                         <div class="row g-0">
                                             <div class="col-md-4">
                                                 <img onerror="this.onerror=null; this.src='https://semantic-ui.com/images/wireframe/white-image.png';"
                                                     src="{{ $item->room->feature_image }}"
-                                                    class="img img-fluid rounded-start"
+                                                    class="img img-fluid rounded-start" style="border-radius: 1rem 0 0 0"
                                                     alt="{{ $item->room->feature_image }}">
 
                                             </div>
@@ -748,7 +754,7 @@
                         </div>
                         <div class="row">
                             <div class="col-lg-12">
-                                <div class="card">
+                                <div class="card border-0 shadow" style="border-radius: 1rem">
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-lg-6">

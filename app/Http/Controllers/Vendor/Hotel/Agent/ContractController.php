@@ -647,7 +647,15 @@ class ContractController extends Controller
                 $data->percentage = $request->percentage;
 
                
-
+                if($data->stayperiod_end != $request->stayperiod_end){
+                   
+                    $advancepurchase = AdvancePurchase::where('contract_id',$id)->get();
+                    foreach($advancepurchase as $key=>$item){
+                        $item->endsell = $request->stayperiod_end;
+                        $item->save();
+                    }
+                }
+                
                 if($request->percentage != $data->percentage){
                     // Mengumpulkan data yang dibutuhkan sebelumnya
                     $contprice = ContractPrice::where('contract_id', $id)->get();

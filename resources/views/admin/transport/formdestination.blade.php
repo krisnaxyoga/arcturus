@@ -36,6 +36,18 @@
                                             <input type="text" name="destination" class="form-control" id="destination"
                                                 value="{{ $model->destination }}" placeholder="destination...">
                                         </div>
+                                        <div class="mb-3">
+                                            <label for="description" class="form-label">state</label>
+                                            <select name="state" id="" class="form-control">
+                                                <option value="">-select-</option>
+                                                @foreach ($indonesiaprovinsi as $provinsi)
+                                                    <option value="{{$provinsi}}" 
+                                                    @if($model->state == $provinsi)
+                                                       selected
+                                                    @endif>{{$provinsi}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                                 <hr>
