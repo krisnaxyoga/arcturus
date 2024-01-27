@@ -567,6 +567,8 @@ const handlePercentageAdv = (e,itemId) => {
                                                                                         ):(
                                                                                             <>
                                                                                              <label htmlFor="">Market</label>
+                                                                                             {vendor.marketcountry ? (
+                                                                                                <>
                                                                                                 <select
                                                                                                     name=""
                                                                                                     id=""
@@ -575,9 +577,9 @@ const handlePercentageAdv = (e,itemId) => {
                                                                                                     multiple
                                                                                                 >
                                                                                                     <option value="WORLDWIDE">WORLDWIDE</option>
-                                                                                                    {Object.keys(country).map((key) => (
-                                                                                                    <option key={key} value={country[key]}>
-                                                                                                        {country[key]}
+                                                                                                    {Object.keys(vendor.marketcountry).map((key) => (
+                                                                                                    <option key={key} value={vendor.marketcountry[key]}>
+                                                                                                        {vendor.marketcountry[key]}
                                                                                                     </option>
                                                                                                     ))}
                                                                                                 </select>
@@ -593,6 +595,18 @@ const handlePercentageAdv = (e,itemId) => {
                                                                                                     ))}
                                                                                                     </span>
                                                                                                 </p>
+                                                                                                </>
+                                                                                             ):(
+                                                                                                <>
+                                                                                                 <br />
+                                                                                                    <div className='mt-2'>
+                                                                                                        <p className='badge badge-danger'>please input country data in your profile</p>
+                                                                                                        <br />
+                                                                                                        <Link href='/myprofile' className='btn btn-primary'>Input</Link>
+                                                                                                    </div>
+                                                                                                </>
+                                                                                             )}
+                                                                                                
 
                                                                                             </>
                                                                                         )}

@@ -384,32 +384,45 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                         {cont === true ? (
                                                                              <div className="mb-5">
                                                                              <label htmlFor="">Market</label>
-                                                                             <select
-                                                                                 name=""
-                                                                                 id=""
-                                                                                 className="form-control"
-                                                                                 onChange={handleSelectDistribute}
-                                                                                 multiple
-                                                                             >
-                                                                                 <option value="WORLDWIDE">WORLDWIDE</option>
-                                                                                 {Object.keys(country).map((key) => (
-                                                                                 <option key={key} value={country[key]}>
-                                                                                     {country[key]}
-                                                                                 </option>
-                                                                                 ))}
-                                                                             </select>
-                                                                             <p className="mt-2">
-                                                                                Selected Values:{" "}
-                                                                                <span className="text-secondary">
-                                                                                {selectedDistribute.map((value) => (
-                                                                                    <span key={value}>
-                                                                                        <span  onClick={() => handleRemoveSelected(value)} class="btn badge badge-success text-light mx-1">
-                                                                                        {value} <span class="mx-1 badge badge-danger">x</span>
+                                                                             {vendor.marketcountry ? (
+                                                                                <>
+                                                                                    <select
+                                                                                        name=""
+                                                                                        id=""
+                                                                                        className="form-control"
+                                                                                        onChange={handleSelectDistribute}
+                                                                                        multiple
+                                                                                    >
+                                                                                        <option value="WORLDWIDE">WORLDWIDE</option>
+                                                                                        {Object.keys(vendor.marketcountry).map((key) => (
+                                                                                        <option key={key} value={vendor.marketcountry[key]}>
+                                                                                            {vendor.marketcountry[key]}
+                                                                                        </option>
+                                                                                        ))}
+                                                                                    </select>
+                                                                                    <p className="mt-2">
+                                                                                        Selected Values:{" "}
+                                                                                        <span className="text-secondary">
+                                                                                        {selectedDistribute.map((value) => (
+                                                                                            <span key={value}>
+                                                                                                <span  onClick={() => handleRemoveSelected(value)} class="btn badge badge-success text-light mx-1">
+                                                                                                {value} <span class="mx-1 badge badge-danger">x</span>
+                                                                                                </span>
+                                                                                            </span>
+                                                                                        ))}
                                                                                         </span>
-                                                                                    </span>
-                                                                                ))}
-                                                                                </span>
-                                                                            </p>
+                                                                                    </p>
+                                                                                </>
+                                                                             ):(
+                                                                                <>
+                                                                                <br />
+                                                                                <div className='mt-2'>
+                                                                                    <p className='badge badge-danger'>please input country data in your profile</p>
+                                                                                    <br />
+                                                                                    <Link href='/myprofile' className='btn btn-primary'>Input</Link>
+                                                                                </div>
+                                                                                </>
+                                                                             )}
                                                                          </div>
                                                                         ) : (
                                                                             <>
