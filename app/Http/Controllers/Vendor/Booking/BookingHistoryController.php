@@ -10,6 +10,8 @@ use App\Models\ContractRate;
 use App\Models\HotelRoomBooking;
 use App\Models\Setting;
 
+use App\Models\Affiliate;
+
 class BookingHistoryController extends Controller
 {
     /**
@@ -20,7 +22,7 @@ class BookingHistoryController extends Controller
         $userid = auth()->user()->id;
         $vendor = Vendor::where('user_id',$userid)->with('users')->first();
         $data = Booking::where('vendor_id',$vendor->id)->whereNotIn('booking_status', ['-', ''])->with('vendor')->with('users')->orderBy('created_at', 'desc')->get();
-        
+
 
         return inertia('Vendor/BookingHistory/Index',[
             'data'=>$data,
@@ -51,6 +53,7 @@ class BookingHistoryController extends Controller
         $cont_id = HotelRoomBooking::where('booking_id',$id)->first();
         $conttract = ContractRate::where('id',$cont_id->contract_id)->first();
         $setting = Setting::first();
+        $affiliator = Affiliate::where('code',$vendor->affiliate)->first();
 
         return inertia('Vendor/BookingHistory/Detail',[
             'data'=>$data,
@@ -58,6 +61,7 @@ class BookingHistoryController extends Controller
             'contract' => $conttract,
             'vendor' =>$vendor,
             'setting' => $setting,
+            'affiliator' => $affiliator
         ]);
     }
 }

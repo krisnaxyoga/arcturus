@@ -13,7 +13,7 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import jsPDF from 'jspdf';
 
-export default function Detail({ session, data,vendor, agent,roombooking,contract, setting }) {
+export default function Detail({ session, data,vendor, agent,roombooking,contract, setting,affiliator }) {
     console.log(data, ">>>>>>>data country >>>>>>>>");
     function formatRupiah(amount) {
         return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount).slice(0, -3);
@@ -39,8 +39,8 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
         if (printContent2) {
             // Mendapatkan lebar window untuk menyesuaikan skala gambar
             const windowWidth = 1600;
-    
-            html2canvas(printContent2, { 
+
+            html2canvas(printContent2, {
                 scale: 2,
                 windowWidth: windowWidth, // Menyesuaikan lebar kanvas dengan lebar window
             }).then(canvas => {
@@ -54,7 +54,7 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                 pdf.save('document.pdf'); // Simpan PDF dengan nama "document.pdf"
             });
         }
-      }; 
+      };
 
       const formatDate = (dateString) => {
         const parts = dateString.split('-'); // Memecah tanggal berdasarkan tanda "-"
@@ -87,7 +87,7 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                                     <i className="fa fa-angle-double-right text-80"></i>
                                                                     ID: {data.booking_code}
                                                                 </small>
-                                                            </h1> 
+                                                            </h1>
 
                                                             <div className="page-tools">
                                                                 <div className="action-buttons">
@@ -157,14 +157,24 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                                                     data.users.vendors.affiliate == data.vendor.affiliate ? (
                                                                                         <>
                                                                                         <span className='badge badge-success badge-pill px-25'>
-                                                                                            powered by {data.users.vendors.vendor_name}
+                                                                                            powered by ARCTURUS
                                                                                         </span>
                                                                                         </>
                                                                                     ) : (
                                                                                         <>
-                                                                                        <span className='badge badge-success badge-pill px-25'>
-                                                                                             powered by ARCTURUS
-                                                                                        </span>
+                                                                                        {data.vendor.affiliate ? (
+                                                                                            <>
+                                                                                            <span className='badge badge-success badge-pill px-25'>
+                                                                                                powered by {affiliator.name}
+                                                                                            </span>
+                                                                                            </>
+                                                                                        ):(
+                                                                                            <>
+                                                                                            <span className='badge badge-success badge-pill px-25'>
+                                                                                                powered by ARCTURUS
+                                                                                            </span>
+                                                                                            </>
+                                                                                        )}
                                                                                         </>
                                                                                     )
                                                                                 }
@@ -187,7 +197,7 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                                                                                         )}
                                                                                 </div>
 
-                                                                                
+
 
                                                                             </div>
 
@@ -233,13 +243,13 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                                                                 </div>
                                                                                             </div>
                                                                                             <div className="col-12 col-sm-7 text-grey-d2 text-95 mt-2 mt-lg-0">
-                                                                                                <div> 
+                                                                                                <div>
                                                                                                     <div className='m-0'>
-                                                                                                        <p style={{ padding: "5px 0",margin:'0px',fontSize:'18px',fontWeight:'700' }}>Benefits :</p> 
+                                                                                                        <p style={{ padding: "5px 0",margin:'0px',fontSize:'18px',fontWeight:'700' }}>Benefits :</p>
                                                                                                         <div className='m-0' dangerouslySetInnerHTML={{ __html: item.contractrate.benefit_policy.substring(0, 1550) }}></div>
                                                                                                     </div>
                                                                                                 </div>
-                                                                                                <div> 
+                                                                                                <div>
                                                                                                     <div className='m-0'>
                                                                                                         <p style={{ padding: "5px 0",margin:'0px',fontSize:'18px',fontWeight:'700' }}>Other Conditions :</p>
                                                                                                         {item.contractrate.other_policy && (
@@ -251,16 +261,16 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
 
                                                                                             <div className="col-12 col-sm-5 text-grey text-90 order-first order-sm-last">
                                                                                                 <div className='text-right'>
-                                                                                                    <p style={{ padding: "5px 0",margin:'0px',fontSize:'18px',fontWeight:'700' }}>Cancellation Policy :</p> 
+                                                                                                    <p style={{ padding: "5px 0",margin:'0px',fontSize:'18px',fontWeight:'700' }}>Cancellation Policy :</p>
                                                                                                     <p>
                                                                                                     {item.contractrate.cencellation_policy && (
                                                                                                         <div dangerouslySetInnerHTML={{ __html: item.contractrate.cencellation_policy.substring(0, 1550) }}></div>
                                                                                                         )}
                                                                                                     </p>
                                                                                                 </div>
-                                                                                                
+
                                                                                                 <div className='text-right'>
-                                                                                                    <p style={{ padding: "5px 0",margin:'0px',fontSize:'18px',fontWeight:'700' }}>Deposit Policy :</p> 
+                                                                                                    <p style={{ padding: "5px 0",margin:'0px',fontSize:'18px',fontWeight:'700' }}>Deposit Policy :</p>
                                                                                                     <p>
                                                                                                         {item.contractrate.deposit_policy && (
                                                                                                             <div dangerouslySetInnerHTML={{ __html: item.contractrate.deposit_policy.substring(0, 1550) }}></div>
@@ -277,7 +287,7 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                                             <div className="row mt-3">
                                                                                 <div className="col-12 col-sm-7 text-grey-d2 text-95 mt-2 mt-lg-0">
                                                                                         <div>
-                                                                                            <p style={{ padding: "5px 0",margin:'0px',fontSize:'18px',fontWeight:'700' }}>Benefits :</p> 
+                                                                                            <p style={{ padding: "5px 0",margin:'0px',fontSize:'18px',fontWeight:'700' }}>Benefits :</p>
                                                                                                 <div dangerouslySetInnerHTML={{ __html: contract.benefit_policy.substring(0, 1550) }}></div>
                                                                                         </div>
                                                                                         </div>
@@ -293,16 +303,16 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                                                                 </div>
                                                                                             </div> */}
                                                                                             <div className='text-right'>
-                                                                                                <p style={{ padding: "5px 0",margin:'0px',fontSize:'18px',fontWeight:'700' }}>Cancellation Policy :</p> 
+                                                                                                <p style={{ padding: "5px 0",margin:'0px',fontSize:'18px',fontWeight:'700' }}>Cancellation Policy :</p>
                                                                                                 <p>
                                                                                                 {contract.cencellation_policy && (
                                                                                                     <div dangerouslySetInnerHTML={{ __html: contract.cencellation_policy.substring(0, 1550) }}></div>
                                                                                                     )}
                                                                                                 </p>
                                                                                             </div>
-                                                                                            
+
                                                                                             <div className='text-right'>
-                                                                                                <p style={{ padding: "5px 0",margin:'0px',fontSize:'18px',fontWeight:'700' }}>Deposit Policy :</p> 
+                                                                                                <p style={{ padding: "5px 0",margin:'0px',fontSize:'18px',fontWeight:'700' }}>Deposit Policy :</p>
                                                                                                 <p>
                                                                                                     {contract.deposit_policy && (
                                                                                                         <div dangerouslySetInnerHTML={{ __html: contract.deposit_policy.substring(0, 1550) }}></div>
@@ -316,7 +326,7 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                                             <div className="row">
                                                                                 <div className="col-12 col-sm-7">
                                                                                     <div>
-                                                                                        <span className="text-400 align-middle" style={{fontSize:'16px',fontWeight:'700'}}>Special Request: </span> 
+                                                                                        <span className="text-400 align-middle" style={{fontSize:'16px',fontWeight:'700'}}>Special Request: </span>
                                                                                         <span className="text-400 text-110 align-middle"> {data.special_request}</span>
                                                                                     </div>
                                                                                 </div>
