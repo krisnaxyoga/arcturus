@@ -151,7 +151,7 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                                                 <div className="my-2"><i className="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span className="text-600 text-90">ID:</span> {data.booking_code}</div>
 
 
-                                                                                <div className="my-2"><i className="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span className="text-600 text-90">Agent Name:</span> {data.users.first_name} {data.users.last_name}
+                                                                                <div className="my-2"><i className="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span className="text-600 text-90">Agent Name:</span> {data.users.vendors.vendor_name}
                                                                                 <br />
                                                                                 {
                                                                                     data.users.vendors.affiliate == data.vendor.affiliate ? (
