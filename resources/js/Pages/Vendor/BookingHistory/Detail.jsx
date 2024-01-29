@@ -165,7 +165,7 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                                                         {data.vendor.affiliate ? (
                                                                                             <>
                                                                                             <span className='badge badge-success badge-pill px-25'>
-                                                                                                powered by {affiliator.name}
+                                                                                                powered by {affiliator.vendor_name}
                                                                                             </span>
                                                                                             </>
                                                                                         ):(

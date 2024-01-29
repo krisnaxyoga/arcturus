@@ -53,13 +53,13 @@ class BookingHistoryController extends Controller
         $cont_id = HotelRoomBooking::where('booking_id',$id)->first();
         $conttract = ContractRate::where('id',$cont_id->contract_id)->first();
         $setting = Setting::first();
-        $affiliator = Affiliate::where('code',$vendor->affiliate)->first();
+        $affiliator = Vendor::where('affiliate',$vendor->affiliate)->where('type_vendor','agent')->first();
 
         return inertia('Vendor/BookingHistory/Detail',[
-            'data'=>$data,
+            'data' => $data,
             'roombooking'=>$hotelroombooking,
             'contract' => $conttract,
-            'vendor' =>$vendor,
+            'vendor' => $vendor,
             'setting' => $setting,
             'affiliator' => $affiliator
         ]);

@@ -61,8 +61,6 @@
                                     </p>
                                     <h1>{{ $vendordetail->vendor_name }}</h1>
                                     <p><i class="fa fa-map-marker"></i> {{ $vendordetail->country }}</p>
-
-
                                 </div>
                                 <div class="col-lg-3">
                                     <div class="card border-0 mb-3" style="border-radius: 1rem">
@@ -140,7 +138,6 @@
                                         <div class="date-input-wrapper">
                                             <select name="country" id="market" class="form-control " onchange="checknight()">
                                                 @foreach ($vendordetail->marketcountry as $name)
-                                                
                                                     <option
                                                         @if (($agentCountry ?? '') == $name) selected @endif
                                                         value="{{ $name }}">
@@ -628,7 +625,7 @@
                                                                                                 $selectOptions .= '<option
                                                                                                     data-contprice=' . $itemprice->id . '
                                                                                                     data-contractid=' . $itemprice->contract_id . '
-                                                                                                    data-roomid=' . $itemprice->room->id . '
+                                                                                                    data-roomid=' . $itemprice->room_id . '
                                                                                                     data-price="' . $i * (($price + $markupsystem) + $surchargepricetotalx) . '"
                                                                                                     data-pricenomarkup="' . $i * $price . '"
                                                                                                     value="' . $i . '">
@@ -982,6 +979,24 @@
             }
 
         }
+        // function mengosongkan select bedpreci
+        function empityselectbedprice(){
+            var selectBeds = document.getElementsByClassName('bed-quantity');
+
+            for (var j = 0; j < selectBeds.length; j++) {
+                var selectBed = selectBeds[j];
+
+                for (var i = 0; i < selectBed.options.length; i++) {
+                    if (selectBed.options[i].value == 0) {
+                        optionZeroExists = true;
+                        selectBed.selectedIndex = i; // Menjadikan opsi "0" sebagai yang terpilih
+                        break;
+                    }
+                }
+
+            }
+        }
+
         // calculate extrabed
         function caclulateextrabed(){
             
@@ -990,9 +1005,20 @@
             var roomQuantityRoomId = $('.room-quantity').data('roomid');
             var bedQuantityRoomId = $('.bed-quantity').data('roomid');
             console.log(roomQuantityRoomId,">>>>roomQuantityRoomId");
+            console.log(bedQuantityRoomId,">>>>bedQuantityRoomId");
             var totalPricebed = 0;
             var totalbed = 0;
             var totalPrice = 0;
+
+            var selects = document.querySelectorAll('.room-quantity');
+    
+            selects.forEach(function(select) {
+                var roomId = select.getAttribute('data-roomid');
+                var roomIdParts = roomId.split('.'); // Memecah nilai data-roomid menjadi array
+                var firstRoomIdPart = roomIdParts[0]; // Mengambil bagian pertama dari array
+                
+                console.log(firstRoomIdPart,">>>>roomQuantityRoomId"); // Lakukan apa pun yang Anda inginkan dengan nilai ini
+            });
             
             for (var i = 0; i < bedQuantity.length; i++) {
                 var selectedOption = bedQuantity[i].options[bedQuantity[i].selectedIndex];
@@ -1018,6 +1044,10 @@
             // Dapatkan elemen input dengan name "totalprice"
             var totalpriceInput = document.getElementsByName("totalprice")[0];
             var totalpricebeforebedroom = document.getElementsByName("totalpriceandnight")[0];
+            console.log(totalpricebeforebedroom.value,">>>>>>totalpricebeforebedroom");
+            if(totalpricebeforebedroom.value == 0){
+                empityselectbedprice()
+            }
 
             var totalNight = document.querySelector('input[name="totalnight"]');
             
@@ -1046,6 +1076,8 @@
                 // Tambahkan numericValue dengan totalPricebed
                 totalPrice = numericValue + totalPricebed;
                  // Tampilkan data yang sudah diupdate
+                 
+                 console.log(numericValue, ">>>>>> total price value");
                     console.log(decryptedData, ">>>>>> Data setelah diupdate");
 
                     console.log(totalNight.value,">>>>>>>NIGHT");
@@ -1141,9 +1173,15 @@
 
             // console.log(totalPrice, totalPricenomarkup, ">>>totalnomarkup");
             totalRoomElement.textContent = totalRoom;
+            
             var priceintext = parseInt(totalPrice * totalNight.value);
             totalPriceElement.textContent = priceintext.toLocaleString();
             $('[name="totalpriceandnight"]').val(priceintext);
+            console.log($('[name="totalpriceandnight"]').val(),">>>>PRICE");
+
+            if(priceintext == 0){
+                caclulateextrabed();
+            }
 
             var totalRoomInput = document.querySelector('input[name="totalroom"]');
             totalRoomInput.value = totalRoom;

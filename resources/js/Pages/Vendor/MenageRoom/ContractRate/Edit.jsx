@@ -576,7 +576,14 @@ const handlePercentageAdv = (e,itemId) => {
                                                                                                     onChange={handleSelectDistribute}
                                                                                                     multiple
                                                                                                 >
+                                                                                                    {/* <option value="WORLDWIDE">WORLDWIDE</option>
                                                                                                     <option value="WORLDWIDE">WORLDWIDE</option>
+                                                                                                    <option value="Asia">Asia</option>
+                                                                                                    <option value="Pasific">Pasific</option>
+                                                                                                    <option value="Europe">Europe</option>
+                                                                                                    <option value="Middle East">Middle East</option>
+                                                                                                    <option value="Russia and CIS">Russia and CIS</option>
+                                                                                                    <option value="Africa">Africa</option> */}
                                                                                                     {Object.keys(vendor.marketcountry).map((key) => (
                                                                                                     <option key={key} value={vendor.marketcountry[key]}>
                                                                                                         {vendor.marketcountry[key]}

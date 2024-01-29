@@ -393,7 +393,6 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                                         onChange={handleSelectDistribute}
                                                                                         multiple
                                                                                     >
-                                                                                        <option value="WORLDWIDE">WORLDWIDE</option>
                                                                                         {Object.keys(vendor.marketcountry).map((key) => (
                                                                                         <option key={key} value={vendor.marketcountry[key]}>
                                                                                             {vendor.marketcountry[key]}

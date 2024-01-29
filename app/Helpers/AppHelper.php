@@ -39,12 +39,6 @@ function type_property(){
 function get_country_lists(){
     $countries = array
     (
-        'ASIA' => 'Asia',
-        'PAc' => 'Pasific',
-        'EU' => 'Europe',
-        'Midle' => 'Middle East',
-        'RuS' => 'Russia and CIS',
-        'Aff' => 'Africa',
         'ID' => 'Indonesia',
         'AF' => 'Afghanistan',
         'AX' => 'Aland Islands',

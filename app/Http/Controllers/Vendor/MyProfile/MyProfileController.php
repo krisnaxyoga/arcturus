@@ -339,7 +339,12 @@ class MyProfileController extends Controller
             $pendingpayment = Booking::where('vendor_id',$vendor->id)->where('booking_status','unpaid')->count();
             $booking = Booking::where('vendor_id',$vendor->id)->whereNotIn('booking_status', ['-', ''])->with('vendor','users')->orderBy('created_at', 'desc')->get();
             $acyive = auth()->user()->is_active;
-            $roomhotel = Booking::where('vendor_id',$vendor->id)->where('booking_status','paid')->sum('night');
+            $roomhotel1 = Booking::where('vendor_id',$vendor->id)->where('booking_status','paid')->get();
+            $roomhotel = 0;
+            foreach($roomhotel1 as $item){
+                $roomhotel += $item->night * $item->total_room;
+            }
+
             $widraw = WidrawVendor::where('vendor_id', $vendor->id)
             ->whereDate('created_at', '=', Carbon::today())
             ->get();

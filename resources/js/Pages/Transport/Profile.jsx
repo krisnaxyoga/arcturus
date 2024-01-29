@@ -161,7 +161,7 @@ function Profile({ token, user }) {
                                                 type="text"
                                                 name="company_name"
                                                 className="form-control"
-                                                value={user.company_name}
+                                                defaultValue={user.company_name}
                                                 onChange={handleChange}
                                             />
                                         </div>
@@ -171,7 +171,7 @@ function Profile({ token, user }) {
                                                 type="text"
                                                 name="email"
                                                 className="form-control"
-                                                value={user.email}
+                                                defaultValue={user.email}
                                                 onChange={handleChange}
                                             />
                                         </div>
@@ -183,7 +183,7 @@ function Profile({ token, user }) {
                                                 type="text"
                                                 name="mobile_phone"
                                                 className="form-control"
-                                                value={user.mobile_phone}
+                                                defaultValue={user.mobile_phone}
                                                 onChange={handleChange}
                                             />
                                         </div>
@@ -248,7 +248,7 @@ function Profile({ token, user }) {
                                                         type="text"
                                                         name="bank_name"
                                                         className="form-control"
-                                                        value={
+                                                        defaultValue={
                                                             formDataBank.bank_name
                                                         }
                                                         onChange={
@@ -264,7 +264,7 @@ function Profile({ token, user }) {
                                                         type="text"
                                                         name="bank_address"
                                                         className="form-control"
-                                                        value={
+                                                        defaultValue={
                                                             formDataBank.bank_address
                                                         }
                                                         onChange={
@@ -280,7 +280,7 @@ function Profile({ token, user }) {
                                                         type="text"
                                                         name="account_number"
                                                         className="form-control"
-                                                        value={
+                                                        defaultValue={
                                                             formDataBank.account_number
                                                         }
                                                         onChange={
@@ -296,7 +296,7 @@ function Profile({ token, user }) {
                                                         type="text"
                                                         name="swif_code"
                                                         className="form-control"
-                                                        value={
+                                                        defaultValue={
                                                             formDataBank.swif_code
                                                         }
                                                         onChange={

@@ -127,7 +127,7 @@ export default function BookingHistory({ token, user }) {
                                                             <p className="m-0">{
                                                                     post.time_pickup
                                                                 }</p>
-                                                                 <p className="m-0"> Flight time :</p>
+                                                                 <p className="m-0"> Flight Number :</p>
                                                                  <p>
                                                                     {
                                                                         post.flight_time
