@@ -194,7 +194,7 @@
                             @foreach ($data as $keyup => $item)
 
                                 <div class="col-md-12 ftco-animate">
-                                    <div class="card border-0 shadow mb-3" style="border-radius: 1rem">
+                                    <div class="card border-0 shadow mb-3 cardroom" style="border-radius: 1rem">
                                         <div class="row g-0">
                                             <div class="col-md-4">
                                                 <img onerror="this.onerror=null; this.src='https://semantic-ui.com/images/wireframe/white-image.png';"
@@ -999,7 +999,12 @@
 
         // calculate extrabed
         function caclulateextrabed(){
-            
+            var cardroom = document.getElementsByClassName('cardroom');
+            console.log(cardroom.length,">>>CARDROMM");
+            for (var i = 0; i < cardroom.length; i++) {
+                console.log(cardroom,">>>>>>>>>>>>>>>>SSSSSS")
+            }
+
             var bedQuantity = document.getElementsByClassName('bed-quantity');
            // Mendapatkan data-roomid dari room-quantity
             var roomQuantityRoomId = $('.room-quantity').data('roomid');
@@ -1010,15 +1015,15 @@
             var totalbed = 0;
             var totalPrice = 0;
 
-            var selects = document.querySelectorAll('.room-quantity');
+            // var selects = document.querySelectorAll('.room-quantity');
     
-            selects.forEach(function(select) {
-                var roomId = select.getAttribute('data-roomid');
-                var roomIdParts = roomId.split('.'); // Memecah nilai data-roomid menjadi array
-                var firstRoomIdPart = roomIdParts[0]; // Mengambil bagian pertama dari array
+            // selects.forEach(function(select) {
+            //     var roomId = select.getAttribute('data-roomid');
+            //     var roomIdParts = roomId.split('.'); // Memecah nilai data-roomid menjadi array
+            //     var firstRoomIdPart = roomIdParts[0]; // Mengambil bagian pertama dari array
                 
-                console.log(firstRoomIdPart,">>>>roomQuantityRoomId"); // Lakukan apa pun yang Anda inginkan dengan nilai ini
-            });
+            //     console.log(firstRoomIdPart,">>>>roomQuantityRoomId"); // Lakukan apa pun yang Anda inginkan dengan nilai ini
+            // });
             
             for (var i = 0; i < bedQuantity.length; i++) {
                 var selectedOption = bedQuantity[i].options[bedQuantity[i].selectedIndex];
