@@ -110,7 +110,7 @@
                         @csrf
                         <div class="search-property-1">
                             <div class="row no-gutters">
-                              
+
                                 {{-- <div class="col-md d-flex">
                                     <div class="form-group p-4">
                                         <label for="#">Check-in</label>
@@ -148,7 +148,7 @@
                                     </div>
                                 </div>
                                 @endif
-                               
+
                                 <div class="col-md d-flex card border-0 shadow mx-1 mb-2" style="border-radius: 1rem">
                                     <div class="form-group card-body border-0">
                                         <label for="#">Person</label>
@@ -212,7 +212,7 @@
                                                             data-target="#exampleModalx1234{{ $keyup }}">{{ $item->room->ratedesc }}</button>
                                                     </h3>
                                                     <p>{!! $item->room->content !!}</p>
-                                                    
+
                                                     @if ($contractprice->count() != 0)
                                                         <a class="btn btn-success" style="font-weight:500;font-size:14px"
                                                             data-toggle="collapse"
@@ -236,7 +236,7 @@
                                                                             if ($affiliate == null || $affiliate != $item->contractrate->vendors->affiliate) {
                                                                                 $markupsystem = $item->contractrate->vendors->system_markup;
                                                                             }
-                                                                            
+
                                                                             $status = 1;
                                                                             $room_allow = 0;
                                                                             $no_checkout = 0;
@@ -257,7 +257,7 @@
 
                                                                             $lang_of_stay = 1;
                                                                             $isSold = false;
-                                                                            
+
                                                                             if ($HotelCalendar->count() != 0) {
                                                                                 foreach ($HotelCalendar as $key => $calendar) {
 
@@ -362,8 +362,8 @@
                                                                                                     $status = 2;
                                                                                                 }
                                                                                                 $hotelroomid = $calendar->room_hotel_id;
-                                                                                                
-                                                                                
+
+
                                                                                             }
                                                                                             //filter yang berfungsi untuk calendar rate
                                                                                         }
@@ -401,23 +401,23 @@
                                                                                             } else {
                                                                                                 // Jika tidak, gunakan nilai room_allow dari $calendar
                                                                                                 $room_allow = $calendar->room_allow;
-                                                                                                
+
                                                                                             }
 
                                                                                             $hotelroomid = $calendar->room_hotel_id;
-                                                                                                
-                                                                                            
+
+
                                                                                         }
 
                                                                                     }
                                                                                 }
-                                                                                
+
                                                                                 //filter yang berfungsi untuk calendar rate
                                                                                 if($totalx != 0){
                                                                                     $countNights = $totalNights - $totalDataCount;
                                                                                     $TotalHotelCalendar = ($totalx + ($itemprice->recom_price * $countNights)) / $totalNights;
                                                                                 }
-                                                                                
+
                                                                                 if($room_allowx != 0){
                                                                                     $room_allow = $room_allowx;
                                                                                 }
@@ -425,7 +425,7 @@
 
                                                                             }
 
-                                                                            
+
                                                                         // ============================================= total surcharge all room =========================================//
                                                                             $totalsurchargex = 0;
                                                                             $totalDataCountx = 0;
@@ -444,9 +444,9 @@
                                                                         // ============================================= total surcharge all room =========================================//
 
                                                                             //var_dump($TotalHotelCalendar);
-                                                                            
 
-                                                                           
+
+
 
                                                                             // $Room_recomprice = ($TotalHotelCalendar <= 0) ? $itemprice->recom_price : $TotalHotelCalendar;
                                                                             if ($TotalHotelCalendar <= 0) {
@@ -461,7 +461,7 @@
                                                                                             $Room_recomprice = $TotalHotelCalendar;
                                                                                         }else{
                                                                                             $Room_recomprice = $totalpricecalendar;
-                                                                                            
+
                                                                                         }
                                                                                     }
 
@@ -479,14 +479,14 @@
                                                                                     // $Room_recomprice = $TotalHotelCalendar;
                                                                                 }
                                                                             }
-                                                                            
+
                                                                             // var_dump('calender sama nilai dari rate ='.$Room_recomprice.' total calendar = '.$totalx.' cek night ='.$totalDataCount);
                                                                             // ========================================================= END CALENDAR ====================================
 
                                                                             // ========================================================= ROOM ALLOWMENT ====================================
                                                                             $totalRoomBooking = 0; // Inisialisasi totalRoomBooking
 
-                                                                            
+
                                                                             if ($status != 1 || $no_checkout != 0 || $no_checkin != 0) {
                                                                                 $totalRoomBooking = $itemprice->room->room_allow;
                                                                             }
@@ -498,19 +498,19 @@
                                                                                 foreach ($HotelRoomBooking as $key => $value) {
                                                                                     if ($value->room_id == $itemprice->room_id) {
                                                                                         $totalRoomBooking += $value->total_room;
-                                                                                        
+
                                                                                     }
                                                                                 }
                                                                             }
-                                                                            
+
                                                                             // Setel $RoomAllowment ke $itemprice->room->room_allow dikurangi total total_room yang sesuai
                                                                             if($itemprice->room_id == $item->room->id){
                                                                                 $RoomAllowment = $itemprice->room->room_allow - $totalRoomBooking;
                                                                             }
-                                                                            
+
                                                                             if ($foundZero == true) {
                                                                                 $room_allow = 0;
-                                                                                
+
                                                                             }
 
                                                                             if($lang_of_stay > $totalNights){
@@ -520,14 +520,14 @@
                                                                             }else{
                                                                                 $room_allow = $room_allow;
                                                                             }
-                                                                            
+
                                                                             // ========================================================= ROOM ALLOWMENT ====================================
 
                                                                         @endphp
                                                                         @php
 
                                                                             $price = $itemprice->recom_price;
-                                                                           
+
                                                                             // if ($Room_recomprice) {
                                                                             //         $price = $Room_recomprice;
                                                                             // }
@@ -542,7 +542,7 @@
                                                                                                 }
                                                                                             }
                                                                                     }
-                                                                                   
+
                                                                                 }
                                                                             } else {
                                                                                 if ($itemprice->contractrate->rolerate == 1) {
@@ -551,7 +551,7 @@
                                                                                     $price = $itemprice->recom_price;
                                                                                 }
                                                                             }
-                                                                            
+
                                                                              //var_dump($Room_recomprice);
                                                                         @endphp
                                                                         {{-- <hr>
@@ -601,7 +601,7 @@
                                                                                             $RoomAllowment = $room_allow;
                                                                                         }
                                                                                     }
-                                                                                   
+
                                                                                 @endphp
 
                                                                                     {{-- @foreach ($blackoutdate as $blackoutdateitem)
@@ -664,7 +664,7 @@
                                                                                             @endif
                                                                                         @endif
                                                                                     @endif
-                                                                                    
+
 
                                                                                 {{-- @if ($RoomAllowment <= 0 || $isSold = true)
                                                                                     <span class="badge badge-danger">Sold</span>
@@ -999,50 +999,40 @@
 
         // calculate extrabed
         function caclulateextrabed(){
-            var cardroom = document.getElementsByClassName('cardroom');
-            console.log(cardroom.length,">>>CARDROMM");
-            for (var i = 0; i < cardroom.length; i++) {
-                console.log(cardroom,">>>>>>>>>>>>>>>>SSSSSS")
-            }
-
             var bedQuantity = document.getElementsByClassName('bed-quantity');
            // Mendapatkan data-roomid dari room-quantity
-            var roomQuantityRoomId = $('.room-quantity').data('roomid');
-            var bedQuantityRoomId = $('.bed-quantity').data('roomid');
-            console.log(roomQuantityRoomId,">>>>roomQuantityRoomId");
-            console.log(bedQuantityRoomId,">>>>bedQuantityRoomId");
             var totalPricebed = 0;
             var totalbed = 0;
             var totalPrice = 0;
 
             // var selects = document.querySelectorAll('.room-quantity');
-    
+
             // selects.forEach(function(select) {
             //     var roomId = select.getAttribute('data-roomid');
             //     var roomIdParts = roomId.split('.'); // Memecah nilai data-roomid menjadi array
             //     var firstRoomIdPart = roomIdParts[0]; // Mengambil bagian pertama dari array
-                
+
             //     console.log(firstRoomIdPart,">>>>roomQuantityRoomId"); // Lakukan apa pun yang Anda inginkan dengan nilai ini
             // });
-            
+
             for (var i = 0; i < bedQuantity.length; i++) {
                 var selectedOption = bedQuantity[i].options[bedQuantity[i].selectedIndex];
-                
+
                 // Pastikan dataset.bedprice ada pada opsi yang dipilih
                 if (selectedOption && selectedOption.dataset.bedprice !== undefined) {
                     var quantity = parseInt(bedQuantity[i].value);
                     var price = parseInt(selectedOption.dataset.bedprice);
-                    
+
                     var bedit = parseInt(selectedOption.dataset.bedid);
                     totalbed += quantity;
                     totalPricebed += price;
-                    
+
                 } else {
                     console.log("Dataset bedprice tidak ditemukan pada opsi yang dipilih");
                 }
             }
-            
-            
+
+
             // Dapatkan data terenkripsi dari localStorage
             var encryptionKey = 'KunciEnkripsiRahasia';
             var decryptedData = getDecryptedDataFromLocalStorage(encryptionKey);
@@ -1055,7 +1045,7 @@
             }
 
             var totalNight = document.querySelector('input[name="totalnight"]');
-            
+
             totalPricebed = totalPricebed * totalNight.value;
 
             console.log(totalPricebed,">>>>>>Bedprice");
@@ -1081,7 +1071,7 @@
                 // Tambahkan numericValue dengan totalPricebed
                 totalPrice = numericValue + totalPricebed;
                  // Tampilkan data yang sudah diupdate
-                 
+
                  console.log(numericValue, ">>>>>> total price value");
                     console.log(decryptedData, ">>>>>> Data setelah diupdate");
 
@@ -1178,7 +1168,7 @@
 
             // console.log(totalPrice, totalPricenomarkup, ">>>totalnomarkup");
             totalRoomElement.textContent = totalRoom;
-            
+
             var priceintext = parseInt(totalPrice * totalNight.value);
             totalPriceElement.textContent = priceintext.toLocaleString();
             $('[name="totalpriceandnight"]').val(priceintext);
