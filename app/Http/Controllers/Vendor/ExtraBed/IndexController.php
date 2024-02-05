@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Vendor;
 use App\Models\ExtrabedPrice;
+use App\Models\RoomHotel;
 
 class IndexController extends Controller
 {
@@ -17,10 +18,12 @@ class IndexController extends Controller
         $iduser = auth()->user()->id;
         $vendor = Vendor::where('user_id',$iduser)->with('users')->first();
         $data = ExtrabedPrice::where('user_id',$iduser)->get();
+        $room = RoomHotel::where('user_id',$iduser)->with('extrabedprice')->get();
 
-        inertia('Vendor/ExtraBedPrice/Index',[
-            'data'=>$data,
-            'vendor' => $vendor
+        return inertia('Vendor/ExtraBedPrice/Index',[
+            'data'=> $data,
+            'vendor'=> $vendor,
+            'room'=>$room
         ]);
         //
     }
@@ -30,7 +33,14 @@ class IndexController extends Controller
      */
     public function create()
     {
-        //
+        $iduser = auth()->user()->id;
+        $vendor = Vendor::where('user_id',$iduser)->with('users')->first();
+        $data = ExtrabedPrice::where('user_id',$iduser)->get();
+
+        return inertia('Vendor/ExtraBedPrice/Index',[
+            'data'=> $data,
+            'vendor'=> $vendor
+        ]);
     }
 
     /**

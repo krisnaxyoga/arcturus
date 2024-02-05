@@ -22,7 +22,7 @@ Route::get('/agenthomepage', [\App\Http\Controllers\LandingPage\HomeController::
 Route::get('/', [\App\Http\Controllers\LandingPage\HomeController::class, 'index'])->name('auth.homepage.home');
 Route::get('/doku', [\App\Http\Controllers\LandingPage\HomeController::class, 'doku'])->name('doku.homepage.home');
 Route::get('/callbackdoku', [\App\Http\Controllers\LandingPage\HomeController::class, 'callbackdoku'])->name('callbackdoku.homepage.home');
-Route::get('/auth/google/callback',[\App\Http\Controllers\Auth\GoogleController::class, 'handleCallback']);
+// Route::get('/auth/google/callback',[\App\Http\Controllers\Auth\GoogleController::class, 'handleCallback']);
 // Route::get('/account/nonactive', [\App\Http\Controllers\LandingPage\HomeController::class, 'accountnonactive'])->name('accountnonactive.homepage');
 
 // affiliator
@@ -336,6 +336,9 @@ Route::group(['middleware' => ['auth', 'checkrole:2']], function() {
     Route::get('/room/attribute/edit/{id}',[\App\Http\Controllers\Vendor\Hotel\Room\AttributeController::class, 'edit']);
     Route::post('/room/attribute/update/{id}',[\App\Http\Controllers\Vendor\Hotel\Room\AttributeController::class, 'update']);
     Route::get('/room/attribute/destroy/{id}',[\App\Http\Controllers\Vendor\Hotel\Room\AttributeController::class, 'destroy']);
+
+    // Extrabed 
+    Route::get('/room/extrabed',[App\Http\Controllers\Vendor\ExtraBed\IndexController::class,'index']);
 
 });
 

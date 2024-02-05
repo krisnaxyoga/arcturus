@@ -50,6 +50,20 @@ class BookingHistoryController extends Controller
         ])
         ->with('vendor')->first();
         $hotelroombooking = HotelRoomBooking::where('booking_id',$id)->with('room')->with('contractprice')->with('contractrate')->get();
+
+        foreach($hotelroombooking as $item){
+            // $room = RoomHotel::where('id',$item->room_id)->first();
+            if($item->room_name == null){
+                $item->room_name = $item->room->ratedesc ?? 'unknow';
+                $item->contract_name = $item->contractrate->codedesc ?? '<p>unknow</p>';
+                $item->benefit_policy = $item->contractrate->benefit_policy ?? '<p>unknow</p>';
+                $item->other_policy = $item->contractrate->other_policy ?? '<p>unknow</p>';
+                $item->cencellation_policy = $item->contractrate->cencellation_policy ?? '<p>unknow</p>';
+                $item->deposit_policy = $item->contractrate->deposit_policy ?? '<p>unknow</p>';
+                $item->save();
+            }
+        }
+
         $cont_id = HotelRoomBooking::where('booking_id',$id)->first();
         $conttract = ContractRate::where('id',$cont_id->contract_id)->first();
         $setting = Setting::first();

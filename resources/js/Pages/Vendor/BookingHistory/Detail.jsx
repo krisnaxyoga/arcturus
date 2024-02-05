@@ -221,7 +221,8 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                                             {roombooking.map((item, index) => (
                                                                                 <tr key={index} className="mb-2 mb-sm-0 py-25 justify-content-between">
                                                                                     <td>{item.total_room}</td>
-                                                                                    <td>{item.room.ratedesc} {roombooking.length > 1 ? (<span className='badge badge-dark'>{item.contractrate.codedesc}</span>):(<></>)}</td>
+                                                                                    <td>{item.room_name} <span className='badge badge-dark'>{item.contract_name}</span> </td>
+                                                                                    {/* <td>{item.room_name} {roombooking.length > 1 ? (<span className='badge badge-dark'>{item.contract_name}</span>):(<></>)}</td> */}
                                                                                     <td>{data.total_guests}</td>
                                                                                     <td>{formatRupiah(item.rate_price ? item.rate_price : item.contractprice.recom_price)}</td>
                                                                                     <td>{data.night}</td>
@@ -238,22 +239,22 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                                             <div className='row' key={index}>
                                                                                             <div className="col-12">
                                                                                                 <div className="d-flex">
-                                                                                                    <p className='m-0 text-primary' style={{fontWeight:'700'}}>{item.room.ratedesc}</p>
-                                                                                                    <p className='badge badge-dark mx-2 mt-1'>{item.contractrate.codedesc}</p>
+                                                                                                    <p className='m-0 text-primary' style={{fontWeight:'700'}}>{item.room_name}</p>
+                                                                                                    <p className='badge badge-dark mx-2 mt-1'>{item.contract_name}</p>
                                                                                                 </div>
                                                                                             </div>
                                                                                             <div className="col-12 col-sm-7 text-grey-d2 text-95 mt-2 mt-lg-0">
                                                                                                 <div>
                                                                                                     <div className='m-0'>
                                                                                                         <p style={{ padding: "5px 0",margin:'0px',fontSize:'18px',fontWeight:'700' }}>Benefits :</p>
-                                                                                                        <div className='m-0' dangerouslySetInnerHTML={{ __html: item.contractrate.benefit_policy.substring(0, 1550) }}></div>
+                                                                                                        <div className='m-0' dangerouslySetInnerHTML={{ __html: item.benefit_policy.substring(0, 1550) }}></div>
                                                                                                     </div>
                                                                                                 </div>
                                                                                                 <div>
                                                                                                     <div className='m-0'>
                                                                                                         <p style={{ padding: "5px 0",margin:'0px',fontSize:'18px',fontWeight:'700' }}>Other Conditions :</p>
-                                                                                                        {item.contractrate.other_policy && (
-                                                                                                            <div dangerouslySetInnerHTML={{ __html: item.contractrate.other_policy.substring(0, 250) }}></div>
+                                                                                                        {item.other_policy && (
+                                                                                                            <div dangerouslySetInnerHTML={{ __html: item.other_policy.substring(0, 250) }}></div>
                                                                                                             )}
                                                                                                     </div>
                                                                                                 </div>
@@ -263,8 +264,8 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                                                                 <div className='text-right'>
                                                                                                     <p style={{ padding: "5px 0",margin:'0px',fontSize:'18px',fontWeight:'700' }}>Cancellation Policy :</p>
                                                                                                     <p>
-                                                                                                    {item.contractrate.cencellation_policy && (
-                                                                                                        <div dangerouslySetInnerHTML={{ __html: item.contractrate.cencellation_policy.substring(0, 1550) }}></div>
+                                                                                                    {item.cencellation_policy && (
+                                                                                                        <div dangerouslySetInnerHTML={{ __html: item.cencellation_policy.substring(0, 1550) }}></div>
                                                                                                         )}
                                                                                                     </p>
                                                                                                 </div>
@@ -272,8 +273,8 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                                                                 <div className='text-right'>
                                                                                                     <p style={{ padding: "5px 0",margin:'0px',fontSize:'18px',fontWeight:'700' }}>Deposit Policy :</p>
                                                                                                     <p>
-                                                                                                        {item.contractrate.deposit_policy && (
-                                                                                                            <div dangerouslySetInnerHTML={{ __html: item.contractrate.deposit_policy.substring(0, 1550) }}></div>
+                                                                                                        {item.deposit_policy && (
+                                                                                                            <div dangerouslySetInnerHTML={{ __html: item.deposit_policy.substring(0, 1550) }}></div>
                                                                                                         )}
                                                                                                     </p>
                                                                                                 </div>
@@ -284,43 +285,61 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                                             </>
                                                                             ) : (
                                                                             <>
-                                                                            <div className="row mt-3">
-                                                                                <div className="col-12 col-sm-7 text-grey-d2 text-95 mt-2 mt-lg-0">
-                                                                                        <div>
-                                                                                            <p style={{ padding: "5px 0",margin:'0px',fontSize:'18px',fontWeight:'700' }}>Benefits :</p>
-                                                                                                <div dangerouslySetInnerHTML={{ __html: contract.benefit_policy.substring(0, 1550) }}></div>
-                                                                                        </div>
-                                                                                        </div>
-
-                                                                                        <div className="col-12 col-sm-5 text-grey text-90 order-first order-sm-last">
-
-                                                                                            {/* <div className="row my-2 align-items-center bgc-primary-l3 p-2">
-                                                                                                <div className="col-7 text-right">
-                                                                                                    Total Room :
-                                                                                                </div>
-                                                                                                <div className="col-5">
-                                                                                                    <span className="text-400 text-success-d3 opacity-2">{data.total_room}</span>
-                                                                                                </div>
-                                                                                            </div> */}
-                                                                                            <div className='text-right'>
-                                                                                                <p style={{ padding: "5px 0",margin:'0px',fontSize:'18px',fontWeight:'700' }}>Cancellation Policy :</p>
-                                                                                                <p>
-                                                                                                {contract.cencellation_policy && (
-                                                                                                    <div dangerouslySetInnerHTML={{ __html: contract.cencellation_policy.substring(0, 1550) }}></div>
-                                                                                                    )}
-                                                                                                </p>
+                                                                             {roombooking.map((item, index) => (
+                                                                                <>
+                                                                                    
+                                                                                    <div className="row mt-3">
+                                                                                        <div className="col-12 mt-2">
+                                                                                            <div className="d-flex">
+                                                                                                    <p className='m-0 text-primary' style={{fontWeight:'700'}}>{item.room_name}</p>
+                                                                                            <p className='badge badge-dark mx-2 mt-1'>{item.contract_name}</p>
                                                                                             </div>
-
-                                                                                            <div className='text-right'>
-                                                                                                <p style={{ padding: "5px 0",margin:'0px',fontSize:'18px',fontWeight:'700' }}>Deposit Policy :</p>
-                                                                                                <p>
-                                                                                                    {contract.deposit_policy && (
-                                                                                                        <div dangerouslySetInnerHTML={{ __html: contract.deposit_policy.substring(0, 1550) }}></div>
-                                                                                                    )}
-                                                                                                </p>
-                                                                                            </div>
+                                                                                            
                                                                                         </div>
-                                                                            </div>
+                                                                                        <div className="col-12 col-sm-7 text-grey-d2 text-95 mt-2 mt-lg-0">
+                                                                                                <div>
+                                                                                                    <p style={{ padding: "5px 0",margin:'0px',fontSize:'18px',fontWeight:'700' }}>Benefits :</p>
+                                                                                                        <div dangerouslySetInnerHTML={{ __html: item.benefit_policy.substring(0, 250) }}></div>
+                                                                                                </div>
+                                                                                                <div>
+                                                                                                    <p style={{ padding: "5px 0",margin:'0px',fontSize:'18px',fontWeight:'700' }}>Other Conditions :</p>
+                                                                                                    {item.other_policy && (
+                                                                                                        <div dangerouslySetInnerHTML={{ __html: item.other_policy.substring(0, 250) }}></div>
+                                                                                                        )}
+                                                                                                </div>
+                                                                                                </div>
+
+                                                                                                <div className="col-12 col-sm-5 text-grey text-90 order-first order-sm-last">
+
+                                                                                                    {/* <div className="row my-2 align-items-center bgc-primary-l3 p-2">
+                                                                                                        <div className="col-7 text-right">
+                                                                                                            Total Room :
+                                                                                                        </div>
+                                                                                                        <div className="col-5">
+                                                                                                            <span className="text-400 text-success-d3 opacity-2">{data.total_room}</span>
+                                                                                                        </div>
+                                                                                                    </div> */}
+                                                                                                    <div className='text-right'>
+                                                                                                        <p style={{ padding: "5px 0",margin:'0px',fontSize:'18px',fontWeight:'700' }}>Cancellation Policy :</p>
+                                                                                                        <p>
+                                                                                                        {item.cencellation_policy && (
+                                                                                                            <div dangerouslySetInnerHTML={{ __html: item.cencellation_policy.substring(0, 250) }}></div>
+                                                                                                            )}
+                                                                                                        </p>
+                                                                                                    </div>
+
+                                                                                                    <div className='text-right'>
+                                                                                                        <p style={{ padding: "5px 0",margin:'0px',fontSize:'18px',fontWeight:'700' }}>Deposit Policy :</p>
+                                                                                                        <p>
+                                                                                                            {item.deposit_policy && (
+                                                                                                                <div dangerouslySetInnerHTML={{ __html: item.deposit_policy.substring(0, 250) }}></div>
+                                                                                                            )}
+                                                                                                        </p>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                    </div>
+                                                                                </>
+                                                                            ))}
                                                                             </>
                                                                             )}
                                                                             <div className="row">

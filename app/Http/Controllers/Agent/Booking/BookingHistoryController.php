@@ -9,6 +9,7 @@ use App\Models\Booking;
 use App\Models\PaymentGetwayTransaction;
 use App\Models\HotelRoomBooking;
 
+use App\Models\RoomHotel;
 use App\Http\Resources\PostResource;
 use App\Models\ContractRate;
 use App\Models\RoomType;
@@ -72,6 +73,20 @@ class BookingHistoryController extends Controller
         $conttract = ContractRate::where('id',$cont_id->contract_id)->first();
         $setting = Setting::first();
         $hotelroombooking = HotelRoomBooking::where('booking_id',$data->id)->with('room')->with('contractprice')->with('contractrate')->with('vendors')->get();
+        
+        foreach($hotelroombooking as $item){
+            // $room = RoomHotel::where('id',$item->room_id)->first();
+            if($item->room_name == null){
+                $item->room_name = $item->room->ratedesc;
+                $item->contract_name = $item->contractrate->codedesc;
+                $item->benefit_policy = $item->contractrate->benefit_policy;
+                $item->other_policy = $item->contractrate->other_policy;
+                $item->cencellation_policy = $item->contractrate->cencellation_policy;
+                $item->deposit_policy = $item->contractrate->deposit_policy;
+                $item->save();
+            }
+        }
+
         $transport = OrderTransport::where('booking_id',$id)->with('agenttransport')->first();
         return inertia('Agent/BookingHistory/Detail',[
             'data' => $data,

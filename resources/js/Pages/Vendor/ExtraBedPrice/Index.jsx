@@ -8,14 +8,26 @@ import Layout from '../../../Layouts/Vendor';
 import { Link, usePage } from '@inertiajs/inertia-react';
 import { Inertia } from '@inertiajs/inertia';
 import Pagination from '../../../Components/Pagination';
-import Bookings from '../BookingHistory/Bookings';
+import Extrabed from '../ExtraBedPrice/Extrabed';
 
-export default function Index({ props }) {
+export default function Index({ props,data,vendor,room }) {
     const { url } = usePage();
+    const [currentPage, setCurrentPage] = useState(1)
+    const [postsPerPage, setPostsPerPage] = useState(10)
+
+    const indexOfLastPost = currentPage * postsPerPage;
+    const indexOfFirstPost = indexOfLastPost - postsPerPage;
+    const currentPosts = room.slice(indexOfFirstPost, indexOfLastPost);
+
+    const paginate = pageNum => setCurrentPage(pageNum);
+
+    const nextPage = () => setCurrentPage(currentPage + 1);
+
+    const prevPage = () => setCurrentPage(currentPage - 1);
 
   return (
     <>
-    <Layout page={url}>
+    <Layout page={url} vendor={vendor}>
         <div className="container">
             <div className="card">
                 <div className="card-body">
@@ -29,7 +41,7 @@ export default function Index({ props }) {
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            {/* <Bookings bookings={currentPosts} /> */}
+                            <Extrabed extrabed={currentPosts} />
                         </table>
                         <Pagination postsPerPage={postsPerPage} totalPosts={data.length} paginate={paginate} nextPage={nextPage} prevPage={prevPage} crntPage={currentPage} />
                     </div>

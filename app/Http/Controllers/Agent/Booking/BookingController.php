@@ -112,8 +112,9 @@ class BookingController extends Controller
 
                 $pricenomarkupint = (int) $pString;
 
-                $contractprice = ContractPrice::where('id',$item['contpriceid'])->first();
+                $contractprice = ContractPrice::where('id',$item['contpriceid'])->with('contractrate')->first();
 
+                $roomhotel = RoomHotel::where('id',$item['roomId'])->first();
 
                 $hotelbook = new HotelRoomBooking();
                 $hotelbook->room_id = $item['roomId'];
@@ -125,6 +126,14 @@ class BookingController extends Controller
                 $hotelbook->checkin_date = $request->checkin;
                 $hotelbook->checkout_date = $request->checkout;
                 $hotelbook->price = $priceint;
+                $hotelbook->room_name = $roomhotel->ratedesc;
+
+                $hotelbook->contract_name = $contractprice->contractrate->codedesc;
+                $hotelbook->benefit_policy = $contractprice->contractrate->benefit_policy;
+                $hotelbook->other_policy = $contractprice->contractrate->other_policy;
+                $hotelbook->cencellation_policy = $contractprice->contractrate->cencellation_policy;
+                $hotelbook->deposit_policy = $contractprice->contractrate->deposit_policy;
+
                 $hotelbook->rate_price = $contractprice->recom_price + $surcharge;
                 $hotelbook->total_ammount = ((($contractprice->recom_price + $surcharge) * $totalNights) * $item['quantity']);
                 $hotelbook->pricenomarkup = $pricenomarkupint + ($surcharge * $totalNights);
