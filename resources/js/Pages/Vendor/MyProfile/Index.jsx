@@ -27,7 +27,7 @@ export default function Index({
 }) {
 
     console.log(indonesiaprovinsi);
-    
+
     const { url } = usePage();
     const [selectcountry, setCountry] = useState("");
     const [type_property, setProperty] = useState("");
@@ -153,7 +153,7 @@ export default function Index({
 
     useEffect(() => {
         setSelectedDistribute(data[0].marketcountry || []);
-   
+
     }, [data[0].marketcountry]);
 
     const handleRemoveSelected = (valueToRemove) => {
@@ -1037,12 +1037,12 @@ export default function Index({
                                                             >
                                                                 <option value="WORLDWIDE">WORLDWIDE</option>
                                                                 <option value="Asia">Asia</option>
-                                                                <option value="Pasific">Pasific</option>
+                                                                <option value="Pacific">Pacific</option>
                                                                 <option value="Europe">Europe</option>
                                                                 <option value="Middle East">Middle East</option>
                                                                 <option value="Russia and CIS">Russia and CIS</option>
                                                                 <option value="Africa">Africa</option>
-                                                                
+
                                                                 {Object.keys(
                                                                     country
                                                                 ).map((key) => (

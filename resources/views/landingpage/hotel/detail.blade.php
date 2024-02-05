@@ -644,8 +644,8 @@
                                                                                                 {!! $selectOptions !!}
                                                                                             </select>
                                                                                             @if($itemprice->room->extra_bed > 0)
-                                                                                            <label for="" class="extras">Extra bed</label>
-                                                                                                <select data-roomid="{{$itemprice->room_id}}" name="" id="" class="form-control bed-quantity mb-2" style="width:200px" onchange="caclulateextrabed()">
+                                                                                            {{-- <label for="" class="extras">Extra bed</label> --}}
+                                                                                                {{-- <select data-roomid="{{$itemprice->room_id}}" name="" id="" class="form-control bed-quantity mb-2" style="width:200px" onchange="caclulateextrabed()">
                                                                                                     <option value="0">0</option>
                                                                                                     @for ($i = 1; $i <= $itemprice->room->extra_bed; $i++)
                                                                                                         <option
@@ -660,7 +660,7 @@
                                                                                                             @endif
                                                                                                         </option>
                                                                                                     @endfor
-                                                                                                </select>
+                                                                                                </select> --}}
                                                                                             @endif
                                                                                         @endif
                                                                                     @endif
