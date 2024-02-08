@@ -13,6 +13,7 @@ use App\Models\Affiliate;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 
 class HotelController extends Controller
@@ -72,62 +73,110 @@ class HotelController extends Controller
                 ->withErrors($validator->errors())
                 ->withInput($request->all());
         } else {
-                // $gambarPaths = [];
+               
 
-                // foreach ($request->file('gambar') as $gambar) {
-                //     $filename = uniqid().'.'.$gambar->getClientOriginalExtension();
-                //     $gambar->move(public_path('hotel'), $filename);
+            $data = new User();
+            $data->first_name =  $request->firstname;
+            $data->last_name = $request->lastname;
+            $data->email = $request->email;
+            $data->mobile_phone = $request->phone;
+            $data->password = Hash::make('password123');
+            $data->departement = '-';
+            $data->position = 'master';
+            $data->title = Str::random(8);
+            $data->role_id = 2;
+            $data->is_see = 0;
+            $data->is_active = 0;
+            $data->save();
 
-                //     $gambarPaths[] = "/hotel/".$filename;
-                // }
-                // dd($gambarPaths);
-                $data = new User();
-                $data->first_name = $request->firstname;
-                $data->last_name = $request->lastname;
-                $data->email = $request->email;
-                $data->password = Hash::make('password123');
-                $data->role_id = 2;
-                $data->save();
+            $member = new Vendor();
+            $member->user_id = $data->id;
+            $member->vendor_name = $request->vendor_name;
+            $member->vendor_legal_name = $request->vendor_legal_name;
+            $member->address_line1 = $request->address1;
+            $member->city = $request->city;
+            $member->state = $request->state;
+            $member->country = $request->country;
+            $member->email = $request->email;
+            $member->phone = $request->phone;
+            $member->type_vendor = 'hotel';
+            $member->is_active = 0;
+            $member->system_markup = $request->markup;
+            $member->hotel_star = $request->hotel_star;
+            $member->recomend = $request->recomend; 
+            
+            if($request->affiliate){
+                $member->affiliate = $request->affiliate;
+                $Affiliate = Affiliate::where('code',$request->affiliate)->first();
+                $Affiliate->hotelaffiliate = $Affiliate->hotelaffiliate + 1;
+                $Affiliate->save();
+            }
+            $member->save();
+            if($request->affiliate){
+                $Affiliate = Affiliate::where('code',$request->affiliate)->first();
+                $VendorAffiliate = new VendorAffiliate;
+                $VendorAffiliate->vendor_id = $member->id;
+                $VendorAffiliate->affiliate_id = $Affiliate->id;
+                $VendorAffiliate->save();
+            }
+
+            
+
+
+            $user = User::find($data->id);
+            $user->vendor_id = $member->id;
+            $user->save();
+
+
+                // $data = new User();
+                // $data->first_name = $request->firstname;
+                // $data->last_name = $request->lastname;
+                // $data->email = $request->email;
+                // $data->password = Hash::make('password123');
+                // $data->role_id = 2;
+                // $data->save();
     
-                $vendor = new Vendor();
-                $vendor->user_id = $data->id;
-                $vendor->vendor_name = $request->vendor_name;
-                $vendor->vendor_legal_name = $request->vendor_legal_name;
-                $vendor->logo_img = '-';
-                $vendor->type_vendor = 'hotel';
-                $vendor->address_line1 = $request->address1;
-                $vendor->address_line2 = $request->address2;
-                $vendor->phone = $request->phone;
-                $vendor->email = $request->email;
-                $vendor->country = $request->country;
-                $vendor->state = $request->state;
-                $vendor->city = $request->city;
-                $vendor->system_markup = $request->markup;
-                $vendor->hotel_star = $request->hotel_star;
-                $vendor->recomend = $request->recomend; 
-                $vendor->affiliate = $request->affiliate;
-                if($request->affiliate){
+                // $vendor = new Vendor();
+                // $vendor->user_id = $data->id;
+                // $vendor->vendor_name = $request->vendor_name;
+                // $vendor->vendor_legal_name = $request->vendor_legal_name;
+                // $vendor->logo_img = '-';
+                // $vendor->type_vendor = 'hotel';
+                // $vendor->address_line1 = $request->address1;
+                // $vendor->address_line2 = $request->address2;
+                // $vendor->phone = $request->phone;
+                // $vendor->email = $request->email;
+                // $vendor->country = $request->country;
+                // $vendor->state = $request->state;
+                // $vendor->city = $request->city;
+                // $vendor->system_markup = $request->markup;
+                // $vendor->hotel_star = $request->hotel_star;
+                // $vendor->recomend = $request->recomend; 
+                // $vendor->affiliate = $request->affiliate;
+                // if($request->affiliate){
                    
-                    $Affiliate = Affiliate::where('code',$request->affiliate)->first();
-                    $Affiliate->hotelaffiliate = $Affiliate->hotelaffiliate + 1;
-                    $Affiliate->save();
-                }
+                //     $Affiliate = Affiliate::where('code',$request->affiliate)->first();
+                //     $Affiliate->hotelaffiliate = $Affiliate->hotelaffiliate + 1;
+                //     $Affiliate->save();
+                // }
     
-                if($request->affiliate){
-                    $Affiliate = Affiliate::where('code',$request->affiliate)->first();
-                    $VendorAffiliate = new VendorAffiliate;
-                    $VendorAffiliate->vendor_id = $vendor->id;
-                    $VendorAffiliate->affiliate_id = $Affiliate->id;
-                    $VendorAffiliate->save();
-                }
-                $vendor->save();
+                // if($request->affiliate){
+                //     $Affiliate = Affiliate::where('code',$request->affiliate)->first();
+                //     $VendorAffiliate = new VendorAffiliate;
+                //     $VendorAffiliate->vendor_id = $vendor->id;
+                //     $VendorAffiliate->affiliate_id = $Affiliate->id;
+                //     $VendorAffiliate->save();
+                // }
+                // $vendor->save();
+
+
     
-                //get vendor by user_id 
-                $vendor = Vendor::where('user_id',$data->id)->first();
-                // update vendor_id on user table
-                $user = User::find($vendor->user_id);;
-                $user->vendor_id = $vendor->id;
-                $user->update();
+                // //get vendor by user_id 
+                // $vendor = Vendor::where('user_id',$data->id)->first();
+                // // update vendor_id on user table
+                // $user = User::find($vendor->user_id);;
+                // $user->vendor_id = $vendor->id;
+                // $user->update();
 
                 return redirect()
                 ->route('dashboard.hotel')
