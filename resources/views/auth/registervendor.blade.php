@@ -55,7 +55,7 @@
                                 <div class="form-outline mb-4">
                                     
                                     <input type="text" name="first_name"
-                                        class="form-control @error('first_name') is-invalid @enderror" id="name">
+                                        class="form-control @error('first_name') is-invalid @enderror" id="name" value="{{ old('first_name') }}">
                                     @error('first_name')
                                         <div class="invalid-feedback">
                                             {{ $message }}
@@ -67,7 +67,7 @@
                             <div class="col-lg-6">
                                
                                 <input type="text" name="last_name"
-                                    class="form-control @error('last_name') is-invalid @enderror" id="name">
+                                    class="form-control @error('last_name') is-invalid @enderror" id="name" value="{{ old('last_name') }}">
                                 @error('last_name')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -79,7 +79,7 @@
 
                         
                         <input type="text" name="busisnes_name"
-                            class="form-control @error('busisnes_name') is-invalid @enderror" id="name">
+                            class="form-control @error('busisnes_name') is-invalid @enderror" id="name" value="{{ old('busisnes_name') }}">
                             @error('busisnes_name')
                                 <div class="invalid-feedback">
                                     {{ $message }}
@@ -97,7 +97,7 @@
                         <div class="form-outline mb-4">
                             
                             <input type="text" name="address" class="form-control @error('address') is-invalid @enderror"
-                                id="address">
+                                id="address" value="{{ old('address') }}">
                             @error('address')
                                 <div class="invalid-feedback">
                                     {{ $message }}
@@ -110,7 +110,7 @@
                             <input required
                             inputmode="email"
                             type="email" name="email" class="form-control @error('email') is-invalid @enderror"
-                                id="email">
+                                id="email" value="{{ old('email') }}">
                             @error('email')
                                 <div class="invalid-feedback">
                                     {{ $message }}
@@ -121,7 +121,7 @@
                         <div class="form-outline mb-4">
                             
                             <input required type="text" name="phone" class="form-control @error('phone') is-invalid @enderror"
-                                id="name">
+                                id="name" value="{{ old('phone') }}">
                             @error('phone')
                                 <div class="invalid-feedback">
                                     {{ $message }}
@@ -131,18 +131,23 @@
                         </div>
                         <div class="form-outline mb-4">
                             
-                            <select name="country" class="form-control" required>
+                            <select name="country" class="form-control @error('country') is-invalid @enderror" required>
                                 <option value="">{{ __('-- Select --') }}</option>
                                 @foreach (get_country_lists() as $id => $name)
-                                    <option @if (($user->country ?? '') == $id) selected @endif value="{{ $name }}">{{ $name }}</option>
+                                    <option @if (old('country', ($user->country ?? '')) == $name) selected @endif value="{{ $name }}">{{ $name }}</option>
                                 @endforeach
                             </select>
+                            @error('country')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                             <label for="name" class="form-label">Country <span class="text-danger">*</span></label>
                         </div>
                         <div class="form-outline mb-4">
                             
                             <input type="text" name="state" class="form-control @error('state') is-invalid @enderror"
-                                id="name">
+                                id="name" value="{{ old('state') }}">
                             @error('state')
                                 <div class="invalid-feedback">
                                     {{ $message }}
@@ -153,7 +158,7 @@
                         <div class="form-outline mb-4">
                            
                             <input type="text" name="city" class="form-control @error('city') is-invalid @enderror"
-                                id="name">
+                                id="name" value="{{ old('city') }}">
                             @error('city')
                                 <div class="invalid-feedback">
                                     {{ $message }}
