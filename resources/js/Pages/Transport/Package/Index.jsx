@@ -93,6 +93,7 @@ export default function Index({ token, user }) {
                                                 <div className="d-flex justify-content-between">
                                                     <span>
                                                       <p style={{fontWeight:'700'}}>{post.type_car}</p>
+                                                      <p>{post.set ? post.set : 0}/seat</p>
                                                       <p>{post.transportdestination.destination}</p>
                                                       <p>{formatRupiah(post.price)}</p>
                                                       {/* <p>{post.number_police}</p> */}

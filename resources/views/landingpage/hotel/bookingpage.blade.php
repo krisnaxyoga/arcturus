@@ -204,7 +204,7 @@
                             <div class="col-lg-12">
                                 <div class="transport-cards">
                                     <div class="row">
-                                        @foreach ($transport as $item)
+                                        @foreach ($transport as $key=>$item)
                                         @php
                                             $price = $item->price + $item->agenttransport->markup
                                         @endphp
@@ -217,9 +217,13 @@
                                                             <input type="checkbox" class="transport-checkbox" data-idtransport="{{ $item->id }}" data-price="{{ $price }}">
                                                             <span class="slider"></span>
                                                         </label>
+                                                        {{-- <button
+                                                        class="btn font-weight-bold font-weight-bold p-0"
+                                                        style="font-size: 20px" type="button" data-toggle="modal"
+                                                        data-target="#exampleModalx1234{{ $key }}"><i class="fa fa-eye"></i></button> --}}
                                                     </div>
                                                     <div class="mx-3">
-                                                        <p class="m-0" style="font-weight: 700">{{$item->type_car}}</p>
+                                                        <p class="m-0" style="font-weight: 700">{{$item->type_car}} - {{$item->set}}/Seats</p>
                                                         <p class="transport-price m-0">Rp. {{ number_format($price, 0, ',', '.')}}</p>
                                                         <p class="m-0">{{$item->transportdestination->destination}}</p>
                                                     </div>
@@ -227,6 +231,28 @@
                                             </div>
                                         </div>
                                         @endif
+                                        {{-- <div class="modal" id="exampleModalx1234{{ $key }}" tabindex="-1"
+                                        aria-labelledby="exampleModalx1234Label" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title font-weight-bold" id="exampleModalx1234Label">
+                                                            {{ $item->type_car }}</h5>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="row">
+                                                            <div class="col-lg-12">
+                                                                {{$item->description}}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div> --}}
                                         {{-- {{$item->agenttransport->status}} --}}
 
                                         @endforeach

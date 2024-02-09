@@ -51,6 +51,8 @@ class PackageController extends Controller
             'destination' => $request->destination,
             'price' => $request->price,
             // 'number_police' => $request->number_police,
+            // 'description' => $request->description,
+            'set' => $request->set,
             'change_policy' => $request->change_policy,
             'cancellation_policy' => $request->cancellation_policy,
         ]);
@@ -84,6 +86,8 @@ class PackageController extends Controller
                 'destination'     => $request->destination,
                 'price'   => $request->price,
                 // 'number_police'   => $request->number_police,
+                // 'description' => $request->description,
+                'set' => $request->set,
                 'change_policy' => $request->change_policy,
                 'cancellation_policy' => $request->cancellation_policy,
             ]);

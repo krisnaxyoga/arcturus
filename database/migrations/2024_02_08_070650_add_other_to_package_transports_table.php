@@ -14,9 +14,11 @@ return new class extends Migration
         Schema::table('package_transports', function (Blueprint $table) {
             $table->text('other_policy')->after('price')->nullable();
             $table->text('description')->after('price')->nullable();
+            $table->integer('set')->after('price')->nullable();
         });
 
         Schema::table('order_transports', function (Blueprint $table) {
+            $table->integer('set')->after('typecar')->nullable();
             $table->text('other_policy')->after('typecar')->nullable();
             $table->text('description')->after('typecar')->nullable();
             $table->text('change_policy')->after('typecar')->nullable();

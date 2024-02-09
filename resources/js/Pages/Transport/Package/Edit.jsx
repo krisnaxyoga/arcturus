@@ -11,6 +11,8 @@ export default function Edit({token, user, iddata}) {
         destination: "",
         price: "",
         number_police: "",
+        description:"",
+        set:"",
         change_policy: "",
         cancellation_policy:"",
     });
@@ -56,6 +58,9 @@ export default function Edit({token, user, iddata}) {
                     destination: data.destination || "",
                     price: data.price || "",
                     // number_police: data.number_police || "",
+                    // description: data.description || "",
+                    
+                    set: data.set || "",
                     change_policy: data.change_policy,
                     cancellation_policy: data.cancellation_policy,
 
@@ -131,7 +136,34 @@ export default function Edit({token, user, iddata}) {
                         <div className="card">
                             <div className="card-body">
                                 <form onSubmit={handleSubmit}>
-                                    <div className="form-group mb-3">
+                                <div className="row">
+                                        <div className="col-lg-6">
+                                        <div className="form-group mb-3">
+                                            <label>Type Car:</label>
+                                            <input
+                                            className="form-control"
+                                                type="text"
+                                                name="type_car"
+                                                value={formData.type_car}
+                                                onChange={handleChange}
+                                            />
+                                        </div>
+                                        </div>
+                                        <div className="col-lg-6">
+                                            <div className="form-group mb-3">
+                                                <label>Seats:</label>
+                                                <input
+                                                className="form-control"
+                                                    type="number"
+                                                    name="set"
+                                                    value={formData.set}
+                                                    onChange={handleChange}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* <div className="form-group mb-3">
                                         <label>Type Car:</label>
                                         <input
                                         className="form-control"
@@ -140,7 +172,7 @@ export default function Edit({token, user, iddata}) {
                                             value={formData.type_car}
                                             onChange={handleChange}
                                         />
-                                    </div>
+                                    </div> */}
                                     <div className="form-group mb-3">
                                         <label>Destination:</label>
                                         <select className="form-control" name="destination" id="" onChange={handleChange}>
@@ -177,6 +209,12 @@ export default function Edit({token, user, iddata}) {
                                             value={formData.number_police}
                                             onChange={handleChange}
                                         />
+                                    </div> */}
+                                     {/* <div className="form-group mb-3">
+                                        <label htmlFor="">Description</label>
+                                        <textarea className="form-control" onChange={handleChange} value={formData.description} name="description" id="" cols="30" rows="10">
+                                            {formData.description}
+                                        </textarea>
                                     </div> */}
                                     <div className="form-group mb-3">
 

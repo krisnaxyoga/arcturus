@@ -10,6 +10,8 @@ function Create({token, user}) {
         destination: "",
         price: "",
         number_police: "",
+        description: "",
+        set:"",
         change_policy: "",
         cancellation_policy:"",
     });
@@ -98,16 +100,33 @@ function Create({token, user}) {
                         <div className="card">
                             <div className="card-body">
                                 <form onSubmit={handleSubmit}>
-                                    <div className="form-group mb-3">
-                                        <label>Type Car:</label>
-                                        <input
-                                        className="form-control"
-                                            type="text"
-                                            name="type_car"
-                                            value={formData.type_car}
-                                            onChange={handleChange}
-                                        />
+                                    <div className="row">
+                                        <div className="col-lg-6">
+                                        <div className="form-group mb-3">
+                                            <label>Type Car:</label>
+                                            <input
+                                            className="form-control"
+                                                type="text"
+                                                name="type_car"
+                                                value={formData.type_car}
+                                                onChange={handleChange}
+                                            />
+                                        </div>
+                                        </div>
+                                        <div className="col-lg-6">
+                                            <div className="form-group mb-3">
+                                                <label>Seats:</label>
+                                                <input
+                                                className="form-control"
+                                                    type="number"
+                                                    name="set"
+                                                    value={formData.set}
+                                                    onChange={handleChange}
+                                                />
+                                            </div>
+                                        </div>
                                     </div>
+                                   
                                     <div className="form-group mb-3">
                                         <label>Destination:</label>
                                         <select className="form-control" name="destination" id="" onChange={handleChange}>
@@ -144,6 +163,12 @@ function Create({token, user}) {
                                             value={formData.number_police}
                                             onChange={handleChange}
                                         />
+                                    </div> */}
+                                     {/* <div className="form-group mb-3">
+                                        <label htmlFor="">Description</label>
+                                        <textarea className="form-control" onChange={handleChange} value={formData.description} name="description" id="" cols="30" rows="10">
+                                            {formData.description}
+                                        </textarea>
                                     </div> */}
                                     <div className="form-group mb-3">
                                         <label htmlFor="">Change Policy</label>

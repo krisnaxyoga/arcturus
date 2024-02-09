@@ -46,7 +46,7 @@
               <h3 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Log in</h3>
   
               <div class="form-outline mb-4">
-                <input type="email" name="email" id="form2Example18" class="form-control form-control-lg @error('email') is-invalid @enderror" />
+                <input type="email" value="{{old('email')}}" name="email" id="form2Example18" class="form-control form-control-lg @error('email') is-invalid @enderror" />
                 <label class="form-label" for="form2Example18">Email address</label>
                 @error('email')
                 <div class="invalid-feedback">
