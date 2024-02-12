@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('package_transports', function (Blueprint $table) {
-            $table->text('other_policy')->after('price')->nullable();
+            $table->text('other_policy')->after('price')->nullable(); 
+            $table->text('change_policy')->after('price')->nullable();
+            $table->text('cancellation_policy')->after('price')->nullable();
             $table->text('description')->after('price')->nullable();
             $table->integer('set')->after('price')->nullable();
         });

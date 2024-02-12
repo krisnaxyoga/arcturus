@@ -98,13 +98,18 @@ class EwalletController extends Controller
             $contract_id = HotelRoomBooking::where('booking_id',$id)->first();
             $contract = ContractRate::where('id',$contract_id->contract_id)->first();
             $agent = Vendor::where('user_id',$booking->user_id)->first();
+            
+            $vendor = Vendor::where('id',$booking->vendor_id)->first();
+            $affiliator = Vendor::where('affiliate',$vendor->affiliate)->where('type_vendor','agent')->first();
 
             $data = [
                 'booking' => $booking, // $book merupakan instance dari model Booking yang sudah Anda dapatkan
                 'contract' => $contract,
                 'setting' => Setting::first(),
-                'agent' =>$agent,
-                'hotelbook' => $hotelbook
+                'agent' => $agent,
+                'hotelbook' => $hotelbook,
+                'affiliator'=> $affiliator
+
             ];
 
 
@@ -113,6 +118,7 @@ class EwalletController extends Controller
                 Mail::to($booking->vendor->email)->send(new BookingConfirmationHotel($data));
                 Mail::to($booking->users->email)->send(new BookingConfirmation($data));
             }
+
             $message = 'payment success';
             return view('landingpage.hotel.confirsaldo',compact('message'));
         }else{

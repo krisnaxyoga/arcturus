@@ -32,10 +32,13 @@
             <p style="margin:0 0 10px 0;padding:0;font-size:14px;"><span style="display:block;font-weight:bold;font-size:13px">Travel Agent</span>
               {{$booking->users->vendors->vendor_name}} <br>
               <?php if($booking->users->vendors->affiliate == $booking->vendor->affiliate){?>
-                <b style="color:green;font-weight:normal;margin:0"> powered by {{$booking->users->vendors->vendor_name}} </b>
+                <b style="color:green;font-weight:normal;margin:0"> powered by ARCTURUS </b>
                 <?php } else { ?>
-                  <b style="color:green;font-weight:normal;margin:0"> powered by ARCTURUS </b>
+                    <?php if($booking->vendor->affiliate) { ?> 
+                      <b style="color:green;font-weight:normal;margin:0"> powered by {{$affiliatorvendors->vendor_name}} </b>
+                      <?php } ?>
                   <?php } ?>
+
               </p>
                     <p style="margin:0 0 10px 0;padding:0;font-size:14px;"><span style="display:block;font-weight:bold;font-size:13px">Guest Name</span> {{$booking->first_name}} {{$booking->last_name}}</p>
                     <p style="margin:0 0 10px 0;padding:0;font-size:14px;"><span style="display:block;font-weight:bold;font-size:13px;">Email</span> {{$booking->email}}</p>

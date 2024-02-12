@@ -101,6 +101,7 @@ class HotelController extends Controller
             $member->phone = $request->phone;
             $member->type_vendor = 'hotel';
             $member->is_active = 0;
+            $member->marketcountry = ["WORLDWIDE"];
             $member->system_markup = $request->markup;
             $member->hotel_star = $request->hotel_star;
             $member->recomend = $request->recomend; 

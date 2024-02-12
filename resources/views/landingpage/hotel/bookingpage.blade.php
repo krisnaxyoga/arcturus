@@ -223,7 +223,9 @@
                                                         data-target="#exampleModalx1234{{ $key }}"><i class="fa fa-eye"></i></button> --}}
                                                     </div>
                                                     <div class="mx-3">
-                                                        <p class="m-0" style="font-weight: 700">{{$item->type_car}} - {{$item->set}}/Seats</p>
+                                                        <p class="m-0" style="font-weight: 700">{{$item->type_car}} @if($item->set != null)
+                                                            - {{$item->set}} seat
+                                                        @endif </p>
                                                         <p class="transport-price m-0">Rp. {{ number_format($price, 0, ',', '.')}}</p>
                                                         <p class="m-0">{{$item->transportdestination->destination}}</p>
                                                     </div>

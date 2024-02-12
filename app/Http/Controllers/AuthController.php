@@ -177,6 +177,11 @@ class AuthController extends Controller
             $member->phone = $request->phone;
             $member->type_vendor = $request->type_vendor;
             $member->is_active = 0;
+
+            if($request->type_vendor == 'hotel'){
+                $member->marketcountry = ["WORLDWIDE"];
+            }
+
             if($request->affiliate){
                 $member->affiliate = $request->affiliate;
                 $Affiliate = Affiliate::where('code',$request->affiliate)->first();

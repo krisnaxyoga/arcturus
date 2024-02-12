@@ -43,7 +43,8 @@ class BookingConfirmationHotel extends Mailable
             'contract' => $this->data['contract'],
             'setting' => $this->data['setting'],
             'agent' => $this->data['agent'],
-            'hotelbook' => $this->data['hotelbook']
+            'hotelbook' => $this->data['hotelbook'],
+            'affiliator' => $this->data['affiliator']
         ]);
     }
 

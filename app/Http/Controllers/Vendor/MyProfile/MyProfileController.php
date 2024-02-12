@@ -37,6 +37,13 @@ class MyProfileController extends Controller
         $markup = AgentMarkupSetup::where('user_id',$iduser)->first();
         $slider = Slider::where('user_id',$iduser)->get();
         $vendor= Vendor::with('users')->where('user_id',$iduser)->first();
+        // Check if "WORLDWIDE" is already present
+        if (!in_array("WORLDWIDE", $vendor->marketcountry)) {
+            // Add "WORLDWIDE" only if it's not present
+            $vendor->marketcountry[] = "WORLDWIDE";
+            $vendor->save();
+        }
+
 
         return inertia('Vendor/MyProfile/Index',[
             'data' => $data,
