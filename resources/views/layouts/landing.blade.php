@@ -51,9 +51,63 @@
             right: 20px;
             z-index: 9999;
         }
+
+           
+        /* Style untuk popup */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+                z-index: 2;
+
+        }
+        .popup-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+        .close-btn {
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        
     </style>
 </head>
 <body>
+    <div class="popup-overlay" id="popup" onclick="closePopup()">
+        <div class="popup-content p-0">
+           <img class="img-fluid" style="width:600px" src="https://arcturus.my.id/public/images/popup.png" alt="">
+        </div>
+    </div> 
+
+    <script>
+        // Tampilkan popup saat halaman dimuat
+        window.onload = function() {
+            showPopup();
+        };
+
+        // Fungsi untuk menampilkan popup
+        function showPopup() {
+            document.getElementById('popup').style.display = 'flex';
+        }
+
+        // Fungsi untuk menutup popup
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+
+        
+    </script>
 	<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar ftco-navbar-light" id="ftco-navbar">
 		<div class="container">
 			{{-- <a class="navbar-brand" href="index.html">Pacific<span>Travel Agency</span></a> --}}
@@ -149,5 +203,46 @@
         });
 
         </script>
+
+
+<script>
+    // Fungsi untuk menampilkan popup
+    document.getElementById('overlay').style.display = 'block';
+    document.getElementById('popup').style.display = 'block';
+</script>
+
+<style>
+    /* Style untuk popup */
+    .popup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 20px;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        z-index: 999;
+    }
+
+    /* Style untuk overlay background */
+    .overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 998;
+    }
+
+    /* Style untuk gambar di dalam popup */
+    .popup img {
+        max-width: 100%;
+        height: auto;
+    }
+</style>
     </body>
 </html>

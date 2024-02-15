@@ -40,7 +40,7 @@ class MyProfileController extends Controller
         // Check if "WORLDWIDE" is already present
         if (!in_array("WORLDWIDE", $vendor->marketcountry)) {
             // Add "WORLDWIDE" only if it's not present
-            $vendor->marketcountry[] = "WORLDWIDE";
+            $vendor->marketcountry = ["WORLDWIDE"];
             $vendor->save();
         }
 

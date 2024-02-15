@@ -200,7 +200,7 @@ export default function Index({ totalroom,income,vendor,success,pending,data,wid
                   </div>
                 </div>
                 <div className="col-lg-4">
-                <div className="card">
+                {/* <div className="card">
                     <div className="card-header">
                       <h2>Evidence of transfer</h2>
                     </div>
@@ -218,7 +218,7 @@ export default function Index({ totalroom,income,vendor,success,pending,data,wid
                             <Pagination postsPerPage={postsPerPage} totalPosts={widraw.length} paginate={paginate} nextPage={nextPage} prevPage={prevPage} crntPage={currentPage} />
                         </div>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
               {/* <!-- Content Row --> */}

@@ -258,5 +258,6 @@ class AuthController extends Controller
         return redirect()
                 ->route('login')
                 ->with('message', 'Thank you, your account has now been verified, please login here.');
+    
     }
 }

@@ -35,7 +35,7 @@
                 <b style="color:green;font-weight:normal;margin:0"> powered by ARCTURUS </b>
                 <?php } else { ?>
                     <?php if($booking->vendor->affiliate) { ?> 
-                      <b style="color:green;font-weight:normal;margin:0"> powered by {{$affiliatorvendors->vendor_name}} </b>
+                      <b style="color:green;font-weight:normal;margin:0"> powered by {{$affiliator->vendor_name}} </b>
                       <?php } ?>
                   <?php } ?>
 
