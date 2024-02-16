@@ -10,6 +10,7 @@ use App\Models\ContractPrice;
 use App\Models\RoomHotel;
 use App\Models\User;
 use App\Models\Slider;
+use App\Models\Popup;
 use App\Models\AgentMarkupDetail;
 use App\Models\AgentMarkupSetup;
 use App\Models\HotelRoomBooking;
@@ -49,6 +50,11 @@ class HomeController extends Controller
             $slider = Slider::all();
         }
 
+        $today = Carbon::now()->toDateString(); // Mendapatkan tanggal hari ini dalam format YYYY-MM-DD
+
+        $popups = Popup::where('start_date', '<=', $today)
+            ->where('end_date', '>=', $today)
+            ->first();
         $hotel = Vendor::where('type_vendor', 'hotel')->count();
         $agent = Vendor::where('type_vendor', 'agent')->count();
         $country = Vendor::where('type_vendor', 'hotel')
@@ -56,7 +62,7 @@ class HomeController extends Controller
         ->select('country')
         ->get();
 
-        return view('landingpage.index', compact('slider', 'hotel', 'agent','country'));
+        return view('landingpage.index', compact('slider', 'hotel', 'agent','country','popups'));
     }
 
     public function hotel(Request $request)

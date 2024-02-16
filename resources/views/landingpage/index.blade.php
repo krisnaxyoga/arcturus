@@ -1,6 +1,36 @@
 @extends('layouts.landing')
 @section('title', 'Home Page')
 @section('contents')
+
+@if($popups)
+<div class="popup-overlay" id="popup" onclick="closePopup()">
+    <div class="popup-content p-0">
+       <img class="img-fluid" style="width:600px" src="{{$popups->url}}" alt="{{$popups->image}}">
+    </div>
+</div> 
+
+<script>
+    // Tampilkan popup saat halaman dimuat
+    window.onload = function() {
+        showPopup();
+    };
+
+    // Fungsi untuk menampilkan popup
+    function showPopup() {
+        document.getElementById('popup').style.display = 'flex';
+    }
+
+    // Fungsi untuk menutup popup
+    function closePopup() {
+        document.getElementById('popup').style.display = 'none';
+    }
+
+    
+</script>
+@endif
+
+
+
 <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>

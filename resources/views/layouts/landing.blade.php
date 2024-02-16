@@ -84,30 +84,6 @@
     </style>
 </head>
 <body>
-    <div class="popup-overlay" id="popup" onclick="closePopup()">
-        <div class="popup-content p-0">
-           <img class="img-fluid" style="width:600px" src="https://arcturus.my.id/public/images/popup.png" alt="">
-        </div>
-    </div> 
-
-    <script>
-        // Tampilkan popup saat halaman dimuat
-        window.onload = function() {
-            showPopup();
-        };
-
-        // Fungsi untuk menampilkan popup
-        function showPopup() {
-            document.getElementById('popup').style.display = 'flex';
-        }
-
-        // Fungsi untuk menutup popup
-        function closePopup() {
-            document.getElementById('popup').style.display = 'none';
-        }
-
-        
-    </script>
 	<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar ftco-navbar-light" id="ftco-navbar">
 		<div class="container">
 			{{-- <a class="navbar-brand" href="index.html">Pacific<span>Travel Agency</span></a> --}}

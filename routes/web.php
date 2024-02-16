@@ -172,6 +172,9 @@ Route::group(['middleware' => ['auth', 'checkrole:1']], function() {
 
     Route::post('/admin/storeslider/',[\App\Http\Controllers\Admin\Setting\SettingController::class,'storeslider'])->name('dashboard.setting.storeslider');
     Route::delete('/admin/destroyslider/{id}',[\App\Http\Controllers\Admin\Setting\SettingController::class,'destroyslider'])->name('dashboard.setting.destroyslider');
+   
+    Route::post('/admin/storepopup/',[\App\Http\Controllers\Admin\Setting\SettingController::class,'storepopup'])->name('dashboard.setting.storepopup');
+    Route::delete('/admin/destroypopup/{id}',[\App\Http\Controllers\Admin\Setting\SettingController::class,'destroypopup'])->name('dashboard.setting.destroypopup');
 
     //payment admin to hotel
     Route::get('/admin/paymenthotel', [\App\Http\Controllers\Admin\Hotel\PaymentController::class, 'index'])->name('dashboard.paymenttohotel.index');

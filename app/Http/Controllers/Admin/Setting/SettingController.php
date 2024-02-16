@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Setting;
 use App\Models\Slider;
 use Illuminate\Support\Facades\File;
+use App\Models\Popup;
 
 class SettingController extends Controller
 {
@@ -28,7 +29,8 @@ class SettingController extends Controller
         }
 
         $slide = Slider::all();
-        return view('admin.setting.form',compact('setting', 'countries','slide'));
+        $popup = Popup::all();
+        return view('admin.setting.form',compact('setting', 'countries','slide','popup'));
     }
 
     /**
@@ -224,5 +226,52 @@ class SettingController extends Controller
                 ->route('dashboard.setting')
                 ->with('message', 'Data berhasil disimpan.');
         }
+    }
+
+    public function storepopup(Request $request){
+        $validator =  Validator::make($request->all(), [
+            'image' => 'nullable|mimes:png,jpg,jpeg|max:5048',
+        ]);
+
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator->errors())
+                ->withInput($request->all());
+        } else {
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $filename = time() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('slider'), $filename);
+
+                // Lakukan hal lain yang diperlukan, seperti menyimpan nama file dalam database
+            }else{
+                $filename= "";
+            }
+
+            $feature = "/slider/".$filename;
+
+            $data = new Popup();
+            $data->image = $feature;
+            $data->status = 'active';
+            $data->url = $feature;
+            $data->start_date = $request->start_date;
+            $data->end_date = $request->end_date;
+            $data->save();
+
+            return redirect()
+                ->route('dashboard.setting')
+                ->with('message', 'Data berhasil disimpan.');
+        }
+    }
+
+    public function destroypopup(string $id)
+    {
+        $data = Popup::find($id);
+        $data->delete();
+        return redirect()
+        ->route('dashboard.setting')
+        ->with('message', 'Data deleted.');
     }
 }
