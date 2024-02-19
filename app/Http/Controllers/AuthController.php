@@ -40,10 +40,10 @@ class AuthController extends Controller
             $request->session()->regenerate();
 
 
-            if (auth()->user()->role_id === 1) {
+            if (auth()->user()->role_id == 1) {
                 // jika user superadmin
                 return redirect()->intended('/admin');
-            } else if (auth()->user()->role_id === 2) {
+            } else if (auth()->user()->role_id == 2) {
                 // jika user vendordashboard
                 return redirect()->intended('/vendordashboard');
             }else{

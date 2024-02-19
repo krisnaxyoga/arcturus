@@ -229,41 +229,45 @@ class SettingController extends Controller
     }
 
     public function storepopup(Request $request){
-        $validator =  Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
             'image' => 'nullable|mimes:png,jpg,jpeg|max:5048',
         ]);
-
-
+    
         if ($validator->fails()) {
-            return redirect()
-                ->back()
-                ->withErrors($validator->errors())
-                ->withInput($request->all());
-        } else {
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
-                $filename = time() . '.' . $image->getClientOriginalExtension();
-                $image->move(public_path('slider'), $filename);
-
-                // Lakukan hal lain yang diperlukan, seperti menyimpan nama file dalam database
-            }else{
-                $filename= "";
-            }
-
-            $feature = "/slider/".$filename;
-
-            $data = new Popup();
-            $data->image = $feature;
-            $data->status = 'active';
-            $data->url = $feature;
-            $data->start_date = $request->start_date;
-            $data->end_date = $request->end_date;
-            $data->save();
-
-            return redirect()
-                ->route('dashboard.setting')
-                ->with('message', 'Data berhasil disimpan.');
+            return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
         }
+    
+        $newData = [
+            'image' => null,
+            'status' => 'active',
+            'url' => null,
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date,
+        ];
+    
+        // Check for existing record with overlapping dates
+        $existingPopup = Popup::where('start_date', '<=', $request->end_date)
+                               ->where('end_date', '>=', $request->start_date)
+                               ->first();
+    
+        if ($existingPopup) {
+            return redirect()->back()->withInput($newData)->with('error', 'The specified date range overlaps with an existing popup. Please choose different dates.');
+        }
+    
+        // If no overlap, process image upload and data saving
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $filename = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('slider'), $filename);
+    
+            $newData['image'] = "/slider/" . $filename;
+        }
+    
+        $data = new Popup($newData);
+        $data->save();
+    
+        return redirect()->route('dashboard.setting')->with('message', 'Data berhasil disimpan.');
+    
     }
 
     public function destroypopup(string $id)
