@@ -205,7 +205,7 @@
                             <div class="col-lg-8">
                                 @foreach ($popup as $ie)
 
-                                <div class="card">
+                                <div class="card mb-2">
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-lg-4">

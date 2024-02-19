@@ -19,6 +19,13 @@ Route::post('/booking', [\App\Http\Controllers\Api\BookingController::class, 'cr
 Route::post('/login/transport', [\App\Http\Controllers\Api\Transport\LoginController::class, 'login']);
 
 Route::post('/login/transport/logout', [\App\Http\Controllers\Api\Transport\LoginController::class, 'logout']);
+
+
+// login travel agent
+
+Route::post('/login/travelagent', [\App\Http\Controllers\Api\TravelAgent\AuthController::class, 'login']);
+Route::post('/register/agent', [\App\Http\Controllers\Api\TravelAgent\AuthController::class, 'agentstore']);
+Route::post('/travelagent/forgetpassword', [\App\Http\Controllers\Api\TravelAgent\AuthController::class, 'forgotpassword']);
  
 Route::group(['middleware' => 'auth.agent_transport'], function () {
 
@@ -59,3 +66,10 @@ Route::group(['middleware' => 'auth.agent_transport'], function () {
     Route::get('/packagecar/destroy/{id}', [\App\Http\Controllers\Api\Transport\PackageController::class, 'destroy']);
 });
 
+
+Route::middleware(['auth:api'])->group(function () {
+    Route::get('/user/agent', [\App\Http\Controllers\Api\TravelAgent\AuthController::class, 'user']);
+    Route::get('/agent/hotel', [\App\Http\Controllers\Api\TravelAgent\HomepageController::class, 'hotel']);
+    Route::get('/agent/hoteldetail/{id}', [\App\Http\Controllers\Api\TravelAgent\HomepageController::class, 'hoteldetail']);
+
+});

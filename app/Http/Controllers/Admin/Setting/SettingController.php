@@ -228,6 +228,46 @@ class SettingController extends Controller
         }
     }
 
+    public function updateslider(Request $request,$id){
+        $validator =  Validator::make($request->all(), [
+            'image' => 'nullable|mimes:png,jpg,jpeg|max:2048',
+            'description' => 'nullable',
+            'title' => 'nullable'
+        ]);
+
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator->errors())
+                ->withInput($request->all());
+        } else {
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $filename = time() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('slider'), $filename);
+
+                // Lakukan hal lain yang diperlukan, seperti menyimpan nama file dalam database
+            }else{
+                $filename= "";
+            }
+
+            $feature = "/slider/".$filename;
+
+            $userid = auth()->user()->id;
+            $data = Slider::find($id);
+            $data->user_id =$userid;
+            $data->title = $request->title;
+            $data->description = $request->description;
+            $data->image = $feature;
+            $data->save();
+
+            return redirect()
+                ->route('dashboard.setting')
+                ->with('message', 'Data berhasil disimpan.');
+        }
+    }
+
     public function storepopup(Request $request){
         $validator = Validator::make($request->all(), [
             'image' => 'nullable|mimes:png,jpg,jpeg|max:5048',
@@ -263,7 +303,11 @@ class SettingController extends Controller
             $newData['image'] = "/slider/" . $filename;
         }
     
-        $data = new Popup($newData);
+        $data = new Popup();
+        $data->image = $newData['image'];
+        $data->url = $newData['image'];
+        $data->start_date = $request->start_date;
+        $data->end_date = $request->end_date;
         $data->save();
     
         return redirect()->route('dashboard.setting')->with('message', 'Data berhasil disimpan.');
