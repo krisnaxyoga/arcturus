@@ -805,6 +805,9 @@ const handlePercentageAdv = (e,itemId) => {
                                                                 </div>
                                                             </Tab>
                                                         </Tabs>
+                                                        <button type="submit" className="btn btn-primary mb-3">
+                                                            <i className="fa fa-save"></i> Save
+                                                        </button>
                                                         <div className="row">
                                                             <div className="col-lg-12">
                                                                 <div className="card">
@@ -1013,9 +1016,7 @@ const handlePercentageAdv = (e,itemId) => {
                                                 <div className="row justify-content-between"> {/* Use justify-content-between to move the buttons to both ends */}
                                                     <div className="col-lg-auto">
                                                         <div className="d-flex">
-                                                            <button type="submit" className="btn btn-primary mb-3">
-                                                            <i className="fa fa-save"></i> Save
-                                                        </button>
+                                                          
                                                         <div className="mb-3 ml-2 text-right">
                                                             <a href="#" onClick={() => buttonSendValueTable()} className='btn btn-success'><i className='fa fa-plus'></i>add price</a>
                                                         </div>
@@ -1045,10 +1046,11 @@ const handlePercentageAdv = (e,itemId) => {
                                             <form onSubmit={(e) => storeAdvance(e, item.id,item.day,item.percentage,item.beginsell,item.endsell)}>
                                             <div className="card mt-3">
                                                 <div className="card-header">
-                                                    <div className="d-flex justify-content-between">
-                                                        <h2>
+                                                        <h2 className='text-center'>
                                                              ADVANCE PURCHASE
                                                         </h2>
+                                                    <div className="d-flex justify-content-between">
+
                                                         <span className='d-flex'>
                                                             <span className='d-flex'>
                                                                 <input onChange={(e) => handlePercentageAdv(e, item.id)} type="text" className='form-control' style={{width:'5rem'}} defaultValue={item.percentage}/>
@@ -1058,6 +1060,11 @@ const handlePercentageAdv = (e,itemId) => {
                                                                 <input onChange={(e) => handleDayChange(e, item.beginsell, item.endsell, item.day)} type="number" className='form-control' style={{width:'5rem'}} defaultValue={item.day}/>
                                                                 <p className='text-dark' style={{marginTop: '8px',marginLeft: '7px'}}> DAYS</p>
                                                             </span>
+                                                        </span>
+                                                        <span>
+                                                            <div>
+                                                                <button className='btn btn-primary' type='submit'> <i className='fa fa-save'></i> save</button>
+                                                            </div>
                                                         </span>
                                                     </div>
 
@@ -1160,9 +1167,6 @@ const handlePercentageAdv = (e,itemId) => {
                                                             </div>
                                                     </div>
                                                     <hr />
-                                                    <div className="my-3">
-                                                        <button className='btn btn-primary' type='submit'> <i className='fa fa-save'></i> save</button>
-                                                    </div>
                                                          </>
                                                     ):(
                                                         <>
