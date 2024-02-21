@@ -805,9 +805,31 @@ const handlePercentageAdv = (e,itemId) => {
                                                                 </div>
                                                             </Tab>
                                                         </Tabs>
-                                                        <button type="submit" className="btn btn-primary mb-3">
+                                                       
+                                                        <hr />
+                                                <div className="row justify-content-between"> {/* Use justify-content-between to move the buttons to both ends */}
+
+                                                    <div className="col-lg-auto">
+                                                        <div className="d-flex">
+                                                           <button type="submit" className="btn btn-primary mb-3">
                                                             <i className="fa fa-save"></i> Save
                                                         </button>
+                                                        <div className="mb-3 ml-2 text-right">
+                                                            <a href="#" onClick={() => buttonSendValueTable()} className='btn btn-success'><i className='fa fa-plus'></i>add price</a>
+                                                        </div>
+                                                        <div className="ml-2 mb-3">
+                                                        <Link href={`/room/contract/blackoutcontract/${contract.id}`} className='btn btn-secondary'>Blackout</Link>
+                                                        </div>
+                                                        </div>
+
+                                                        {/* <Link href={`/room/promo/index/${contract.id}`} className='btn btn-warning'>Promo Price</Link> */}
+                                                    </div>
+                                                    <div className="col-lg-auto">
+                                                        <Link href={'/room/contract/index'} className="btn btn-danger">
+                                                            Cancel
+                                                        </Link>
+                                                    </div>
+                                                </div>
                                                         <div className="row">
                                                             <div className="col-lg-12">
                                                                 <div className="card">
@@ -1012,27 +1034,7 @@ const handlePercentageAdv = (e,itemId) => {
 
                                                    
                                                 </div>
-                                                <hr />
-                                                <div className="row justify-content-between"> {/* Use justify-content-between to move the buttons to both ends */}
-                                                    <div className="col-lg-auto">
-                                                        <div className="d-flex">
-                                                          
-                                                        <div className="mb-3 ml-2 text-right">
-                                                            <a href="#" onClick={() => buttonSendValueTable()} className='btn btn-success'><i className='fa fa-plus'></i>add price</a>
-                                                        </div>
-                                                        <div className="ml-2 mb-3">
-                                                        <Link href={`/room/contract/blackoutcontract/${contract.id}`} className='btn btn-secondary'>Blackout</Link>
-                                                        </div>
-                                                        </div>
-
-                                                        {/* <Link href={`/room/promo/index/${contract.id}`} className='btn btn-warning'>Promo Price</Link> */}
-                                                    </div>
-                                                    <div className="col-lg-auto">
-                                                        <Link href={'/room/contract/index'} className="btn btn-danger">
-                                                            Cancel
-                                                        </Link>
-                                                    </div>
-                                                </div>
+                                                
 
                                             </div>
                                         </div>
@@ -1046,11 +1048,46 @@ const handlePercentageAdv = (e,itemId) => {
                                             <form onSubmit={(e) => storeAdvance(e, item.id,item.day,item.percentage,item.beginsell,item.endsell)}>
                                             <div className="card mt-3">
                                                 <div className="card-header">
-                                                        <h2 className='text-center'>
-                                                             ADVANCE PURCHASE
-                                                        </h2>
+                                                       
                                                     <div className="d-flex justify-content-between">
+                                                        <span>
+                                                            {item.is_active == 1 ? (
+                                                                <>
+                                                                <div className="d-flex mb-4">
+                                                                    <a
+                                                                    href="#"
+                                                                    className="btn btn-success"
+                                                                    onClick={(e) => {
+                                                                        e.preventDefault(); // Mencegah perilaku default dari tautan
+                                                                        toggleStatusAdvmaster(item.id, item.is_active); // Ganti dengan fungsi toggleStatus yang sesuai
+                                                                        // window.history.pushState({}, '', `#adv-${item.id}`); // Menggunakan History API
+                                                                    }}
+                                                                    >on</a>
+                                                                
 
+                                                                    </div>
+                                                                </>
+                                                            ):(<>
+                                                             <div className="d-flex">
+                                                        <a
+                                                        href="#"
+                                                        className="btn btn-danger"
+                                                        onClick={(e) => {
+                                                            e.preventDefault(); // Mencegah perilaku default dari tautan
+                                                            toggleStatusAdvmaster(item.id, item.is_active); // Ganti dengan fungsi toggleStatus yang sesuai
+                                                           
+                                                        }}
+                                                        >off</a>
+
+                                                        </div>
+                                                            </>)}
+                                                        </span>
+
+                                                        <span>
+                                                            <h2 className='text-center'>
+                                                                ADVANCE PURCHASE
+                                                            </h2>
+                                                        </span>
                                                         <span className='d-flex'>
                                                             <span className='d-flex'>
                                                                 <input onChange={(e) => handlePercentageAdv(e, item.id)} type="text" className='form-control' style={{width:'5rem'}} defaultValue={item.percentage}/>
@@ -1058,33 +1095,21 @@ const handlePercentageAdv = (e,itemId) => {
                                                             </span>
                                                             <span className='d-flex'>
                                                                 <input onChange={(e) => handleDayChange(e, item.beginsell, item.endsell, item.day)} type="number" className='form-control' style={{width:'5rem'}} defaultValue={item.day}/>
-                                                                <p className='text-dark' style={{marginTop: '8px',marginLeft: '7px'}}> DAYS</p>
+                                                                <p className='text-dark' style={{marginTop: '8px',marginLeft: '7px', marginRight:'7px'}}> DAYS</p>
                                                             </span>
-                                                        </span>
-                                                        <span>
+                                                            <span>
                                                             <div>
                                                                 <button className='btn btn-primary' type='submit'> <i className='fa fa-save'></i> save</button>
                                                             </div>
                                                         </span>
+                                                        </span>
+                                                        
                                                     </div>
 
                                                 </div>
                                                 <div className="card-body">
                                                     {item.is_active == 1 ? (
                                                         <>
-                                                        <div className="d-flex mb-4">
-                                                        <p className='mr-2'>status : </p>    <a
-                                                        href="#"
-                                                        className="btn btn-success"
-                                                        onClick={(e) => {
-                                                            e.preventDefault(); // Mencegah perilaku default dari tautan
-                                                            toggleStatusAdvmaster(item.id, item.is_active); // Ganti dengan fungsi toggleStatus yang sesuai
-                                                            // window.history.pushState({}, '', `#adv-${item.id}`); // Menggunakan History API
-                                                        }}
-                                                        >on</a>
-                                                       
-
-                                                        </div>
                                                         <div className="row mb-3">
                                                         <div className="col-lg-6">
                                                             <label htmlFor="">Begin Stay Date</label>
@@ -1170,20 +1195,7 @@ const handlePercentageAdv = (e,itemId) => {
                                                          </>
                                                     ):(
                                                         <>
-                                                        <div className="d-flex">
-                                                        <p>status : </p>
-                                                        
-                                                        <a
-                                                        href="#"
-                                                        className="btn btn-danger"
-                                                        onClick={(e) => {
-                                                            e.preventDefault(); // Mencegah perilaku default dari tautan
-                                                            toggleStatusAdvmaster(item.id, item.is_active); // Ganti dengan fungsi toggleStatus yang sesuai
-                                                           
-                                                        }}
-                                                        >off</a>
-
-                                                        </div>
+                                                       
                                                          </>
                                                     )}
                                                 </div>

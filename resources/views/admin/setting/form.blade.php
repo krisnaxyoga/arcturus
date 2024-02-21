@@ -220,12 +220,12 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="">start date</label>
-                                                    <input type="date" name="start_date" class="form-control">
+                                                    <input type="date" name="start_date" id="start_date" class="form-control">
                                                 </div>
                                                 
                                                 <div class="form-group">
                                                     <label for="">end date</label>
-                                                    <input type="date" name="end_date" class="form-control">
+                                                    <input type="date" name="end_date" id="end_date" class="form-control">
                                                 </div>
 
                                             @endif
@@ -431,6 +431,23 @@
 
         });
         </script>
+        <!-- JavaScript -->
+<script>
+ document.addEventListener("DOMContentLoaded", function () {
+        // Ambil elemen input untuk start_date dan end_date
+        var startDateInput = document.getElementById("start_date");
+        var endDateInput = document.getElementById("end_date");
+
+        // Tambahkan event listener ke start_date
+        startDateInput.addEventListener("change", function () {
+            // Ambil nilai dari start_date
+            var startDateValue = startDateInput.value;
+
+            // Set nilai end_date sama dengan start_date
+            endDateInput.value = startDateValue;
+        });
+    });
+</script>
         <style>
             /* Genel stil */
 .toggle-switch {
