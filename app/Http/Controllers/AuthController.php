@@ -179,7 +179,7 @@ class AuthController extends Controller
             $member->is_active = 0;
 
             if($request->type_vendor == 'hotel'){
-                $member->marketcountry = ["WORLDWIDE"];
+                $member->marketcountry = ["WORLDWIDE","".$request->country.""];
             }
 
             if($request->affiliate){

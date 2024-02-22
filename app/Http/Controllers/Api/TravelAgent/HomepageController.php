@@ -26,6 +26,50 @@ use Illuminate\Support\Facades\DB;
 
 class HomepageController extends Controller
 {
+
+    public function index()
+        {
+    
+            if (auth()->check()) {
+    
+                $iduser = auth()->user()->id;
+                $user = User::where('id', $iduser)->first();
+    
+                if ($user->role_id == 2) {
+    
+                    $slider = Slider::where('user_id', $iduser)->get();
+                } else {
+                    // $slider = Slider::where('user_id', 1)->get();
+                    $slider = Slider::all();
+                }
+            } else {
+                // $slider = Slider::where('user_id', 1)->get();
+                $slider = Slider::all();
+            }
+    
+            $today = Carbon::now()->toDateString(); // Mendapatkan tanggal hari ini dalam format YYYY-MM-DD
+    
+            $popups = Popup::where('start_date', '<=', $today)
+                ->where('end_date', '>=', $today)
+                ->first();
+            $hotel = Vendor::where('type_vendor', 'hotel')->count();
+            $agent = Vendor::where('type_vendor', 'agent')->count();
+            $country = Vendor::where('type_vendor', 'hotel')
+            ->distinct()
+            ->select('country')
+            ->get();
+
+            return response()->json([
+                'slider'=>$slider, 
+                'hotel'=>$hotel, 
+                'agent'=>$agent,
+                'country'=>$country,
+                'popups'=>$popups
+            ], 200);
+    
+        }
+
+
     public function hotel(Request $request)
     {
 

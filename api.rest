@@ -110,3 +110,8 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vM
     "checkout" : "2024-02-23",
     "person" : "2"
 }
+
+###
+GET http://127.0.0.1:8007/api/dashboard/agent
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYXZlbGFnZW50IiwiaWF0IjoxNzA4NTcyODYzLCJleHAiOjE3MDg1NzY0NjMsIm5iZiI6MTcwODU3Mjg2MywianRpIjoiSGdMRTNRUUhMWUdQWlZqYSIsInN1YiI6IjIzNjAiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.pyqrveqlLX37T1GgpQRc4NG0sYe9sOFOeLIf59J5DTY

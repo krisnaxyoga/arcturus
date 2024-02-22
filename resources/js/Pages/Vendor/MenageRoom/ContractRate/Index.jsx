@@ -128,6 +128,7 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
         Inertia.post('/room/barcode/store', formData, {
             onSuccess: () => {
                 // Lakukan aksi setelah gamBARberhasil diunggah
+                window.location.reload();
             },
         });
     }
@@ -151,7 +152,7 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
 
         Inertia.post('/room/barcode/store', formData, {
             onSuccess: () => {
-                // Lakukan aksi setelah gamBARberhasil diunggah
+                window.location.reload();
             },
         });
     }
@@ -176,7 +177,7 @@ export default function Index({ session,data,roomtype,form,barroom,surcharge,bla
 
         Inertia.post(`/room/barcode/update/${barroom.id}`, formData, {
             onSuccess: () => {
-                // Lakukan aksi setelah gamBARberhasil diunggah
+                window.location.reload();
             },
         });
     }

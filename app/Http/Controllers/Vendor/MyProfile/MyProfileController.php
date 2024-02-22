@@ -38,9 +38,10 @@ class MyProfileController extends Controller
         $slider = Slider::where('user_id',$iduser)->get();
         $vendor= Vendor::with('users')->where('user_id',$iduser)->first();
         // Check if "WORLDWIDE" is already present
-        if (!in_array("WORLDWIDE", $vendor->marketcountry)) {
+
+        if ($vendor->marketcountry == null || !in_array("WORLDWIDE", (array)$vendor->marketcountry)) {
             // Add "WORLDWIDE" only if it's not present
-            $vendor->marketcountry = ["WORLDWIDE"];
+            $vendor->marketcountry = ["WORLDWIDE","".$vendor->country.""];
             $vendor->save();
         }
 
