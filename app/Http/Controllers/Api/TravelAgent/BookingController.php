@@ -93,7 +93,10 @@ class BookingController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+            return response()->json([
+                'request' =>$request->all(),
+                'errors' => $validator->errors()
+            ], 422);
         } else {
             $userid = auth()->user()->id;
 
@@ -321,6 +324,8 @@ class BookingController extends Controller
         }
 
         $tranportbookings = OrderTransport::where('booking_id',$booking->id)->first();
+
+        $tranportbooking = 0;
         if($tranportbookings){
             $transportbooking = $tranportbookings->total_price;
         }else{
