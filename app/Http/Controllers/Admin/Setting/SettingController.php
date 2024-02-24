@@ -133,7 +133,7 @@ class SettingController extends Controller
 
             if ($request->hasFile('photo')) {
                 $photo = $request->file('photo');
-                if (File::exists(public_path($data->logo_image))) 
+                if (File::exists(public_path($data->logo_image)))
                     {
                         File::delete(public_path($data->logo_image));
                     }
@@ -145,14 +145,14 @@ class SettingController extends Controller
             }else{
                 $filename = $data->logo_image;
             }
-            
+
             $feature = "/logo/system/".$filename;
             // dd($feature);
             $userid = auth()->user()->id;
             $data->user_id = $userid;
             $data->company_name = $request->name;
             $data->business_permit_number = $request->permit;
-            $data->description = $request->description; 
+            $data->description = $request->description;
 
             $data->address_line1 = $request->address1;
             $data->address_line2 = $request->address2;
@@ -174,7 +174,7 @@ class SettingController extends Controller
                 ->with('message', 'Data berhasil diupdate.');
         }
     }
-    
+
 
     /**
      * Remove the specified resource from storage.
@@ -229,41 +229,45 @@ class SettingController extends Controller
     }
 
     public function storepopup(Request $request){
-        $validator =  Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
             'image' => 'nullable|mimes:png,jpg,jpeg|max:5048',
         ]);
 
-
         if ($validator->fails()) {
-            return redirect()
-                ->back()
-                ->withErrors($validator->errors())
-                ->withInput($request->all());
-        } else {
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
-                $filename = time() . '.' . $image->getClientOriginalExtension();
-                $image->move(public_path('slider'), $filename);
-
-                // Lakukan hal lain yang diperlukan, seperti menyimpan nama file dalam database
-            }else{
-                $filename= "";
-            }
-
-            $feature = "/slider/".$filename;
-
-            $data = new Popup();
-            $data->image = $feature;
-            $data->status = 'active';
-            $data->url = $feature;
-            $data->start_date = $request->start_date;
-            $data->end_date = $request->end_date;
-            $data->save();
-
-            return redirect()
-                ->route('dashboard.setting')
-                ->with('message', 'Data berhasil disimpan.');
+            return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
         }
+
+        $newData = [
+            'image' => null,
+            'status' => 'active',
+            'url' => null,
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date,
+        ];
+
+        // Check for existing record with overlapping dates
+        $existingPopup = Popup::where('start_date', '<=', $request->end_date)
+                               ->where('end_date', '>=', $request->start_date)
+                               ->first();
+
+        if ($existingPopup) {
+            return redirect()->back()->withInput($newData)->with('error', 'The specified date range overlaps with an existing popup. Please choose different dates.');
+        }
+
+        // If no overlap, process image upload and data saving
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $filename = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('slider'), $filename);
+
+            $newData['image'] = "/slider/" . $filename;
+        }
+
+        $data = new Popup($newData);
+        $data->save();
+
+        return redirect()->route('dashboard.setting')->with('message', 'Data berhasil disimpan.');
+
     }
 
     public function destroypopup(string $id)
