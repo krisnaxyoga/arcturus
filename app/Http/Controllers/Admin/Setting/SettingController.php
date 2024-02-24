@@ -19,6 +19,7 @@ class SettingController extends Controller
      */
     public function index()
     {
+        $datapop = new Popup;
         $countries = get_country_lists();
         $settingExists = Setting::exists();
 
@@ -30,7 +31,7 @@ class SettingController extends Controller
 
         $slide = Slider::all();
         $popup = Popup::all();
-        return view('admin.setting.form',compact('setting', 'countries','slide','popup'));
+        return view('admin.setting.form',compact('setting', 'countries','slide','popup','datapop'));
     }
 
     /**
@@ -267,6 +268,83 @@ class SettingController extends Controller
         $data->save();
 
         return redirect()->route('dashboard.setting')->with('message', 'Data berhasil disimpan.');
+
+    }
+
+    public function storepopup(Request $request){
+        $validator = Validator::make($request->all(), [
+            'image' => 'nullable|mimes:png,jpg,jpeg|max:5048',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator->errors())->withInput($request->all());
+        }
+
+        $newData = [
+            'image' => null,
+            'status' => 'active',
+            'url' => null,
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date,
+        ];
+
+
+        // If no overlap, process image upload and data saving
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $filename = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('slider'), $filename);
+
+            $newData['image'] = "/slider/" . $filename;
+        }
+
+        if($request->id){
+            $data = Popup::find($request->id);
+            if($request->hasFile('image') == null){
+                $newData['image'] = $data->image;
+            }
+        }else{
+             // Check for existing record with overlapping dates
+            $existingPopup = Popup::where('start_date', '<=', $request->end_date)
+            ->where('end_date', '>=', $request->start_date)
+            ->first();
+
+            if ($existingPopup) {
+                return redirect()->back()->withInput($newData)->with('error', 'The specified date range overlaps with an existing popup. Please choose different dates.');
+            }
+
+            $data = new Popup();
+        }
+
+
+        $data->image = $newData['image'];
+        $data->url = $newData['image'];
+        $data->start_date = $request->start_date;
+        $data->end_date = $request->end_date;
+        $data->save();
+
+        return redirect()->route('dashboard.setting')->with('message', 'Data berhasil disimpan.');
+
+    }
+
+    public function editpopup(string $id)
+    {
+
+        $datapop = Popup::find($id);
+        $countries = get_country_lists();
+        $settingExists = Setting::exists();
+
+        if ($settingExists) {
+            $setting = Setting::first();
+        } else {
+            $setting = new Setting;
+        }
+
+        $slide = Slider::all();
+        $popup = Popup::all();
+
+        return view('admin.setting.form',compact('setting', 'countries','slide','popup','datapop'));
+
 
     }
 

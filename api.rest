@@ -72,3 +72,46 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vM
 GET http://127.0.0.1:8007/api/reportordertransport/4
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYW5zcG9ydCIsImlhdCI6MTcwNTA0ODExOSwiZXhwIjoxNzA1MDUxNzE5LCJuYmYiOjE3MDUwNDgxMTksImp0aSI6Inpjd0h1dHc0NVltelJHc0giLCJzdWIiOiIxIiwicHJ2IjoiYTMxNWZhYjg1ODI2MjM5NGU1N2YyOWZhNzUyNTQ2NTRiZjQ4ZjQxMSJ9.okczI0lUx7IalfMswk78f-UZuV7IyvtEWETb4giuCX0
+
+###
+POST http://127.0.0.1:8007/api/login/travelagent
+Content-Type: application/json
+
+{
+    "email" : "krisna.testingwow@gmail.com",
+    "password" : "password"
+}
+
+###
+GET http://127.0.0.1:8007/api/user/agent
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYXZlbGFnZW50IiwiaWF0IjoxNzA4MzMwNTYzLCJleHAiOjE3MDgzMzQxNjMsIm5iZiI6MTcwODMzMDU2MywianRpIjoiT1hZQWtnYW80WEZUWU5VViIsInN1YiI6IjIzNjAiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.A4QPwZSTKPPaJ9CVN55-8txKSyq5NS96V7pJO3CvVxk
+
+###
+GET http://127.0.0.1:8007/api/agent/hotel
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYXZlbGFnZW50IiwiaWF0IjoxNzA4NTA0MjQ2LCJleHAiOjE3MDg1MDc4NDYsIm5iZiI6MTcwODUwNDI0NiwianRpIjoiTFdnZ09OZlhaejRGYUQ0WiIsInN1YiI6IjIzNjAiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.8HrbZPSFZ5hWxiBvsfQDToRE-_5E6cX8TZoxUKtFZVo
+
+{
+    "search" : "mulia",
+    "checkin" : "2024-02-21",
+    "checkout" : "2024-02-23",
+    "person" : "2"
+}
+
+###
+GET http://127.0.0.1:8007/api/agent/hoteldetail/140
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYXZlbGFnZW50IiwiaWF0IjoxNzA4MzMwNTYzLCJleHAiOjE3MDgzMzQxNjMsIm5iZiI6MTcwODMzMDU2MywianRpIjoiT1hZQWtnYW80WEZUWU5VViIsInN1YiI6IjIzNjAiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.A4QPwZSTKPPaJ9CVN55-8txKSyq5NS96V7pJO3CvVxk
+
+{
+    "search" : "mulia",
+    "checkin" : "2024-02-21",
+    "checkout" : "2024-02-23",
+    "person" : "2"
+}
+
+###
+GET http://127.0.0.1:8007/api/dashboard/agent
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYXZlbGFnZW50IiwiaWF0IjoxNzA4NTcyODYzLCJleHAiOjE3MDg1NzY0NjMsIm5iZiI6MTcwODU3Mjg2MywianRpIjoiSGdMRTNRUUhMWUdQWlZqYSIsInN1YiI6IjIzNjAiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.pyqrveqlLX37T1GgpQRc4NG0sYe9sOFOeLIf59J5DTY

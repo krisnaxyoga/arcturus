@@ -1,7 +1,18 @@
 @extends('layouts.admin')
 @section('title', 'Settings')
 @section('content')
+<style>
+    .object-fit-cover {
+    -o-object-fit: cover!important;
+    object-fit: cover!important;
+}
 
+.card-img, .card-img-top {
+    border-top-left-radius: 0.35rem;
+    border-top-right-radius: 0.35rem;
+    height: 200px !important;
+}
+</style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <section>
         <div class="container mt-5">
@@ -180,20 +191,44 @@
                                         <form action="{{route('dashboard.setting.storepopup')}}" method="post" enctype="multipart/form-data">
                                             @csrf
                                             @method('POST')
-                                            <div class="form-group">
-                                                <label for="">popup</label>
-                                                <input type="file" name="image" id="popup" class="form-control">
-                                                <img id="image-previewpopup" class="mt-3" style="width: 200px" src="#" alt="Preview">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="">start date</label>
-                                                <input type="date" name="start_date" class="form-control">
-                                            </div>
-                                            
-                                            <div class="form-group">
-                                                <label for="">end date</label>
-                                                <input type="date" name="end_date" class="form-control">
-                                            </div>
+
+                                            @if ($datapop->exists)
+
+                                                <input type="hidden" name="id" value="{{$datapop->id}}">
+                                                <div class="form-group">
+                                                    <label for="">popup</label>
+                                                    <input type="file" name="image" id="popup" class="form-control">
+                                                    <img id="image-previewpopup" class="mt-3" style="width: 200px" src="{{$datapop->image}}" alt="Preview">
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="">start date</label>
+                                                    <input type="date" name="start_date" class="form-control" value="{{$datapop->start_date}}">
+                                                </div>
+                                                
+                                                <div class="form-group">
+                                                    <label for="">end date</label>
+                                                    <input type="date" name="end_date" class="form-control" value="{{$datapop->end_date}}">
+                                                </div>
+
+                                            @else
+
+                                                <div class="form-group">
+                                                    <label for="">popup</label>
+                                                    <input type="file" name="image" id="popup" class="form-control">
+                                                    <img id="image-previewpopup" class="mt-3" style="width: 200px" src="#" alt="Preview">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="">start date</label>
+                                                    <input type="date" name="start_date" id="start_date" class="form-control">
+                                                </div>
+                                                
+                                                <div class="form-group">
+                                                    <label for="">end date</label>
+                                                    <input type="date" name="end_date" id="end_date" class="form-control">
+                                                </div>
+
+                                            @endif
 
                                             <div class="form-group">
                                                 <button class="btn btn-primary" type="submit">upload</button>
@@ -203,15 +238,13 @@
                                 </div>
                             </div>
                             <div class="col-lg-8">
-                                @foreach ($popup as $ie)
+                                <div class="row">
+                                    @foreach ($popup as $ie)
 
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-lg-4">
-                                               <img src="{{$ie->url}}" alt="{{$ie->url}}" class="img-fluid shadow" style="width: 200px; border-radius:1rem">
-                                            </div>
-                                            <div class="col-lg-8">
+                                    <div class="col-lg-6">
+                                        <div class="card mb-3">
+                                            <img src="{{$ie->url}}" alt="{{$ie->url}}" class="card-img-top object-fit-cover">
+                                            <div class="card-body">
                                                 <ul>
                                                     <li>Url :<a href="{{$ie->url}}">{{$ie->url}}</a></li>
                                                     {{-- <li>Status : <div class="toggle-switch">
@@ -219,29 +252,32 @@
                                                         <label class="toggle-label" for="toggle"></label>
                                                       </div>
                                                     </li> --}}
-                                                    <li>Start Date :{{$ie->start_date}}</li>
-                                                    <li>End Date : {{$ie->end_date}}</li>
+                                                    <li>Start Date  : {{$ie->start_date}}</li>
+                                                    <li>End Date    : {{$ie->end_date}}</li>
                                                     <li>
                                                         <form class="d-inline"
-                                                        action="{{ route('dashboard.setting.destroypopup', $ie->id) }}"
-                                                        method="POST"
-                                                        onSubmit="return confirm('are you sure delete this banner?');">
-                                                        @csrf
-                                                        @method('delete')
+                                                            action="{{ route('dashboard.setting.destroypopup', $ie->id) }}"
+                                                            method="POST"
+                                                            onSubmit="return confirm('are you sure delete this banner?');">
+                                                            @csrf
+                                                            @method('delete')
 
-                                                        <button type="submit"
-                                                            class="btn btn-datatable btn-icon btn-transparent-dark mr-2">
-                                                            <i data-feather="trash-2"></i>
-                                                        </button>
-                                                    </form></li>
+                                                            <button type="submit"
+                                                                class="btn btn-datatable btn-icon btn-transparent-dark mr-2">
+                                                                <i data-feather="trash-2"></i>
+                                                            </button>
+                                                        </form>
+                                                    </li>
+                                                <li>
+                                                    <a href="{{ route('dashboard.setting.editpopup', $ie->id) }}" class="btn btn-datatable btn-icon btn-transparent-dark mr-2"><i data-feather="edit"></i></a>
+                                                </li>
                                                 </ul>
                                             </div>
-                                        </div>
-                                    </div>
+                                          </div>
+
+                                   </div>
+                                   @endforeach
                                 </div>
-                                    
-                                @endforeach
-                                
                             </div>
                         </div>
                         
@@ -395,6 +431,23 @@
 
         });
         </script>
+        <!-- JavaScript -->
+<script>
+ document.addEventListener("DOMContentLoaded", function () {
+        // Ambil elemen input untuk start_date dan end_date
+        var startDateInput = document.getElementById("start_date");
+        var endDateInput = document.getElementById("end_date");
+
+        // Tambahkan event listener ke start_date
+        startDateInput.addEventListener("change", function () {
+            // Ambil nilai dari start_date
+            var startDateValue = startDateInput.value;
+
+            // Set nilai end_date sama dengan start_date
+            endDateInput.value = startDateValue;
+        });
+    });
+</script>
         <style>
             /* Genel stil */
 .toggle-switch {

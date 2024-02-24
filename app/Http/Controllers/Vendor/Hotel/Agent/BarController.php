@@ -60,7 +60,7 @@ class BarController extends Controller
     {
         // dd($request->all());
          $validator = Validator::make($request->all(), [
-            'barcode' => 'required',
+            'barcode' => 'nullable',
         ]);
         if ($validator->fails()) {
             return redirect()
@@ -132,14 +132,38 @@ class BarController extends Controller
                         'rolerate' => 2,
                         'distribute' => ["WORLDWIDE"]
                         ],
-                    //  4 =>[
-                    //     'ratecode' => 'WORLD9',
-                    //     'desc' => 'worldwide',
-                    //     'percented' => 20,
-                    //     'minstay' => 9,
-                    //     'rolerate' => 2,
-                    //     'distribute' => ["WORLDWIDE"]
-                    //     ],
+                     4 =>[
+                        'ratecode' => 'WORLD9',
+                        'desc' => 'worldwide',
+                        'percented' => 20,
+                        'minstay' => 9,
+                        'rolerate' => 2,
+                        'distribute' => ["WORLDWIDE"]
+                        ], 
+                    5 =>[
+                        'ratecode' => 'DOM1',
+                        'desc' => 'Domestic',
+                        'percented' => 10,
+                        'minstay' => 1,
+                        'rolerate' => 2,
+                        'distribute' => ["".$vendor[0]->country.""]
+                        ],
+                    6 =>[
+                        'ratecode' => 'DOM2',
+                        'desc' => 'Domestic',
+                        'percented' => 15,
+                        'minstay' => 3,
+                        'rolerate' => 2,
+                        'distribute' => ["".$vendor[0]->country.""]
+                        ],
+                    7 =>[
+                        'ratecode' => 'DOM3',
+                        'desc' => 'Domestic',
+                        'percented' => 20,
+                        'minstay' => 5,
+                        'rolerate' => 2,
+                        'distribute' => ["".$vendor[0]->country.""]
+                        ],
                     // 5 =>[
                     //     'ratecode' => 'APAC',
                     //     'desc' => 'ASIAPACIFIC',

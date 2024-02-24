@@ -122,8 +122,6 @@ class HotelController extends Controller
             }
 
             
-
-
             $user = User::find($data->id);
             $user->vendor_id = $member->id;
             $user->save();
