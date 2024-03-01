@@ -349,9 +349,13 @@ class MarkupHotelController extends Controller
             return view('auth.login');
         }else{
             $iduser = auth()->user()->id;
-            $agent_country = Vendor::where('user_id', $iduser)->first();
             $markup = User::where('id',$iduser)->with('vendors')->first();
-            $agentCountry = $agent_country->country;
+            $agent_country = Vendor::where('user_id', $iduser)->first();
+            if($request->country == null){
+                $agentCountry = $agent_country->country;
+            }else{
+                $agentCountry = $request->country;
+            }
             $category = $request->input('data.category');
             $datareq = $request->all();
             // dd($datareq['checkin']);

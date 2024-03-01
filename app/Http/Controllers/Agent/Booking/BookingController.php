@@ -135,7 +135,7 @@ class BookingController extends Controller
                 $hotelbook->deposit_policy = $contractprice->contractrate->deposit_policy;
 
                 $hotelbook->rate_price = $contractprice->recom_price + $surcharge;
-                $hotelbook->total_ammount = ((($contractprice->recom_price + $surcharge) * $totalNights) * $item['quantity']);
+                $hotelbook->total_ammount = ((($priceint + $surcharge) * $totalNights) * $item['quantity']);
                 $hotelbook->pricenomarkup = $pricenomarkupint + ($surcharge * $totalNights);
                 $hotelbook->save();
 
@@ -145,7 +145,7 @@ class BookingController extends Controller
 
             $pricenomaruptotal = 0;
             foreach($hotelbook_where_totalamount as $hbwt){
-                $pricenomaruptotal += $hbwt->total_ammount;
+                $pricenomaruptotal += $hbwt->pricenomarkup;
             }
 
             $booking_update_pricenomarkup = Booking::find($data->id);

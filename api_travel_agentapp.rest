@@ -1,11 +1,11 @@
 # http://127.0.0.1:8007 bisa di ganti dengan https://developertester.my.id/
 ### LOGIN TRAVEL AGENT
-POST http://127.0.0.1:8007/api/login/travelagent
+POST https://developertester.my.id/api/login/travelagent
 Content-Type: application/json
 
 {
-    "email" : "krisna.testingwow@gmail.com",
-    "password" : "password"
+    "email" : "test1@gmail.com",
+    "password" : "apipassword$$**"
 }
 
 ### REGISTRASI
@@ -13,18 +13,18 @@ POST http://127.0.0.1:8007/api/register/agent
 Content-Type: application/json
 
 {
-  "first_name": "REQUIRED_FIRST_NAME",
-  "last_name": "REQUIRED_LAST_NAME",
-  "email": "REQUIRED_EMAIL",
-  "password": "REQUIRED_PASSWORD",
-  "phone": "REQUIRED_PHONE_NUMBER",
-  "busisnes_name": "REQUIRED_BUSINESS_NAME",
-  "company_name": "REQUIRED_COMPANY_NAME",
-  "address": "REQUIRED_ADDRESS",
-  "city": "REQUIRED_CITY",
-  "state": "REQUIRED_STATE",
-  "country": "REQUIRED_COUNTRY",
-  "affiliate": "OPTIONAL_AFFILIATE_ID",
+  "first_name": "demo",
+  "last_name": "api",
+  "email": "demoapi@gmail.com",
+  "password": "apipassword$$**",
+  "phone": "08127313412131",
+  "busisnes_name": "AGENT API",
+  "company_name": "AGENT API",
+  "address": "JL.MUBARAT,MUMBAi",
+  "city": "DELHI",
+  "state": "GUJARAT",
+  "country": "Indonesia",
+  "affiliate": "",
 }
 
 ### LUPA PASSWORD
@@ -184,3 +184,6 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vM
     "totaltopup" : "", //tolong buatkan kode unik 3 angka di belakang ribuan semisal 100.000 buat jadi 100.123 dimana random angka,
     "image" : "" // buatkan bentuk file karena merupakan upload bukti transfer
 }
+
+###
+GET http://127.0.0.1:8007/api/country/travelagent

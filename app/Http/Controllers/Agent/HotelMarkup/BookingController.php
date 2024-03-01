@@ -14,7 +14,8 @@ use App\Models\User;
 use App\Models\Setting;
 use App\Models\OrderTransport;
 use Carbon\Carbon;
-
+use App\Mail\BookingConfirmation;
+use App\Mail\BookingConfirmationHotel;
 use App\Models\HistoryWallet;
 use App\Models\AgentTransport;
 use App\Models\SurchargeAllRoom;
@@ -123,7 +124,7 @@ class BookingController extends Controller
                 $hotelbook->checkout_date = $request->checkout;
                 $hotelbook->price = $priceint;
                 $hotelbook->rate_price = $contractprice->recom_price + $surcharge;
-                $hotelbook->total_ammount = ((($contractprice->recom_price + $surcharge) * $totalNights) * $item['quantity']);
+                $hotelbook->total_ammount = ((($priceint + $surcharge) * $totalNights) * $item['quantity']);
                 $hotelbook->pricenomarkup = $pricenomarkupint + ($surcharge * $totalNights);
                 $hotelbook->save();
 
@@ -136,7 +137,7 @@ class BookingController extends Controller
 
             $pricenomaruptotal = 0;
             foreach($hotelbook_where_totalamount as $hbwt){
-                $pricenomaruptotal += $hbwt->total_ammount;
+                $pricenomaruptotal += $hbwt->pricenomarkup;
             }
 
             $booking_update_pricenomarkup = Booking::find($data->id);
@@ -621,12 +622,17 @@ class BookingController extends Controller
             $contract = ContractRate::where('id',$contract_id->contract_id)->first();
             $agent = Vendor::where('user_id',$booking->user_id)->first();
 
+            $vendor = Vendor::where('id',$booking->vendor_id)->first();
+            $affiliator = Vendor::where('affiliate',$vendor->affiliate)->where('type_vendor','agent')->first();
+
             $data = [
                 'booking' => $booking, // $book merupakan instance dari model Booking yang sudah Anda dapatkan
                 'contract' => $contract,
                 'setting' => Setting::first(),
-                'agent' =>$agent,
-                'hotelbook' => $hotelbook
+                'agent' => $agent,
+                'hotelbook' => $hotelbook,
+                'affiliator'=> $affiliator
+
             ];
 
 

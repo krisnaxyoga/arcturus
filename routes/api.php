@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/booking', [\App\Http\Controllers\Api\BookingController::class, 'create'])->name('booking.agent.create');
 
 
+Route::get('/country/travelagent', [\App\Http\Controllers\Api\Country\CoutryController::class, 'index']);
 Route::post('/login/transport', [\App\Http\Controllers\Api\Transport\LoginController::class, 'login']);
 
 Route::post('/login/transport/logout', [\App\Http\Controllers\Api\Transport\LoginController::class, 'logout']);
@@ -70,7 +71,6 @@ Route::group(['middleware' => 'auth.agent_transport'], function () {
 
 Route::middleware(['auth:api'])->group(function () {
    
-    Route::get('/country/travelagent', [\App\Http\Controllers\Api\Country\CoutryController::class, 'index']);
 
     // TRAVEL AGENT API
     Route::get('/user/agent', [\App\Http\Controllers\Api\TravelAgent\AuthController::class, 'user']);

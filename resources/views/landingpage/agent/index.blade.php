@@ -407,7 +407,9 @@
                                     @if ($lowestPrice !== null)
                                         <div class="price" style="color: #1a2b48; font-size: 18px; font-weight: 500;">
                                             <span style="color: #5e6d77; font-size: 14px; font-weight: 400;">From</span> <br>
-                                            Rp. {{ number_format(($lowestPrice + (($lowestPrice * $markup->vendors->agent_markup)/100)), 0, ',', '.') }}</div>
+                                            {{-- Rp. {{ number_format(($lowestPrice + (($lowestPrice * $markup->vendors->agent_markup)/100)), 0, ',', '.') }} --}}
+                                            Rp. {{ number_format(($lowestPrice + $markup->vendors->agent_markup), 0, ',', '.') }}
+                                        </div>
                                         <span style="color: #5e6d77; font-size: 10px; font-weight: 400;">/Night</span>
                                     @endif
 
