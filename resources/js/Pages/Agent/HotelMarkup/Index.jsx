@@ -49,7 +49,7 @@ function Index({ agent }) {
                                                 agent.vendors.agent_markup
                                             }
                                         /> 
-                                        <p className="mb-0 mx-3 mt-1">%</p>
+                                        {/* <p className="mb-0 mx-3 mt-1">%</p> */}
                                         </div>
                                         
                                     </div>

@@ -110,23 +110,9 @@
                 <div class="col-lg-12">
                     <form id="bookingForm" enctype="multipart/form-data">
                         @csrf
-                        <div class="search-property-1" style="border-top: 1px solid rgba(0, 0, 0, 0.1);">
+                        <div class="search-property-1">
                             <div class="row no-gutters">
-                                <div class="col-md d-flex">
-                                    <?php
-                                    $checkin = date('m/d/Y', strtotime($datareq['checkin']));
-                                    $checkout = date('m/d/Y', strtotime($datareq['checkout']));
-                                    ?>
-                                    <div class="form-group p-4">
-                                        <label for="">CheckIn - CheckOut</label>
-                                        <input class="form-control checkindate" type="text" name="dates"
-                                            value="{{ $checkin }} - {{ $checkout }}" />
-                                    </div>
-                                    <input value="{{ $datareq['checkin'] }}" id="checkin" type="hidden" name="checkin"
-                                        class="form-control checkindate" placeholder="Check In Date">
-                                    <input value="{{ $datareq['checkout'] }}" id="checkout" type="hidden" name="checkout"
-                                        class="form-control checkoutdate" placeholder="Check Out Date">
-                                </div>
+
                                 {{-- <div class="col-md d-flex">
                                     <div class="form-group p-4">
                                         <label for="#">Check-in</label>
@@ -147,8 +133,26 @@
                                         </div>
                                     </div>
                                 </div> --}}
-                                <div class="col-md d-flex">
-                                    <div class="form-group p-4" style="    border-right: 1px solid rgba(0, 0, 0, 0.1);">
+                                @if($vendordetail->marketcountry != null)
+                                <div class="col-md d-flex card border-0 shadow mx-1 mb-2" style="border-radius: 1rem">
+                                    <div class="form-group card-body border-0">
+                                        <label for="#">Market</label>
+                                        <div class="date-input-wrapper">
+                                            <select name="country" id="market" class="form-control " onchange="checknight()">
+                                                @foreach ($vendordetail->marketcountry as $name)
+                                                    <option
+                                                        @if (($agentCountry ?? '') == $name) selected @endif
+                                                        value="{{ $name }}">
+                                                        {{ $name }}</option>
+                                                    @endforeach
+                                                </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endif
+
+                                <div class="col-md d-flex card border-0 shadow mx-1 mb-2" style="border-radius: 1rem">
+                                    <div class="form-group card-body border-0">
                                         <label for="#">Person</label>
                                         <div class="">
                                             <select name="person" id="person" class="form-control" required>
@@ -164,20 +168,40 @@
                                         </div>
                                     </div>
                                 </div>
-
+                                <div class="col-md d-flex card border-0 shadow mx-1 mb-2" style="border-radius: 1rem">
+                                    <?php
+                                    $checkin = date('m/d/Y', strtotime($datareq['checkin']));
+                                    $checkout = date('m/d/Y', strtotime($datareq['checkout']));
+                                    ?>
+                                    <div class="form-group card-body border-0">
+                                        <label for="">CheckIn - CheckOut</label>
+                                        <input class="form-control checkindate" type="text" name="dates"
+                                            value="{{ $checkin }} - {{ $checkout }}" />
+                                    </div>
+                                    <input value="{{ $datareq['checkin'] }}" id="checkin" type="hidden" name="checkin"
+                                        class="form-control checkindate" placeholder="Check In Date">
+                                    <input value="{{ $datareq['checkout'] }}" id="checkout" type="hidden" name="checkout"
+                                        class="form-control checkoutdate" placeholder="Check Out Date">
+                                </div>
                             </div>
                         </div>
-
+                        @if($vendordetail->marketcountry != null)
+                        <div class="row">
+                            <div class="col">
+                                <p class="text-danger m-0 font-weight-bold">* Guest ID Card = Market, ID Card is required upon check-in</p>
+                            </div>
+                        </div>
+                        @endif
                         <div class="row">
                             @foreach ($data as $keyup => $item)
 
                                 <div class="col-md-12 ftco-animate">
-                                    <div class="card mb-3">
+                                    <div class="card border-0 shadow mb-3 cardroom" style="border-radius: 1rem">
                                         <div class="row g-0">
                                             <div class="col-md-4">
                                                 <img onerror="this.onerror=null; this.src='https://semantic-ui.com/images/wireframe/white-image.png';"
                                                     src="{{ $item->room->feature_image }}"
-                                                    class="img img-fluid rounded-start"
+                                                    class="img img-fluid rounded-start" style="border-radius: 1rem 0 0 0"
                                                     alt="{{ $item->room->feature_image }}">
 
                                             </div>
@@ -543,7 +567,7 @@
                                                                             <div class="col-lg">
                                                                                 <span class="price text-primary"
                                                                                     style="font-weight: 600">Rp.
-                                                                                    {{ number_format((($price + $itemprice->contractrate->vendors->system_markup) + $surchargepricetotalx)+ (((($price + $itemprice->contractrate->vendors->system_markup) + $surchargepricetotalx) * $markup->vendors->agent_markup)/100), 0, ',', '.') }}
+                                                                                    {{ number_format((($price + $itemprice->contractrate->vendors->system_markup) + $surchargepricetotalx)+ ($markup->vendors->agent_markup), 0, ',', '.') }}
                                                                                     / night
                                                                                 </span>
                                                                                 <p class="m-0">Benefits :</p>
@@ -589,15 +613,30 @@
 
                                                                                     @php
                                                                                         $selectOptions = '';
+                                                                                        // if ($Nights >= $itemprice->contractrate->min_stay) {
+                                                                                        //     for ($i = 1; $i <= $RoomAllowment; $i++) {
+                                                                                        //         $selectOptions .= '<option
+                                                                                        //             data-contprice=' . $itemprice->id . '
+                                                                                        //             data-contractid=' . $itemprice->contract_id . '
+                                                                                        //             data-roomid=' . $itemprice->room->id . '
+                                                                                        //             data-price="' . $i * ((($price + $itemprice->contractrate->vendors->system_markup) + $surchargepricetotalx) + (((($price + $itemprice->contractrate->vendors->system_markup) + $surchargepricetotalx) * $markup->vendors->agent_markup)/100)) . '"
+                                                                                        //             data-noagentmarkup="'.$i * (($price + $itemprice->contractrate->vendors->system_markup) + $surchargepricetotalx) .'"
+                                                                                        //             data-agentmarkup="'.(((($price + $itemprice->contractrate->vendors->system_markup) + $surchargepricetotalx) * $markup->vendors->agent_markup)/100).'"
+                                                                                        //             data-pricenomarkup="' . $i * $price . '"
+                                                                                        //             value="' . $i . '">
+                                                                                        //             ' . $i . ' ' . ($i == 1 ? 'room' : 'rooms') . '
+                                                                                        //         </option>';
+                                                                                        //     }
+                                                                                        // }
                                                                                         if ($Nights >= $itemprice->contractrate->min_stay) {
                                                                                             for ($i = 1; $i <= $RoomAllowment; $i++) {
                                                                                                 $selectOptions .= '<option
                                                                                                     data-contprice=' . $itemprice->id . '
                                                                                                     data-contractid=' . $itemprice->contract_id . '
                                                                                                     data-roomid=' . $itemprice->room->id . '
-                                                                                                    data-price="' . $i * ((($price + $itemprice->contractrate->vendors->system_markup) + $surchargepricetotalx) + (((($price + $itemprice->contractrate->vendors->system_markup) + $surchargepricetotalx) * $markup->vendors->agent_markup)/100)) . '"
+                                                                                                    data-price="' . $i * ((($price + $itemprice->contractrate->vendors->system_markup) + $surchargepricetotalx) + $markup->vendors->agent_markup) . '"
                                                                                                     data-noagentmarkup="'.$i * (($price + $itemprice->contractrate->vendors->system_markup) + $surchargepricetotalx) .'"
-                                                                                                    data-agentmarkup="'.(((($price + $itemprice->contractrate->vendors->system_markup) + $surchargepricetotalx) * $markup->vendors->agent_markup)/100).'"
+                                                                                                    data-agentmarkup="'.$markup->vendors->agent_markup.'"
                                                                                                     data-pricenomarkup="' . $i * $price . '"
                                                                                                     value="' . $i . '">
                                                                                                     ' . $i . ' ' . ($i == 1 ? 'room' : 'rooms') . '
@@ -703,7 +742,7 @@
                         </div>
                         <div class="row">
                             <div class="col-lg-12">
-                                <div class="card">
+                                <div class="card border-0 shadow mb-3 cardroom" style="border-radius: 1rem">
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-lg-6">
@@ -868,6 +907,7 @@
 
 
             var person = $('#person').val();
+            var market = $('#market').val();
 
             // Ubah format tanggal menjadi YYYY-MM-DD
             var formattedCheckin = checkinDate.toISOString().slice(0, 10);
@@ -875,10 +915,12 @@
 
             // Bentuk URL dengan parameter yang diinginkan
             var contractId = '{{ $data[0]->contract_id }}'; // Ganti dengan cara Anda mendapatkan contract_id
-            var url = '/agent/hotelmarkup/hoteldetail/' + contractId +
+            var url = '/homepage/hotel/' + contractId +
                 '?checkin=' + formattedCheckin +
                 '&checkout=' + formattedCheckout +
-                '&person=' + person;
+                '&person=' + person +
+                '&country='+ market;
+
 
             // Lakukan pengalihan ke halaman yang diinginkan
             window.location.href = url;
@@ -1109,20 +1151,21 @@
         //==================================================
     </script>
     <script>
-        $('input[name="dates"]').daterangepicker(
-            isInvalidDate: function(date) {
+        $('input[name="dates"]').daterangepicker({
+        isInvalidDate: function(date) {
             // Nonaktifkan tanggal sebelum hari ini
             return date.isBefore(moment(), 'day');
         }
-        );
+    });
 
         // Tambahkan event listener untuk deteksi klik tombol "Apply"
         $('input[name="dates"]').on('apply.daterangepicker', function(ev, picker) {
             // Mengambil tanggal checkin dan checkout dari Date Range Picker
             const checkin = picker.startDate.format('YYYY-MM-DD');
             const checkout = picker.endDate.format('YYYY-MM-DD');
-            const checkin1 = picker.startDate.format('MM/DD/YYYY');
-           const checkout1 = picker.endDate.format('MM/DD/YYYY');
+            const checkin1 = picker.startDate.format('DD/MM/YYYY');
+            const checkout1 = picker.endDate.format('DD/MM/YYYY');
+
             // Memperbarui nilai input tanggal checkin dan checkout
             $('input[name="checkin"]').val(checkin);
             $('input[name="checkout"]').val(checkout);
@@ -1265,3 +1308,4 @@
     </style>
 
 @endsection
+
