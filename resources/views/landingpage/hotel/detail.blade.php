@@ -226,6 +226,7 @@
                                                                 @foreach ($contractprice as $itemprice)
                                                                     @if ($itemprice->room_id == $item->room->id)
                                                                             @php
+
                                                                             // ========================================================= START CALENDAR ====================================
 
                                                                             $markupsystem = $itemprice->contractrate->vendors->system_markup;
@@ -474,12 +475,12 @@
                                                                                             $Room_recomprice = $itemprice->recom_price;
                                                                                         }else{
                                                                                             $Room_recomprice = $ratecalender;
+
                                                                                         }
                                                                                     }
                                                                                     // $Room_recomprice = $TotalHotelCalendar;
                                                                                 }
                                                                             }
-
                                                                             // var_dump('calender sama nilai dari rate ='.$Room_recomprice.' total calendar = '.$totalx.' cek night ='.$totalDataCount);
                                                                             // ========================================================= END CALENDAR ====================================
 
@@ -531,17 +532,26 @@
                                                                             // if ($Room_recomprice) {
                                                                             //         $price = $Room_recomprice;
                                                                             // }
+                                                                            // if($itemprice->advanceprice){
+                                                                            //     dd($itemprice->advanceprice,">>adv");
+                                                                            // }
                                                                             if ($advancepurchase->count() > 0) {
                                                                                 foreach ($advancepurchase as $advancevalue) {
-                                                                                    if($advancevalue->is_active == 1){
-                                                                                         if ($advancevalue->contract_id == $itemprice->contract_id && $advancevalue->room_id == $itemprice->room_id && $advancevalue->room_id == $item->room->id) {
-                                                                                                if ($Room_recomprice != $itemprice->recom_price) {
-                                                                                                    $price = ($advancevalue->price / $itemprice->recom_price) * $Room_recomprice;
-                                                                                                } else {
-                                                                                                    $price = $advancevalue->price;
-                                                                                                }
-                                                                                            }
+                                                                                    if($itemprice->advanceprice->id == $advancevalue->id && $itemprice->advanceprice->is_active == 1){
+                                                                                        if ($Room_recomprice != $itemprice->recom_price) {
+
+                                                                                            $price = ($advancevalue->price / $itemprice->recom_price) * $Room_recomprice;
+
+                                                                                        } else {
+                                                                                            $price = $advancevalue->price;
+                                                                                        }
+
+                                                                                        if($Room_recomprice == 0){
+                                                                                            $price = $advancevalue->price;
+                                                                                        }
+
                                                                                     }
+
 
                                                                                 }
                                                                             } else {
@@ -551,8 +561,6 @@
                                                                                     $price = $itemprice->recom_price;
                                                                                 }
                                                                             }
-
-                                                                             //var_dump($Room_recomprice);
                                                                         @endphp
                                                                         {{-- <hr>
                                                                 <p style="font-size:20px;font-weight:700" class="m-0 p-0">{{$itemprice->contractrate->codedesc}}</p> --}}

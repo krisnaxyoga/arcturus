@@ -379,8 +379,8 @@ class HomeController extends Controller
             }else{
                 $agentCountry = $request->country;
             }
-            
-            
+
+
 
             $category = $request->input('data.category');
             $datareq = $request->all();
