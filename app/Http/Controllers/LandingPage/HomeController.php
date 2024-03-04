@@ -618,7 +618,8 @@ class HomeController extends Controller
                 'affiliate',
                 'blackoutdate',
                 'user',
-                'agentCountry'
+                'agentCountry',
+                'day'
             ));
         }
     }

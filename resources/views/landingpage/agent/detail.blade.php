@@ -448,12 +448,12 @@
                                                                             } else {
                                                                                 if ($itemprice->recom_price == $TotalHotelCalendar) {
                                                                                     if($itemprice->contractrate->rolerate == 2){
-                                                                                        $Room_recomprice = $totalpricecalendar * ((100 - $itemprice->contractrate->percentage)/100);
+                                                                                        $Room_recomprice = $TotalHotelCalendar * ((100 - $itemprice->contractrate->percentage)/100);
                                                                                     }else{
                                                                                         if($totalpricecalendar == 0){
                                                                                             $Room_recomprice = $TotalHotelCalendar;
                                                                                         }else{
-                                                                                            $Room_recomprice = $totalpricecalendar;
+                                                                                            $Room_recomprice = $TotalHotelCalendar;
                                                                                             
                                                                                         }
                                                                                     }
@@ -524,27 +524,93 @@
                                                                             // if ($Room_recomprice) {
                                                                             //         $price = $Room_recomprice;
                                                                             // }
+                                                                            $lastUsedPrice = null; // Inisialisasi variabel untuk menyimpan nilai terakhir dari $advancevalue->price
+                                                                            $advcontract_id = null;
+                                                                            $advcontract_active = 0;
+                                                                            $advcontract_roomid = null;
+
                                                                             if ($advancepurchase->count() > 0) {
                                                                                 foreach ($advancepurchase as $advancevalue) {
+
                                                                                     if($advancevalue->is_active == 1){
-                                                                                         if ($advancevalue->contract_id == $itemprice->contract_id && $advancevalue->room_id == $itemprice->room_id && $advancevalue->room_id == $item->room->id) {
-                                                                                                if ($Room_recomprice != $itemprice->recom_price) {
-                                                                                                    $price = ($advancevalue->price / $itemprice->recom_price) * $Room_recomprice;
-                                                                                                } else {
-                                                                                                    $price = $advancevalue->price;
-                                                                                                }
-                                                                                            }
+                                                                                        // Memeriksa apakah kontrak dan ruangan cocok dengan data yang tersedia
+                                                                                        if ($advancevalue->contract_id == $itemprice->contract_id && $advancevalue->room_id == $itemprice->advanceprice->room_id && $advancevalue->advancepurchase->day <= $day) {
+                                                                                            // Harga yang dihitung berdasarkan harga rekomendasi ruangan
+                                                                                            // var_dump($advancevalue->price." ini aktif = ".$advancevalue->is_active." begin sell = ".$advancevalue->advancepurchase->beginsell." day = ". $advancevalue->advancepurchase->day);
+                                                                                            // var_dump($itemprice->advanceprice->advancepurchase->day);
+                                                                                            $advcontract_id = $advancevalue->contract_id;
+                                                                                            $lastUsedPrice = $advancevalue->price;
+                                                                                            $advcontract_active = $advancevalue->is_active;
+                                                                                            $advcontract_roomid = $advancevalue->room_id;
+                                                                                            
+                                                                                            // if ($Room_recomprice != $itemprice->recom_price) {
+                                                                                            //     $price = ($lastUsedPrice / $itemprice->recom_price) * $Room_recomprice;
+                                                                                               
+                                                                                            // } else {
+                                                                                            //     $price = $lastUsedPrice;
+                                                                                            // }
+                                                                                            
+                                                                                            // // Memeriksa apakah kontrak memiliki rate khusus (rolerate)
+                                                                                            // if ($itemprice->contractrate->rolerate == 1) {
+                                                                                            //     // Jika iya, gunakan harga rekomendasi ruangan
+                                                                                            //     if($Room_recomprice != 0){
+                                                                                            //         $price = $lastUsedPrice;
+                                                                                            //     }else{
+                                                                                            //         $price = $Room_recomprice;
+                                                                                            //     }
+                                                                                              
+                                                                                            // } else {
+                                                                                            //     // Jika tidak, gunakan harga rekomendasi kontrak
+                                                                                            //     $price = $itemprice->recom_price;
+                                                                                            // }
+                                                                                            
+                                                                                            // // Jika harga rekomendasi ruangan adalah 0, gunakan harga rekomendasi kontrak
+                                                                                            // if($Room_recomprice == 0){
+                                                                                            //     $price = $lastUsedPrice;
+                                                                                            // }
+                                                                                        }
                                                                                     }
-                                                                                   
                                                                                 }
+
+                                                                                if($advcontract_active == 1){
+                                                                                    if ($advcontract_id == $itemprice->contract_id && $advcontract_roomid == $itemprice->advanceprice->room_id && $advancevalue->advancepurchase->day <= $day) {
+                                                                                        if ($Room_recomprice != $itemprice->recom_price) {
+                                                                                                $price = ($lastUsedPrice / $itemprice->recom_price) * $Room_recomprice;
+                                                                                               
+                                                                                            } else {
+                                                                                                $price = $lastUsedPrice;
+                                                                                                
+                                                                                            }
+                                                                                            
+                                                                                            // Memeriksa apakah kontrak memiliki rate khusus (rolerate)
+                                                                                            if ($itemprice->contractrate->rolerate == 1) {
+                                                                                                // Jika iya, gunakan harga rekomendasi ruangan
+                                                                                                if($Room_recomprice != 0){
+                                                                                                    $price = $lastUsedPrice;
+                                                                                                }else{
+                                                                                                    $price = $Room_recomprice;
+                                                                                                }
+                                                                                              
+                                                                                            } 
+                                                                                            
+                                                                                            // Jika harga rekomendasi ruangan adalah 0, gunakan harga rekomendasi kontrak
+                                                                                            if($Room_recomprice == 0){
+                                                                                                $price = $lastUsedPrice;
+                                                                                                
+                                                                                            }
+                                                                                            
+                                                                                            
+                                                                                    }
+                                                                                }
+
                                                                             } else {
+                                                                                // Jika tidak ada pembelian lanjutan, gunakan harga rekomendasi kontrak
                                                                                 if ($itemprice->contractrate->rolerate == 1) {
                                                                                     $price = $Room_recomprice;
                                                                                 } else {
                                                                                     $price = $itemprice->recom_price;
                                                                                 }
                                                                             }
-                                                                            
                                                                              //var_dump($Room_recomprice);
                                                                         @endphp
                                                                         {{-- <hr>

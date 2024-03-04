@@ -450,6 +450,8 @@ class ContractController extends Controller
      */
     public function edit(string $id)
     {
+        // $this->sync_advance_purchase($id);
+
         $userid = auth()->user()->id;
         $vendor = Vendor::where('user_id',$userid)->with('users')->first();
         $price = AgentMarkupSetup::where('user_id',$userid)->get();

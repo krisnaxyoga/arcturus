@@ -588,7 +588,8 @@ class MarkupHotelController extends Controller
                 'HotelRoomBooking',
                 'surchargeAllRoom',
                 'blackoutdate',
-                'markup'
+                'markup',
+                'day'
             ));
         }
     }

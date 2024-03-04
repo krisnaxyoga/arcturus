@@ -355,15 +355,15 @@ export default function Index({ props, session, agent,history,setting }) {
                                             <p>Date : {formatDate(item.created_at)}</p>
                                             <span className={item.status == 'success' ? `badge badge-success` : `badge badge-warning`}>{item.status}</span>
                                             <p>{formatRupiah(item.saldo_master)}</p>
-                                            {item.type_transaction == 'PAYMENT-SALDO' ? (
-                                                <>
-                                                 <p style={{fontWeight:'700',color:'#eb5151'}}>- {formatRupiah(item.saldo_add_minus)}</p>
-                                                </>
-                                            ):(
-                                                <>
-                                                 <p style={{fontWeight:'700',color:'#32cf76'}}>+ {formatRupiah(item.saldo_add_minus)}</p>
-                                                </>
-                                            )}
+                                                {item.type_transaction == 'PAYMENT-SALDO' && item.type_transaction == 'REFUND-SALDO' ? (
+                                                    <>
+                                                    <p style={{fontWeight:'700',color:'#eb5151'}}>- {formatRupiah(item.saldo_add_minus)}</p>
+                                                    </>
+                                                ):(
+                                                    <>
+                                                    <p style={{fontWeight:'700',color:'#32cf76'}}>+ {formatRupiah(item.saldo_add_minus)}</p>
+                                                    </>
+                                                )}
                                            
                                             <p>{formatRupiah(item.total_saldo)}</p>
                                             <p>{item.type_transaction}</p>
