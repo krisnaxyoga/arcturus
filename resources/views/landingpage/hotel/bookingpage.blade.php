@@ -205,34 +205,37 @@
                                 <div class="transport-cards">
                                     <div class="row">
                                         @foreach ($transport as $key=>$item)
-                                        @php
-                                            $price = $item->price + $item->agenttransport->markup
-                                        @endphp
-                                        @if($item->agenttransport->status == 1)
-                                        <div class="card mx-3 border-0 rounded shadow" data-destination="{{$item->destination}}">
-                                            <div class="card-body">
-                                                <div class="d-flex">
-                                                    <div class="mx-3">
-                                                        <label class="switch">
-                                                            <input type="checkbox" class="transport-checkbox" data-idtransport="{{ $item->id }}" data-price="{{ $price }}">
-                                                            <span class="slider"></span>
-                                                        </label>
-                                                        {{-- <button
-                                                        class="btn font-weight-bold font-weight-bold p-0"
-                                                        style="font-size: 20px" type="button" data-toggle="modal"
-                                                        data-target="#exampleModalx1234{{ $key }}"><i class="fa fa-eye"></i></button> --}}
-                                                    </div>
-                                                    <div class="mx-3">
-                                                        <p class="m-0" style="font-weight: 700">{{$item->type_car}} @if($item->set != null)
-                                                            - {{$item->set}} seat
-                                                        @endif </p>
-                                                        <p class="transport-price m-0">Rp. {{ number_format($price, 0, ',', '.')}}</p>
-                                                        <p class="m-0">{{$item->transportdestination->destination}}</p>
+                                        @if($item->agenttransport)
+                                            @php
+                                                $price = $item->price + $item->agenttransport->markup
+                                            @endphp
+                                            @if($item->agenttransport->status == 1)
+                                            <div class="card mx-3 border-0 rounded shadow" data-destination="{{$item->destination}}">
+                                                <div class="card-body">
+                                                    <div class="d-flex">
+                                                        <div class="mx-3">
+                                                            <label class="switch">
+                                                                <input type="checkbox" class="transport-checkbox" data-idtransport="{{ $item->id }}" data-price="{{ $price }}">
+                                                                <span class="slider"></span>
+                                                            </label>
+                                                            {{-- <button
+                                                            class="btn font-weight-bold font-weight-bold p-0"
+                                                            style="font-size: 20px" type="button" data-toggle="modal"
+                                                            data-target="#exampleModalx1234{{ $key }}"><i class="fa fa-eye"></i></button> --}}
+                                                        </div>
+                                                        <div class="mx-3">
+                                                            <p class="m-0" style="font-weight: 700">{{$item->type_car}} @if($item->set != null)
+                                                                - {{$item->set}} seat
+                                                            @endif </p>
+                                                            <p class="transport-price m-0">Rp. {{ number_format($price, 0, ',', '.')}}</p>
+                                                            <p class="m-0">{{$item->transportdestination->destination}}</p>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                            @endif
                                         @endif
+                                        
                                         {{-- <div class="modal" id="exampleModalx1234{{ $key }}" tabindex="-1"
                                         aria-labelledby="exampleModalx1234Label" aria-hidden="true">
                                             <div class="modal-dialog">

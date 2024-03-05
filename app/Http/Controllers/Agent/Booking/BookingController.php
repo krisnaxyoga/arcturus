@@ -149,11 +149,11 @@ class BookingController extends Controller
             }
 
             $booking_update_pricenomarkup = Booking::find($data->id);
-            $booking_update_pricenomarkup->pricenomarkup = $pricenomaruptotal;
+            $booking_update_pricenomarkup->pricenomarkup = $pricenomaruptotal * $totalNights;
             $booking_update_pricenomarkup->save();
 
             return response()->json([
-                $data->id
+                $data->id,
             ]);
 
             // return response()->json(['success' => 'Data saved!']);

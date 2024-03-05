@@ -51,14 +51,25 @@
         </tr>
         <tr>
             <td colspan="2" style="padding:15px;">
+              <?php if($booking->noagentmarkup == null){ ?>
                 <?php foreach ($hotelbook as $key => $item) { ?>
-                    <p style="font-size:14px;margin:0;padding:10px;border:solid 1px #ddd;font-weight:bold;">
-                        <span style="display:block;font-size:13px;font-weight:normal;">{{ $item->room->ratedesc}}</span> Rp. {{ number_format($item->price, 0, ',', '.')}} / Night <b style="font-size:12px;font-weight:300;"> </b>
-                      </p>
-                <?php } ?>
-    
-                <p style="font-size:14px;margin:0;padding:10px;border:solid 1px #ddd;font-weight:bold;">Total amount : </span> Rp. {{ number_format($booking->price, 0, ',', '.')}}</p>
-             
+                      <p style="font-size:14px;margin:0;padding:10px;border:solid 1px #ddd;font-weight:bold;">
+                          <span style="display:block;font-size:13px;font-weight:normal;">{{ $item->room->ratedesc}}</span> Rp. {{ number_format($item->price, 0, ',', '.')}} / Night <b style="font-size:12px;font-weight:300;"> </b>
+                        </p>
+                  <?php } ?>
+      
+                  <p style="font-size:14px;margin:0;padding:10px;border:solid 1px #ddd;font-weight:bold;">Total amount : </span> Rp. {{ number_format($booking->price, 0, ',', '.')}}</p>
+              
+                <?php } else { ?> 
+                    <?php foreach ($hotelbook as $key => $item) { ?>
+                        <p style="font-size:14px;margin:0;padding:10px;border:solid 1px #ddd;font-weight:bold;">
+                            <span style="display:block;font-size:13px;font-weight:normal;">{{ $item->room->ratedesc}}</span> Rp. {{ number_format($item->price, 0, ',', '.')}} / Night <b style="font-size:12px;font-weight:300;"> </b>
+                          </p>
+                    <?php } ?>
+        
+                    <p style="font-size:14px;margin:0;padding:10px;border:solid 1px #ddd;font-weight:bold;">Total amount : </span> Rp. {{ number_format(($booking->price + ($booking->agentmarkup * $booking->night)), 0, ',', '.')}}</p>
+                
+                  <?php } ?>
               </td>
         </tr>
       </tbody>

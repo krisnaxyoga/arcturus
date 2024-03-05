@@ -1092,7 +1092,7 @@
             var pricenomarkupintext = parseInt(totalPricenomarkup * totalNight.value);
             totalPricenomarkupElement.textContent = pricenomarkupintext.toLocaleString();
             var totalPricenomarkupInput = document.querySelector('input[name="totalpricenomarkup"]');
-            totalPricenomarkupInput.value = totalPricenomarkup.toLocaleString();
+            totalPricenomarkupInput.value = pricenomarkupintext.toLocaleString();
         }
 
         //function untuk tanggal checkin

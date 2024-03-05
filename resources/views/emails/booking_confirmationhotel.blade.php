@@ -66,7 +66,7 @@
               <table cellspacing="0" cellpadding="0" border="0" style="font-size: 14px; margin: 0; padding: 10px; border: solid 1px #ddd; font-weight: bold; width: 100%;">
                 <tr>
                     <td style="width: 50%;"><span style="display: block; font-size: 13px; font-weight: normal;">{{ $item->total_room}} &nbsp; | &nbsp;{{ $item->room->ratedesc}}</span></td>
-                    <td style="text-align: right;"><span style="font-size: 13px; font-weight: normal;">Rp. {{ number_format($item->pricenomarkup, 0, ',', '.')}} / Night</span></td>
+                    <td style="text-align: right;"><span style="font-size: 13px; font-weight: normal;">Rp. {{ number_format(($item->pricenomarkup * $booking->night), 0, ',', '.')}} / Night</span></td>
                 </tr>
             </table>
             <?php } ?>
