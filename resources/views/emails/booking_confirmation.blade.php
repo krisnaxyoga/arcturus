@@ -53,21 +53,35 @@
             <td colspan="2" style="padding:15px;">
               <?php if($booking->noagentmarkup == null){ ?>
                 <?php foreach ($hotelbook as $key => $item) { ?>
-                      <p style="font-size:14px;margin:0;padding:10px;border:solid 1px #ddd;font-weight:bold;">
-                          <span style="display:block;font-size:13px;font-weight:normal;">{{ $item->room->ratedesc}}</span> Rp. {{ number_format($item->price, 0, ',', '.')}} / Night <b style="font-size:12px;font-weight:300;"> </b>
-                        </p>
+                    <table cellspacing="0" cellpadding="0" border="0" style="font-size: 14px; margin: 0; padding: 10px; border: solid 1px #ddd; font-weight: bold; width: 100%;">
+                      <tr>
+                          <td style="width: 50%;"><span style="display: block; font-size: 13px; font-weight: normal;">{{ $item->total_room}} &nbsp; | &nbsp;{{ $item->room->ratedesc}}</span></td>
+                          <td style="text-align: right;"><span style="font-size: 13px; font-weight: normal;">Rp. {{ number_format(($item->price * $booking->night), 0, ',', '.')}} / Night</span></td>
+                      </tr>
+                  </table>
+                      
                   <?php } ?>
       
                   <p style="font-size:14px;margin:0;padding:10px;border:solid 1px #ddd;font-weight:bold;">Total amount : </span> Rp. {{ number_format($booking->price, 0, ',', '.')}}</p>
               
                 <?php } else { ?> 
+                  <?php
+                    $roomallow = 0;
+                    ?>
                     <?php foreach ($hotelbook as $key => $item) { ?>
-                        <p style="font-size:14px;margin:0;padding:10px;border:solid 1px #ddd;font-weight:bold;">
-                            <span style="display:block;font-size:13px;font-weight:normal;">{{ $item->room->ratedesc}}</span> Rp. {{ number_format($item->price, 0, ',', '.')}} / Night <b style="font-size:12px;font-weight:300;"> </b>
-                          </p>
-                    <?php } ?>
+                      <table cellspacing="0" cellpadding="0" border="0" style="font-size: 14px; margin: 0; padding: 10px; border: solid 1px #ddd; font-weight: bold; width: 100%;">
+                        <tr>
+                            <td style="width: 50%;"><span style="display: block; font-size: 13px; font-weight: normal;">{{ $item->total_room }} &nbsp; | &nbsp;{{ $item->room->ratedesc}}</span></td>
+                            <td style="text-align: right;"><span style="font-size: 13px; font-weight: normal;">Rp. {{ number_format((($item->price + ($booking->agentmarkup * $item->total_room)) * $booking->night), 0, ',', '.')}} / Night</span></td>
+                        </tr>
+                    </table>
+                    <?php 
+
+                    $roomallow += $item->total_room;
+
+                  } ?>
         
-                    <p style="font-size:14px;margin:0;padding:10px;border:solid 1px #ddd;font-weight:bold;">Total amount : </span> Rp. {{ number_format(($booking->price + ($booking->agentmarkup * $booking->night)), 0, ',', '.')}}</p>
+                    <p style="font-size:14px;margin:0;padding:10px;border:solid 1px #ddd;font-weight:bold;">Total amount : </span> Rp. {{ number_format(($booking->price + (($booking->agentmarkup * $roomallow) * $booking->night)), 0, ',', '.')}}</p>
                 
                   <?php } ?>
               </td>

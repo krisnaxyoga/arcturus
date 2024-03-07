@@ -229,7 +229,7 @@ class SettingController extends Controller
         }
     }
 
-    public function storepopup(Request $request){
+    public function storepopups(Request $request){
         $validator = Validator::make($request->all(), [
             'image' => 'nullable|mimes:png,jpg,jpeg|max:5048',
         ]);

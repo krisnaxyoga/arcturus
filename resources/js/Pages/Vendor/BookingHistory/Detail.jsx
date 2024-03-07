@@ -226,7 +226,8 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                                                     <td>{data.total_guests}</td>
                                                                                     <td>{formatRupiah(item.rate_price ? item.rate_price : item.contractprice.recom_price)}</td>
                                                                                     <td>{data.night}</td>
-                                                                                    <td>{formatRupiah(item.total_ammount ? item.total_ammount : item.contractprice.recom_price * data.night * item.total_room)}</td>
+                                                                                    <td>{formatRupiah(item.pricenomarkup * data.night)}</td>
+                                                                                    {/* <td>{formatRupiah(item.total_ammount ? item.total_ammount : item.contractprice.recom_price * data.night * item.total_room)}</td> */}
                                                                                     {/* <td>{formatRupiah(data.pricenomarkup)}</td> */}
                                                                                 </tr>
                                                                             ))}

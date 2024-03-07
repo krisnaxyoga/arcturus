@@ -141,10 +141,10 @@ class BookingController extends Controller
             }
 
             $booking_update_pricenomarkup = Booking::find($data->id);
-            $booking_update_pricenomarkup->pricenomarkup = $pricenomaruptotal;
+            $booking_update_pricenomarkup->pricenomarkup = $pricenomaruptotal * $totalNights;
             
             $booking_update_pricenomarkup->agentmarkup = $agentmarkup;
-            $booking_update_pricenomarkup->noagentmarkup = $noagentmarkup;
+            $booking_update_pricenomarkup->noagentmarkup = $noagentmarkup * $totalNights;
             $booking_update_pricenomarkup->save();
 
             return response()->json([
@@ -563,6 +563,8 @@ class BookingController extends Controller
             $totaltranport = 0;
         }
 
+        
+        $booking1 = Booking::find($id);
 
         $hotel_room_booking = HotelRoomBooking::where('booking_id',$id)->get();
         $saldo = auth()->user()->saldo;
@@ -570,14 +572,13 @@ class BookingController extends Controller
         foreach($hotel_room_booking as $item){
            
             $vendormarkup = Vendor::where('id',$item->vendor_id)->first();
-            $item->price = $item->booking->noagentmarkup;
+            $item->price =  $item->price - ($item->total_room * $booking1->agentmarkup);
             $item->save();
         }
 
        
-        $booking1 = Booking::find($id);
         $bookingvendormarkup = Vendor::where('id',$booking1->vendor_id)->first();
-        $booking1->price = $booking1->noagentmarkup * $booking1->night;
+        $booking1->price = $booking1->noagentmarkup;
         $booking1->save();
 
         $totalprice = 0;
