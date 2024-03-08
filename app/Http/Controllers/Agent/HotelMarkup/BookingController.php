@@ -89,7 +89,7 @@ class BookingController extends Controller
             $data->total_room = $request->totalroom;
             $data->night = $totalNights;
             $data->price = $totalNights * $price;
-            $data->pricenomarkup = $totalNights * ($pricenomarkup + $surcharge);
+            $data->pricenomarkup = $pricenomarkup + $surcharge;
             $data->total_guests = $request->person;
             $data->booking_status = '-';
             
@@ -125,7 +125,7 @@ class BookingController extends Controller
                 $hotelbook->price = $priceint;
                 $hotelbook->rate_price = $contractprice->recom_price + $surcharge;
                 $hotelbook->total_ammount = ((($priceint + $surcharge) * $totalNights) * $item['quantity']);
-                $hotelbook->pricenomarkup = $pricenomarkupint + ($surcharge * $totalNights);
+                $hotelbook->pricenomarkup = $pricenomarkupint + $surcharge;
                 $hotelbook->save();
 
 

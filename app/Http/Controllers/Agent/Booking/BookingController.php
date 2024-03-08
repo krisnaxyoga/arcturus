@@ -98,7 +98,7 @@ class BookingController extends Controller
             $data->total_room = $request->totalroom;
             $data->night = $totalNights;
             $data->price = $totalNights * $price;
-            $data->pricenomarkup = $totalNights * ($pricenomarkup + $surcharge);
+            $data->pricenomarkup = $pricenomarkup + $surcharge;
             $data->total_guests = $request->person;
             $data->booking_status = '-';
             $data->save();
@@ -115,6 +115,12 @@ class BookingController extends Controller
                 $contractprice = ContractPrice::where('id',$item['contpriceid'])->with('contractrate')->first();
 
                 $roomhotel = RoomHotel::where('id',$item['roomId'])->first();
+
+                // return response()->json([
+                //     'SURCHARGE'=>$surcharge,
+                //     'pricenomarkup' =>$pricenomarkup,
+                //     'pricenomarkupint satuan' =>$pricenomarkupint
+                // ]);
 
                 $hotelbook = new HotelRoomBooking();
                 $hotelbook->room_id = $item['roomId'];
@@ -135,8 +141,10 @@ class BookingController extends Controller
                 $hotelbook->deposit_policy = $contractprice->contractrate->deposit_policy;
 
                 $hotelbook->rate_price = $contractprice->recom_price + $surcharge;
-                $hotelbook->total_ammount = ((($priceint + $surcharge) * $totalNights) * $item['quantity']);
-                $hotelbook->pricenomarkup = $pricenomarkupint + ($surcharge * $totalNights);
+                $hotelbook->total_ammount = (($priceint + $surcharge) * $item['quantity']);
+                // $hotelbook->pricenomarkup = $pricenomarkupint + ($surcharge * $totalNights);
+                
+                $hotelbook->pricenomarkup = $pricenomarkupint + $surcharge;
                 $hotelbook->save();
 
             }
