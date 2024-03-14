@@ -224,7 +224,9 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                                                     <td>{item.room_name} <span className='badge badge-dark'>{item.contract_name}</span> </td>
                                                                                     {/* <td>{item.room_name} {roombooking.length > 1 ? (<span className='badge badge-dark'>{item.contract_name}</span>):(<></>)}</td> */}
                                                                                     <td>{data.total_guests}</td>
-                                                                                    <td>{formatRupiah(item.rate_price ? item.rate_price : item.contractprice.recom_price)}</td>
+                                                                                    {/* <td>{formatRupiah(item.rate_price ? item.rate_price : item.contractprice.recom_price)}</td> */}
+                                                                                    
+                                                                                    <td>{formatRupiah(item.pricenomarkup)}</td>
                                                                                     <td>{data.night}</td>
                                                                                     <td>{formatRupiah(item.pricenomarkup * data.night)}</td>
                                                                                     {/* <td>{formatRupiah(item.total_ammount ? item.total_ammount : item.contractprice.recom_price * data.night * item.total_room)}</td> */}

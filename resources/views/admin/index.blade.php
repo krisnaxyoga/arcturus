@@ -284,7 +284,11 @@
                                     @foreach ($booking as $item)
                                         <tr>
                                             <td>{{ $item->vendor->vendor_name }}</td>
-                                            <td>{{ $item->users->first_name }} {{ $item->users->last_name }}</td>
+                                            <td>  @if ($item->users)
+        {{ $item->users->first_name }} {{ $item->users->last_name }}
+    @else
+        N/A
+    @endif</td>
                                             <td>{{ $item->total_guests }}</td>
                                             <td>{{ $item->total_room }}</td>
                                             <td>{{ $item->night }}</td>

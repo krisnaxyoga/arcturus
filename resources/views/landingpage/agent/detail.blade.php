@@ -155,7 +155,16 @@
                                     <div class="form-group card-body border-0">
                                         <label for="#">Person</label>
                                         <div class="">
-                                            <select name="person" id="person" class="form-control" required>
+                                            @php
+                                                $maximumAdults = $data->max('room.adults');
+                                            @endphp
+                                
+                                        <select name="person" id="person" class="form-control" required onchange="checknight()">
+                                            @for ($i = 1; $i <= $maximumAdults; $i++)
+                                                <option @if (($datareq['person'] ?? '') == $i) selected @endif value="{{ $i }}">{{ $i }}</option>
+                                            @endfor
+                                        </select>
+                                            {{-- <select name="person" id="person" class="form-control" required>
                                                 <option @if (($datareq['person'] ?? '') == 1) selected @endif value="1">1
                                                 </option>
                                                 <option @if (($datareq['person'] ?? '') == 2) selected @endif value="2">2
@@ -164,7 +173,7 @@
                                                 </option>
                                                 <option @if (($datareq['person'] ?? '') == 4) selected @endif value="4">4
                                                 </option>
-                                            </select>
+                                            </select> --}}
                                         </div>
                                     </div>
                                 </div>
@@ -194,7 +203,7 @@
                         @endif
                         <div class="row">
                             @foreach ($data as $keyup => $item)
-
+                            @if($datareq['person'] <= $item->room->adults) 
                                 <div class="col-md-12 ftco-animate">
                                     <div class="card border-0 shadow mb-3 cardroom" style="border-radius: 1rem">
                                         <div class="row g-0">
@@ -804,6 +813,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                @endif
                             @endforeach
                         </div>
                         <div class="row">
@@ -981,7 +991,7 @@
 
             // Bentuk URL dengan parameter yang diinginkan
             var contractId = '{{ $data[0]->contract_id }}'; // Ganti dengan cara Anda mendapatkan contract_id
-            var url = '/homepage/hotel/' + contractId +
+            var url = '/agent/hotelmarkup/hoteldetail/' + contractId +
                 '?checkin=' + formattedCheckin +
                 '&checkout=' + formattedCheckout +
                 '&person=' + person +
