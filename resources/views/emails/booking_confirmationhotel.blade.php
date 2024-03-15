@@ -34,7 +34,7 @@
               <?php if($booking->users->vendors->affiliate == $booking->vendor->affiliate){?>
                 <b style="color:green;font-weight:normal;margin:0"> powered by ARCTURUS </b>
                 <?php } else { ?>
-                    <?php if($booking->vendor->affiliate) { ?> 
+                    <?php if($booking->vendor->affiliate) { ?>
                       <b style="color:green;font-weight:normal;margin:0"> powered by {{$affiliator->vendor_name}} </b>
                       <?php } ?>
                   <?php } ?>
@@ -50,7 +50,7 @@
                     <p style="margin:0 0 10px 0;padding:0;font-size:14px;"><span style="display:block;font-weight:bold;font-size:13px;">Total Guest</span> {{$booking->total_guests}}</p>
           </td>
           <td style="width:50%;padding:20px;vertical-align:top">
-            
+
             <p style="margin:0 0 10px 0;padding:0;font-size:14px;"><span style="display:block;font-weight:bold;font-size:13px;">Special Request</span> {{$booking->special_request}}</p>
             <p style="margin:0 0 10px 0;padding:0;font-size:14px;"><span style="display:block;font-weight:bold;font-size:13px;">Deposit Policy</span> {!!$contract->deposit_policy!!}</p>
             <p style="margin:0 0 10px 0;padding:0;font-size:14px;"><span style="display:block;font-weight:bold;font-size:13px;">Cenclellation Policy</span> {!!$contract->cencellation_policy!!}</p>
@@ -72,7 +72,7 @@
             <?php } ?>
 
             <p style="font-size:14px;margin:0;padding:10px;border:solid 1px #ddd;font-weight:bold;">Total amount : </span> Rp. {{ number_format($booking->pricenomarkup, 0, ',', '.')}}</p>
-         
+
           </td>
         </tr>
       </tbody>
@@ -86,5 +86,5 @@
         </tfooter>
     </table>
   </body>
-  
+
 </html>

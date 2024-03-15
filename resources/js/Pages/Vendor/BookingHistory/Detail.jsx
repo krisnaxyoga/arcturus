@@ -225,8 +225,8 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                                                     {/* <td>{item.room_name} {roombooking.length > 1 ? (<span className='badge badge-dark'>{item.contract_name}</span>):(<></>)}</td> */}
                                                                                     <td>{data.total_guests}</td>
                                                                                     {/* <td>{formatRupiah(item.rate_price ? item.rate_price : item.contractprice.recom_price)}</td> */}
-                                                                                    
-                                                                                    <td>{formatRupiah(item.pricenomarkup)}</td>
+
+                                                                                    <td>{formatRupiah(item.pricenomarkup/item.total_room)}</td>
                                                                                     <td>{data.night}</td>
                                                                                     <td>{formatRupiah(item.pricenomarkup * data.night)}</td>
                                                                                     {/* <td>{formatRupiah(item.total_ammount ? item.total_ammount : item.contractprice.recom_price * data.night * item.total_room)}</td> */}
@@ -290,14 +290,14 @@ export default function Detail({ session, data,vendor, agent,roombooking,contrac
                                                                             <>
                                                                              {roombooking.map((item, index) => (
                                                                                 <>
-                                                                                    
+
                                                                                     <div className="row mt-3">
                                                                                         <div className="col-12 mt-2">
                                                                                             <div className="d-flex">
                                                                                                     <p className='m-0 text-primary' style={{fontWeight:'700'}}>{item.room_name}</p>
                                                                                             <p className='badge badge-dark mx-2 mt-1'>{item.contract_name}</p>
                                                                                             </div>
-                                                                                            
+
                                                                                         </div>
                                                                                         <div className="col-12 col-sm-7 text-grey-d2 text-95 mt-2 mt-lg-0">
                                                                                                 <div>
