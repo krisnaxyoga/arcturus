@@ -621,6 +621,7 @@ class HomepageController extends Controller
                 'blackoutdate' => $blackoutdate,
                 'user' => $user,
                 'agentCountry' => $agentCountry,
+                'day' => $day,
             ], 200);
         
     }

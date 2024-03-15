@@ -52,6 +52,26 @@ class ContractController extends Controller
             $is_form = 'edit';
         }
 
+
+        $advs = AdvancePurchase::where('user_id',$userid)->get();
+
+        if($advs->count() >= 0){
+            foreach ($advs as $adv) {
+                $day = $adv->day;
+        
+                // $beginsell = Carbon::parse($adv->beginsell); // Convert beginsell to Carbon object
+                $today = Carbon::now(); // Tanggal hari ini
+        
+                $interval = intval($day); // Calculate the interval based on the day property of $adv
+                // Calculate new beginsell based on $day and original beginsell
+                $newbeginsell = $today->copy()->addDays($interval); // Calculate beginsell based on new $day
+        
+                $adv->beginsell = $newbeginsell; // Set the new beginsell value
+                $adv->save();
+            }
+        }
+
+
         return inertia('Vendor/MenageRoom/ContractRate/Index',[
             'data'=>$data,
             'roomtype'=>$room,
