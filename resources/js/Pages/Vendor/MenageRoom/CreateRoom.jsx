@@ -110,7 +110,7 @@ export default function Index({ session, props, attr,roomtype,vendor }) {
                 alert('Only image files with formats png, jpg, or jpeg are allowed!');
                 e.target.value = ''; // Mengosongkan input file
             } else if (file.size > maxFileSizeInBytes) {
-                alert('File size must not exceed 5 MB!');
+                alert('File size must not exceed 5 MB!, otherwise contact admin');
                 e.target.value = ''; // Mengosongkan input file
             } else {
                 setImage(file);
@@ -137,11 +137,11 @@ export default function Index({ session, props, attr,roomtype,vendor }) {
                 return true; // File ini tidak valid
             }
     
-            if (file.size > 5 * 1024 * 1024) {
-                alert('File size must not exceed 5 MB!');
-                e.target.value = '';
-                return true; // File ini tidak valid
-            }
+            // if (file.size > 5 * 1024 * 1024) {
+            //     alert('File size must not exceed 5 MB!');
+            //     e.target.value = '';
+            //     return true; // File ini tidak valid
+            // }
 
             return false; // File ini valid
         });
@@ -306,7 +306,7 @@ export default function Index({ session, props, attr,roomtype,vendor }) {
                                                         <div className="col-lg-3">
                                                             <div className="mb-3">
                                                                 <label htmlFor="exampleFormControlInput1" className="form-label">Size</label>
-                                                                <input required onChange={(e) => setSize(e.target.value)} type="number" className="form-control" id="exampleFormControlInput1" placeholder="Total Bedroom" />
+                                                                <input required onChange={(e) => setSize(e.target.value)} type="number" className="form-control" id="exampleFormControlInput1" placeholder="Size Room" />
                                                             </div>
                                                         </div>
                                                     </div>

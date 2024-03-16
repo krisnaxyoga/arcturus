@@ -39,9 +39,10 @@ class DashboardController extends Controller
         $cancelled = Booking::where('booking_status', 'cancelled')->count();
         // $process = Booking::whereNotIn('booking_status', ['-', '','paid', 'unpaid'])->count();
 
-        $booking = Booking::whereNotIn('booking_status', ['-', ''])->with('users','vendor')->get();
+        $booking = Booking::whereNotIn('booking_status', ['-', ''])->with('users','vendor')->orderBy('created_at', 'desc') // Mengurutkan data berdasarkan created_at secara descending (terbaru dulu)
+        ->get();
 
-        $roomhotel = Booking::where('booking_status','paid')->sum('night');
+        $roomhotel = Booking::where('booking_status','paid')->get();
         return view('admin.index',compact('setting','totalbooking','totalunpaid','totaltransaction','hotel','agent','paid','cancelled','unpaid','process','booking','vendor','roomhotel'));
     }
 

@@ -32,4 +32,9 @@ class ContractPrice extends Model
     public function advancepurchaseprice() {
         return $this->hasMany(AdvancePurchasePrice::class);
     }
+
+    public function advanceprice()
+    {
+        return $this->hasOne(AdvancePurchasePrice::class, 'room_id', 'room_id')->where('contract_id', $this->contract_id);
+    }
 }

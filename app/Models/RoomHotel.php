@@ -46,4 +46,8 @@ class RoomHotel extends Model
     public function advancepurchaseprice() {
         return $this->hasMany(AdvancePurchasePrice::class);
     }
+
+    public function extrabedprice(){
+        return $this->hasOne(ExtrabedPrice::class, 'room_id');
+    }
 }

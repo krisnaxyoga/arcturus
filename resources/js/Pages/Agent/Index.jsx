@@ -12,7 +12,7 @@ import { Link, usePage } from '@inertiajs/inertia-react';
 import Carousel from 'react-bootstrap/Carousel';
 import { Inertia } from '@inertiajs/inertia';
 
-export default function Index({ totalroom, data,booking,success,pending,getbooking }) {
+export default function Index({ totalroom, data,booking,success,pending,getbooking,transport }) {
   const { url } = usePage();
 
   function formatRupiah(amount) {
@@ -30,7 +30,7 @@ export default function Index({ totalroom, data,booking,success,pending,getbooki
   const nextPage = () => setCurrentPage(currentPage + 1);
 
   const prevPage = () => setCurrentPage(currentPage - 1);
-  
+
 
   return (
     <>
@@ -43,7 +43,7 @@ export default function Index({ totalroom, data,booking,success,pending,getbooki
             <div className="container-fluid">
               {/* <!-- Page Heading --> */}
               <div className="d-sm-flex align-items-center justify-content-center mb-4">
-                <h1 className="h3 mb-0 text-gray-800">Agent Dashboard</h1> 
+                <h1 className="h3 mb-0 text-gray-800">Agent Dashboard</h1>
               </div>
 
               {/* <!-- Content Row --> */}
@@ -139,10 +139,10 @@ export default function Index({ totalroom, data,booking,success,pending,getbooki
                                     <th>Nights</th>
                                     <th>Total</th>
                                     <th>Status</th>
-                                    <th>Action</th>
+                                    <th>Confirmation letter</th>
                                 </tr>
                             </thead>
-                            <Bookings bookings={currentPosts} />
+                            <Bookings bookings={currentPosts} transports={transport}/>
                         </table>
                         <Pagination postsPerPage={postsPerPage} totalPosts={data.length} paginate={paginate} nextPage={nextPage} prevPage={prevPage} crntPage={currentPage} />
                     </div>

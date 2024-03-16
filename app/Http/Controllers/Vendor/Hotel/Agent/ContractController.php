@@ -14,9 +14,12 @@ use App\Models\ContractRate;
 use App\Models\ContractPrice;
 use App\Models\AdvancePurchase;
 use App\Models\AdvancePurchasePrice;
+use App\Models\BlackoutContractRate;
+use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Response;
+use Illuminate\Support\Facades\Auth;
 
 class ContractController extends Controller
 {
@@ -48,6 +51,26 @@ class ContractController extends Controller
             $roomcategory = RoomHotel::where('user_id',$userid)->get();
             $is_form = 'edit';
         }
+
+
+        $advs = AdvancePurchase::where('user_id',$userid)->get();
+
+        if($advs->count() >= 0){
+            foreach ($advs as $adv) {
+                $day = $adv->day;
+        
+                // $beginsell = Carbon::parse($adv->beginsell); // Convert beginsell to Carbon object
+                $today = Carbon::now(); // Tanggal hari ini
+        
+                $interval = intval($day); // Calculate the interval based on the day property of $adv
+                // Calculate new beginsell based on $day and original beginsell
+                $newbeginsell = $today->copy()->addDays($interval); // Calculate beginsell based on new $day
+        
+                $adv->beginsell = $newbeginsell; // Set the new beginsell value
+                $adv->save();
+            }
+        }
+
 
         return inertia('Vendor/MenageRoom/ContractRate/Index',[
             'data'=>$data,
@@ -114,6 +137,7 @@ class ContractController extends Controller
                 $data->stayperiod_end = $request->stayperiod_end;
                 $data->booking_begin = $request->booking_begin;
                 $data->booking_end = $request->booking_end;
+                $data->is_active = 1;
                 if($contract == false){
                     $data->min_stay = 1;
                     $data->distribute = ["WORLDWIDE"];
@@ -127,36 +151,50 @@ class ContractController extends Controller
 
                 $data->pick_day = explode(",", $request->pick_day);
                 if($request->cencellation_policy == null){
-                    $data->cencellation_policy = "
-                    <p>
+                    // $data->cencellation_policy = "<span>
+                    // <ul>
+                    // <li>HIGH season from 01-31 August: 14 days prior to arrival</li>
+                    // <li>PEAK season from 27Dec - 05Jan: 45 days prior to arrival</li>
+                    // <li>Except above periods: 72 hours prior to arrival</li>
+                    // <ul>
+                    // <li>If cancellation/amendment is made NORMAL/HIGH/PEAK days prior to your arrival date, no fee will be charged</li>
+                    // <li>If cancellation/amendment is made within NORMAL/HIGH/PEAK days, 1st night’s room rate and tax will be charged
+                    // </li>
+                    // <li>In case of no-show, 100% room rate and tax will be charged</li>
+                    // </ul>
+                    // <li>Early Bird/Long Stay/Package Rates are Non - refundable</li>
+                    // </ul>
+                    // </span>
+                    // ";
+                    $data->cencellation_policy = "<span>
                     <ul>
-                    <li>HIGH season from 01-31 August: 14 days prior to arrival</li>
-                    <li>PEAK season from 27Dec - 05Jan: 45 days prior to arrival</li>
-                    <li>Except above periods: 72 hours prior to arrvial</li>
-                    <ul>
-                    <li>If cancellation/amendment is made NORMAL/HIGH/PEAK days prior to your arrival date, no fee will be charged</li>
-                    <li>If cancellation/amendment is made within NORMAL/HIGH/PEAK days, including reservations made within 72 hours of your arrival, 1st night’s room rate and tax will be charged
-                    </li>
-                    <li>In case of no-show, 100% room rate and tax will be charged</li>
+                    <li>Non - refundable,</li>
+                    <li>7days prior to arrival, changeable within the same year with NEW rate apply</li>
                     </ul>
-                    <li>Early Bird/Long Stay/Package Rates are Non - changeable & Non - refundable</li>
-                    </ul>
-                    </p>
+                    </span>
                     ";
                 }else{
                     $data->cencellation_policy = $request->cencellation_policy;
                 }
+
                 if ($request->deposit_policy == null){
                     $data->deposit_policy = "<li>Full payment is required upon booking received</li>";
                 }else{
                     $data->deposit_policy = $request->deposit_policy;
                 }
+
                 if ($request->benefit_policy == null){
                     $data->benefit_policy = "<li>Include daily breakfast for 2 pax</li>";
                 }else{
                     $data->benefit_policy = $request->benefit_policy;
                 }
                 
+                if ($request->other_policy == null){
+                    $data->other_policy = "";
+                }else{
+                    $data->other_policy = $request->other_policy;
+                }
+
                 $data->except = explode(",",$request->except);
                 
                 if($request->percentage == null){
@@ -204,6 +242,7 @@ class ContractController extends Controller
 
         $userid = auth()->user()->id;
         $barprice = BarPrice::where('user_id',$userid)->get();
+        $vendor = Vendor::where('user_id',$userid)->first();
 
         // $markup = AgentMarkupSetup::where('user_id',$userid)->get();
 
@@ -247,6 +286,7 @@ class ContractController extends Controller
 
                 $data->price = 0;
                 $data->is_active = 1;
+                $data->recomend = $vendor->recomend;
                 $data->barprice_id = $baritem->id;
                 $data->save();
 
@@ -271,6 +311,14 @@ class ContractController extends Controller
                     $advanceprice->rolerate = 2;
                     $advanceprice->is_active = $item->is_active;
                     $advanceprice->save();
+
+                     // Hitung persentase
+                    $pecentage1 = 1 - $nilai[$key];
+                    $pecentage2 = $pecentage1 * 100;
+
+                    // Tetapkan persentase pada $advancepurchase atau $item
+                    $item->percentage = $pecentage2;
+                    $item->save();
                 }
             }
         }
@@ -286,6 +334,7 @@ class ContractController extends Controller
         $barprice = BarPrice::find($id);
         $userid = auth()->user()->id;
         $contract = ContractRate::find($cont);
+        $vendor = Vendor::where('user_id',$userid)->first();
 
         $contractroleone= ContractRate::where('user_id',$userid)->where('rolerate',1)->first();
             // $markup = AgentMarkupSetup::where('user_id',$userid)->first();
@@ -323,6 +372,7 @@ class ContractController extends Controller
 
             $data->is_active = 1;
             $data->barprice_id = $id;
+            $data->recomend = $vendor->recomend;
             $data->save();
 
 
@@ -347,6 +397,14 @@ class ContractController extends Controller
                 $advanceprice->rolerate = 2;
                 $advanceprice->is_active = $item->is_active;
                 $advanceprice->save();
+
+                 // Hitung persentase
+                 $pecentage1 = 1 - $nilai[$key];
+                 $pecentage2 = $pecentage1 * 100;
+
+                 // Tetapkan persentase pada $advancepurchase atau $item
+                 $item->percentage = $pecentage2;
+                 $item->save();
             }
 
 
@@ -412,6 +470,8 @@ class ContractController extends Controller
      */
     public function edit(string $id)
     {
+        // $this->sync_advance_purchase($id);
+
         $userid = auth()->user()->id;
         $vendor = Vendor::where('user_id',$userid)->with('users')->first();
         $price = AgentMarkupSetup::where('user_id',$userid)->get();
@@ -462,6 +522,18 @@ class ContractController extends Controller
             'vendor' => $vendor,
             'contpriceone' => $contractpriceroleone
         ]);
+    }
+
+    public function getAdvancePrice(string $id)
+    {
+        // Ambil data advanceprice yang diperlukan
+        $contract = ContractRate::find($id);
+        $advanceprice = AdvancePurchasePrice::where('contract_id', $contract->id)
+            ->with('room')
+            ->orderBy('price', 'asc')
+            ->get();
+
+        return response()->json(['advanceprice' => $advanceprice]);
     }
 
     /**
@@ -591,48 +663,67 @@ class ContractController extends Controller
                 $data->cencellation_policy = $request->cencellation_policy;
                 $data->deposit_policy = $request->deposit_policy;
                 $data->benefit_policy = $request->benefit_policy;
+                $data->other_policy = $request->other_policy;
                 $data->except = explode(",",$request->except);
                 $data->distribute = explode(",",$request->distribute);
                 $data->percentage = $request->percentage;
 
-                $data->save();
-
-                // Mengumpulkan data yang dibutuhkan sebelumnya
-                $contprice = ContractPrice::where('contract_id', $id)->get();
-                $advancepurchase = AdvancePurchase::where('contract_id',$id)->get();
-                foreach($advancepurchase as $key=>$item){
-                    $nilai = [
-                        0 => 0.962,
-                        1 => 0.925444,
-                        2 => 0.890277128,
-                        3 => 0.856446597136,
-                        4 => 0.823901626444832,
-                        5 => 0.792593364639928,
-                    ];
-
-                    foreach($contprice as $denden){
-                        $advanceprice = new AdvancePurchasePrice;
-                        $advanceprice->room_id = $denden->room_id;
-                        $advanceprice->user_id = $userid;
-                        $advanceprice->vendor_id = $item->vendor_id;
-                        $advanceprice->contract_id = $id;
-                        $advanceprice->advance_id = $item->id;
-                        $advanceprice->price = $denden->recom_price * $nilai[$key];
-                        $advanceprice->rolerate = 2;
-                        $advanceprice->is_active = $item->is_active;
-
-                        $existingPrice = AdvancePurchasePrice::where('room_id', $advanceprice->room_id)
-                            ->where('user_id', $advanceprice->user_id)
-                            ->where('vendor_id', $advanceprice->vendor_id)
-                            ->where('contract_id', $advanceprice->contract_id)
-                            ->where('advance_id', $advanceprice->advance_id)
-                            ->first();
-
-                        if (!$existingPrice) {
-                            $advanceprice->save();
-                        }
+               
+                if($data->stayperiod_end != $request->stayperiod_end){
+                   
+                    $advancepurchase = AdvancePurchase::where('contract_id',$id)->get();
+                    foreach($advancepurchase as $key=>$item){
+                        $item->endsell = $request->stayperiod_end;
+                        $item->save();
                     }
                 }
+                
+                if($request->percentage != $data->percentage){
+                    // Mengumpulkan data yang dibutuhkan sebelumnya
+                    $contprice = ContractPrice::where('contract_id', $id)->get();
+                    $advancepurchase = AdvancePurchase::where('contract_id',$id)->get();
+                    foreach($advancepurchase as $key=>$item){
+                        $nilai = [
+                            0 => 0.962,
+                            1 => 0.925444,
+                            2 => 0.890277128,
+                            3 => 0.856446597136,
+                            4 => 0.823901626444832,
+                            5 => 0.792593364639928,
+                        ];
+
+                        foreach($contprice as $denden){
+                            $advanceprice = new AdvancePurchasePrice;
+                            $advanceprice->room_id = $denden->room_id;
+                            $advanceprice->user_id = $userid;
+                            $advanceprice->vendor_id = $item->vendor_id;
+                            $advanceprice->contract_id = $id;
+                            $advanceprice->advance_id = $item->id;
+                            $advanceprice->price = $denden->recom_price * $nilai[$key];
+                            $advanceprice->rolerate = 2;
+                            $advanceprice->is_active = $item->is_active;
+
+                            $existingPrice = AdvancePurchasePrice::where('room_id', $advanceprice->room_id)
+                                ->where('user_id', $advanceprice->user_id)
+                                ->where('vendor_id', $advanceprice->vendor_id)
+                                ->where('contract_id', $advanceprice->contract_id)
+                                ->where('advance_id', $advanceprice->advance_id)
+                                ->first();
+
+                            if (!$existingPrice) {
+                                $advanceprice->save();
+                            }
+                        }
+                        // Hitung persentase
+                        $pecentage1 = 1 - $nilai[$key];
+                        $pecentage2 = $pecentage1 * 100;
+    
+                        // Tetapkan persentase pada $advancepurchase atau $item
+                        $item->percentage = $pecentage2;
+                        $item->save();
+                    }
+                }
+                $data->save();
 
                 // Perulangan pada AdvancePurchasePrice
 
@@ -694,6 +785,13 @@ class ContractController extends Controller
                     $advanceprice->save();
                 }
             }
+             // Hitung persentase
+             $pecentage1 = 1 - $nilai[$key];
+             $pecentage2 = $pecentage1 * 100;
+
+             // Tetapkan persentase pada $advancepurchase atau $item
+             $item->percentage = $pecentage2;
+             $item->save();
         }
         return redirect()->back()->with('success', 'advance purchase price has refresh');
     }
@@ -759,7 +857,20 @@ class ContractController extends Controller
                 ->withInput($request->all());
         } else {
             $data = AdvancePurchase::find($id);
-            
+
+            if($data->percentage != $request->percentage){
+
+                $percentagenew = (1-($request->percentage/100));
+
+                $advancePurchasePrices = AdvancePurchasePrice::where('advance_id', $data->id)->get();
+                foreach ($advancePurchasePrices as $advancePurchasePrice) {
+                    $advaPrice = AdvancePurchasePrice::find($advancePurchasePrice->id);
+                    $advaPrice->price =  ceil(($advaPrice->price/(1-($data->percentage/100))) * $percentagenew);
+                    $advaPrice->save();
+                }
+            }
+
+            $data->percentage = $request->percentage;
             $data->day = $request->day;
 
             // $beginsell = Carbon::parse($data->beginsell); // Convert beginsell to Carbon object
@@ -771,6 +882,7 @@ class ContractController extends Controller
 
             $data->beginsell = $newbeginsell; // Set the new endsell value
             $data->save();
+            
 
             return redirect()->back()->with('success', 'Advance Purchase Updated!');
         }
@@ -798,8 +910,16 @@ class ContractController extends Controller
 
             // dd($advance);
         $contract = ContractRate::where('id', $data->contract_id)->first();
+        
+        $advprice = AdvancePurchasePrice::where('advance_id',$id)->get();
 
+        foreach ($advprice as $item){
+            $item->is_active = $is_active;
+            $item->save(); 
+        }
+            
         foreach ($advance as $key => $itm) {
+
             if ($itm->is_active == 1 && $itm->numberactive >= 1 && $itm->numberactive <= 6) {
                 $date3 = AdvancePurchase::where('numberactive', $itm->numberactive)
                     ->where('contract_id', $data->contract_id)
@@ -833,4 +953,121 @@ class ContractController extends Controller
         return redirect()->back()->with('success', 'Data Delete');
     }
 
+    public function adv_price_is_active($id,$is_active){
+
+        $data = AdvancePurchasePrice::find($id);
+        $data->is_active = $is_active;
+        $data->save();
+
+        return redirect()->back()->with('success', 'advance purchase update status');
+    } 
+    
+    public function contractrate_is_active($id,$is_active){
+
+        $data = ContractRate::find($id);
+        $data->is_active = $is_active;
+        $data->save();
+
+        if($is_active == 1){
+            $this->addallcontractprice($id);
+        }
+
+        return redirect()->back()->with('success', 'contract rate update status');
+    }
+
+    // ========================================================== BLACKOUTDATE ===========================================================//
+
+    public function blackoutcontract($contid){
+        $userid = auth()->user()->id;
+        $vendor = Vendor::where('user_id',$userid)->with('users')->first();
+
+        $today = Carbon::now();
+        $tomorrow = $today->addDay();
+
+        $currentDate = now(); // Mendapatkan tanggal saat ini
+
+        $data = BlackoutContractRate::where('user_id', $userid)
+        ->where('stayperiod_end', '<', $today)
+        ->delete();
+
+        $data = BlackoutContractRate::where('user_id', $userid)
+        ->where('contract_id',$contid)
+        ->select('code', 'stayperiod_start', 'stayperiod_end')
+        ->groupBy('code', 'stayperiod_start', 'stayperiod_end')
+        ->orderBy('stayperiod_start', 'asc')
+        ->get();
+
+        return inertia('Vendor/MenageRoom/ContractRate/Blackoutdate/Index',[
+            'data'=>$data,
+            'vendor'=>$vendor,
+            'contractid'=>$contid
+        ]);
+    }
+
+    public function blackoutcontractstore(Request $request)
+    {
+        $request->validate([
+            'start_date' => 'required',
+            'end_date' => 'required',
+            'contractid' => 'required',
+        ]);
+
+        $userid = Auth::id();
+
+        $vendor = Vendor::query()->where('user_id', $userid)->with('users')->first();
+        $code = Str::random(8);
+        $start_date = date('Y-m-d', strtotime($request->start_date));
+        $end_date = date('Y-m-d', strtotime($request->end_date));
+
+        $BlackoutContractRatearray = BlackoutContractRate::where('code',$request->code)
+            ->get();
+        foreach($BlackoutContractRatearray as $itemdate){
+            $itemdate->delete();
+        }
+
+        $current_date = $start_date;
+
+        while ($current_date <= $end_date) {
+            $hotel_blackoutdate = BlackoutContractRate::query()
+                ->where('vendor_id', $vendor->id)
+                ->where('start_date', $current_date)
+                ->where('contract_id', $request->contractid)
+                ->where('code', $request->code)
+                ->first();
+
+            if (! $hotel_blackoutdate) {
+                $hotel_blackoutdate = new BlackoutContractRate();
+            }
+            
+            $hotel_blackoutdate->user_id = $userid;
+            $hotel_blackoutdate->vendor_id = $vendor->id;
+            $hotel_blackoutdate->contract_id = $request->contractid;
+            $hotel_blackoutdate->stayperiod_start = $request->start_date;
+            $hotel_blackoutdate->stayperiod_end = $request->end_date;
+            $hotel_blackoutdate->start_date = $current_date;
+            $hotel_blackoutdate->end_date = $current_date; // End date is the same as start date for daily entries
+            $hotel_blackoutdate->status = 1;
+            $hotel_blackoutdate->code = $code;
+    
+            $hotel_blackoutdate->save();
+
+            $current_date = date('Y-m-d', strtotime($current_date . ' +1 day')); // Move to the next day
+        }
+
+        
+        return redirect()->back()->with('success', 'Data Saved!');
+    }
+
+    public function blackoutdestroy($code)
+    {
+        $hotel_blackout = BlackoutContractRate::query()
+            ->where('code', $code)
+            ->get();
+        foreach ($hotel_blackout as $item){
+            $item->delete();
+        }
+       
+
+        return redirect()->back()->with('success', 'blackout deleted');
+    }
 }

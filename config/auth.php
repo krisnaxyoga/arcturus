@@ -36,9 +36,17 @@ return [
     */
 
     'guards' => [
+        'api' => [
+            'driver' => 'jwt', // Atau 'token' sesuai dengan konfigurasi JWT Anda.
+            'provider' => 'users',
+        ],
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
+        ],
+        'agent_transport' => [
+            'driver' => 'jwt', // Atau sesuaikan dengan driver yang Anda gunakan
+            'provider' => 'agent_transports', // Sesuaikan dengan nama provider yang digunakan
         ],
     ],
 
@@ -63,6 +71,10 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
+        ],
+        'agent_transports' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\AgentTransport::class, // Ganti dengan model yang sesuai
         ],
 
         // 'users' => [

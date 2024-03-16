@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Vendor extends Model
 {
     use HasFactory;
+    protected $casts = [
+        'marketcountry' => 'array'
+    ];
+
 
     public function users() {
         return $this->belongsTo(User::class, 'user_id');
@@ -31,5 +35,21 @@ class Vendor extends Model
 
     public function advancepurchase() {
         return $this->hasMany(AdvancePurchase::class);
+    }
+
+    public function historywallet() {
+        return $this->hasMany(HistoryWallet::class);
+    }
+
+    public function surchargeAllRoom() {
+        return $this->hasMany(SurchargeAllRoom::class);
+    }
+
+    public function blackoutContractRate() {
+        return $this->hasMany(BlackoutContractRate::class);
+    }
+
+    public function VendorAffiliate() {
+        return $this->hasMany(VendorAffiliate::class);
     }
 }

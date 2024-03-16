@@ -17,6 +17,11 @@
                             </h1>
                         </div>
                         <div class="card-body">
+                            @if (session('message'))
+                                <div class="alert alert-success">
+                                    {{ session('message') }}
+                                </div>
+                            @endif
                             <form
                                 action="@if ($model->exists) {{ route('dashboard.hotel.update', $model->id) }} @else {{ route('dashboard.hotel.store') }} @endif"
                                 method="POST" enctype="multipart/form-data">
@@ -29,46 +34,67 @@
                                             <input type="text" name="vendor_name" class="form-control" id="vendor_name"
                                                 value="{{ $model->vendor_name }}" placeholder="Hotel Name">
                                         </div>
-                                        <div class="mb-3">
-                                            <label for="firstname" class="form-label">First Name</label>
-                                            <input type="text" name="firstname" class="form-control" id="firstname"
-                                                value="@if ($model->exists) {{ $model->users->first_name }} @else {{ $user->first_name }} @endif"
-                                                placeholder="First Name">
+                                        <div class="d-flex">
+                                            <div class="mb-3">
+                                                <label for="firstname" class="form-label">First Name</label>
+                                                <input type="text" name="firstname" class="form-control" id="firstname"
+                                                    value="@if ($model->exists) {{ $model->users->first_name }} @else {{ $user->first_name }} @endif"
+                                                    placeholder="First Name">
+                                            </div>
+                                            <div class="mb-3 mx-3">
+                                                <label for="lastname" class="form-label">Last Name</label>
+                                                <input type="text" name="lastname" class="form-control" id="lastname"
+                                                    value="@if ($model->exists) {{ $model->users->last_name }} @else {{ $user->last_name }} @endif"
+                                                    placeholder="Last Name">
+                                            </div>
+                                            <div class="mb-3 mx-3">
+                                                <label for="affiliate" class="form-label">Affiliate Code</label>
+                                                <input type="text" name="affiliate" class="form-control" id="lastname"
+                                                    value="{{ $model->affiliate }}"
+                                                    placeholder="affiliate">
+                                            </div>
                                         </div>
+                                        
                                         <div class="mb-3">
                                             <label for="address1" class="form-label">Address Line1</label>
                                             <input type="text" name="address1" class="form-control" id="address1"
                                                 value="{{ $model->address_line1 }}" placeholder="Address Line1">
                                         </div>
                                         <div class="mb-3">
-                                            <label for="input1" class="form-label">Phone</label>
-                                            <input type="text" name="phone" class="form-control" id="input1"
-                                            value="{{ $model->phone }}"   placeholder="Phone">
+                                            <label for="address2" class="form-label">Address Line2</label>
+                                            <input type="text" name="address2" class="form-control" id="address2"
+                                                value="{{ $model->address_line2 }}" placeholder="Address Line2">
                                         </div>
+                                       
                                     </div>
                                     <div class="col-lg-6">
-                                        <div class="mb-3">
+                                        {{-- <div class="mb-3">
                                             <label for="vendor_legal_name" class="form-label">Name Hotel</label>
                                             <input type="text" name="vendor_legal_name" class="form-control"
                                                 id="vendor_legal_name" value="{{ $model->vendor_legal_name }}"
                                                 placeholder="Buissines Name">
-                                        </div>
+                                        </div> --}}
+                                        
                                         <div class="mb-3">
-                                            <label for="lastname" class="form-label">Last Name</label>
-                                            <input type="text" name="lastname" class="form-control" id="lastname"
-                                                value="@if ($model->exists) {{ $model->users->last_name }} @else {{ $user->last_name }} @endif"
-                                                placeholder="Last Name">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="address2" class="form-label">Address Line2</label>
-                                            <input type="text" name="address2" class="form-control" id="address2"
-                                                value="{{ $model->address_line2 }}" placeholder="Address Line2">
+                                            <label for="input1" class="form-label">Phone</label>
+                                            <input type="text" name="phone" class="form-control" id="input1"
+                                            value="{{ $model->phone }}"   placeholder="Phone">
                                         </div>
                                         <div class="mb-3">
                                             <label for="input1" class="form-label">Email</label>
                                             <input type="email" name="email" class="form-control" id="input1"
                                             value="{{ $model->email }}"   placeholder="email@mail.com">
                                         </div>
+                                            <div class="mb-3">
+                                                <label for="hotel_star" class="form-label">Hotel Stars</label>
+                                                <input type="number" class="form-control" id="hotel_star" name="hotel_star"
+                                                    value="{{ $model->hotel_star }}" placeholder="hotel_star">
+                                            </div>
+                                            <div class="mb-6">
+                                                <label for="recomend" class="form-label">recomended</label>
+                                                <input type="number" class="form-control" id="recomend" name="recomend"
+                                                    value="{{ $model->recomend }}" placeholder="System recomended">
+                                            </div>
                                     </div>
                                 </div>
                                 <div class="row">

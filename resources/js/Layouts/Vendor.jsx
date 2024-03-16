@@ -8,6 +8,9 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
 import '../../css/app.css';
 
+const decrypt = (encryptedValue) => {
+    return atob(encryptedValue);
+};
 
 function Layout({ children, page, vendor }) {
 
@@ -15,14 +18,17 @@ function Layout({ children, page, vendor }) {
     const [isOpen, setIsOpen] = useState(false);
     const [isOpen2, setIsOpen2] = useState(false);
 
+    // const [positionmaster, setPostionmaster] = useState('')
     const logOut = (e) => {
-        Inertia.post('/logout', {
-            onSuccess: () => {
-                console.log('logout');
-                // Lakukan aksi setelah gambar berhasil diunggah
-            },
-        });
+        localStorage.clear();
+        window.location.href = `/logout`;
     }
+    // Mendapatkan nilai 'encryptedPosition' dari localStorage
+    const encryptedPosition = localStorage.getItem('encryptedPosition');
+
+    // Mendekripsi nilai jika 'encryptedPosition' ada di localStorage
+    const position = decrypt(encryptedPosition);
+    // setPostionmaster(position);
 
     const handleShow = () => {
         setShow(!show);
@@ -37,6 +43,8 @@ function Layout({ children, page, vendor }) {
         if(page === '/myprofile'){
             setIsOpen2(true);
         }else if(page === '/room/attribute'){
+            setIsOpen2(true);
+        }else if(page === '/room/extrabed'){
             setIsOpen2(true);
         }else if(page === '/room/index'){
             setIsOpen2(true);
@@ -70,7 +78,7 @@ function Layout({ children, page, vendor }) {
 
                             </Dropdown.Toggle>
                             <Dropdown.Menu style={{ transform: "none!important" }}>
-                                <Dropdown.Item href="/logout">
+                                <Dropdown.Item onClick={logOut}>
                                     logout
                                 </Dropdown.Item>
                                 {/* <Dropdown.Item href="#/action-3">Something else</Dropdown.Item> */}
@@ -104,8 +112,10 @@ function Layout({ children, page, vendor }) {
                                     </a>
                                     {isOpen2 && <div className="bg-white py-2 px-4 colapse-inner rounded">
                                         <Link className={`nav-link ${page === '/myprofile' ? 'active' : ''}`} href="/myprofile">Hotel Info</Link>
+
                                         {/* <Link className={`nav-link ${page === '/room/attribute' ? 'active' : ''}`} href="/room/attribute">Amenities</Link> */}
                                         <Link className={`nav-link ${page === '/room/index' ? 'active' : ''}`} href="/room/index">Room Types</Link>
+                                        {/* <Link className={`nav-link ${page === '/room/extrabed' ? 'active' : ''}`} href="/room/extrabed">Extrabed (Under Construction)</Link> */}
                                         <Link className={`nav-link ${page === '/room/contract/index' ? 'active' : ''}`} href="/room/contract/index">Rates</Link>
                                         <Link className={`nav-link ${page === '/room/surcharge/index' ? 'active' : ''}`} href="/room/surcharge/index">Rate Calendar</Link>
                                     </div>}
@@ -114,7 +124,7 @@ function Layout({ children, page, vendor }) {
                                     <div className="nav-link-icon">  <i className="fas fa-fw fa-chart-area"></i></div>
                                     Booking Report
                                 </Link>
-                                {vendor.users.position == 'master' && (
+                                {(vendor.users.position == 'master' || position == 'master') && (
                                     <>
                                      <Link className={`nav-link ${page === '/vendor-profile/property' ? 'active' : ''}`} href="/vendor-profile/property">
                                         <div className="nav-link-icon"><i className="fa fa-building" aria-hidden="true"></i></div>

@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -65,5 +66,35 @@ class User extends Authenticatable
 
     public function advancepurchase() {
         return $this->hasMany(AdvancePurchase::class);
+    }
+
+    public function historywallet() {
+        return $this->hasMany(HistoryWallet::class);
+    }
+
+    public function paymentgetwaytransaction() {
+        return $this->hasMany(PaymentGetwayTransaction::class);
+    }
+
+    public function surchargeAllRoom() {
+        return $this->hasMany(SurchargeAllRoom::class);
+    }
+
+    public function blackoutContractRate() {
+        return $this->hasMany(BlackoutContractRate::class);
+    }
+
+    public function ordertransport() {
+        return $this->hasMany(OrderTransport::class);
+    }
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
     }
 }

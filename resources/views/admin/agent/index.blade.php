@@ -33,6 +33,9 @@
                                         <td>{{ $item->phone }}</td>
                                         <td>{{ $item->email }}</td>     
                                         <td>
+                                            <a href="{{route('dashboard.loginhotel',$item->user_id)}}" class="btn btn-datatable btn-icon btn-transparent-dark mr-2">
+                                                <i data-feather="key"></i>
+                                                </a>
                                             @if($item->is_active == 1)
                                                 <a href="{{route('dashboard.agent.unactive',$item->id)}}" class="btn btn-datatable btn-icon btn-transparent-dark mr-2"><i data-feather="x"></i></a>
                                             

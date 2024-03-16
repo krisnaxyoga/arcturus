@@ -1,5 +1,5 @@
 //import React
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 
 //import layout
 import Layout from '../../../Layouts/Agent';
@@ -13,12 +13,10 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 
 export default function Index({ session, data, contacts, country }) {
-    console.log(data, ">>>>>>>data country >>>>>>>>");
 
     const { url } = usePage();
 
     //export default function Index({ session, data, country }) {
-    //console.log(data[0].users, ">>>>>>>data users");
     const [selectcountry, setCountry] = useState('');
     const [busisnessname, setBusisness] = useState('');
     const [legalname, setLegalitas] = useState('');
@@ -45,7 +43,11 @@ export default function Index({ session, data, contacts, country }) {
     const [limit, setCreditLimit] = useState(0);
     const [used, setCreditUsed] = useState(0);
     const [saldo, setCreditSaldo] = useState(0);
+    
 
+    const [selectedDistribute, setSelectedDistribute] = useState(data.vendors.marketcountry || []);
+
+    console.log(selectedDistribute, ">>>>>>>data users");
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -94,6 +96,7 @@ const logoPreview = logo ? URL.createObjectURL(logo) : null;
         formData.append('saldo', saldo ? saldo : data.vendors.credit_saldo);
         formData.append('bankaddress', bankaddress ? bankaddress : data.vendors.bank_address);
         formData.append('accountnumber', accountnumber ? accountnumber : data.vendors.account_number);
+        formData.append('distribute', selectedDistribute);
 
         Inertia.post('/agent-profile/update', formData, {
             onSuccess: () => {
@@ -101,6 +104,28 @@ const logoPreview = logo ? URL.createObjectURL(logo) : null;
             },
         });
     }
+
+    useEffect(() => {
+        setSelectedDistribute(data.vendors.marketcountry || []);
+    }, [data.vendors.marketcountry]);
+    
+
+    const handleRemoveSelected = (valueToRemove) => {
+        setSelectedDistribute((prevSelectedValues) =>
+          prevSelectedValues.filter((value) => value !== valueToRemove)
+        );
+      };
+
+      const handleSelectDistribute = (event) => {
+        const selectedDistributes = event.target.value;
+        const isSelected = selectedDistribute.includes(selectedDistributes);
+
+        if (isSelected) {
+            setSelectedDistribute((prevSelectedValues) => prevSelectedValues.filter((value) => value !== selectedDistributes));
+        } else {
+            setSelectedDistribute((prevSelectedValues) => [...prevSelectedValues, selectedDistributes]);
+        }
+    };
 
     return (
         <>
@@ -189,6 +214,7 @@ const logoPreview = logo ? URL.createObjectURL(logo) : null;
                                                     </div>
                                                     <div className="col-lg-6">
                                                         {/* <p style={{ fontWeight: "bold" }}>Location Information</p> */}
+                                                        
                                                         <div className='mb-3'>
                                                             <label for="country" className="form-label">Country</label>
                                                             {/* <select onChange={(e) => setCountry(e.target.value)} className="form-control" aria-label="Default select example">
@@ -216,6 +242,38 @@ const logoPreview = logo ? URL.createObjectURL(logo) : null;
                                                                 {/* <p style={{ fontSize:'11px' }} className='text-danger'>if you want to change country, you must send an email to admin@arcturus.my.id</p> */}
 
                                                             </div>
+                                                        </div>
+                                                        <div className="md-3">
+                                                        <>
+                                                            {/* <label htmlFor="">Market</label>
+                                                            <select
+                                                                name=""
+                                                                id=""
+                                                                className="form-control"
+                                                                onChange={handleSelectDistribute}
+                                                                multiple
+                                                            >
+                                                                <option value="WORLDWIDE">WORLDWIDE</option>
+                                                                {Object.keys(country).map((key) => (
+                                                                <option key={key} value={country[key]}>
+                                                                    {country[key]}
+                                                                </option>
+                                                                ))}
+                                                            </select>
+                                                            <p className="mt-2">
+                                                                Selected Values:{" "}
+                                                                <span className="text-secondary">
+                                                                {selectedDistribute.map((value) => (
+                                                                    <span key={value}>
+                                                                        <span  onClick={() => handleRemoveSelected(value)} className="btn badge badge-success text-light mx-1">
+                                                                        {value} <span className="mx-1 badge badge-danger">x</span>
+                                                                        </span>
+                                                                    </span>
+                                                                ))}
+                                                                </span>
+                                                            </p> */}
+
+                                                        </>
                                                         </div>
                                                     </div>
                                                 </div>

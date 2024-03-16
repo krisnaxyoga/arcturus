@@ -7,13 +7,19 @@ use Illuminate\Http\Request;
 use App\Models\Vendor;
 use App\Models\User;
 use App\Models\AgentMarkupSetup;
+use App\Models\Booking;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Slider;
+use App\Models\RoomHotel;
+use App\Models\WidrawVendor;
+use Carbon\Carbon;
 
 use Illuminate\Support\Facades\File;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Inertia\Inertia;
+use Illuminate\Support\Str;
 
 class MyProfileController extends Controller
 {
@@ -25,11 +31,20 @@ class MyProfileController extends Controller
         $country = get_country_lists();
         $property = type_property();
         $iduser = auth()->user()->id;
+        $indonesiaprovinsi = getindonesiaprovinsi();
         $data = Vendor::with('users')->where('user_id',$iduser)->get();
         // dd($data, $iduser);
         $markup = AgentMarkupSetup::where('user_id',$iduser)->first();
         $slider = Slider::where('user_id',$iduser)->get();
         $vendor= Vendor::with('users')->where('user_id',$iduser)->first();
+        // Check if "WORLDWIDE" is already present
+
+        if ($vendor->marketcountry == null || !in_array("WORLDWIDE", (array)$vendor->marketcountry)) {
+            // Add "WORLDWIDE" only if it's not present
+            $vendor->marketcountry = ["WORLDWIDE","".$vendor->country.""];
+            $vendor->save();
+        }
+
 
         return inertia('Vendor/MyProfile/Index',[
             'data' => $data,
@@ -38,6 +53,7 @@ class MyProfileController extends Controller
             'banner' => $slider,
             'vendor' => $vendor,
             'property' => $property,
+            'indonesiaprovinsi' => $indonesiaprovinsi,
         ]);
     }
 
@@ -76,10 +92,34 @@ class MyProfileController extends Controller
 
 
             $data = User::find($id);
+
+            if($data->position == 'master' && $data->title != $request->code){
+                $user = User::where('title',$data->title)->where('position','sub-master')->get();
+                foreach($user as $key=>$itemuser){
+                    $itemuser->title = Str::random(6).'key'.$key;
+                    $itemuser->position = 'master';
+                    $itemuser->save();
+                }
+            }
+
+            
+
             $data->first_name = $request->firstname;
             $data->last_name = $request->lastname;
             $data->email = $request->email;
             $data->profile_image = $logo;
+            if ($data->title != $request->code) {
+                $user1 = User::where('title', $request->code)->first();
+            
+                if (!$user1) {
+                    $data->position = 'master';
+                } else {
+                    if ($data->position != 'master') {
+                        $data->position = 'sub-master';
+                    }
+                }
+            }
+            $data->title = $request->code;
             $data->save();
 
             $member = Vendor::find($vendor[0]->id);
@@ -101,6 +141,8 @@ class MyProfileController extends Controller
             $member->description = $request->description;
             $member->type_property = $request->type_property;
             // $member->email = $request->email;
+            
+            $member->marketcountry = explode(",",$request->distribute);
             $member->save();
 
             $markup = AgentMarkupSetup::where('user_id',$id)->exists();
@@ -110,7 +152,7 @@ class MyProfileController extends Controller
                 $mark->user_id = $id;
                 $mark->vendor_id = $vendor[0]->id;
                 $mark->service = $request->service;
-                $mark->tax = $request->tax;
+                $mark->tax = 0;
                 $mark->markup_price = 0;
                 $mark->save();
             }else{
@@ -118,14 +160,14 @@ class MyProfileController extends Controller
                 $mark2->user_id = $id;
                 $mark2->vendor_id = $vendor[0]->id;
                 $mark2->service = $request->service;
-                $mark2->tax = $request->tax;
+                $mark2->tax = 0;
                 $mark2->save();
             }
 
             // dd($member->id);
             return redirect()
                 ->route('vendor.myprofile')
-                ->with('success', 'data updated success');;
+                ->with('success', 'data updated success');
         }
     }
 
@@ -297,9 +339,39 @@ class MyProfileController extends Controller
 
             // Lakukan otentikasi sebagai akun hotel
             Auth::loginUsingId($id);
+            $iduser = $id;
+            $vendor = Vendor::where('user_id',$iduser)->with('users')->first();
+            $totalincome = Booking::where('vendor_id',$vendor->id)->where('booking_status','paid')->sum('pricenomarkup');
+            $totalbooking = Booking::where('vendor_id',$vendor->id)->where('booking_status','paid')->count();
+            $bookingsuccess = Booking::where('vendor_id',$vendor->id)->where('booking_status','paid')->count();
+            $pendingpayment = Booking::where('vendor_id',$vendor->id)->where('booking_status','unpaid')->count();
+            $booking = Booking::where('vendor_id',$vendor->id)->whereNotIn('booking_status', ['-', ''])->with('vendor','users')->orderBy('created_at', 'desc')->get();
+            $acyive = auth()->user()->is_active;
+            $roomhotel1 = Booking::where('vendor_id',$vendor->id)->where('booking_status','paid')->get();
+            $roomhotel = 0;
+            foreach($roomhotel1 as $item){
+                $roomhotel += $item->night * $item->total_room;
+            }
+
+            $widraw = WidrawVendor::where('vendor_id', $vendor->id)
+            ->whereDate('created_at', '=', Carbon::today())
+            ->get();
+            // Redirect ke halaman hotel
+            // return redirect('/vendordashboard');
+            // Menyertakan variabel position
+            Inertia::share('position', 'master');
 
             // Redirect ke halaman hotel
-            return redirect('/vendordashboard');
+            return Inertia::render('Vendor/Index',[
+                'income'=>$totalincome,
+                'booking'=>$totalbooking,
+                'success'=>$bookingsuccess,
+                'pending'=>$pendingpayment,
+                'data'=>$booking,
+                'widraw'=>$widraw,
+                'totalroom' => $roomhotel,
+                'vendor' => $vendor,
+            ]);
         }
     }
 }

@@ -23,9 +23,9 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="w-100">
-                                <p style="font-size:16px" class="text-center">Account is not active</p>
-                                <h2 class="mb-4 text-center">your account is not active, Please contact the admin to verify your account</h2>
-                                <a href="mailto:admin@arcturus.my.id" class="text-center">admin@arcturus.my.id</a>
+                               <p class="text-center"><span class="badge badge-danger mx-5">Account is not active</span></p> 
+                                <h2 class="mb-4 text-center">Please check your email to active your account</h2>
+                                {{-- <a href="mailto:admin@arcturus.my.id" class="text-center">admin@arcturus.my.id</a> --}}
                             </div>
                         </div>
                     </div>

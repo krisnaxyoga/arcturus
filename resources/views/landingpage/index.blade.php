@@ -1,6 +1,36 @@
 @extends('layouts.landing')
 @section('title', 'Home Page')
 @section('contents')
+
+@if($popups)
+<div class="popup-overlay" id="popup" onclick="closePopup()">
+    <div class="popup-content p-0">
+       <img class="img-fluid" style="width:600px" src="{{$popups->url}}" alt="{{$popups->image}}">
+    </div>
+</div> 
+
+<script>
+    // Tampilkan popup saat halaman dimuat
+    window.onload = function() {
+        showPopup();
+    };
+
+    // Fungsi untuk menampilkan popup
+    function showPopup() {
+        document.getElementById('popup').style.display = 'flex';
+    }
+
+    // Fungsi untuk menutup popup
+    function closePopup() {
+        document.getElementById('popup').style.display = 'none';
+    }
+
+    
+</script>
+@endif
+
+
+
 <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
@@ -34,7 +64,7 @@
     </div>
 
 
-    @if (isset(Auth::user()->id) && Auth::user()->role_id == 3)
+    @if (isset(Auth::user()->id) && Auth::user()->role_id == 3 && Auth::user()->is_active == 1)
         <section class="ftco-section ftco-no-pb ftco-no-pt">
             <div class="container">
                 <div class="row">
@@ -64,27 +94,40 @@
                                                     <div class="row">
                                                         <div class="col-md d-flex">
                                                             <div class="form-group border-0 mb-3 mt-2 mx-2">
-                                                                <label class="pl-3 mt-3" for="">country</label>
-                                                                <select name="country" id=""
+                                                                <label class="pl-3 mt-3" for="">Search</label>
+                                                                <input type="text" name="search" class="form-control" placeholder="Search...">
+                                                                {{-- <select name="country" id=""
                                                                 class="form-control ">
                                                                 <option value="">{{ __('-- Select --') }}
-                                                                </option>
-                                                                @foreach (get_country_lists() as $id => $name)
+                                                                </option> --}}
+                                                                {{-- @foreach (get_country_lists() as $id => $name)
                                                                     <option
                                                                         @if (($user->country ?? '') == $id) selected @endif
                                                                         value="{{ $name }}">
                                                                         {{ $name }}</option>
+                                                                @endforeach --}}
+                                                                {{-- @foreach ($country as $name)
+                                                                <option
+                                                                    @if (($user->country ?? '') == $name->country) selected @endif
+                                                                    value="{{ $name->country }}">
+                                                                    {{ $name->country }}</option>
                                                                 @endforeach
-                                                            </select>
+                                                            </select> --}}
                                                             </div>
                                                         </div>
                                                         {{-- <div class="col-md d-flex">
                                                             <div class="form-group mb-3 mt-2 mx-2">
-                                                                <label class="pl-3 mt-3" for="#">State</label>
-                                                                <div class="form-field"> --}}
-                                                                    {{-- <div class="icon"><span class="fa fa-search"></span></div> --}}
-                                                                    {{-- <input type="text" name="state" class="form-control"
-                                                                        placeholder="state...">
+                                                                <label class="pl-3 mt-3" for="#">Market</label>
+                                                                <div class="form-field">
+                                                                    <select name="country" id="" class="form-control ">
+                                                                    @foreach ($user->vendors->marketcountry as $name)
+                                                                    
+                                                                        <option
+                                                                            @if (($user->vendors->country ?? '') == $name) selected @endif
+                                                                            value="{{ $name }}">
+                                                                            {{ $name }}</option>
+                                                                        @endforeach
+                                                                    </select>
                                                                 </div>
                                                             </div>
                                                         </div> --}}
@@ -161,12 +204,147 @@
     @endif
 
     <section class="ftco-section services-section">
+        
+        <div class="container">
+            <div class="row d-flex justify-content-center mb-4">
+                <div
+                    class="col-md-4 ftco-animate">
+                    <div class="card shadow border-0 mb-3" style="border-radius: 20px;">
+                        <div class="card-body">
+                            <h5 class="text-center text-secondary font-weight-bold"><i class="fa fa-building"></i> Hotel</h5>
+                            <h3 class="text-center text-secondary font-weight-bold">{{$hotel}}</h3>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="col-md-4 ftco-animate">
+                    <div class="card shadow border-0 mb-3" style="border-radius: 20px;">
+                        <div class="card-body">
+                            <h5 class="text-center text-secondary font-weight-bold"><i class="fa fa-users"></i> Agent</h5>
+                            <h3 class="text-center text-secondary font-weight-bold">{{$agent}}</h3>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="col-md-4 ftco-animate">
+                    <div class="card shadow border-0 mb-3 " style="border-radius: 20px;">
+                        <div class="card-body">
+                            <h5 class="text-center text-secondary font-weight-bold"><i class="fa fa-car"></i> Transport</h5>
+                            <h3 class="text-center text-secondary font-weight-bold">2</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="container">
             <div class="row d-flex mb-5">
                 <div class="col-md-12 order-md-last heading-section pl-md-5 ftco-animate d-flex align-items-center">
                     <div class="w-100">
+                         {{-- <span class="subheading">Welcome to Arcturus</span> --}}
+                         <h2 class="subheading mb-4">Welcome to Arcturus</h2>
+                         <p>ARCTURUS is a growing online travel marketplace that connects retailer agents with travel service
+                             providers, especially hotels, boats, and tour operators. With one-time registration, ARCTURUS
+                             helps retailer agents get access to the hotel’s dynamic rates and other special offers provided
+                             by travel service providers. On the other hand, hotels and travel service providers can
+                             efficiently reach and target their promotions directly to hundreds of retailer agents. </p>
+                         <p>Our mission is to make it easier for retailer agents and hotels including travel services
+                             providers to collaborate and support one another. The platform is built to enable properties
+                             around the world to reach a global audience and grow their businesses by offering travellers an
+                             extensive selection of hotels and activities at competitive rates.
+                         </p>
+                    </div>
+                </div>
+            </div>
+            <h3 class="text-center mb-3 text-secondary font-weight-bold">How Rates Distributed</h3>
+            <div class="row mb-3 justify-content-center">
+                <div class="col-lg-4 mb-3 col-md-6">
+                    <div class="cardx">
+                        <p class="cardx-title text-center"> Hotel </p>
+                        <div class="cardx-body">
+                           <ul>
+                            <li>Hotel submit data requirement to admin</li>
+                            <li>provide monthly special offer or flash deal if available</li>
+                           </ul>
+                        </div>
+                      </div>
+                </div>
+                <div class="col-lg-4 mb-3 col-md-6">
+                    <div class="cardx">
+                        <p class="cardx-title text-center">Arcturus</p>
+                        <div class="cardx-body">
+                          <ul>
+                            <li>Arcturus will UPLOAD all rates with guarantee allotment minimum 1 room in order all bookings will be automatically confirmed</li>
+                                
+                                <li>System provide E-Wallet for payment transaction and Verification for e-wallet top-ups may take up to 3 hours, depending on transaction traffic</li>
+                          </ul>
+                        </div>
+                      </div>
+                </div>
+                <div class="col-lg-4 mb-3 col-md-6">
+                    <div class="cardx">
+                        <p class="cardx-title text-center">Retail Agent</p>
+                        <div class="cardx-body">
+                         <ul>
+                            <li>JUST register in ARCTURUS then all will be displayed in your screen and ready to SELL to your guests</li>
+
+                              
+                         </ul>
+                        </div>
+                      </div>
+                </div>
+            </div>
+            <h3 class="text-center mb-3 text-secondary font-weight-bold">Benefits For</h3>
+            <div class="row justify-content-center mb-5">
+                <div class="col-lg-4 mb-3 col-md-6">
+                    <div class="cardx">
+                        <p class="cardx-title text-center">Hotel</p>
+                        <div class="cardx-body">
+                          <ul>
+                            <li>Hotels incur a commission fee of only 2.5% per successfully realized booking through the system</li>
+                                  
+                               <li> No risk since hotel will receives full payment upon bookings received.</li>
+                          </ul>
+                        </div>
+                      </div>
+                </div>
+                <div class="col-lg-4 mb-3 col-md-6">
+                    <div class="cardx">
+                        <p class="cardx-title text-center">Arcturus</p>
+                        <div class="cardx-body">
+                         <ul>
+                            <li>Free registration</li>
+                         </ul>
+                        </div>
+                      </div>
+                </div>
+                <div class="col-lg-4 mb-3 col-md-6">
+                    <div class="cardx">
+                        <p class="cardx-title text-center">Retail Agent</p>
+                        <div class="cardx-body">
+                            <ul>
+                                <li>Gain seamless access to ALL rates in the Arcturus system without reach out to individual hotel sales teams for rate and room availability</li>
+                                <li>Receive immediate confirmation featuring logos from both the Agent and Hotel. Print directly from the system or download and send it via email to your guests</li>
+                            </ul>
+                        </div>
+                      </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <p class="text-center"> For more information, please visit our instagram</p> <br>
+            </div>
+            <div class="row justify-content-center">
+                <a href="https://www.instagram.com/arcturusnets?igsh=MTgyem1lNWUxcHZiaw==" target="_blank" class="instagram-button Btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 448 512" class="svgIcon"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"></path></svg>
+                  <span class="text-secondary font-weight-bold">@arcturusnets</span>
+                </a>
+            </div>
+        </div>
+             {{--
+            <div class="row d-flex mb-5">
+                <div class="col-md-12 order-md-last heading-section pl-md-5 ftco-animate d-flex align-items-center">
+                    <div class="w-100">
                         {{-- <span class="subheading">Welcome to Arcturus</span> --}}
-                        <h2 class="subheading mb-4">Welcome to Arcturus</h2>
+                        {{-- <h2 class="subheading mb-4">Welcome to Arcturus</h2>
                         <p>ARCTURUS is a growing online travel marketplace that connects retailer agents with travel service
                             providers, especially hotels, boats, and tour operators. With one-time registration, ARCTURUS
                             helps retailer agents get access to the hotel’s dynamic rates and other special offers provided
@@ -189,9 +367,9 @@
                             <li>Hotels can focus their promotion based on their target location. It will only be shown,
                                 distributed, and visible to your target market.</li>
                             <li>Hotels will receive promo recommendations based on their target market and statistics.</li>
-                            <li>Full payment will be received 1x24 hours after the booking is confirmed.</li>
+                            <li>Full payment will be received 1x24 hours after the booking is confirmed.</li> --}}
                             {{-- <li>Lower commission fee than other OTAs. Only 2,5%- 5%.</li> --}}
-                        </ul>
+                        {{-- </ul>
                         <h4>Benefits for travel agents</h4>
                         <ul>
                             <li>FREE to join & FREE of charge.</li>
@@ -205,36 +383,8 @@
                 </div>
 
             </div>
-            <div class="row d-flex justify-content-center mt-4">
-                <div
-                    class="col-md-4 ftco-animate">
-                    <div class="card shadow border-0 mb-3">
-                        <div class="card-body">
-                            <h3 class="text-center">Hotel</h3>
-                            <p class="text-center" style="font-size: 16px">{{$hotel}}</p>
-                        </div>
-                    </div>
-                </div>
-                <div
-                    class="col-md-4 ftco-animate">
-                    <div class="card shadow border-0 mb-3">
-                        <div class="card-body">
-                            <h3 class="text-center">Agent</h3>
-                            <p class="text-center" style="font-size: 16px">{{$agent}}</p>
-                        </div>
-                    </div>
-                </div>
-                <div
-                    class="col-md-4 ftco-animate">
-                    <div class="card shadow border-0 mb-3">
-                        <div class="card-body">
-                            <h3 class="text-center">Others</h3>
-                            <p class="text-center" style="font-size: 16px">0</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+           
+        </div> --}} 
     </section>
     {{--
     <section class="ftco-section img ftco-select-destination"
@@ -687,16 +837,19 @@
 
   <section class="ftco-intro ftco-section ftco-no-pt mt-5">
     <div class="container">
-        <div class="row justify-content-center">
+        <a href="https://www.vibeshospitality.id/" target="_blank">
+             <div class="row justify-content-center">
             <div class="col-md-12 text-center">
-                <div class="img" style="background-image: url(/landing/travel/images/bg_2.jpg);">
+                <div class="img" style="background-image: url(/landing/travel/images/bg_2.jpg); border-radius: 29px">
                     <div class="overlay"></div>
-                    <h2>Vibes Hospitality</h2>
+                    <h2 style="text-transform: none;">ViBES HOSPITALITY</h2>
                     <!--<p>We can manage your dream building A small river named Duden flows by their place</p>-->
                     <!--<p class="mb-0"><a href="#" class="btn btn-primary px-4 py-3">Ask For A Quote</a></p>-->
                 </div>
             </div>
         </div>
+        </a>
+       
     </div>
 </section>
     <script>
@@ -771,7 +924,10 @@
         }
     </script>
  <script>
-    $('input[name="dates"]').daterangepicker();
+    $('input[name="dates"]').daterangepicker({
+        autoApply: true, // Secara otomatis menerapkan perubahan ketika pengguna memilih tanggal
+        showDropdowns: true, // Menampilkan dropdown untuk memilih bulan dan tahun
+    });
 
         // Tambahkan event listener untuk deteksi klik tombol "Apply"
     $('input[name="dates"]').on('apply.daterangepicker', function(ev, picker) {
@@ -790,11 +946,17 @@
 <script>
     // Inisialisasi Date Range Picker
     $('input[name="dates"]').daterangepicker({
-        startDate: moment().format('YYYY-MM-DD'), // Tanggal checkin (hari ini)
-        endDate: moment().add(1, 'days').format('YYYY-MM-DD'), // Tanggal checkout (besok)
+        autoApply: true, // Secara otomatis menerapkan perubahan ketika pengguna memilih tanggal
+        showDropdowns: true, // Menampilkan dropdown untuk memilih bulan dan tahun
+        startDate: moment().format('MM/DD/YYYY'), // Tanggal checkin (hari ini)
+        endDate: moment().add(1, 'days').format('MM/DD/YYYY'), // Tanggal checkout (besok)
         autoUpdateInput: false, // Menonaktifkan pembaruan otomatis
         locale: {
-            format: 'YYYY-MM-DD', // Format tanggal yang diharapkan
+            format: 'MM/DD/YYYY', // Format tanggal yang diharapkan
+        },
+        isInvalidDate: function(date) {
+            // Nonaktifkan tanggal sebelum hari ini
+            return date.isBefore(moment(), 'day');
         }
     });
 
@@ -803,13 +965,14 @@
         // Mengambil tanggal checkin dan checkout dari Date Range Picker
         const checkin = picker.startDate.format('YYYY-MM-DD');
         const checkout = picker.endDate.format('YYYY-MM-DD');
-        
+        const checkin1 = picker.startDate.format('MM/DD/YYYY');
+        const checkout1 = picker.endDate.format('MM/DD/YYYY');
         // Memperbarui nilai input tanggal checkin dan checkout
         $('input[name="checkin"]').val(checkin);
         $('input[name="checkout"]').val(checkout);
 
         // Memperbarui nilai input dengan tampilan tanggal
-        $(this).val(checkin + ' - ' + checkout);
+        $(this).val(checkin1 + ' - ' + checkout1);
     });
 </script>
 @endsection

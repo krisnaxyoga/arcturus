@@ -1,0 +1,189 @@
+# http://127.0.0.1:8007 bisa di ganti dengan https://developertester.my.id/
+### LOGIN TRAVEL AGENT
+POST https://developertester.my.id/api/login/travelagent
+Content-Type: application/json
+
+{
+    "email" : "test1@gmail.com",
+    "password" : "apipassword$$**"
+}
+
+### REGISTRASI
+POST http://127.0.0.1:8007/api/register/agent
+Content-Type: application/json
+
+{
+  "first_name": "demo",
+  "last_name": "api",
+  "email": "demoapi@gmail.com",
+  "password": "apipassword$$**",
+  "phone": "08127313412131",
+  "busisnes_name": "AGENT API",
+  "company_name": "AGENT API",
+  "address": "JL.MUBARAT,MUMBAi",
+  "city": "DELHI",
+  "state": "GUJARAT",
+  "country": "Indonesia",
+  "affiliate": "",
+}
+
+### LUPA PASSWORD
+POST http://127.0.0.1:8007/api/travelagent/forgetpassword
+Content-Type: application/json
+{
+    "email":"REQUIRED_EMAIL",
+}
+
+### LOGOUT TRAVEL AGENT
+POST http://127.0.0.1:8007/api/logout/travelagent
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYXZlbGFnZW50IiwiaWF0IjoxNzA4Njc0MzU1LCJleHAiOjE3MDg2Nzc5NTUsIm5iZiI6MTcwODY3NDM1NSwianRpIjoielBoejllZkRqT3hpd09lSyIsInN1YiI6IjIzNjAiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.1RdxjqLMokeCz_vJzjV30qTM6KTt8TCkw5Fqf9mnmt8
+
+### COUNTRY
+GET http://127.0.0.1:8007/api/country/travelagent
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYXZlbGFnZW50IiwiaWF0IjoxNzA4Njc4NTAwLCJleHAiOjE3MDg2ODIxMDAsIm5iZiI6MTcwODY3ODUwMCwianRpIjoielV6blhwbTk2ZFBIYlM3YiIsInN1YiI6IjIzNjAiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.wUdhA1_oq6Tn69u0H2o9Gh4rsOVT2ucdk2tF6BD3bB0
+# ======================== PROSES BOOKING ====================================================== #
+
+### SEARCH HOTEL
+GET http://127.0.0.1:8007/api/agent/hotel
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYXZlbGFnZW50IiwiaWF0IjoxNzA4Njc4NTAwLCJleHAiOjE3MDg2ODIxMDAsIm5iZiI6MTcwODY3ODUwMCwianRpIjoielV6blhwbTk2ZFBIYlM3YiIsInN1YiI6IjIzNjAiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.wUdhA1_oq6Tn69u0H2o9Gh4rsOVT2ucdk2tF6BD3bB0
+
+{
+    "search" : "mulia",
+    "checkin" : "2024-02-21",
+    "checkout" : "2024-02-23",
+    "person" : "2"
+}
+
+### DETAIL HOTEL
+GET http://127.0.0.1:8007/api/agent/hoteldetail/140
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYXZlbGFnZW50IiwiaWF0IjoxNzA4Njc0MzU1LCJleHAiOjE3MDg2Nzc5NTUsIm5iZiI6MTcwODY3NDM1NSwianRpIjoielBoejllZkRqT3hpd09lSyIsInN1YiI6IjIzNjAiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.1RdxjqLMokeCz_vJzjV30qTM6KTt8TCkw5Fqf9mnmt8
+
+{
+    "search" : "mulia",
+    "checkin" : "2024-02-21",
+    "checkout" : "2024-02-23",
+    "person" : "2"
+}
+### CREATE BOOKING DETAIL HOTEL
+POST http://127.0.0.1:8007/api/agent/createbooking
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYXZlbGFnZW50IiwiaWF0IjoxNzA4Njc0MzU1LCJleHAiOjE3MDg2Nzc5NTUsIm5iZiI6MTcwODY3NDM1NSwianRpIjoielBoejllZkRqT3hpd09lSyIsInN1YiI6IjIzNjAiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.1RdxjqLMokeCz_vJzjV30qTM6KTt8TCkw5Fqf9mnmt8
+
+{
+    "checkin" : "2024-03-19",
+    "checkout" : "2024-03-21",
+    "person" : 1,
+    "room" : "[{\"contpriceid\":738,\"contractid\":232,\"price\":3458888,\"pricenomarkup\":3400000,\"quantity\":1,\"roomId\":30},{\"contpriceid\":739,\"contractid\":232,\"price\":3608888,\"pricenomarkup\":3550000,\"quantity\":1,\"roomId\":31}]",
+    "totalprice" : "14135552",
+    "vendorid" : "1338",
+    "totalpricenomarkup": "13900000"
+}
+
+### DETAIL BOOKING (GUNAKAN API INI SETELAH CREATE BOOKING DAN AMBIL ID YANG DI DAPAT DARI API CREATE BOOKING DETAIL HOTEL DISINI)
+GET http://127.0.0.1:8007/api/agent/detailbooking/203
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYXZlbGFnZW50IiwiaWF0IjoxNzA4Njc0MzU1LCJleHAiOjE3MDg2Nzc5NTUsIm5iZiI6MTcwODY3NDM1NSwianRpIjoielBoejllZkRqT3hpd09lSyIsInN1YiI6IjIzNjAiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.1RdxjqLMokeCz_vJzjV30qTM6KTt8TCkw5Fqf9mnmt8
+
+### BOOKING STORE (GUNAKAN API INI SETELAH DETAIL BOOKING)
+POST http://127.0.0.1:8007/api/agent/bookingstore/203
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYXZlbGFnZW50IiwiaWF0IjoxNzA4Njc0MzU1LCJleHAiOjE3MDg2Nzc5NTUsIm5iZiI6MTcwODY3NDM1NSwianRpIjoielBoejllZkRqT3hpd09lSyIsInN1YiI6IjIzNjAiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.1RdxjqLMokeCz_vJzjV30qTM6KTt8TCkw5Fqf9mnmt8
+
+{
+  "firstname": "JHON",
+  "lastname": "DOE",
+  "email": "martin@luther.com",
+  "phone": "08131841231",
+  "address_line1": "jl.palawa",
+  "address_line2": "",
+  "zipcode": "213d",
+  "city": "denpasar",
+  "country": "Indonesia",
+  "state": "bali",
+  "special_request": "",
+  "idtransport": 2,
+  "timepickup": "01:00",
+  "flight": "FLIGHT_DETAILS",
+  "datepickup": "2024-03-19"
+}
+
+### PAYMENT PAGE (GUNAKAN API INI SETELAH BOOKING STORE)
+GET http://127.0.0.1:8007/api/agent/paymentbookingpage/203
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYXZlbGFnZW50IiwiaWF0IjoxNzA4Njc0MzU1LCJleHAiOjE3MDg2Nzc5NTUsIm5iZiI6MTcwODY3NDM1NSwianRpIjoielBoejllZkRqT3hpd09lSyIsInN1YiI6IjIzNjAiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.1RdxjqLMokeCz_vJzjV30qTM6KTt8TCkw5Fqf9mnmt8
+
+### PAY WALLET (GUNAKAN API INI SETELAH PAYMENT PAGE UNTUK MELAKUKAN PEMBAYARAN)
+GET http://127.0.0.1:8007/api/agent/wallet/pay/203
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYXZlbGFnZW50IiwiaWF0IjoxNzA4Njc0MzU1LCJleHAiOjE3MDg2Nzc5NTUsIm5iZiI6MTcwODY3NDM1NSwianRpIjoielBoejllZkRqT3hpd09lSyIsInN1YiI6IjIzNjAiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.1RdxjqLMokeCz_vJzjV30qTM6KTt8TCkw5Fqf9mnmt8
+
+
+# ======================== PROSES BOOKING ====================================================== #
+
+
+### DASHBOARD IN LOGIN AGENT
+GET http://127.0.0.1:8007/api/dashboard/agent
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYXZlbGFnZW50IiwiaWF0IjoxNzA4Njc0MzU1LCJleHAiOjE3MDg2Nzc5NTUsIm5iZiI6MTcwODY3NDM1NSwianRpIjoielBoejllZkRqT3hpd09lSyIsInN1YiI6IjIzNjAiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.1RdxjqLMokeCz_vJzjV30qTM6KTt8TCkw5Fqf9mnmt8
+
+### PROFILE
+GET http://127.0.0.1:8007/api/agent/myprofile
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYXZlbGFnZW50IiwiaWF0IjoxNzA4Njc0MzU1LCJleHAiOjE3MDg2Nzc5NTUsIm5iZiI6MTcwODY3NDM1NSwianRpIjoielBoejllZkRqT3hpd09lSyIsInN1YiI6IjIzNjAiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.1RdxjqLMokeCz_vJzjV30qTM6KTt8TCkw5Fqf9mnmt8
+
+### UPDATE PROFILE
+POST http://127.0.0.1:8007/api/agent/myprofile/update
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYXZlbGFnZW50IiwiaWF0IjoxNzA4Njc0MzU1LCJleHAiOjE3MDg2Nzc5NTUsIm5iZiI6MTcwODY3NDM1NSwianRpIjoielBoejllZkRqT3hpd09lSyIsInN1YiI6IjIzNjAiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.1RdxjqLMokeCz_vJzjV30qTM6KTt8TCkw5Fqf9mnmt8
+
+{
+  "city": "REQUIRED_CITY",
+  "state": "REQUIRED_STATE",
+  "country": "REQUIRED_COUNTRY",
+  "area": "OPTIONAL_AREA",
+  "location": "OPTIONAL_LOCATION",
+  "busisnessname": "REQUIRED_BUSINESS_NAME",
+  "legalname": "REQUIRED_LEGAL_NAME",
+  "address": "REQUIRED_ADDRESS_LINE_1",
+  "address2": "OPTIONAL_ADDRESS_LINE_2",
+  "phone": "REQUIRED_PHONE_NUMBER",
+  "email": "OPTIONAL_EMAIL",
+  "latitude": "REQUIRED_LATITUDE",
+  "longitude": "REQUIRED_LONGITUDE",
+  "bank": "OPTIONAL_BANK_NAME",
+  "bankaccount": "OPTIONAL_BANK_ACCOUNT",
+  "swifcode": "OPTIONAL_SWIFT_CODE",
+  "bankaddress": "OPTIONAL_BANK_ADDRESS",
+  "accountnumber": "OPTIONAL_ACCOUNT_NUMBER",
+  "distribute": "REQUIRED_DISTRIBUTE_COUNTRY_CODES (comma-separated)",
+}
+
+### UPDATE PASSWORD
+POST http://127.0.0.1:8007/api/agent/myprofile/updatepassword
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYXZlbGFnZW50IiwiaWF0IjoxNzA4Njc0MzU1LCJleHAiOjE3MDg2Nzc5NTUsIm5iZiI6MTcwODY3NDM1NSwianRpIjoielBoejllZkRqT3hpd09lSyIsInN1YiI6IjIzNjAiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.1RdxjqLMokeCz_vJzjV30qTM6KTt8TCkw5Fqf9mnmt8
+
+{
+    "password" : "REQUIRED_PASSWORD"
+}
+
+### WALLETPAGE
+GET http://127.0.0.1:8007/api/agent/wallet
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYXZlbGFnZW50IiwiaWF0IjoxNzA4Njc0MzU1LCJleHAiOjE3MDg2Nzc5NTUsIm5iZiI6MTcwODY3NDM1NSwianRpIjoielBoejllZkRqT3hpd09lSyIsInN1YiI6IjIzNjAiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.1RdxjqLMokeCz_vJzjV30qTM6KTt8TCkw5Fqf9mnmt8
+
+### WALLETTOPUP
+POST http://127.0.0.1:8007/api/agent/wallet/topup
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYXZlbGFnZW50IiwiaWF0IjoxNzA4Njc0MzU1LCJleHAiOjE3MDg2Nzc5NTUsIm5iZiI6MTcwODY3NDM1NSwianRpIjoielBoejllZkRqT3hpd09lSyIsInN1YiI6IjIzNjAiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.1RdxjqLMokeCz_vJzjV30qTM6KTt8TCkw5Fqf9mnmt8
+
+{
+    "totaltopup" : "", //tolong buatkan kode unik 3 angka di belakang ribuan semisal 100.000 buat jadi 100.123 dimana random angka,
+    "image" : "" // buatkan bentuk file karena merupakan upload bukti transfer
+}
+
+###
+GET http://127.0.0.1:8007/api/country/travelagent

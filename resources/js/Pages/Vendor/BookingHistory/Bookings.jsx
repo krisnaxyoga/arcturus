@@ -7,6 +7,15 @@ export default function Bookings({ bookings }) {
         return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount).slice(0, -3);
       }
 
+      const formatDate = (dateString) => {
+        const parts = dateString.split('-'); // Memecah tanggal berdasarkan tanda "-"
+        if (parts.length === 3) {
+          const [year, month, day] = parts;
+          return `${day}/${month}/${year}`; // Mengganti urutan tanggal
+        }
+        return dateString; // Kembalikan jika tidak dapat memproses tanggal
+      };
+
     return (
         <tbody>
             {bookings.map((item, index) => (
@@ -14,9 +23,9 @@ export default function Bookings({ bookings }) {
                     <tr key={item.id+index+1}>
                         <td>{index+1}</td>
                         <td>{item.users.first_name} {item.users.last_name}</td>
-                        <td>{item.booking_date}</td>
-                        <td>{item.checkin_date}</td>
-                        <td>{item.checkout_date}</td>
+                        <td>{formatDate(item.booking_date)}</td>
+                        <td>{formatDate(item.checkin_date)}</td>
+                        <td>{formatDate(item.checkout_date)}</td>
                         <td>{item.night}</td>
                         <td>{item.total_room}</td>
                         <td>{item.total_guests}</td>
@@ -25,7 +34,7 @@ export default function Bookings({ bookings }) {
                         <td>{item.booking_status}</td>
                         <td>
                             <Link className='btn btn-outline-warning' href={`/bookinghistory/detail/${item.id}`} title='Details'>
-                            <i className="fas fa-info-circle"></i>
+                            <i className="fas fa-file"></i>
                             </Link>&nbsp;
                             {/* <Link className='btn btn-outline-success' href={`/agent/bookinghistory/invoice/${item.id}`} title='Invoice'>
                             <i className="fas fa-print"></i>

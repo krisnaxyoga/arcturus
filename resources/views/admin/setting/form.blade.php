@@ -1,7 +1,18 @@
 @extends('layouts.admin')
 @section('title', 'Settings')
 @section('content')
+<style>
+    .object-fit-cover {
+    -o-object-fit: cover!important;
+    object-fit: cover!important;
+}
 
+.card-img, .card-img-top {
+    border-top-left-radius: 0.35rem;
+    border-top-right-radius: 0.35rem;
+    height: 200px !important;
+}
+</style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <section>
         <div class="container mt-5">
@@ -33,7 +44,7 @@
                       </ul>
                       <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                            <div class="card">
+                            <div class="card mb-4">
                             <div class="card-header">
                                 <h1>
                                     @if ($setting->exists)
@@ -173,6 +184,103 @@
                                 </form>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <form action="{{route('dashboard.setting.storepopup')}}" method="post" enctype="multipart/form-data">
+                                            @csrf
+                                            @method('POST')
+
+                                            @if ($datapop->exists)
+
+                                                <input type="hidden" name="id" value="{{$datapop->id}}">
+                                                <div class="form-group">
+                                                    <label for="">popup</label>
+                                                    <input type="file" name="image" id="popup" class="form-control">
+                                                    <img id="image-previewpopup" class="mt-3" style="width: 200px" src="{{$datapop->image}}" alt="Preview">
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="">start date</label>
+                                                    <input type="date" name="start_date" class="form-control" value="{{$datapop->start_date}}">
+                                                </div>
+                                                
+                                                <div class="form-group">
+                                                    <label for="">end date</label>
+                                                    <input type="date" name="end_date" class="form-control" value="{{$datapop->end_date}}">
+                                                </div>
+
+                                            @else
+
+                                                <div class="form-group">
+                                                    <label for="">popup</label>
+                                                    <input type="file" name="image" id="popup" class="form-control">
+                                                    <img id="image-previewpopup" class="mt-3" style="width: 200px" src="#" alt="Preview">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="">start date</label>
+                                                    <input type="date" name="start_date" id="start_date" class="form-control">
+                                                </div>
+                                                
+                                                <div class="form-group">
+                                                    <label for="">end date</label>
+                                                    <input type="date" name="end_date" id="end_date" class="form-control">
+                                                </div>
+
+                                            @endif
+
+                                            <div class="form-group">
+                                                <button class="btn btn-primary" type="submit">upload</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="row">
+                                    @foreach ($popup as $ie)
+
+                                    <div class="col-lg-6">
+                                        <div class="card mb-3">
+                                            <img src="{{$ie->url}}" alt="{{$ie->url}}" class="card-img-top object-fit-cover">
+                                            <div class="card-body">
+                                                <ul>
+                                                    <li>Url :<a href="{{$ie->url}}">{{$ie->url}}</a></li>
+                                                    {{-- <li>Status : <div class="toggle-switch">
+                                                        <input class="toggle-input" id="toggle" type="checkbox">
+                                                        <label class="toggle-label" for="toggle"></label>
+                                                      </div>
+                                                    </li> --}}
+                                                    <li>Start Date  : {{$ie->start_date}}</li>
+                                                    <li>End Date    : {{$ie->end_date}}</li>
+                                                    <li>
+                                                        <form class="d-inline"
+                                                            action="{{ route('dashboard.setting.destroypopup', $ie->id) }}"
+                                                            method="POST"
+                                                            onSubmit="return confirm('are you sure delete this banner?');">
+                                                            @csrf
+                                                            @method('delete')
+
+                                                            <button type="submit"
+                                                                class="btn btn-datatable btn-icon btn-transparent-dark mr-2">
+                                                                <i data-feather="trash-2"></i>
+                                                            </button>
+                                                        </form>
+                                                    </li>
+                                                <li>
+                                                    <a href="{{ route('dashboard.setting.editpopup', $ie->id) }}" class="btn btn-datatable btn-icon btn-transparent-dark mr-2"><i data-feather="edit"></i></a>
+                                                </li>
+                                                </ul>
+                                            </div>
+                                          </div>
+
+                                   </div>
+                                   @endforeach
+                                </div>
+                            </div>
+                        </div>
+                        
                         </div>
                         <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                             <div class="card mb-3">
@@ -306,6 +414,116 @@
               reader.readAsDataURL(this.files[0]);
             }
           });
+
+          $('#popup').change(function() {
+            // Mengecek apakah ada file yang dipilih
+            if (this.files && this.files[0]) {
+              var reader = new FileReader();
+        
+              reader.onload = function(e) {
+                // Menampilkan pratinjau gambar pada elemen img
+                $('#image-previewpopup').attr('src', e.target.result);
+              }
+        
+              reader.readAsDataURL(this.files[0]);
+            }
+          });
+
         });
         </script>
+        <!-- JavaScript -->
+<script>
+ document.addEventListener("DOMContentLoaded", function () {
+        // Ambil elemen input untuk start_date dan end_date
+        var startDateInput = document.getElementById("start_date");
+        var endDateInput = document.getElementById("end_date");
+
+        // Tambahkan event listener ke start_date
+        startDateInput.addEventListener("change", function () {
+            // Ambil nilai dari start_date
+            var startDateValue = startDateInput.value;
+
+            // Set nilai end_date sama dengan start_date
+            endDateInput.value = startDateValue;
+        });
+    });
+</script>
+        <style>
+            /* Genel stil */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 24px;
+  margin: 10px;
+}
+
+/* Giriş stil */
+.toggle-switch .toggle-input {
+  display: none;
+}
+
+/* Anahtarın stilinin etrafındaki etiketin stil */
+.toggle-switch .toggle-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 24px;
+  background-color: #2196F3;
+  border-radius: 34px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+/* Anahtarın yuvarlak kısmının stil */
+.toggle-switch .toggle-label::before {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  background-color: #fff;
+  box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s;
+}
+
+/* Anahtarın etkin hale gelmesindeki stil değişiklikleri */
+.toggle-switch .toggle-input:checked + .toggle-label {
+  background-color: #4CAF50;
+}
+
+.toggle-switch .toggle-input:checked + .toggle-label::before {
+  transform: translateX(16px);
+}
+
+/* Light tema */
+.toggle-switch.light .toggle-label {
+  background-color: #BEBEBE;
+}
+
+.toggle-switch.light .toggle-input:checked + .toggle-label {
+  background-color: #9B9B9B;
+}
+
+.toggle-switch.light .toggle-input:checked + .toggle-label::before {
+  transform: translateX(6px);
+}
+
+/* Dark tema */
+.toggle-switch.dark .toggle-label {
+  background-color: #4B4B4B;
+}
+
+.toggle-switch.dark .toggle-input:checked + .toggle-label {
+  background-color: #717171;
+}
+
+.toggle-switch.dark .toggle-input:checked + .toggle-label::before {
+  transform: translateX(16px);
+}
+
+        </style>
 @endsection

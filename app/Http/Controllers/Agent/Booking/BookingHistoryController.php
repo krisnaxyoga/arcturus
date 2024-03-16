@@ -9,10 +9,13 @@ use App\Models\Booking;
 use App\Models\PaymentGetwayTransaction;
 use App\Models\HotelRoomBooking;
 
+use App\Models\RoomHotel;
+use App\Http\Resources\PostResource;
 use App\Models\ContractRate;
 use App\Models\RoomType;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\OrderTransport;
 
 class BookingHistoryController extends Controller
 {
@@ -24,10 +27,11 @@ class BookingHistoryController extends Controller
         $iduser = auth()->user()->id;
         $user = User::where('id',$iduser)->with('vendors')->first();
         $booking = Booking::with('users','vendor')->whereNotIn('booking_status', ['-', ''])->where('user_id',$user->vendors->user_id)->orderBy('created_at', 'desc')->get();
-        
+        $transport = OrderTransport::where('user_id',$iduser)->get();
         return inertia('Agent/BookingHistory/Index',[
             'data' => $booking,
-            'agent' => $user
+            'agent' => $user,
+            'transport' => $transport,
         ]);
 
     }
@@ -69,12 +73,28 @@ class BookingHistoryController extends Controller
         $conttract = ContractRate::where('id',$cont_id->contract_id)->first();
         $setting = Setting::first();
         $hotelroombooking = HotelRoomBooking::where('booking_id',$data->id)->with('room')->with('contractprice')->with('contractrate')->with('vendors')->get();
+        
+        foreach($hotelroombooking as $item){
+            // $room = RoomHotel::where('id',$item->room_id)->first();
+            if($item->room_name == null){
+                $item->room_name = $item->room->ratedesc;
+                $item->contract_name = $item->contractrate->codedesc;
+                $item->benefit_policy = $item->contractrate->benefit_policy;
+                $item->other_policy = $item->contractrate->other_policy;
+                $item->cencellation_policy = $item->contractrate->cencellation_policy;
+                $item->deposit_policy = $item->contractrate->deposit_policy;
+                $item->save();
+            }
+        }
+
+        $transport = OrderTransport::where('booking_id',$id)->with('agenttransport')->first();
         return inertia('Agent/BookingHistory/Detail',[
             'data' => $data,
             'agent' => $agent,
             'setting' => $setting,
             'contract' => $conttract,
             'roombooking' =>$hotelroombooking,
+            'transport' => $transport
         ]);
     }
 
@@ -121,7 +141,14 @@ class BookingHistoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $transport = OrderTransport::where('booking_id',$id)->first();
+
+        $transport->flight_time = $request->flight_time;
+        $transport->time_pickup = $request->time_pickup;
+        $transport->pickup_confirmation = $request->pickup_confirmation;
+        $transport->save();
+
+        return new PostResource(true, 'Confirmation pickup send to Transport!', $transport);
     }
 
     /**

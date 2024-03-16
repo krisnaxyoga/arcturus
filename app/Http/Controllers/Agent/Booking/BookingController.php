@@ -12,11 +12,16 @@ use App\Models\ContractPrice;
 use App\Models\Vendor;
 use App\Models\User;
 use App\Models\Setting;
+use App\Models\OrderTransport;
 use Carbon\Carbon;
 
+use App\Models\AgentTransport;
+use App\Models\SurchargeAllRoom;
 use Illuminate\Support\Str;
 use App\Models\ContractRate;
 
+use App\Models\PackageTransport;
+use App\Models\TransportDestination;
 use Illuminate\Support\Facades\Log;
 use GuzzleHttp\Client;
 use Illuminate\Http\RedirectResponse;
@@ -70,6 +75,19 @@ class BookingController extends Controller
 
             $pricenomarkup = (int) $pricenomarkupString;
 
+            $surchargeAllRoom = SurchargeAllRoom::where('start_date', '>=', $checkin)
+            ->where('end_date', '<=', Carbon::parse($checkout)->subDay())
+            ->where('vendor_id',$request->vendorid)
+            ->get();
+
+            $totalsurchargex = 0;
+            $surchargepricetotalx = 0;
+            foreach ($surchargeAllRoom as $surchargeAllRoomitem) {
+                    $totalsurchargex += $surchargeAllRoomitem->surcharge_price;
+                    // $totalDataCountx++;
+            }
+            $surcharge = $totalsurchargex/$totalNights;
+
             $data =  new Booking();
             $data->user_id = $userid;
             $data->booking_code = '#BO_'. $this->generateRandomString(10);
@@ -80,7 +98,7 @@ class BookingController extends Controller
             $data->total_room = $request->totalroom;
             $data->night = $totalNights;
             $data->price = $totalNights * $price;
-            $data->pricenomarkup = $totalNights * $pricenomarkup;
+            $data->pricenomarkup = $pricenomarkup + $surcharge;
             $data->total_guests = $request->person;
             $data->booking_status = '-';
             $data->save();
@@ -94,7 +112,15 @@ class BookingController extends Controller
 
                 $pricenomarkupint = (int) $pString;
 
-                $contractprice = ContractPrice::where('id',$item['contpriceid'])->first();
+                $contractprice = ContractPrice::where('id',$item['contpriceid'])->with('contractrate')->first();
+
+                $roomhotel = RoomHotel::where('id',$item['roomId'])->first();
+
+                // return response()->json([
+                //     'SURCHARGE'=>$surcharge,
+                //     'pricenomarkup' =>$pricenomarkup,
+                //     'pricenomarkupint satuan' =>$pricenomarkupint
+                // ]);
 
                 $hotelbook = new HotelRoomBooking();
                 $hotelbook->room_id = $item['roomId'];
@@ -106,15 +132,36 @@ class BookingController extends Controller
                 $hotelbook->checkin_date = $request->checkin;
                 $hotelbook->checkout_date = $request->checkout;
                 $hotelbook->price = $priceint;
-                $hotelbook->rate_price = $contractprice->recom_price;
-                $hotelbook->total_ammount = (($contractprice->recom_price * $totalNights) * $item['quantity']);
-                $hotelbook->pricenomarkup = $pricenomarkupint;
+                $hotelbook->room_name = $roomhotel->ratedesc;
+
+                $hotelbook->contract_name = $contractprice->contractrate->codedesc;
+                $hotelbook->benefit_policy = $contractprice->contractrate->benefit_policy;
+                $hotelbook->other_policy = $contractprice->contractrate->other_policy;
+                $hotelbook->cencellation_policy = $contractprice->contractrate->cencellation_policy;
+                $hotelbook->deposit_policy = $contractprice->contractrate->deposit_policy;
+
+                $hotelbook->rate_price = $contractprice->recom_price + $surcharge;
+                $hotelbook->total_ammount = (($priceint + $surcharge) * $item['quantity']);
+                // $hotelbook->pricenomarkup = $pricenomarkupint + ($surcharge * $totalNights);
+                
+                $hotelbook->pricenomarkup = $pricenomarkupint + $surcharge;
                 $hotelbook->save();
 
             }
 
+            $hotelbook_where_totalamount = HotelRoomBooking::where('booking_id',$data->id)->get();
+
+            $pricenomaruptotal = 0;
+            foreach($hotelbook_where_totalamount as $hbwt){
+                $pricenomaruptotal += $hbwt->pricenomarkup;
+            }
+
+            $booking_update_pricenomarkup = Booking::find($data->id);
+            $booking_update_pricenomarkup->pricenomarkup = $pricenomaruptotal * $totalNights;
+            $booking_update_pricenomarkup->save();
+
             return response()->json([
-                $data->id
+                $data->id,
             ]);
 
             // return response()->json(['success' => 'Data saved!']);
@@ -126,13 +173,18 @@ class BookingController extends Controller
     {
         $data = Booking::where('id',$id)->with('users')->with('vendor')->first();
 
+        $transport = PackageTransport::with('transportdestination')->with('agenttransport')->whereHas('agenttransport', function ($query) {
+            $query->where('status', 1);
+        })->get();
+        $destination = TransportDestination::where('state',$data->vendor->state)->get();
         $hotelbooking = HotelRoomBooking::where('booking_id',$id)->get();
 
-        return view('landingpage.hotel.bookingpage',compact('data','hotelbooking'));
+        return view('landingpage.hotel.bookingpage',compact('data','hotelbooking','transport','destination'));
     }
 
     public function bookingstore(Request $request, string $id)
     {
+        // dd($request->totalPrice);
             $validator = Validator::make($request->all(), [
                 'firstname' => 'required',
                 'lastname' => 'required',
@@ -160,6 +212,28 @@ class BookingController extends Controller
                 $book->booking_status = 'unpaid';
                 $book->save();
 
+                if ($request->idtransport) {
+                    $package = PackageTransport::find($request->idtransport);
+
+                    $ordertransport = new OrderTransport;
+                    $ordertransport->user_id = $book->user_id;
+                    $ordertransport->package_id = $request->idtransport;
+                    $ordertransport->booking_id = $id;
+                    $ordertransport->transport_id = $package->agenttransport->id;
+                    $ordertransport->time_pickup = $request->timepickup;
+                    $ordertransport->flight_time = $request->flight;
+                    $ordertransport->pickup_date = $request->datepickup;
+                    $ordertransport->guest_name = $request->firstname.' '.$request->lastname;
+                    $ordertransport->phone_guest = $request->phone;
+                    $ordertransport->total_price_nomarkup = $package->price;
+                    $ordertransport->total_price = $package->price + $package->agenttransport->markup;
+                    $ordertransport->is_see = 0;
+                    $ordertransport->destination = $package->transportdestination->destination;
+                    $ordertransport->typecar = $package->type_car;
+                    $ordertransport->number_police = $package->number_police;
+                    $ordertransport->booking_status = 'unpaid';
+                    $ordertransport->save();
+                }
                 if($request->paymentmethod == 2){
                     $booking = Booking::find($id);
 
@@ -171,6 +245,7 @@ class BookingController extends Controller
                         'total'=>$totalbooking,
                         'bookingid'=>$booking->id
                     ];
+
                     $data['body'] = [
                         'name' => array(auth()->user()->name), //array($request->name),
                         'email' => array(auth()->user()->email),//array($request->email),
@@ -214,7 +289,30 @@ class BookingController extends Controller
                 }
             }else{
                 $booking = $id;
-                return view('landingpage.hotel.transferbank',compact('booking'));
+                $hotel_room_booking = HotelRoomBooking::where('booking_id',$booking)->get();
+                $totalprice = 0;
+                foreach($hotel_room_booking as $item){
+                    $totalprice += $item->price;
+                }
+
+                $booking = Booking::find($booking);
+                $totalpayment = $booking->night * $totalprice;
+
+                $total_as_saldo = 0;
+                if($booking->price == $totalpayment){
+                    $total_as_saldo = $booking->price;
+                }else{
+                    $total_as_saldo = $totalpayment;
+                }
+
+                if ($request->idtransport) {
+                    $tranportbookings = OrderTransport::where('booking_id',$id)->first();
+                    $transportbooking = $tranportbookings->total_price;
+                }else{
+                    $transportbooking = 0;
+                }
+
+                return view('landingpage.hotel.transferbank',compact('booking','total_as_saldo','transportbooking'));
             }
             return redirect()
             ->route('agent.booking.history')
@@ -222,7 +320,32 @@ class BookingController extends Controller
         }
     }
     public function paymentbookingpage($booking){
-        return view('landingpage.hotel.transferbank',compact('booking'));
+        $hotel_room_booking = HotelRoomBooking::where('booking_id',$booking)->get();
+        $totalprice = 0;
+        foreach($hotel_room_booking as $item){
+            $totalprice += $item->price;
+        }
+
+        $booking = Booking::find($booking);
+        $totalpayment = $booking->night * $totalprice;
+
+        $total_as_saldo = 0;
+        if($booking->price == $totalpayment){
+            $total_as_saldo = $booking->price;
+        }else{
+            $total_as_saldo = $totalpayment;
+        }
+
+        $tranportbookings = OrderTransport::where('booking_id',$booking->id)->first();
+        if($tranportbookings){
+            $transportbooking = $tranportbookings->total_price;
+        }else{
+            $transportbooking = 0;
+        }
+
+
+
+        return view('landingpage.hotel.transferbank',compact('booking','total_as_saldo','transportbooking'));
     }
 
     public function upbanktransfer(Request $request){
@@ -253,6 +376,7 @@ class BookingController extends Controller
 
             $booking = Booking::find($request->idbooking);
             $booking->booking_status = 'proccessing';
+            $booking->is_see = 0;
             $booking->save();
 
             $userid = auth()->user()->id;
@@ -265,12 +389,22 @@ class BookingController extends Controller
             $trans->status = 400;
             $trans->payment_method = 'BANK-TRANSFER';
             $trans->trx_id = Str::random(5);
+            $trans->is_see = 0;
             $trans->save();
 
-            $Setting = Setting::where('id',1)->first();
-            Mail::to($Setting->email)->send(new PaymentNotif($trans));
-            // Mail::to(auth()->user()->email)->send(new BookingConfirmation($data));
+            $tranportbookings = OrderTransport::where('booking_id',$request->idbooking)->first();
+            if($tranportbookings){
+                $tranportbookings->booking_status = 'proccessing';
+                $tranportbookings->is_see = 0;
+                $tranportbookings->save();
+            }
 
+
+            $Setting = Setting::where('id',1)->first();
+            if (env('APP_ENV') == 'production') {
+            Mail::to($Setting->email)->send(new PaymentNotif($trans));
+            Mail::to(auth()->user()->email)->send(new BookingConfirmation($data));
+            }
             return redirect()
             ->route('agent.booking.history')
             ->with('success', 'Transaction success');
@@ -380,9 +514,10 @@ class BookingController extends Controller
                 'contract' => $contract
             ];
 
-            // Mail::to($book->vendor->email)->send(new BookingConfirmation($data));
-            // Mail::to(auth()->user()->email)->send(new BookingConfirmation($data));
-
+            if (env('APP_ENV') == 'production') {
+            Mail::to($book->vendor->email)->send(new BookingConfirmation($data));
+            Mail::to(auth()->user()->email)->send(new BookingConfirmation($data));
+            }
             return redirect()
             ->route('agent.booking.history')
             ->with('success', 'Data saved!');

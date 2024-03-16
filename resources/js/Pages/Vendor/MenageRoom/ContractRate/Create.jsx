@@ -27,6 +27,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
     const [cancelPolicy, setCancellationPolicy] = useState('');
     const [depositPolicy, setDepositPolicy] = useState('');
     const [benefitPolicy, setBenefitPolicy] = useState('');
+    const [otherpolicy, setOtherPolicy] = useState('');
 
     const [minPrice, setMinPrice] = useState('');
     const [sellingPrice, setSellingPrice] = useState('');
@@ -158,6 +159,10 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
         setBenefitPolicy(editor.getData());
     };
 
+    const handleOthertPolicyChange = (event, editor) => {
+        setOtherPolicy(editor.getData());
+    };
+
     const [checkboxes, setCheckboxes] = useState({
         sunday: false,
         monday: false,
@@ -230,6 +235,7 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
         formData.append('cencellation_policy', cancelPolicy);
         formData.append('deposit_policy', depositPolicy);
         formData.append('benefit_policy', benefitPolicy);
+        formData.append('other_policy', otherpolicy);
 
         formData.append('distribute',selectedDistribute);
         formData.append('except',selectedExclude);
@@ -378,32 +384,44 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                         {cont === true ? (
                                                                              <div className="mb-5">
                                                                              <label htmlFor="">Market</label>
-                                                                             <select
-                                                                                 name=""
-                                                                                 id=""
-                                                                                 className="form-control"
-                                                                                 onChange={handleSelectDistribute}
-                                                                                 multiple
-                                                                             >
-                                                                                 <option value="WORLDWIDE">WORLDWIDE</option>
-                                                                                 {Object.keys(country).map((key) => (
-                                                                                 <option key={key} value={country[key]}>
-                                                                                     {country[key]}
-                                                                                 </option>
-                                                                                 ))}
-                                                                             </select>
-                                                                             <p className="mt-2">
-                                                                                Selected Values:{" "}
-                                                                                <span className="text-secondary">
-                                                                                {selectedDistribute.map((value) => (
-                                                                                    <span key={value}>
-                                                                                        <span  onClick={() => handleRemoveSelected(value)} class="btn badge badge-success text-light mx-1">
-                                                                                        {value} <span class="mx-1 badge badge-danger">x</span>
+                                                                             {vendor.marketcountry ? (
+                                                                                <>
+                                                                                    <select
+                                                                                        name=""
+                                                                                        id=""
+                                                                                        className="form-control"
+                                                                                        onChange={handleSelectDistribute}
+                                                                                        multiple
+                                                                                    >
+                                                                                        {Object.keys(vendor.marketcountry).map((key) => (
+                                                                                        <option key={key} value={vendor.marketcountry[key]}>
+                                                                                            {vendor.marketcountry[key]}
+                                                                                        </option>
+                                                                                        ))}
+                                                                                    </select>
+                                                                                    <p className="mt-2">
+                                                                                        Selected Values:{" "}
+                                                                                        <span className="text-secondary">
+                                                                                        {selectedDistribute.map((value) => (
+                                                                                            <span key={value}>
+                                                                                                <span  onClick={() => handleRemoveSelected(value)} class="btn badge badge-success text-light mx-1">
+                                                                                                {value} <span class="mx-1 badge badge-danger">x</span>
+                                                                                                </span>
+                                                                                            </span>
+                                                                                        ))}
                                                                                         </span>
-                                                                                    </span>
-                                                                                ))}
-                                                                                </span>
-                                                                            </p>
+                                                                                    </p>
+                                                                                </>
+                                                                             ):(
+                                                                                <>
+                                                                                <br />
+                                                                                <div className='mt-2'>
+                                                                                    <p className='badge badge-danger'>please input country data in your profile</p>
+                                                                                    <br />
+                                                                                    <Link href='/myprofile' className='btn btn-primary'>Input</Link>
+                                                                                </div>
+                                                                                </>
+                                                                             )}
                                                                          </div>
                                                                         ) : (
                                                                             <>
@@ -575,7 +593,26 @@ export default function PriceAgentRoom({ country, session, data, markup, bardata
                                                                             />
                                                                         </div>
                                                                     </div>
-
+                                                                    <div className="col-lg-12">
+                                                                        <div className="mb-3">
+                                                                            <label className="form-label fw-bold">Other Conditions</label>
+                                                                            <CKEditor
+                                                                                editor={ClassicEditor}
+                                                                                data=""
+                                                                                onReady={editor => {
+                                                                                    // You can store the "editor" and use when it is needed.
+                                                                                    console.log('Editor is ready to use!', editor);
+                                                                                }}
+                                                                                onChange={handleOthertPolicyChange}
+                                                                                onBlur={(event, editor) => {
+                                                                                    console.log('Blur.', editor);
+                                                                                }}
+                                                                                onFocus={(event, editor) => {
+                                                                                    console.log('Focus.', editor);
+                                                                                }}
+                                                                            />
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </Tab>
                                                         </Tabs>

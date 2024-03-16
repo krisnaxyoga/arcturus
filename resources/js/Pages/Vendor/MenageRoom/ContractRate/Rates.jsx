@@ -1,18 +1,28 @@
-import React from "react";
+import React,{ useState } from "react";
 import { Link } from "@inertiajs/inertia-react";
 
-export default function Rates({ rates }) {
+export default function Rates({ rates,toggleStatus }) {
+    const formatDate = (dateString) => {
+        const parts = dateString.split('-'); // Memecah tanggal berdasarkan tanda "-"
+        if (parts.length === 3) {
+          const [year, month, day] = parts;
+          return `${day}/${month}/${year}`; // Mengganti urutan tanggal
+        }
+        return dateString; // Kembalikan jika tidak dapat memproses tanggal
+      };
+
+
     return (
         <tbody>
             {rates.map((item) => (
                 <>
                     <tr className={item.rolerate == 1 && "bg-light"} key={item.id}>
-                        <td>{item.ratecode}</td>
-                        <td>{item.codedesc}</td>
-                        <td>{item.stayperiod_begin}</td>
-                        <td>{item.stayperiod_end}</td>
-                        <td>{item.booking_begin}</td>
-                        <td>{item.booking_end}</td>
+                        {/* <td>{item.ratecode}</td>
+                        <td>{item.codedesc}</td> */}
+                        <td>{formatDate(item.stayperiod_begin)}</td>
+                        <td>{formatDate(item.stayperiod_end)}</td>
+                        <td>{formatDate(item.booking_begin)}</td>
+                        <td>{formatDate(item.booking_end)}</td>
                         <td>{item.min_stay}</td>
                         <td>{item.distribute.join(", ")}</td>
                         <td>
@@ -46,12 +56,43 @@ export default function Rates({ rates }) {
                             >
                                 <i className="fa fa-edit"></i>
                             </Link>
-                            <Link
-                                href={`/room/contract/destroy/${item.id}`}
-                                className="btn btn-datatable btn-icon btn-transparent-dark mr-2"
-                            >
-                                <i className="fa fa-trash"></i>
-                            </Link>
+                            {item.is_active != undefined ? (
+                                <a
+                                    href="#"
+                                    className="btn btn-datatable btn-icon btn-transparent-dark mr-2"
+                                    onClick={(e) => {
+                                    e.preventDefault();
+                                    toggleStatus(item.id, item.is_active);
+                                    }}
+                                >
+                                    {item.is_active == 1 ? (
+                                    <span className="text-success">
+                                        <i className="fa fa-circle" aria-hidden="true"></i>on
+                                    </span>
+                                    ) : (
+                                    <span className="text-danger">
+                                        <i className="fa fa-circle" aria-hidden="true"></i>off
+                                    </span>
+                                    )}
+                                </a>
+                                ) : (
+                                <span>Missing or invalid data</span>
+                                )}
+                                {item.rolerate == 2 && <>
+                                    <Link
+                                        href="#"
+                                        className="btn btn-datatable btn-icon btn-transparent-dark mr-2"
+                                        onClick={() => {
+                                            if (window.confirm('Are you sure you want to delete this?')) {
+                                              // Lanjutkan dengan menghapus jika pengguna menekan OK pada konfirmasi
+                                              window.location.href = `/room/contract/destroy/${item.id}`;
+                                            }
+                                          }}
+                                    >
+                                        <i className="fa fa-trash"></i>
+                                    </Link>
+                                </>}
+                           
                         </td>
                     </tr>
                 </>

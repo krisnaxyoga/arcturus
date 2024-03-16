@@ -39,7 +39,6 @@ function type_property(){
 function get_country_lists(){
     $countries = array
     (
-
         'ID' => 'Indonesia',
         'AF' => 'Afghanistan',
         'AX' => 'Aland Islands',
@@ -287,4 +286,43 @@ function get_country_lists(){
         'ZW' => 'Zimbabwe',
     );
     return $countries;
+}
+
+function getindonesiaprovinsi(){
+    $indonesiaProvinces = array(
+        'Bali',
+        'Nusa Tenggara Barat',
+        'Aceh',
+        'Sumatera Utara',
+        'Sumatera Barat',
+        'Riau',
+        'Jambi',
+        'Sumatera Selatan',
+        'Bengkulu',
+        'Lampung',
+        'Kepulauan Bangka Belitung',
+        'Kepulauan Riau',
+        'DKI Jakarta',
+        'Jawa Barat',
+        'Jawa Tengah',
+        'DI Yogyakarta',
+        'Jawa Timur',
+        'Banten',
+        'Nusa Tenggara Timur',
+        'Kalimantan Barat',
+        'Kalimantan Tengah',
+        'Kalimantan Selatan',
+        'Kalimantan Timur',
+        'Kalimantan Utara',
+        'Sulawesi Utara',
+        'Sulawesi Tengah',
+        'Sulawesi Selatan',
+        'Sulawesi Tenggara',
+        'Gorontalo',
+        'Maluku',
+        'Maluku Utara',
+        'Papua Barat',
+        'Papua'
+    );
+    return $indonesiaProvinces;
 }

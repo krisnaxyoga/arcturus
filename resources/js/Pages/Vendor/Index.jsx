@@ -1,6 +1,11 @@
 //import React
 import React, { useState,useEffect } from 'react';
 
+const encrypt = (value) => {
+  return btoa(value);
+};
+
+
 //import layout
 import Layout from '../../Layouts/Vendor';
 
@@ -20,6 +25,7 @@ export default function Index({ totalroom,income,vendor,success,pending,data,wid
   const [currentPage, setCurrentPage] = useState(1)
   const [postsPerPage, setPostsPerPage] = useState(10)
   const [isLoading, setIsLoading] = useState(true);
+
 
   useEffect(() => {
       // Anda dapat menambahkan logika tambahan jika diperlukan
@@ -44,6 +50,21 @@ export default function Index({ totalroom,income,vendor,success,pending,data,wid
   const nextPage = () => setCurrentPage(currentPage + 1);
 
   const prevPage = () => setCurrentPage(currentPage - 1);
+
+  // Dapatkan nilai 'position' dari props
+  const { position } = usePage().props;
+
+  // Enkripsi dan simpan ke dalam localStorage hanya sekali
+  useEffect(() => {
+    // Hanya jalankan efek jika nilai position adalah 'master'
+    if (position == 'master') {
+        const encryptedPosition = encrypt(position);
+        localStorage.setItem('encryptedPosition', encryptedPosition);
+    }
+}, [position]);
+  // Sekarang, variabel 'position' dapat digunakan di dalam komponen React Anda
+  console.log('Position:', position);
+  
 
   return (
     <>
@@ -147,8 +168,8 @@ export default function Index({ totalroom,income,vendor,success,pending,data,wid
                 </div>
               </div>
               <div className="row">
-                <div className="col-lg-8">
-                  <div className="card">
+                <div className="col-lg-12">
+                  <div className="card mb-5">
                     <div className="card-header">
                       <h2>Booking</h2>
                     </div>
@@ -179,7 +200,7 @@ export default function Index({ totalroom,income,vendor,success,pending,data,wid
                   </div>
                 </div>
                 <div className="col-lg-4">
-                <div className="card">
+                {/* <div className="card">
                     <div className="card-header">
                       <h2>Evidence of transfer</h2>
                     </div>
@@ -197,7 +218,7 @@ export default function Index({ totalroom,income,vendor,success,pending,data,wid
                             <Pagination postsPerPage={postsPerPage} totalPosts={widraw.length} paginate={paginate} nextPage={nextPage} prevPage={prevPage} crntPage={currentPage} />
                         </div>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
               {/* <!-- Content Row --> */}

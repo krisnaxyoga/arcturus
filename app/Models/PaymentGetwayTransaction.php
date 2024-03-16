@@ -12,4 +12,8 @@ class PaymentGetwayTransaction extends Model
     public function booking() {
         return $this->belongsTo(Booking::class, 'booking_id');
     }
+
+    public function users() {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

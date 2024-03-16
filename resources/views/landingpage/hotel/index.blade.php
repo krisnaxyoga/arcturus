@@ -72,17 +72,41 @@
                         <div class="row">
                             <div class="col-md d-flex">
                                 <div class="form-group border-0 mb-3 mt-2 mx-2">
-                                    <label class="pl-3 mt-3" for="">country</label>
-                                    <select name="country" id=""
+                                    <label class="pl-3 mt-3" for="">Search</label>
+                                    <input type="text" name="search" class="form-control" placeholder="Search..." value="{{$requestdata['search']}}">
+                                    {{-- <select name="country" id=""
                                     class="form-control ">
                                     <option value="">{{ __('-- Select --') }}
-                                    </option>
-                                    @foreach (get_country_lists() as $id => $name)
+                                    </option> --}}
+                                    {{-- @foreach (get_country_lists() as $id => $name)
                                         <option @if (($requestdata['country'] ?? '') == $name) selected @endif value="{{ $name }}">{{ $name }}</option>
-                                    @endforeach
-                                </select>
+                                    @endforeach --}}
+                                    {{-- @foreach ($country as $name)
+                                    <option
+                                        @if (($requestdata['country'] ?? '') == $name->country) selected @endif
+                                            value="{{ $name->country }}">
+                                            {{ $name->country }}</option>
+                                        @endforeach
+                                </select> --}}
                                 </div>
                             </div>
+                            {{-- <div class="col-md d-flex">
+                                <div class="form-group mb-3 mt-2 mx-2">
+                                    <label class="pl-3 mt-3" for="#">Market</label>
+                                    <div class="form-field">
+                                        {{-- <div class="icon"><span class="fa fa-search"></span></div> --}}
+                                        {{-- <select name="country" id="" class="form-control ">
+                                        @foreach ($user->vendors->marketcountry as $name)
+                                        
+                                            <option
+                                                @if (($requestdata['country'] ?? '') == $name) selected @endif
+                                                value="{{ $name }}">
+                                                {{ $name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div> --}} 
                             {{-- <div class="col-md d-flex">
                                 <div class="form-group mb-3 mt-2 mx-2">
                                     <label class="pl-3 mt-3" for="#">State</label>
@@ -97,6 +121,8 @@
                                 // Mendapatkan nilai checkin dan checkout dari requestdata
                                 $checkin = isset($requestdata['checkin']) ? date('m/d/Y', strtotime($requestdata['checkin'])) : date('m/d/Y');
                                 $checkout = isset($requestdata['checkout']) ? date('m/d/Y', strtotime($requestdata['checkout'])) : date('m/d/Y', strtotime('+1 day'));
+                                // Menghitung selisih antara tanggal check-in dan check-out
+                                // $totalNights = ceil(($checkout - $checkin) / 86400); // 86400 detik dalam sehari
                                 ?>
                                 <div class="form-group mb-3 mt-2 mx-2">
                                     <label class="pl-3 mt-3" for="">CheckIn - CheckOut</label>
@@ -173,69 +199,69 @@
         @else
         <div class="container">
             <div class="row">
-                <div class="col-lg-3 ">
-                    <div class="card">
-                        <div class="card-body">
-                            <p class="m-0" style="color: #1a2b48;
-                            font-size: 20px;
-                            font-weight: 500;
-                        ">Filter By</p>
-                        </div>
-                    </div>
-                    {{-- <div class="card">
-                        <div class="card-body">
-                            <a class="text-secondary" data-toggle="collapse" href="#collapseExample1" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                Filter Price
-                              </a>
-                              <div class="collapse show" id="collapseExample1">
-                                <div>
-                                    <form method="post" action="/action_page_post.php">
-                                        <div data-role="rangeslider">
-                                          <label for="price-min">Range:</label>
-                                          <input type="range" min="1000000" max="10000000" value="5000000" class="slider" id="myRange">
-                                          <p>Value: <span id="demo"></span></p>
-                                        </div>
-                                          <input class="btn btn-secondary" type="submit" data-inline="true" value="Submit">
-                                         </form>
+                <!--<div class="col-lg-3 ">-->
+                <!--    <div class="card">-->
+                <!--        <div class="card-body">-->
+                <!--            <p class="m-0" style="color: #1a2b48;-->
+                <!--            font-size: 20px;-->
+                <!--            font-weight: 500;-->
+                <!--        ">Filter By</p>-->
+                <!--        </div>-->
+                <!--    </div>-->
+                <!--    {{-- <div class="card">-->
+                <!--        <div class="card-body">-->
+                <!--            <a class="text-secondary" data-toggle="collapse" href="#collapseExample1" role="button" aria-expanded="false" aria-controls="collapseExample">-->
+                <!--                Filter Price-->
+                <!--              </a>-->
+                <!--              <div class="collapse show" id="collapseExample1">-->
+                <!--                <div>-->
+                <!--                    <form method="post" action="/action_page_post.php">-->
+                <!--                        <div data-role="rangeslider">-->
+                <!--                          <label for="price-min">Range:</label>-->
+                <!--                          <input type="range" min="1000000" max="10000000" value="5000000" class="slider" id="myRange">-->
+                <!--                          <p>Value: <span id="demo"></span></p>-->
+                <!--                        </div>-->
+                <!--                          <input class="btn btn-secondary" type="submit" data-inline="true" value="Submit">-->
+                <!--                         </form>-->
 
-                                </div>
-                              </div>
-                        </div>
-                    </div> --}}
-                    <div class="card">
-                        <div class="card-body">
-                            <a class="text-secondary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                Property type
-                                {{-- {{$requestdata['properties']}} --}}
-                                {{-- @foreach ($requestdata['properties'] as $av)
-                                    {{$av}}
-                                @endforeach --}}
-                              </a>
-                              <div class="collapse show" id="collapseExample">
-                                <div>
-                                    <form action="{{ route('hotel.homepage') }}" method="get">
-                                        @csrf
-                                        @foreach (type_property() as $id => $name)
-                                        <input value="{{ $requestdata['checkin'] }}" type="hidden" name="checkin"
-                                        class="form-control checkindate"
-                                        placeholder="Check In Date">
-                                        <input value="{{ $requestdata['checkout'] }}" type="hidden" name="checkout"
-                                        class="form-control checkoutdate"
-                                        placeholder="Check Out Date">
-                                        <input type="hidden" value="{{$requestdata['person']}}" name="person">
-                                        <input type="hidden" value="{{$requestdata['country']}}" name="country">
-                                        <input type="hidden" value="{{$requestdata['sort']}}" name="sort">
-                                        <input type="checkbox" id="property{{ $id }}" name="properties[]" value="{{ $name }}" @if(is_array($requestdata['properties']) && in_array($name, $requestdata['properties']) || $name == $requestdata['properties']) checked @endif><label for="vehicle1{{ $id }}"> &nbsp; {{ $name }}</label><br>
-                                            {{-- <option @if (($requestdata['country'] ?? '') == $name) selected @endif value="{{ $name }}">{{ $name }}</option> --}}
-                                        @endforeach
-                                        <input class="btn btn-secondary" type="submit" value="Filter">
-                                      </form>
-                                </div>
-                              </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-9">
+                <!--                </div>-->
+                <!--              </div>-->
+                <!--        </div>-->
+                <!--    </div> --}}-->
+                <!--    <div class="card">-->
+                <!--        <div class="card-body">-->
+                <!--            <a class="text-secondary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">-->
+                <!--                Property type-->
+                <!--                {{-- {{$requestdata['properties']}} --}}-->
+                <!--                {{-- @foreach ($requestdata['properties'] as $av)-->
+                <!--                    {{$av}}-->
+                <!--                @endforeach --}}-->
+                <!--              </a>-->
+                <!--              <div class="collapse show" id="collapseExample">-->
+                <!--                <div>-->
+                <!--                    <form action="{{ route('hotel.homepage') }}" method="get">-->
+                <!--                        @csrf-->
+                <!--                        @foreach (type_property() as $id => $name)-->
+                <!--                        <input value="{{ $requestdata['checkin'] }}" type="hidden" name="checkin"-->
+                <!--                        class="form-control checkindate"-->
+                <!--                        placeholder="Check In Date">-->
+                <!--                        <input value="{{ $requestdata['checkout'] }}" type="hidden" name="checkout"-->
+                <!--                        class="form-control checkoutdate"-->
+                <!--                        placeholder="Check Out Date">-->
+                <!--                        <input type="hidden" value="{{$requestdata['person']}}" name="person">-->
+                <!--                        <input type="hidden" value="{{$requestdata['country']}}" name="country">-->
+                <!--                        <input type="hidden" value="{{$requestdata['sort']}}" name="sort">-->
+                <!--                        <input type="checkbox" id="property{{ $id }}" name="properties[]" value="{{ $name }}" @if(is_array($requestdata['properties']) && in_array($name, $requestdata['properties']) || $name == $requestdata['properties']) checked @endif><label for="vehicle1{{ $id }}"> &nbsp; {{ $name }}</label><br>-->
+                <!--                            {{-- <option @if (($requestdata['country'] ?? '') == $name) selected @endif value="{{ $name }}">{{ $name }}</option> --}}-->
+                <!--                        @endforeach-->
+                <!--                        <input class="btn btn-secondary" type="submit" value="Filter">-->
+                <!--                      </form>-->
+                <!--                </div>-->
+                <!--              </div>-->
+                <!--        </div>-->
+                <!--    </div>-->
+                <!--</div>-->
+                <div class="col-lg-12">
                     <div class="row">
                         <div class="col-lg-12 d-flex justify-content-between ">
                             <span class="price" style="color: #1a2b48;
@@ -270,11 +296,12 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <p class="star mb-0">
-                                            <span class="fa fa-star"></span>
-                                            <span class="fa fa-star"></span>
-                                            <span class="fa fa-star"></span>
-                                            <span class="fa fa-star"></span>
-                                            <span class="fa fa-star"></span>
+                                            @php
+                                               $hotel_star_count = $item->contractrate->vendors->hotel_star
+                                            @endphp
+                                            @for($i = 0; $i < $hotel_star_count; $i++)
+                                                <span class="fa fa-star"></span>
+                                            @endfor
                                         </p>
                                         <h3 class="m-0"><a href="{{ route('hoteldetail.homepage', ['id' => $item->contract_id]) }}?{{ http_build_query($requestdata) }}">{{$item->contractrate->vendors->vendor_name}}</a></h3>
 
@@ -293,39 +320,297 @@
                                         </p>
                                     </div>
                                     <div class="col-lg-3 border-left">
+
                                         @php
+                                         $totalsurcharge = 0;
+                                        $totalDataCount = 0;
+                                        $totalDataCounttwo = 0;
+                                        $surchargepricetotal = 0;
+                                        $calendarpricetotal=0;
+                                        $calendarprice = 0;
+                                        $vendorid = 0;
+                                        $vendorcalender = 0;
+                                        foreach ($surchargeAllRoom as $surchargeAllRoomitem) {
+                                           if($surchargeAllRoomitem->vendor_id == $item->contractrate->vendors->id){
+                                                $totalsurcharge += $surchargeAllRoomitem->surcharge_price;
+                                                $totalDataCount++;
+                                                $vendorid = $surchargeAllRoomitem->vendor_id;
+                                           }
+                                        }
+                                        if($vendorid == $item->contractrate->vendors->id){
+                                            // $countNights = ($Nights + 1) - ($totalDataCount);
+                                            // $surchargepricetotal = ($totalsurcharge * $countNights) / $Nights;
+                                            // var_dump(($totalsurcharge * $countNights));
+                                            // var_dump($countNights);
+
+                                            $surchargepricetotal = $totalsurcharge / $Nights;
+                                        }
+                                        // var_dump($surchargepricetotal);
+
+
                                         $lowestPrice = null; // Inisialisasi variabel untuk harga terendah
+                                        $percentage = 0;
+
+                                        $largestPercentage = null;
+                                        $roomrecom = null;
+                                        $nightrecom = null;
+
+                                        $markupsystem = $item->contractrate->vendors->system_markup;
+
+                                        if($affiliate == $item->contractrate->vendors->affiliate){
+                                            $markupsystem = 0;
+                                        }
+
+                                        if ($affiliate == null || $affiliate != $item->contractrate->vendors->affiliate) {
+                                            $markupsystem = $item->contractrate->vendors->system_markup;
+                                        }
+                                        
                                     @endphp
-                                    
+
+                                    @foreach ($HotelCalendar as $calendar)
+                                    <?php
+                                    if($calendar->room_hotel_id == $item->room_id){
+                                        $calendarprice += $calendar->recom_price;
+                                        $totalDataCounttwo++;
+                                        $vendorcalender = $calendar->vendor_id;
+                                    }
+                                    ?>
+                                    @endforeach
+
                                     @foreach ($contractprice as $contprice)
+                                    <?php
+                                    $countNights = 0;
+                                    //  if($vendorcalender == $item->contractrate->vendors->id){
+                                    //     $countNights = $Nights - $totalDataCounttwo;
+                                       
+                                    //     if($countNights <= 0){
+                                    //         $calendarpricetotal = $contprice->recom_price;
+                                    //     }else{
+                                    //         $calendarpricetotal = ($calendarprice + ($contprice->recom_price * $countNights)) / $totalNights;
+                                    //     }
+
+                                    //     }
+                                    ?>
                                         @php
+                                        // if($calendarpricetotal == $contprice->recom_price){
                                             $advprice = $contprice->recom_price;
-                                                            
+                                        // }else{
+                                        //     $advprice = $calendarpricetotal;
+                                        // }
+
+
                                             if ($advancepurchase->count() > 0) {
                                                 foreach ($advancepurchase as $advancevalue) {
                                                     if ($advancevalue->contract_id == $contprice->contract_id && $advancevalue->room_id == $contprice->room_id) {
                                                         $advprice = $advancevalue->price;
-                                                        
+
                                                     }
                                                 }
                                             }
+                                            // var_dump($advprice+ $markupsystem);
                                         @endphp
-                                        @if ($contprice->user_id == $item->user_id)
+                                        @if ($contprice->user_id == $item->user_id && $contprice->vendor_id == $item->vendor_id)
                                             @php
-                                                $price = $advprice + $item->contractrate->vendors->system_markup;
-                                                if ($lowestPrice === null || $price < $lowestPrice) {
+                                            if($surchargepricetotal > 0){
+                                                $price = $advprice + $markupsystem + $surchargepricetotal;
+                                            }else{
+                                                $price = $advprice + $markupsystem;
+                                            }
+                                            $percentage = $contprice->contractrate->percentage;
+
+                                                if ($lowestPrice == null || $price < $lowestPrice) {
                                                     $lowestPrice = $price; // Simpan harga terendah
+
+                                                    if ($percentage == null || $percentage > $largestPercentage) {
+                                                        $largestPercentage = $percentage;
+                                                    }
                                                 }
+
                                             @endphp
                                         @endif
+
                                     @endforeach
-                                    
+
                                     @if ($lowestPrice !== null)
                                         <div class="price" style="color: #1a2b48; font-size: 18px; font-weight: 500;">
                                             <span style="color: #5e6d77; font-size: 14px; font-weight: 400;">From</span> <br>
                                             Rp. {{ number_format($lowestPrice, 0, ',', '.') }}</div>
                                         <span style="color: #5e6d77; font-size: 10px; font-weight: 400;">/Night</span>
                                     @endif
+
+                                    <div>
+                                        <!-- Button trigger modal -->
+                                        {{-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal{{ $item->room_id }}">
+                                            Recoment Price
+                                        </button> --}}
+                                    </div>
+
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="exampleModal{{ $item->room_id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">{{ $item->contractrate->vendors->vendor_name }}</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                                                    <li class="nav-item" role="presentation">
+                                                      <button class="nav-link active border-0" id="pills-home-tab{{ $item->room_id }}" data-toggle="pill" data-target="#pills-home{{ $item->room_id }}" type="button" role="tab" aria-controls="pills-home{{ $item->room_id }}" aria-selected="true">All Rate</button>
+                                                    </li>
+                                                    <li class="nav-item" role="presentation">
+                                                      <button class="nav-link border-0 mx-1" id="pills-profile-tab{{ $item->room_id }}" data-toggle="pill" data-target="#pills-profile{{ $item->room_id }}" type="button" role="tab" aria-controls="pills-profile{{ $item->room_id }}" aria-selected="false">Rate Calendar</button>
+                                                    </li>
+                                                  </ul>
+                                                  <div class="tab-content" id="pills-tabContent">
+                                                    <div class="tab-pane fade show active" id="pills-home{{ $item->room_id }}" role="tabpanel" aria-labelledby="pills-home-tab{{ $item->room_id }}">
+                                                        <p class="m-0" style="font-size: 16px;font-weight:700">All Rate</p>
+
+                                                        <div class="row">
+                                                            <?php
+                                                                $conpricearray = $contractprice->sortBy('recom_price');
+                                                                ?>
+                                                            @foreach ($conpricearray as $contprice)
+                                                                <?php
+                                                                $countNights = 0;
+                                                                $lowestPrice2 = null;
+                                                                $lowestPriceRoom = null;
+                                                                // if($vendorcalender == $item->contractrate->vendors->id){
+                                                                //     $countNights = $Nights - $totalDataCounttwo;
+                                                                //     if($countNights <= 0){
+                                                                //         $calendarpricetotal = $contprice->recom_price;
+                                                                //     }else{
+                                                                //         $calendarpricetotal = ($calendarprice + ($contprice->recom_price * $countNights)) / $totalNights;
+
+                                                                //     }
+
+                                                                //     }
+                                                                ?>
+                                                                    @php
+                                                                    // if($calendarpricetotal == $contprice->recom_price){
+                                                                        $advprice = $contprice->recom_price;
+                                                                    // }else{
+                                                                    //     $advprice = $calendarpricetotal;
+                                                                    // }
+
+
+                                                                        if ($advancepurchase->count() > 0) {
+                                                                            foreach ($advancepurchase as $advancevalue) {
+                                                                                if ($advancevalue->contract_id == $contprice->contract_id && $advancevalue->room_id == $contprice->room_id) {
+                                                                                    $advprice = $advancevalue->price;
+
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                        // var_dump($advprice+ $markupsystem);
+                                                                    @endphp
+                                                                    @if ($contprice->user_id == $item->user_id && $contprice->vendor_id == $item->vendor_id)
+                                                                        <?php
+                                                                        if($surchargepricetotal > 0){
+                                                                            $price = $advprice + $markupsystem + $surchargepricetotal;
+                                                                        }else{
+                                                                            $price = $advprice + $markupsystem;
+                                                                        }
+                                                                        $percentage = $contprice->contractrate->percentage;
+
+                                                                            if ($lowestPrice2 == null || $price < $lowestPrice2) {
+                                                                                $lowestPrice2 = $price; // Simpan harga terendah
+                                                                        ?>
+
+                                                                        <div class="col-lg-4 mb-2">
+                                                                            <div class="card border-0 shadow" style="border-radius: 15px">
+
+                                                                                <div class="card-body">
+                                                                                    <div class="row">
+                                                                                        <div class="col">
+                                                                                            <p class="badge  @if ($lowestPrice2 == $lowestPrice)
+                                                                                            badge-success
+                                                                                                @else
+                                                                                                badge-primary
+                                                                                            @endif m-0">{{ $contprice->room->ratedesc }}</p>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="row">
+                                                                                        <div class="col">
+                                                                                            <p class="badge badge-light m-0">{{ $contprice->contractrate->min_stay }} /Night</p>
+
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="row">
+                                                                                        <div class="col">
+                                                                                            <p class="badge badge-light m-0">Rp. {{ number_format($lowestPrice2, 0, ',', '.') }}</p>
+
+                                                                                        </div>
+                                                                                    </div>
+                                                                              </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <?php
+
+                                                                            }
+
+                                                                        ?>
+                                                                    @endif
+
+
+                                                                @endforeach
+                                                        </div>
+                                                    </div>
+                                                    <div class="tab-pane fade" id="pills-profile{{ $item->room_id }}" role="tabpanel" aria-labelledby="pills-profile-tab{{ $item->room_id }}">
+
+                                                <p class="m-0" style="font-size: 16px;font-weight:700">Rate Calendar</p>
+                                                <div class="row">
+                                                    @foreach ($HotelCalendartool as $hct)
+                                                        @if ($hct->vendor_id == $item->contractrate->vendor_id && $hct->room_hotel_id == $item->room_id)
+                                                        <div class="col-lg-4 mb-2">
+                                                            <div class="card border-0 shadow" style="border-radius: 15px">
+                                                                <div class="card-body">
+                                                                    <div class="row">
+                                                                        <div class="col-lg-4">
+                                                                            <span class="badge badge-primary">
+                                                                               1 Night
+                                                                            </span>
+                                                                        </div>
+                                                                        <div class="col-lg-8">
+                                                                            <div class="d-flex justify-content-between">
+                                                                                <span>
+                                                                                    <p class="badge badge-light m-0">Date  :</p>
+                                                                                    <p class="badge badge-light m-0">Price :</p>
+                                                                                </span>
+                                                                                <span>
+                                                                                    <p class="badge badge-light m-0">{{ date("d/m/Y", strtotime($hct->start_date)) }}</p>
+                                                                                    <?php
+                                                                                    $price = $hct->recom_price + $markupsystem;
+
+                                                                                     if($surchargepricetotal > 0){
+                                                                                        $price = $price + $surchargepricetotal;
+                                                                                     }else{
+                                                                                        $price = $price;
+                                                                                     }
+                                                                                    ?>
+                                                                                    <p class="badge badge-light m-0">Rp. {{ number_format($price, 0, ',', '.') }}</p>
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        @endif
+                                                    @endforeach
+                                                </div>
+                                                    </div>
+                                                  </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
 
                                     </div>
                                 </div>
@@ -454,20 +739,30 @@
     }
     </script>
     <script>
-        $('input[name="dates"]').daterangepicker();
+        $('input[name="dates"]').daterangepicker({
+            autoApply: true, // Secara otomatis menerapkan perubahan ketika pengguna memilih tanggal
+        showDropdowns: true, // Menampilkan dropdown untuk memilih bulan dan tahun
+       
+            isInvalidDate: function(date) {
+            // Nonaktifkan tanggal sebelum hari ini
+            return date.isBefore(moment(), 'day');
+        }
+        });
 
             // Tambahkan event listener untuk deteksi klik tombol "Apply"
         $('input[name="dates"]').on('apply.daterangepicker', function(ev, picker) {
             // Mengambil tanggal checkin dan checkout dari Date Range Picker
             const checkin = picker.startDate.format('YYYY-MM-DD');
             const checkout = picker.endDate.format('YYYY-MM-DD');
+            const checkin1 = picker.startDate.format('MM/DD/YYYY');
+            const checkout1 = picker.endDate.format('MM/DD/YYYY');
 
             // Memperbarui nilai input tanggal checkin dan checkout
             $('input[name="checkin"]').val(checkin);
             $('input[name="checkout"]').val(checkout);
 
             // Memperbarui nilai input dengan tampilan tanggal
-            $(this).val(checkin + ' - ' + checkout);
+            $(this).val(checkin1 + ' - ' + checkout1);
         });
     </script>
     <script>

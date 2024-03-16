@@ -88,9 +88,22 @@
                             <div class="nav-link-icon"><i data-feather="activity"></i></div>
                             Dashboard
                         </a>
+                        <a class="nav-link {{ request()->routeIs('bookingall.admin.dashboard') ? 'active' : '' }}" href="{{ route('bookingall.admin.dashboard') }}">
+                            <div class="nav-link-icon"><i class="fas fa-fw fa-book"></i></div>
+                            Booking 
+                            @if($booking > 0)
+                                <span class="badge badge-danger mx-2 debardebar">{{$booking}}</span> 
+                            @endif 
+                        </a>
                         <a class="nav-link {{ request()->routeIs('dashboard.admin.booking') ? 'active' : '' }}" href="{{ route('dashboard.admin.booking') }}">
                             <div class="nav-link-icon"><i class="fas fa-fw fa-chart-area"></i></div>
-                            Booking Confirmation
+                            Transfer Confirmation @if($bookingconfirmation > 0)
+                                <span class="badge badge-danger mx-2 debardebar">{{$bookingconfirmation}}</span> 
+                            @endif 
+                        </a>
+                        <a class="nav-link {{ request()->routeIs('dashboard.wallet.admin') ? 'active' : '' }}" href="{{ route('dashboard.wallet.admin') }}">
+                            <div class="nav-link-icon"><i class="fas fa-fw fa-bell"></i></div>
+                            Top Up Confirmation  @if($topupconfirmation > 0) <span class="badge badge-danger mx-2 debardebar">{{$topupconfirmation}}</span>  @endif 
                         </a>
                         <a class="nav-link {{ request()->Is('#') ? 'active' : '' }}" href="#" data-toggle="collapse" data-target="#agentCollapse"
                             aria-expanded="false" aria-controls="agentCollapse">
@@ -106,6 +119,38 @@
                                 <li class="list-unstyled">
                                     <a class="nav-link {{ request()->routeIs('dashboard.agent.create') ? 'active' : '' }}" href="{{ route('dashboard.agent.create') }}">
                                         Add New agent
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <a class="nav-link {{ request()->Is('#') ? 'active' : '' }}" href="#" data-toggle="collapse" data-target="#TransportCollapse"
+                            aria-expanded="false" aria-controls="TransportCollapse">
+                            <div class="nav-link-icon"><i data-feather="truck"></i></div>
+                            Transport @if($orderTransport > 0) 
+                            <span class="badge badge-danger mx-2 debardebar">{{$orderTransport}}</span>
+                            @endif
+                        </a>
+                        <div id="TransportCollapse" class="collapse">
+                            <!-- Isi menu -->
+                            <ul>
+                                <li class="list-unstyled">
+                                    <a class="nav-link {{ request()->routeIs('dashboard.transport.index') ? 'active' : '' }}" href="{{ route('dashboard.transport.index') }}">All agent</a>
+                                </li>
+                                <li class="list-unstyled">
+                                    <a class="nav-link {{ request()->routeIs('dashboard.transport.create') ? 'active' : '' }}" href="{{ route('dashboard.transport.create') }}">
+                                        Add New agent
+                                    </a>
+                                </li>
+                                <li class="list-unstyled">
+                                    <a class="nav-link {{ request()->routeIs('dashboard.transport.destination') ? 'active' : '' }}" href="{{ route('dashboard.transport.destination') }}">
+                                        List destination
+                                    </a>
+                                </li>
+                                <li class="list-unstyled">
+                                    <a class="nav-link {{ request()->routeIs('dashboard.transport.report') ? 'active' : '' }}" href="{{ route('dashboard.transport.report') }}">
+                                        Transport Booking @if($orderTransport > 0) 
+                                        <span class="badge badge-danger mx-2 debardebar">{{$orderTransport}}</span>
+                                        @endif
                                     </a>
                                 </li>
                             </ul>
@@ -146,6 +191,10 @@
                                 </li>
                             </ul>
                         </div>
+                        <a class="nav-link {{ request()->routeIs('admin.afiliate') ? 'active' : '' }}" href="{{ route('admin.afiliate') }}">
+                            <div class="nav-link-icon"><i data-feather="user"></i></div>
+                            Affiliate
+                        </a>
                         <a class="nav-link {{ request()->routeIs('dashboard.user') ? 'active' : '' }}" href="{{ route('dashboard.user') }}">
                             <div class="nav-link-icon"><i data-feather="user"></i></div>
                             Users
@@ -216,6 +265,14 @@
 
             if (activeMenu2) {
                 agentCollapse.classList.add('show');
+            }
+
+             //agentcolapse
+             const TransportCollapse = document.getElementById('TransportCollapse');
+            const activeMenu3 = TransportCollapse.querySelector('.active');
+
+            if (activeMenu3) {
+                TransportCollapse.classList.add('show');
             }
         });
     </script>
