@@ -102,13 +102,16 @@ class EwalletController extends Controller
             $vendor = Vendor::where('id',$booking->vendor_id)->first();
             $affiliator = Vendor::where('affiliate',$vendor->affiliate)->where('type_vendor','agent')->first();
 
+            $tranportbookings = OrderTransport::where('booking_id',$booking->id)->first();
+
             $data = [
                 'booking' => $booking, // $book merupakan instance dari model Booking yang sudah Anda dapatkan
                 'contract' => $contract,
                 'setting' => Setting::first(),
                 'agent' => $agent,
                 'hotelbook' => $hotelbook,
-                'affiliator'=> $affiliator
+                'affiliator'=> $affiliator,
+                'tranport'=> $tranportbookings
 
             ];
 
