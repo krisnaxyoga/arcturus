@@ -165,6 +165,7 @@
                                         <option @if (($requestdata['person'] ?? '') == 2) selected @endif value="2">2</option>
                                         <option @if (($requestdata['person'] ?? '') == 3) selected @endif value="3">3</option>
                                         <option @if (($requestdata['person'] ?? '') == 4) selected @endif value="4">4</option>
+                                        <option @if (($requestdata['person'] ?? '') == 5) selected @endif value="5">5</option>
                                     </select>
                                 </div>
                             </div>
@@ -268,7 +269,7 @@
                                         font-size: 20px;
                                         font-weight: 500;
                                     ">
-                            {{ $data->count() }} Hotel Founds
+                           Hotel Founds
                             </span>
                             <span>
                                 <form action="">
@@ -284,7 +285,123 @@
                             </span>
                         </div>
                         @foreach ($data as $key=>$item)
+                        @php
+                        $totalsurcharge = 0;
+                       $totalDataCount = 0;
+                       $totalDataCounttwo = 0;
+                       $surchargepricetotal = 0;
+                       $calendarpricetotal=0;
+                       $calendarprice = 0;
+                       $vendorid = 0;
+                       $vendorcalender = 0;
+                       foreach ($surchargeAllRoom as $surchargeAllRoomitem) {
+                          if($surchargeAllRoomitem->vendor_id == $item->contractrate->vendors->id){
+                               $totalsurcharge += $surchargeAllRoomitem->surcharge_price;
+                               $totalDataCount++;
+                               $vendorid = $surchargeAllRoomitem->vendor_id;
+                          }
+                       }
+                       if($vendorid == $item->contractrate->vendors->id){
+                           // $countNights = ($Nights + 1) - ($totalDataCount);
+                           // $surchargepricetotal = ($totalsurcharge * $countNights) / $Nights;
+                           // var_dump(($totalsurcharge * $countNights));
+                           // var_dump($countNights);
 
+                           $surchargepricetotal = $totalsurcharge / $Nights;
+                       }
+                       // var_dump($surchargepricetotal);
+
+
+                       $lowestPrice = null; // Inisialisasi variabel untuk harga terendah
+                       $percentage = 0;
+
+                       $maxadult = null;
+                       $largestPercentage = null;
+                       $roomrecom = null;
+                       $nightrecom = null;
+
+                       $markupsystem = $item->contractrate->vendors->system_markup;
+
+                       if($affiliate == $item->contractrate->vendors->affiliate){
+                           $markupsystem = 0;
+                       }
+
+                       if ($affiliate == null || $affiliate != $item->contractrate->vendors->affiliate) {
+                           $markupsystem = $item->contractrate->vendors->system_markup;
+                       }
+                       
+                   @endphp
+
+                   @foreach ($HotelCalendar as $calendar)
+                   <?php
+                   if($calendar->room_hotel_id == $item->room_id){
+                       $calendarprice += $calendar->recom_price;
+                       $totalDataCounttwo++;
+                       $vendorcalender = $calendar->vendor_id;
+                   }
+                   ?>
+                   @endforeach
+
+                   @foreach ($contractprice as $contprice)
+                   <?php
+                   $countNights = 0;
+                   //  if($vendorcalender == $item->contractrate->vendors->id){
+                   //     $countNights = $Nights - $totalDataCounttwo;
+                      
+                   //     if($countNights <= 0){
+                   //         $calendarpricetotal = $contprice->recom_price;
+                   //     }else{
+                   //         $calendarpricetotal = ($calendarprice + ($contprice->recom_price * $countNights)) / $totalNights;
+                   //     }
+
+                   //     }
+                   ?>
+                       @php
+                       // if($calendarpricetotal == $contprice->recom_price){
+                           $advprice = $contprice->recom_price;
+                       // }else{
+                       //     $advprice = $calendarpricetotal;
+                       // }
+
+
+                           if ($advancepurchase->count() > 0) {
+                               foreach ($advancepurchase as $advancevalue) {
+                                   if ($advancevalue->contract_id == $contprice->contract_id && $advancevalue->room_id == $contprice->room_id) {
+                                       $advprice = $advancevalue->price;
+
+                                   }
+                               }
+                           }
+                           // var_dump($advprice+ $markupsystem);
+                       @endphp
+                       @if ($contprice->user_id == $item->user_id && $contprice->vendor_id == $item->vendor_id)
+                           @php
+
+                           $adlut = $contprice->room->adults;
+
+                           if($surchargepricetotal > 0){
+                               $price = $advprice + $markupsystem + $surchargepricetotal;
+                           }else{
+                               $price = $advprice + $markupsystem;
+                           }
+                           $percentage = $contprice->contractrate->percentage;
+
+                               if ($lowestPrice == null || $price < $lowestPrice) {
+                                   $lowestPrice = $price; // Simpan harga terendah
+
+                                   if ($percentage == null || $percentage > $largestPercentage) {
+                                       $largestPercentage = $percentage;
+                                   }
+                               }
+
+                               if($maxadult == null ||  $adlut > $maxadult){
+                                   $maxadult = $adlut;
+                               }
+                           @endphp
+                       @endif
+
+                   @endforeach
+                   @if($requestdata['person'] <= $maxadult)
                         <div class="col-md-12 ">
                             <hr>
                             <div class="mb-3">
@@ -320,116 +437,6 @@
                                         </p>
                                     </div>
                                     <div class="col-lg-3 border-left">
-
-                                        @php
-                                         $totalsurcharge = 0;
-                                        $totalDataCount = 0;
-                                        $totalDataCounttwo = 0;
-                                        $surchargepricetotal = 0;
-                                        $calendarpricetotal=0;
-                                        $calendarprice = 0;
-                                        $vendorid = 0;
-                                        $vendorcalender = 0;
-                                        foreach ($surchargeAllRoom as $surchargeAllRoomitem) {
-                                           if($surchargeAllRoomitem->vendor_id == $item->contractrate->vendors->id){
-                                                $totalsurcharge += $surchargeAllRoomitem->surcharge_price;
-                                                $totalDataCount++;
-                                                $vendorid = $surchargeAllRoomitem->vendor_id;
-                                           }
-                                        }
-                                        if($vendorid == $item->contractrate->vendors->id){
-                                            // $countNights = ($Nights + 1) - ($totalDataCount);
-                                            // $surchargepricetotal = ($totalsurcharge * $countNights) / $Nights;
-                                            // var_dump(($totalsurcharge * $countNights));
-                                            // var_dump($countNights);
-
-                                            $surchargepricetotal = $totalsurcharge / $Nights;
-                                        }
-                                        // var_dump($surchargepricetotal);
-
-
-                                        $lowestPrice = null; // Inisialisasi variabel untuk harga terendah
-                                        $percentage = 0;
-
-                                        $largestPercentage = null;
-                                        $roomrecom = null;
-                                        $nightrecom = null;
-
-                                        $markupsystem = $item->contractrate->vendors->system_markup;
-
-                                        if($affiliate == $item->contractrate->vendors->affiliate){
-                                            $markupsystem = 0;
-                                        }
-
-                                        if ($affiliate == null || $affiliate != $item->contractrate->vendors->affiliate) {
-                                            $markupsystem = $item->contractrate->vendors->system_markup;
-                                        }
-                                        
-                                    @endphp
-
-                                    @foreach ($HotelCalendar as $calendar)
-                                    <?php
-                                    if($calendar->room_hotel_id == $item->room_id){
-                                        $calendarprice += $calendar->recom_price;
-                                        $totalDataCounttwo++;
-                                        $vendorcalender = $calendar->vendor_id;
-                                    }
-                                    ?>
-                                    @endforeach
-
-                                    @foreach ($contractprice as $contprice)
-                                    <?php
-                                    $countNights = 0;
-                                    //  if($vendorcalender == $item->contractrate->vendors->id){
-                                    //     $countNights = $Nights - $totalDataCounttwo;
-                                       
-                                    //     if($countNights <= 0){
-                                    //         $calendarpricetotal = $contprice->recom_price;
-                                    //     }else{
-                                    //         $calendarpricetotal = ($calendarprice + ($contprice->recom_price * $countNights)) / $totalNights;
-                                    //     }
-
-                                    //     }
-                                    ?>
-                                        @php
-                                        // if($calendarpricetotal == $contprice->recom_price){
-                                            $advprice = $contprice->recom_price;
-                                        // }else{
-                                        //     $advprice = $calendarpricetotal;
-                                        // }
-
-
-                                            if ($advancepurchase->count() > 0) {
-                                                foreach ($advancepurchase as $advancevalue) {
-                                                    if ($advancevalue->contract_id == $contprice->contract_id && $advancevalue->room_id == $contprice->room_id) {
-                                                        $advprice = $advancevalue->price;
-
-                                                    }
-                                                }
-                                            }
-                                            // var_dump($advprice+ $markupsystem);
-                                        @endphp
-                                        @if ($contprice->user_id == $item->user_id && $contprice->vendor_id == $item->vendor_id)
-                                            @php
-                                            if($surchargepricetotal > 0){
-                                                $price = $advprice + $markupsystem + $surchargepricetotal;
-                                            }else{
-                                                $price = $advprice + $markupsystem;
-                                            }
-                                            $percentage = $contprice->contractrate->percentage;
-
-                                                if ($lowestPrice == null || $price < $lowestPrice) {
-                                                    $lowestPrice = $price; // Simpan harga terendah
-
-                                                    if ($percentage == null || $percentage > $largestPercentage) {
-                                                        $largestPercentage = $percentage;
-                                                    }
-                                                }
-
-                                            @endphp
-                                        @endif
-
-                                    @endforeach
 
                                     @if ($lowestPrice !== null)
                                         <div class="price" style="color: #1a2b48; font-size: 18px; font-weight: 500;">
@@ -616,6 +623,7 @@
                                 </div>
                             </div>
                         </div>
+                        @endif
                         @endforeach
 
                         <!-- JavaScript untuk mengontrol tampilan elemen tambahan -->
