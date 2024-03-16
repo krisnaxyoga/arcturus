@@ -316,7 +316,13 @@ background-color: #f7f7ff;
                                             <td>{{ $item->total_guests }}</td>
                                             <td>{{ $item->total_room }}</td>
                                             <td>{{ $item->night }}</td>
-                                            <td>Rp. {{ number_format((($item->pricenomarkup / $item->night) / $item->total_room) ?? '0', 0, ',', '.') }}</td>
+                                            <td>
+                                                @if ($item->total_room != 0)
+                                                    Rp. {{ number_format(($item->pricenomarkup / $item->night) / $item->total_room, 0, ',', '.') }}
+                                                @else
+                                                    Nilai Tidak Tersedia
+                                                @endif
+                                            </td>
                                             <td> @if (is_null($item->total_ammount))
                                                     Rp. {{ number_format($item->pricenomarkup ?? '0', 0, ',', '.')  }}
                                                 @else
@@ -339,7 +345,7 @@ background-color: #f7f7ff;
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <td colspan="7"></td>
+                                            <td colspan="8"></td>
                                             <td colspan="2">TOTAL</td>
                                             <td>Rp. {{ number_format($totalCommision ?? '0', 0, ',', '.') }}</td> <!-- Menampilkan total komisi -->
                                         </tr>

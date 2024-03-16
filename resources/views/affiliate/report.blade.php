@@ -102,11 +102,13 @@
                                         <th>Total Room Revenue (contract)</th>
                                         <th>Total Room Revenue (selling)</th>
                                         <th>Commision</th>
+                                        <th>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($data as $item)
                                         <tr>
+                                            
                                             <td>{{ $item->vendor->vendor_name }}</td>
                                             <td>{{ $item->first_name }} {{ $item->last_name }}</td>
                                             <td>{{ date('d/m/Y', strtotime($item->booking_date)) }}</td>
@@ -116,7 +118,9 @@
                                             <td>{{ $item->total_room }}</td>
                                             <td>{{ $item->night }}</td>
                                             <td>
-                                                {{ ($item->pricenomarkup / $item->night)/$item->total_room }}
+                                                {{-- {{ ($item->pricenomarkup / $item->night)/$item->total_room }} --}}
+                                                {{ ($item->total_room != 0) ? ($item->pricenomarkup / $item->night) / $item->total_room : 'Nilai Tidak Tersedia' }}
+
                                             </td>
                                             <td> @if (is_null($item->pricenomarkup))
                                                     {{ $item->pricenomarkup }}
@@ -132,6 +136,9 @@
                                             @else
                                                 {{ ($item->price - $item->pricenomarkup  ) * 0.15 }}
                                             @endif
+                                        </td>
+                                        <td>
+                                            {{$item->booking_status}}
                                         </td>
 
                                         </tr>
