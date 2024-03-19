@@ -6,6 +6,8 @@ import Layout from '../../../Layouts/Vendor';
 import Pagination from '../../../Components/Pagination';
 import Bookings from '../BookingReport/Bookings';
 
+import ExcelJS from 'exceljs';
+import { saveAs } from 'file-saver';
 //import Link
 import { Link, usePage } from '@inertiajs/inertia-react';
 import { Inertia } from '@inertiajs/inertia';
@@ -18,6 +20,8 @@ export default function Index({ props,data,vendor }) {
     const [selectedStatus, setSelectedStatus] = useState('all'); // Status default untuk menampilkan semua
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
+    const [startDate2, setStartDate2] = useState('');
+    const [endDate2, setEndDate2] = useState('');
 
     const indexOfLastPost = currentPage * postsPerPage;
     const indexOfFirstPost = indexOfLastPost - postsPerPage;
@@ -37,15 +41,33 @@ export default function Index({ props,data,vendor }) {
         }
 
         if (startDate && endDate) {
-            filtered = filtered.filter(booking => new Date(booking.booking_date) >= new Date(startDate) && new Date(booking.booking_date) <= new Date(endDate));
+            filtered = filtered.filter(booking => new Date(booking.checkout_date) >= new Date(startDate) && new Date(booking.checkout_date) <= new Date(endDate));
+            // filtered = filtered.filter(booking => new Date(booking.booking_date) >= new Date(startDate) && new Date(booking.booking_date) <= new Date(endDate));
+        }
+
+        if (startDate2 && endDate2) {
+            // filtered = filtered.filter(booking => new Date(booking.checkout_date) >= new Date(startDate) && new Date(booking.checkout_date) <= new Date(endDate));
+            filtered = filtered.filter(booking => new Date(booking.booking_date) >= new Date(startDate2) && new Date(booking.booking_date) <= new Date(endDate2));
         }
         
         // Urutkan berdasarkan tanggal pembuatan, yang terbaru dulu
         const sortedBookings = filtered.sort((a, b) => new Date(b.booking_date) - new Date(a.booking_date));
 
         setFilteredBookings(sortedBookings);
-    }, [data, selectedStatus, startDate, endDate]);
+    }, [data, selectedStatus, startDate2, endDate2, startDate, endDate]);
 
+    function formatRupiah(amount) {
+        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount).slice(0, -3);
+      }
+
+      const formatDate = (dateString) => {
+        const parts = dateString.split('-'); // Memecah tanggal berdasarkan tanda "-"
+        if (parts.length === 3) {
+          const [year, month, day] = parts;
+          return `${day}/${month}/${year}`; // Mengganti urutan tanggal
+        }
+        return dateString; // Kembalikan jika tidak dapat memproses tanggal
+      };
 
      // Handle perubahan pada select status pembayaran
      const handleStatusChange = event => {
@@ -57,8 +79,17 @@ export default function Index({ props,data,vendor }) {
             setStartDate(event.target.value);
         };
 
+          // Handle perubahan pada input tanggal
+          const handleStartDateChange2 = event => {
+            setStartDate2(event.target.value);
+        };
+
         const handleEndDateChange = event => {
             setEndDate(event.target.value);
+        };
+
+        const handleEndDateChange2 = event => {
+            setEndDate2(event.target.value);
         };
      // Handle filter tanggal end-date jika tidak dipilih
      const handleEndDateBlur = () => {
@@ -67,12 +98,95 @@ export default function Index({ props,data,vendor }) {
             setEndDate(nextDay.toISOString().split('T')[0]);
         }
     };
+
+    const handleEndDateBlur2 = () => {
+        if (!endDate2 && startDate2) {
+            const nextDay = new Date(new Date(startDate2).getTime() + 86400000); // Menambahkan 1 hari ke start-date
+            setEndDate2(nextDay.toISOString().split('T')[0]);
+        }
+    };
+
+   
+    const handleExportToExcel = () => {
+        // Membuat workbook baru
+        const workbook = new ExcelJS.Workbook();
+    
+        // Menambahkan worksheet baru
+        const worksheet = workbook.addWorksheet('Booking Report');
+
+    
+         // Menambahkan header
+        worksheet.addRow(['No', 'Agent Name', 'Booking Date', 'Checkin Date', 'Checkout Date', 'Nights', 'Total Room', 'Total Guest', 'Guest Name', 'Total', 'Status']);
+
+        // Menambahkan data
+        filteredBookings.forEach((item, index) => {
+            worksheet.addRow([
+                index + 1,
+                `${item.users.first_name} ${item.users.last_name}`,
+                formatDate(item.booking_date),
+                formatDate(item.checkin_date),
+                formatDate(item.checkout_date),
+                item.night,
+                item.total_room,
+                item.total_guests,
+                `${item.first_name} ${item.last_name}`,
+                formatRupiah(item.pricenomarkup),
+                item.booking_status
+            ]);
+        });
+        
+        // Menulis workbook ke buffer Excel
+        workbook.xlsx.writeBuffer().then(buffer => {
+          // Mengonversi buffer ke objek blob
+          const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+          // Menyimpan blob sebagai file Excel
+          saveAs(blob, 'booking_report.xlsx');
+        });
+      };
+      
   return (
     <>
     <Layout page={url} vendor={vendor}>
         <div className="container">
             <div className="row">
                 <div className="col-lg-12">
+                    <div className="card mb-2">
+                        <div className="card-body">
+                            
+                        <h2>Stay</h2>
+                            <div className="row">
+                                <div className="col-lg-3"> 
+                                    <input type="date" className='form-control' value={startDate} onChange={handleStartDateChange} />
+                                </div>
+                                <div className="col-lg-3">
+                                    <input type="date" className='form-control' value={endDate} onChange={handleEndDateChange} onBlur={handleEndDateBlur} />
+                    
+                                </div>
+                                <div className="col-lg-3">
+                                    <button type='button' className='btn btn-success mr-1' onClick={handleExportToExcel}>excel</button>
+                                    <button type='button' className='btn btn-danger'>pdf</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="card mb-2">
+                        <div className="card-body">
+                            <h2>Made on</h2>
+                        <div className="row">
+                                <div className="col-lg-3"> 
+                                    <input type="date" className='form-control' value={startDate2} onChange={handleStartDateChange2} />
+                                </div>
+                                <div className="col-lg-3">
+                                    <input type="date" className='form-control' value={endDate2} onChange={handleEndDateChange2} onBlur={handleEndDateBlur2} />
+                    
+                                </div>
+                                <div className="col-lg-3">
+                                    <button type='button' className='btn btn-success mr-1' onClick={handleExportToExcel}>excel</button>
+                                    <button type='button' className='btn btn-danger'>pdf</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div className="card">
                         <div className="card-header">
                             <h1 className='text-center'>Booking Report</h1>
@@ -85,15 +199,7 @@ export default function Index({ props,data,vendor }) {
                                         <option value="cancelled">Cancelled</option>
                                     </select>
                                 </div>
-                                <div className="col-lg-3">
-                                    <input type="date" className='form-control' value={startDate} onChange={handleStartDateChange} />
-                                </div>
-                                <div className="col-lg-3">
-                                    <input type="date" className='form-control' value={endDate} onChange={handleEndDateChange} onBlur={handleEndDateBlur} />
-                    
-                                </div>
                             </div>
-                           
                         </div>
                         <div className="card-body">
                             <div className="table-responsive">
