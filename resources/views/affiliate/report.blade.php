@@ -122,7 +122,8 @@
                                                 {{ ($item->total_room != 0) ? ($item->pricenomarkup / $item->night) / $item->total_room : 'Nilai Tidak Tersedia' }}
 
                                             </td>
-                                            <td> @if (is_null($item->pricenomarkup))
+                                            <td> 
+                                                @if (is_null($item->pricenomarkup))
                                                     {{ $item->pricenomarkup }}
                                                 @else
                                                     {{ $item->pricenomarkup }}
@@ -131,7 +132,8 @@
                                             <td>
                                                 {{$item->price}}
                                             </td>
-                                            <td> @if (is_null($item->vendor->system_markup))
+                                            <td> 
+                                            @if (is_null($item->vendor->system_markup))
                                                 {{ ($item->price - $item->pricenomarkup ) * 0.15 }}
                                             @else
                                                 {{ ($item->price - $item->pricenomarkup  ) * 0.15 }}

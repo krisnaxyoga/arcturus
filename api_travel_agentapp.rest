@@ -4,8 +4,8 @@ POST https://developertester.my.id/api/login/travelagent
 Content-Type: application/json
 
 {
-    "email" : "test1@gmail.com",
-    "password" : "apipassword$$**"
+    "email" : "bagus.artasdi89@gmail.com",
+    "password" : "password123$$$"
 }
 
 ### REGISTRASI
