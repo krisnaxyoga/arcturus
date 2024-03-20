@@ -11,6 +11,8 @@ import { saveAs } from 'file-saver';
 //import Link
 import { Link, usePage } from '@inertiajs/inertia-react';
 import { Inertia } from '@inertiajs/inertia';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 export default function Index({ props,data,vendor }) {
     const { url } = usePage();
@@ -144,6 +146,37 @@ export default function Index({ props,data,vendor }) {
         });
       };
       
+      const handleExportToPDF = () => {
+        const doc = new jsPDF();
+        doc.text("Booking Report", 10, 10);
+    
+        // Menambahkan data dalam tabel
+        let yPos = 20; // Posisi awal Y
+        const headers = ["No", "Agent Name", "Booking Date", "Checkin Date", "Checkout Date", "Nights", "Total Room", "Total Guest", "Guest Name", "Total", "Status"];
+        const tableData = filteredBookings.map((item, index) => [
+            index + 1,
+            `${item.users.first_name} ${item.users.last_name}`,
+            formatDate(item.booking_date),
+            formatDate(item.checkin_date),
+            formatDate(item.checkout_date),
+            item.night,
+            item.total_room,
+            item.total_guests,
+            `${item.first_name} ${item.last_name}`,
+            formatRupiah(item.pricenomarkup),
+            item.booking_status
+        ]);
+    
+        doc.autoTable({
+            startY: yPos,
+            head: [headers],
+            body: tableData,
+        });
+    
+        // Simpan sebagai file PDF
+        doc.save("booking_report.pdf");
+    };
+    
   return (
     <>
     <Layout page={url} vendor={vendor}>
@@ -164,7 +197,7 @@ export default function Index({ props,data,vendor }) {
                                 </div>
                                 <div className="col-lg-3">
                                     <button type='button' className='btn btn-success mr-1' onClick={handleExportToExcel}>excel</button>
-                                    <button type='button' className='btn btn-danger'>pdf</button>
+                                    <button type='button' className='btn btn-danger' onClick={handleExportToPDF}>pdf</button>
                                 </div>
                             </div>
                         </div>
@@ -182,7 +215,7 @@ export default function Index({ props,data,vendor }) {
                                 </div>
                                 <div className="col-lg-3">
                                     <button type='button' className='btn btn-success mr-1' onClick={handleExportToExcel}>excel</button>
-                                    <button type='button' className='btn btn-danger'>pdf</button>
+                                    <button type='button' className='btn btn-danger' onClick={handleExportToPDF}>pdf</button>
                                 </div>
                             </div>
                         </div>
