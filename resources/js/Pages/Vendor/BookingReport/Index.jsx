@@ -250,6 +250,8 @@ export default function Index({ props,data,vendor }) {
                                             <th>Guest Name</th>
                                             <th>Total</th>
                                             <th>Status</th>
+                                            
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <Bookings bookings={currentPosts} />
