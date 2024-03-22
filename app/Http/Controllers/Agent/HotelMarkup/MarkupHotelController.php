@@ -142,13 +142,14 @@ class MarkupHotelController extends Controller
             })
 
             ->whereHas('contractrate', function ($query) use ($checkin, $checkout) {
-                $query->where(function ($q) use ($checkin, $checkout) {
+                $today = Carbon::now(); // Mengambil tanggal hari ini
+                $query->where(function ($q) use ($checkin, $checkout,$today) {
                     $q->where(function ($qq) use ($checkin, $checkout) {
                         $qq->where('stayperiod_begin', '<=', $checkin)
-                            ->where('stayperiod_end', '>=', $checkout);
-                    })->Where(function ($qq) use ($checkin, $checkout) {
-                        $qq->where('booking_begin', '<=', $checkin)
-                            ->where('booking_end', '>=', $checkout);
+                            ->where('stayperiod_end', '>=', Carbon::parse($checkout)->subDay());
+                    })->Where(function ($qq) use ($checkin, $checkout,$today) {
+                        $qq->where('booking_begin', '<=', $today)
+                            ->where('booking_end', '>=', Carbon::parse($today)->subDay());
                     });
                 });
             })
@@ -209,11 +210,11 @@ class MarkupHotelController extends Controller
                         $query->where(function ($q) use ($checkin, $checkout, $today) {
                             $q->where(function ($qq) use ($checkin, $checkout,$today) {
                                 $qq->where('booking_begin', '<=', $today)
-                                    ->where('booking_end', '>=', $today);
+                                    ->where('booking_end', '>=', Carbon::parse($today)->subDay());
                             })
                             ->where(function ($qq) use ($checkin, $checkout) {
                                     $qq->where('stayperiod_begin', '<', $checkout)
-                                    ->where('stayperiod_end', '>=', $checkin);
+                                    ->where('stayperiod_end', '>=', Carbon::parse($checkin)->subDay());
                             });
                         });
             })
@@ -383,12 +384,24 @@ class MarkupHotelController extends Controller
 
                         $query->where('is_active', 1);
                     })
+                    ->whereHas('contractrate', function ($query) use ($checkin2, $checkout2) {
+                        $today = Carbon::now(); // Mengambil tanggal hari ini
+                        $query->where(function ($q) use ($checkin2, $checkout2,$today) {
+                            $q->where(function ($qq) use ($checkin2, $checkout2) {
+                                $qq->where('stayperiod_begin', '<=', $checkin2)
+                                    ->where('stayperiod_end', '>=', Carbon::parse($checkout2)->subDay());
+                            })->Where(function ($qq) use ($checkin2, $checkout2,$today) {
+                                $qq->where('booking_begin', '<=', $today)
+                                    ->where('booking_end', '>=', Carbon::parse($today)->subDay());
+                            });
+                        });
+                    })
                     ->orderBy('recom_price', 'asc')
                     ->get();
             // }
 
         //    dd($vendor);
-
+        if ($vendor && isset($vendor[0])) {
             $slider = Slider::where('user_id', $vendor[0]->user_id)->get();
 
             if (isset($datareq['checkin']) && isset($datareq['checkout'])) {
@@ -451,11 +464,11 @@ class MarkupHotelController extends Controller
                         $query->where(function ($q) use ($checkin, $checkout, $today) {
                             $q->where(function ($qq) use ($checkin, $checkout,$today) {
                                 $qq->where('booking_begin', '<=', $today)
-                                    ->where('booking_end', '>=', $today);
+                                    ->where('booking_end', '>=', Carbon::parse($today)->subDay());
                             })
                             ->where(function ($qq) use ($checkin, $checkout) {
                                     $qq->where('stayperiod_begin', '<', $checkout)
-                                    ->where('stayperiod_end', '>=', $checkin);
+                                    ->where('stayperiod_end', '>=', Carbon::parse($checkin)->subDay());
                             });
                         });
                         // $query->where(function ($q) use ($checkin, $checkout) {
@@ -591,6 +604,9 @@ class MarkupHotelController extends Controller
                 'markup',
                 'day'
             ));
+        }else{
+            return view('landingpage.agent.detailback');
+        }
         }
     }
 
