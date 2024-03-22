@@ -171,7 +171,7 @@ export default function Index({ totalroom,income,vendor,success,pending,data,wid
                 <div className="col-lg-12">
                   <div className="card mb-5">
                     <div className="card-header">
-                      <h2>Booking</h2>
+                      <h2>Today's Booking</h2>
                     </div>
                     <div className="card-body">
                       <div className="table-responsive">

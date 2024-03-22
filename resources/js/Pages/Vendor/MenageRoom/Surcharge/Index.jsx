@@ -306,7 +306,7 @@ export default function Index({ errors, session,contractrate, default_selected_h
                 <Modal show={showModel} onHide={handleCloseModal}>
                     <Modal.Header>
                         <Modal.Title>
-                            Surcharge Hotel Room
+                            Rate Calendar
                         </Modal.Title>
                         <Link
                         href="#"

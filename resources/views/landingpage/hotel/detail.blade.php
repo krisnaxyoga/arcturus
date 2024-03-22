@@ -161,7 +161,7 @@
                                             @endphp
                                     
                                     <select name="person" id="person" class="form-control" required onchange="checknight()">
-                                        @for ($i = 1; $i <= $maximumAdults; $i++)
+                                        @for ($i = 1; $i <= 5; $i++)
                                             <option @if (($datareq['person'] ?? '') == $i) selected @endif value="{{ $i }}">{{ $i }}</option>
                                         @endfor
                                     </select>

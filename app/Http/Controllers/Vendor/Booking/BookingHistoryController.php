@@ -55,11 +55,11 @@ class BookingHistoryController extends Controller
             // $room = RoomHotel::where('id',$item->room_id)->first();
             if($item->room_name == null){
                 $item->room_name = $item->room->ratedesc ?? 'unknow';
-                $item->contract_name = $item->contractrate->codedesc ?? '<p>unknow</p>';
-                $item->benefit_policy = $item->contractrate->benefit_policy ?? '<p>unknow</p>';
-                $item->other_policy = $item->contractrate->other_policy ?? '<p>unknow</p>';
-                $item->cencellation_policy = $item->contractrate->cencellation_policy ?? '<p>unknow</p>';
-                $item->deposit_policy = $item->contractrate->deposit_policy ?? '<p>unknow</p>';
+                $item->contract_name = $item->contractrate->codedesc ?? 'unknow';
+                $item->benefit_policy = $item->contractrate->benefit_policy ?? 'unknow';
+                $item->other_policy = $item->contractrate->other_policy ?? 'unknow';
+                $item->cencellation_policy = $item->contractrate->cencellation_policy ?? 'unknow';
+                $item->deposit_policy = $item->contractrate->deposit_policy ?? 'unknow';
                 $item->save();
             }
         }

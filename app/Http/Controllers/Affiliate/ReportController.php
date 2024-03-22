@@ -91,7 +91,8 @@ class ReportController extends Controller
             $hotel_select = '';
 
             $data = Booking::where('booking_status', '<>', '-')
-                ->where('booking_status', '<>', '');
+                ->where('booking_status', '<>', '')
+                ->where('booking_status', '<>', 'cancelled');
 
             if ($startdate1 && $enddate1) {
                 $data->whereBetween('booking_date', [$startdate1, $enddate1]);
@@ -156,7 +157,8 @@ class ReportController extends Controller
         $hotel_select = '';
 
         $data = Booking::where('booking_status', '<>', '-')
-        ->where('booking_status', '<>', '');
+        ->where('booking_status', '<>', '')
+        ->where('booking_status', '<>', 'cancelled');
 
         if ($startdate1 && $enddate1) {
             $data->whereBetween('checkout_date', [$startdate1, $enddate1]);

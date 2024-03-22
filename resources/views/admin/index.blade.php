@@ -193,7 +193,7 @@
                                             <td>
                                                 @if($item->type_vendor == 'hotel')
                                                     <span class="badge badge-secondary">HOTEL</span>
-                                                    <span class="badge badge-success">markup : Rp. {{number_format($item->system_markup ? $item->system_markup : '0', 0, ',', '.')}}</span>
+                                                    {{-- <span class="badge badge-success">markup : Rp. {{number_format($item->system_markup ? $item->system_markup : '0', 0, ',', '.')}}</span>
                                                     <button type="button" class="btn btn-datatable btn-icon btn-transparent-dark mr-2" onclick="showMarkupInput({{$key}})">
                                                         <i data-feather="edit"></i>
                                                     </button>
@@ -209,7 +209,7 @@
                                                                 <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> save</button>
                                                             </div>
                                                         </form>
-                                                    </div>
+                                                    </div> --}}
                                                 @else
                                                 <span class="badge badge-warning">AGENT</span>
                                                 @endif

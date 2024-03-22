@@ -101,10 +101,10 @@ function Layout({ children, page, vendor }) {
                                     <div className="nav-link-icon"><i className="fa fa-adjust" aria-hidden="true"></i></div>
                                     Dashboard
                                 </Link>
-                                <Link className={`nav-link ${page === '/bookinghistory' ? 'active' : ''}`} href="/bookinghistory">
+                                {/* <Link className={`nav-link ${page === '/bookinghistory' ? 'active' : ''}`} href="/bookinghistory">
                                     <div className="nav-link-icon"><i className="fa fa-clock" aria-hidden="true"></i></div>
                                     Booking History
-                                </Link>
+                                </Link> */}
                                 <div className="nav-item">
                                     <a href="#" className='nav-link' onClick={toggleAccordion2}>
                                         <div className="nav-link-icon"><i className="fa fa-cogs" aria-hidden="true"></i></div>

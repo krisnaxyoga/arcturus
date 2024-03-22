@@ -26,12 +26,17 @@ export default function Bookings({ bookings }) {
                         <td>{formatDate(item.booking_date)}</td>
                         <td>{formatDate(item.checkin_date)}</td>
                         <td>{formatDate(item.checkout_date)}</td>
-                        {/* <td>{item.night} /night</td>
-                        <td>{item.total_room} /room</td> */}
+                        <td>{item.night}</td>
+                        <td>{item.total_room}</td>
                         <td>{item.total_guests}</td>
                         <td>{item.first_name} {item.last_name}</td>
                         <td>{formatRupiah(item.pricenomarkup)}</td>
                         <td>{item.booking_status}</td>
+                        <td>
+                            <Link className='btn btn-outline-warning' href={`/bookinghistory/detail/${item.id}`} title='Details'>
+                                <i className="fas fa-file"></i>
+                            </Link>&nbsp;
+                        </td>
                     </tr>
                 </>
             ))}

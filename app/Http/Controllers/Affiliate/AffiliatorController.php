@@ -20,27 +20,28 @@ class AffiliatorController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index($code,$id)
+    public function index($code, $id)
     {
-        $user = Affiliate::where('id',$id)->first();
-        $be_code = Crypt::decrypt($user->auth_code);
-        $fo_code = Crypt::decrypt($code);
+        try {
+            $user = Affiliate::where('id', $id)->first();
+            $be_code = Crypt::decrypt($user->auth_code);
+            $fo_code = Crypt::decrypt($code);
 
-        if($be_code == $fo_code){
+            if ($be_code == $fo_code) {
+                session(['auth_code' => $user->auth_code]);
+                session(['id_affiliate' => $id]);
+                session(['name_affiliate' => $user->name]);
 
-            session(['auth_code' => $user->auth_code]);
-            session(['id_affiliate' => $id]);
-            session(['name_affiliate' => $user->name]);
-
-            $hotel = Vendor::where('affiliate',$user->code)->get();
-
-            $vendoraffiliate = VendorAffiliate::where('affiliate_id',$id)->orderBy('created_at')->get();
-            return view('affiliate.home',compact('user','hotel','vendoraffiliate'));
-
-        }else{
-            return response()->json(['message' => 'sorry Unauthorized']);
+                $hotel = Vendor::where('affiliate', $user->code)->get();
+                $vendoraffiliate = VendorAffiliate::where('affiliate_id', $id)->orderBy('created_at')->get();
+                return view('affiliate.home', compact('user', 'hotel', 'vendoraffiliate'));
+            } else {
+                return response()->json(['message' => 'Sorry, Unauthorized']);
+            }
+        } catch (\Exception $e) {
+            // Tangani pengecualian di sini
+            return response()->json(['message' => 'Error: ' . $e->getMessage()]);
         }
-
     }
 
     /**
