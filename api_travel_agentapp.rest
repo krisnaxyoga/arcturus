@@ -1,4 +1,4 @@
-# http://127.0.0.1:8007 bisa di ganti dengan https://developertester.my.id/
+# https://developertester.my.id bisa di ganti dengan https://developertester.my.id/
 ### LOGIN TRAVEL AGENT
 POST https://developertester.my.id/api/login/travelagent
 Content-Type: application/json
@@ -9,7 +9,7 @@ Content-Type: application/json
 }
 
 ### REGISTRASI
-POST http://127.0.0.1:8007/api/register/agent
+POST https://developertester.my.id/api/register/agent
 Content-Type: application/json
 
 {
@@ -28,24 +28,24 @@ Content-Type: application/json
 }
 
 ### LUPA PASSWORD
-POST http://127.0.0.1:8007/api/travelagent/forgetpassword
+POST https://developertester.my.id/api/travelagent/forgetpassword
 Content-Type: application/json
 {
     "email":"REQUIRED_EMAIL",
 }
 
 ### LOGOUT TRAVEL AGENT
-POST http://127.0.0.1:8007/api/logout/travelagent
+POST https://developertester.my.id/api/logout/travelagent
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYXZlbGFnZW50IiwiaWF0IjoxNzA4Njc0MzU1LCJleHAiOjE3MDg2Nzc5NTUsIm5iZiI6MTcwODY3NDM1NSwianRpIjoielBoejllZkRqT3hpd09lSyIsInN1YiI6IjIzNjAiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.1RdxjqLMokeCz_vJzjV30qTM6KTt8TCkw5Fqf9mnmt8
 
 ### COUNTRY
-GET http://127.0.0.1:8007/api/country/travelagent
+GET https://developertester.my.id/api/country/travelagent
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYXZlbGFnZW50IiwiaWF0IjoxNzA4Njc4NTAwLCJleHAiOjE3MDg2ODIxMDAsIm5iZiI6MTcwODY3ODUwMCwianRpIjoielV6blhwbTk2ZFBIYlM3YiIsInN1YiI6IjIzNjAiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.wUdhA1_oq6Tn69u0H2o9Gh4rsOVT2ucdk2tF6BD3bB0
 # ======================== PROSES BOOKING ====================================================== #
 
 ### SEARCH HOTEL
-GET http://127.0.0.1:8007/api/agent/hotel
+GET https://developertester.my.id/api/agent/hotel
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYXZlbGFnZW50IiwiaWF0IjoxNzA4Njc4NTAwLCJleHAiOjE3MDg2ODIxMDAsIm5iZiI6MTcwODY3ODUwMCwianRpIjoielV6blhwbTk2ZFBIYlM3YiIsInN1YiI6IjIzNjAiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.wUdhA1_oq6Tn69u0H2o9Gh4rsOVT2ucdk2tF6BD3bB0
 
@@ -57,7 +57,7 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vM
 }
 
 ### DETAIL HOTEL
-GET http://127.0.0.1:8007/api/agent/hoteldetail/140
+GET https://developertester.my.id/api/agent/hoteldetail/140
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYXZlbGFnZW50IiwiaWF0IjoxNzA4Njc0MzU1LCJleHAiOjE3MDg2Nzc5NTUsIm5iZiI6MTcwODY3NDM1NSwianRpIjoielBoejllZkRqT3hpd09lSyIsInN1YiI6IjIzNjAiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.1RdxjqLMokeCz_vJzjV30qTM6KTt8TCkw5Fqf9mnmt8
 
@@ -68,7 +68,7 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vM
     "person" : "2"
 }
 ### CREATE BOOKING DETAIL HOTEL
-POST http://127.0.0.1:8007/api/agent/createbooking
+POST https://developertester.my.id/api/agent/createbooking
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYXZlbGFnZW50IiwiaWF0IjoxNzA4Njc0MzU1LCJleHAiOjE3MDg2Nzc5NTUsIm5iZiI6MTcwODY3NDM1NSwianRpIjoielBoejllZkRqT3hpd09lSyIsInN1YiI6IjIzNjAiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.1RdxjqLMokeCz_vJzjV30qTM6KTt8TCkw5Fqf9mnmt8
 
@@ -83,12 +83,12 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vM
 }
 
 ### DETAIL BOOKING (GUNAKAN API INI SETELAH CREATE BOOKING DAN AMBIL ID YANG DI DAPAT DARI API CREATE BOOKING DETAIL HOTEL DISINI)
-GET http://127.0.0.1:8007/api/agent/detailbooking/203
+GET https://developertester.my.id/api/agent/detailbooking/203
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYXZlbGFnZW50IiwiaWF0IjoxNzA4Njc0MzU1LCJleHAiOjE3MDg2Nzc5NTUsIm5iZiI6MTcwODY3NDM1NSwianRpIjoielBoejllZkRqT3hpd09lSyIsInN1YiI6IjIzNjAiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.1RdxjqLMokeCz_vJzjV30qTM6KTt8TCkw5Fqf9mnmt8
 
 ### BOOKING STORE (GUNAKAN API INI SETELAH DETAIL BOOKING)
-POST http://127.0.0.1:8007/api/agent/bookingstore/203
+POST https://developertester.my.id/api/agent/bookingstore/203
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYXZlbGFnZW50IiwiaWF0IjoxNzA4Njc0MzU1LCJleHAiOjE3MDg2Nzc5NTUsIm5iZiI6MTcwODY3NDM1NSwianRpIjoielBoejllZkRqT3hpd09lSyIsInN1YiI6IjIzNjAiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.1RdxjqLMokeCz_vJzjV30qTM6KTt8TCkw5Fqf9mnmt8
 
@@ -111,12 +111,12 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vM
 }
 
 ### PAYMENT PAGE (GUNAKAN API INI SETELAH BOOKING STORE)
-GET http://127.0.0.1:8007/api/agent/paymentbookingpage/203
+GET https://developertester.my.id/api/agent/paymentbookingpage/203
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYXZlbGFnZW50IiwiaWF0IjoxNzA4Njc0MzU1LCJleHAiOjE3MDg2Nzc5NTUsIm5iZiI6MTcwODY3NDM1NSwianRpIjoielBoejllZkRqT3hpd09lSyIsInN1YiI6IjIzNjAiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.1RdxjqLMokeCz_vJzjV30qTM6KTt8TCkw5Fqf9mnmt8
 
 ### PAY WALLET (GUNAKAN API INI SETELAH PAYMENT PAGE UNTUK MELAKUKAN PEMBAYARAN)
-GET http://127.0.0.1:8007/api/agent/wallet/pay/203
+GET https://developertester.my.id/api/agent/wallet/pay/203
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYXZlbGFnZW50IiwiaWF0IjoxNzA4Njc0MzU1LCJleHAiOjE3MDg2Nzc5NTUsIm5iZiI6MTcwODY3NDM1NSwianRpIjoielBoejllZkRqT3hpd09lSyIsInN1YiI6IjIzNjAiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.1RdxjqLMokeCz_vJzjV30qTM6KTt8TCkw5Fqf9mnmt8
 
@@ -125,17 +125,17 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vM
 
 
 ### DASHBOARD IN LOGIN AGENT
-GET http://127.0.0.1:8007/api/dashboard/agent
+GET https://developertester.my.id/api/dashboard/agent
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYXZlbGFnZW50IiwiaWF0IjoxNzA4Njc0MzU1LCJleHAiOjE3MDg2Nzc5NTUsIm5iZiI6MTcwODY3NDM1NSwianRpIjoielBoejllZkRqT3hpd09lSyIsInN1YiI6IjIzNjAiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.1RdxjqLMokeCz_vJzjV30qTM6KTt8TCkw5Fqf9mnmt8
 
 ### PROFILE
-GET http://127.0.0.1:8007/api/agent/myprofile
+GET https://developertester.my.id/api/agent/myprofile
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYXZlbGFnZW50IiwiaWF0IjoxNzA4Njc0MzU1LCJleHAiOjE3MDg2Nzc5NTUsIm5iZiI6MTcwODY3NDM1NSwianRpIjoielBoejllZkRqT3hpd09lSyIsInN1YiI6IjIzNjAiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.1RdxjqLMokeCz_vJzjV30qTM6KTt8TCkw5Fqf9mnmt8
 
 ### UPDATE PROFILE
-POST http://127.0.0.1:8007/api/agent/myprofile/update
+POST https://developertester.my.id/api/agent/myprofile/update
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYXZlbGFnZW50IiwiaWF0IjoxNzA4Njc0MzU1LCJleHAiOjE3MDg2Nzc5NTUsIm5iZiI6MTcwODY3NDM1NSwianRpIjoielBoejllZkRqT3hpd09lSyIsInN1YiI6IjIzNjAiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.1RdxjqLMokeCz_vJzjV30qTM6KTt8TCkw5Fqf9mnmt8
 
@@ -162,7 +162,7 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vM
 }
 
 ### UPDATE PASSWORD
-POST http://127.0.0.1:8007/api/agent/myprofile/updatepassword
+POST https://developertester.my.id/api/agent/myprofile/updatepassword
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYXZlbGFnZW50IiwiaWF0IjoxNzA4Njc0MzU1LCJleHAiOjE3MDg2Nzc5NTUsIm5iZiI6MTcwODY3NDM1NSwianRpIjoielBoejllZkRqT3hpd09lSyIsInN1YiI6IjIzNjAiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.1RdxjqLMokeCz_vJzjV30qTM6KTt8TCkw5Fqf9mnmt8
 
@@ -171,12 +171,12 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vM
 }
 
 ### WALLETPAGE
-GET http://127.0.0.1:8007/api/agent/wallet
+GET https://developertester.my.id/api/agent/wallet
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYXZlbGFnZW50IiwiaWF0IjoxNzA4Njc0MzU1LCJleHAiOjE3MDg2Nzc5NTUsIm5iZiI6MTcwODY3NDM1NSwianRpIjoielBoejllZkRqT3hpd09lSyIsInN1YiI6IjIzNjAiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.1RdxjqLMokeCz_vJzjV30qTM6KTt8TCkw5Fqf9mnmt8
 
 ### WALLETTOPUP
-POST http://127.0.0.1:8007/api/agent/wallet/topup
+POST https://developertester.my.id/api/agent/wallet/topup
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYXZlbGFnZW50IiwiaWF0IjoxNzA4Njc0MzU1LCJleHAiOjE3MDg2Nzc5NTUsIm5iZiI6MTcwODY3NDM1NSwianRpIjoielBoejllZkRqT3hpd09lSyIsInN1YiI6IjIzNjAiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.1RdxjqLMokeCz_vJzjV30qTM6KTt8TCkw5Fqf9mnmt8
 
@@ -186,4 +186,4 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vM
 }
 
 ###
-GET http://127.0.0.1:8007/api/country/travelagent
+GET https://developertester.my.id/api/country/travelagent
