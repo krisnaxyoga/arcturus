@@ -13,7 +13,7 @@ export default function Bookings({ bookings, transports }) {
 {bookings.map((booking, index) => {
     const transportsForBooking = transports || []; // Inisialisasi jika transports bernilai undefined
     const totalPrice = (transportsForBooking.find(trans => trans.booking_id == booking.id) || {}).total_price || 0;
-    const finalPrice = parseInt(booking.price) + parseInt(totalPrice);;
+    const finalPrice = parseInt(booking.price) + parseInt(totalPrice);
 
     return (
         <tr key={`booking_${index}`}>

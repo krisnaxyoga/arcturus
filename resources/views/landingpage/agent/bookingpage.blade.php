@@ -315,13 +315,15 @@
                 transportform.style.display = 'block';
                 transportnota.style.display = 'block';
                 totalPrice += price;
+                idtransportinput.value = idtransport;
             } else {
                 transportform.style.display = 'none';
                 transportnota.style.display = 'none';
                 totalPrice = totalPrice;
+                idtransportinput.value = null;
             }
             totalPriceforInput.value = totalPrice.toFixed(0);
-            idtransportinput.value = idtransport;
+            // idtransportinput.value = idtransport;
             transportPriceforInput.value = price;
             totalPriceDisplay.textContent = 'Rp. ' + numberWithCommas(totalPrice.toFixed(0));
             pricetransport.textContent = 'Rp. ' + numberWithCommas(price.toFixed(0));

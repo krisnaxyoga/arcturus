@@ -18,14 +18,15 @@ class BookingReportController extends Controller
     {
         $iduser = auth()->user()->id;
         $agent = User::where('id',$iduser)->with('vendors')->first();
-        $booking = Booking::with('users','vendor')->where('user_id',$agent->vendors->user_id)->get();
+        // $booking = Booking::with('users','vendor')->where('user_id',$agent->vendors->user_id)->get();
+        $booking = Booking::with('users','vendor')->whereNotIn('booking_status', ['-', ''])->where('user_id',$agent->vendors->user_id)->orderBy('created_at', 'desc')->get();
         $ordertranport = OrderTransport::where('user_id',$iduser)->get();
-
+        $transport = OrderTransport::where('user_id',$iduser)->get();
         return inertia('Agent/BookingReport/Index',[
             'data' => $booking,
             'agent' => $agent,
-            'ordertransport' => $ordertranport
-
+            'ordertransport' => $ordertranport,
+            'transport' => $transport,
         ]);
 
     }

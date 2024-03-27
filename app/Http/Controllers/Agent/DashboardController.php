@@ -28,7 +28,19 @@ class DashboardController extends Controller
         foreach($roomhotel1 as $item){
             $roomhotel += $item->night * $item->total_room;
         }
-        $bookingdata = Booking::where('user_id',$data->vendors->user_id)->with('users','vendor')->whereNotIn('booking_status', ['-', ''])->orderBy('created_at', 'desc')->get();
+        // $bookingdata = Booking::where('user_id',$data->vendors->user_id)->with('users','vendor')->whereNotIn('booking_status', ['-', ''])->orderBy('created_at', 'desc')->get();
+        // $bookingdata = Booking::where('user_id',$data->vendors->user_id)->with('users','vendor')->whereNotIn('booking_status', ['-', ''])->orderBy('created_at', 'desc')->get();
+        $today = now()->toDateString();
+
+        // Mengambil data booking berdasarkan vendor_id dan tanggal penciptaan (created_at) pada hari ini
+        $bookingdata = Booking::where('user_id',$data->vendors->user_id)
+            ->where('created_at', '>=', $today . ' 00:00:00') // Dari awal hari ini
+            ->where('created_at', '<=', $today . ' 23:59:59') // Sampai akhir hari ini
+            ->whereNotIn('booking_status', ['-', '']) // Hapus status '-' dan kosong
+            ->with('vendor', 'users') // Memuat relasi vendor dan users
+            ->orderBy('created_at', 'desc') // Urutkan berdasarkan created_at dari yang terbaru
+            ->get();
+            
         $acyive = auth()->user()->is_active;
         $transport = OrderTransport::where('user_id',$iduser)->get();
         if($acyive == 1){
