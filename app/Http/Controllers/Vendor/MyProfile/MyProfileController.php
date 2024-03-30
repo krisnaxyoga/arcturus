@@ -345,7 +345,19 @@ class MyProfileController extends Controller
             $totalbooking = Booking::where('vendor_id',$vendor->id)->where('booking_status','paid')->count();
             $bookingsuccess = Booking::where('vendor_id',$vendor->id)->where('booking_status','paid')->count();
             $pendingpayment = Booking::where('vendor_id',$vendor->id)->where('booking_status','unpaid')->count();
-            $booking = Booking::where('vendor_id',$vendor->id)->whereNotIn('booking_status', ['-', ''])->with('vendor','users')->orderBy('created_at', 'desc')->get();
+            // $booking = Booking::where('vendor_id',$vendor->id)->whereNotIn('booking_status', ['-', ''])->with('vendor','users')->orderBy('created_at', 'desc')->get();
+            // $booking = Booking::where('vendor_id',$vendor->id)->whereNotIn('booking_status', ['-', ''])->with('vendor','users')->orderBy('created_at', 'desc')->get();
+            // Mendapatkan tanggal hari ini
+            $today = now()->toDateString();
+
+            // Mengambil data booking berdasarkan vendor_id dan tanggal penciptaan (created_at) pada hari ini
+            $booking = Booking::where('vendor_id', $vendor->id)
+                ->where('created_at', '>=', $today . ' 00:00:00') // Dari awal hari ini
+                ->where('created_at', '<=', $today . ' 23:59:59') // Sampai akhir hari ini
+                ->whereNotIn('booking_status', ['-', '']) // Hapus status '-' dan kosong
+                ->with('vendor', 'users') // Memuat relasi vendor dan users
+                ->orderBy('created_at', 'desc') // Urutkan berdasarkan created_at dari yang terbaru
+                ->get();
             $acyive = auth()->user()->is_active;
             $roomhotel1 = Booking::where('vendor_id',$vendor->id)->where('booking_status','paid')->get();
             $roomhotel = 0;

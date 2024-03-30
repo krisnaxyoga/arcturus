@@ -83,10 +83,10 @@ function Layout({ children, page, agent }) {
                                             <div className="nav-link-icon"><i className="fa fa-adjust" aria-hidden="true"></i></div>
                                             Dashboard
                                         </Link>
-                                        <Link className={`nav-link ${page === '/agent/bookinghistory' ? 'active' : ''}`} href="/agent/bookinghistory">
+                                        {/* <Link className={`nav-link ${page === '/agent/bookinghistory' ? 'active' : ''}`} href="/agent/bookinghistory">
                                             <div className="nav-link-icon"><i className="fa fa-clock" aria-hidden="true"></i></div>
                                             Booking History
-                                        </Link>
+                                        </Link> */}
                                         <Link className={`nav-link intro-step-2 ${page === '/agent-profile' ? 'active' : ''}`} href="/agent-profile">
                                             <div className="nav-link-icon"><i className="fa fa-cogs" aria-hidden="true"></i></div>
                                             My Profile
