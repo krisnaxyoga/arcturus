@@ -35,6 +35,14 @@ export default function Index({ errors, session,contractrate, default_selected_h
     const [startDate, setStartDate] = useState('')
 
     const [night,setNight] = useState('')
+    
+    const [roombooking,setRoombooking] = useState('')
+    const [totalroomallow,setTotalallow] = useState(0)
+    
+    const [totalnobooked,setTotalallowBooked] = useState(0)
+    const [vailableroom,setAvailableroom] = useState(0)
+    const [addAllow, setAddAllow] = useState(0);
+    const [minAllow, setMinAllow] = useState(0);
     const [endDate, setEndDate] = useState('')
     const [price, setPrice] = useState(0)
     const [allow, setAllow] = useState('')
@@ -47,7 +55,38 @@ export default function Index({ errors, session,contractrate, default_selected_h
         setActiveEnd(arg.end)
     };
 
+    const handleAddAllowChange = (e) => {
+        const newAddAllow = parseInt(e.target.value);
+        setAddAllow(newAddAllow);
+        
+        // Menghitung jumlah allow + addAllow
+        const totalx = allow + newAddAllow + roombooking;
+        
+        const totalallow = allow + newAddAllow;
+        console.log(totalx,totalallow,roombooking)
+        setTotalallow(totalx);
+        setTotalallowBooked(totalallow);
+    }
+
+    const handleMinAllowChange = (e) => {
+        const newAddAllow = parseInt(e.target.value);
+        setMinAllow(newAddAllow);
+        // Menghitung jumlah allow + addAllow
+        let totalx = allow - newAddAllow + roombooking;
+        
+        let totalallow = allow - newAddAllow;
+          // Mengganti nilai negatif dengan 0
+        totalx = Math.max(totalx, 0);
+        totalallow = Math.max(totalallow, 0);
+
+        console.log(totalx,totalallow,roombooking)
+        setTotalallow(totalx);
+        setTotalallowBooked(totalallow);
+    }
+
     const handleOpenModal = (arg) => {
+        // console.log(arg,">>>>>ARG");
+
         let startDateStr = arg.event.start.toLocaleDateString('en-GB');
 
         // Split tanggal menjadi bagian-bagian
@@ -75,7 +114,8 @@ export default function Index({ errors, session,contractrate, default_selected_h
         setPrice(arg.event.extendedProps.price);
         setAllow(arg.event.allow);
         setNight(arg.event.extendedProps.night);
-
+        setAvailableroom(arg.event.extendedProps.roomavailable);
+        setRoombooking(arg.event.extendedProps.roombooking);
         if(arg.event.extendedProps.nocheckout != 0){
             setNoCheckout(true);
         }else{
@@ -97,6 +137,9 @@ export default function Index({ errors, session,contractrate, default_selected_h
         setStartDate('')
         setPrice(0)
         setShowModal(false)
+        setTotalallowBooked(0);
+        setAddAllow(0);
+        setMinAllow(0);
     }
     useEffect(() => {
         // Anda dapat menambahkan logika tambahan jika diperlukan
@@ -184,13 +227,16 @@ export default function Index({ errors, session,contractrate, default_selected_h
             active: active,
             nocheckin: nocheckin,
             nocheckout: nocheckout,
-            room_allow: allow,
+            room_allow: totalroomallow,
             night : night
         }, {
             onSuccess: () => {
                 handleNavRoomTypeSelect(activeHotelRoom)
                 // handleNavContractSelect(activeContractRoom)
+                setAddAllow(0);
+                setMinAllow(0);
                 handleCloseModal()
+             
             },
             onError: (errors) => {
                 handleCloseModal()
@@ -214,6 +260,9 @@ export default function Index({ errors, session,contractrate, default_selected_h
          
           // Lakukan sesuatu dengan respons jika diperlukan
           if (response.ok) {
+            setTotalallowBooked(0);
+            setAddAllow(0);
+            setMinAllow(0);
             handleNavRoomTypeSelect(activeHotelRoom);
             handleCloseModal()
           } else {
@@ -306,7 +355,11 @@ export default function Index({ errors, session,contractrate, default_selected_h
                 <Modal show={showModel} onHide={handleCloseModal}>
                     <Modal.Header>
                         <Modal.Title>
-                            Rate Calendar
+                            Rate Calendar <br />
+                            {roombooking != 0 &&
+                            <>
+                            <span className='badge badge-danger'>room booked : {roombooking}</span>
+                            </> }
                         </Modal.Title>
                         <Link
                         href="#"
@@ -356,15 +409,42 @@ export default function Index({ errors, session,contractrate, default_selected_h
                                         {errors.price}
                                     </div>
                                 )}
-                                <div className="mb-3">
-                                    <label className="form-label fw-bold">Room Allotment</label>
-                                    <input id="allow" type="number" className="form-control" value={allow ? allow : 0} onChange={(e) => setAllow(e.target.value)} />
+                                <div className="row">
+                                    <div className="col mb-3">
+                                        <label className="form-label fw-bold">+ / - Room</label>
+                                        <input id="addallow" type="number" className="form-control" defaultValue={0} onChange={handleAddAllowChange} 
+                                        disabled={minAllow !== 0}
+                                        />
+                                    </div>
+                                    {/* <div className="col mb-3">
+                                        <label className="form-label fw-bold">-Min Room</label>
+                                        <input id="minallow" type="number" className="form-control" defaultValue={0} onChange={handleMinAllowChange} 
+                                         disabled={addAllow !== 0} // Disable input jika nilai addAllow tidak sama dengan 0
+                                        />
+                                    </div> */}
+                                    <div className="col">
+                                        <div className="mb-3">
+                                            <label className="form-label fw-bold">total</label>
+                                            <input readOnly id="allow" type="number" className="form-control" value={totalnobooked ? totalnobooked : 0} onChange={(e) => setAllow(e.target.value)} />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    
+                                    <div className="col">
+                                        <div className="mb-3">
+                                            <label className="form-label fw-bold text-success" style={{fontWeight:700}}>Room Allotment</label>
+                                            <input readOnly id="allow" type="number" className="form-control" value={allow ? allow : 0} onChange={(e) => setAllow(e.target.value)} />
+                                        </div>
+                                    </div>
                                 </div>
                                 {errors.allow && (
                                     <div className="alert alert-danger">
                                         {errors.allow}
                                     </div>
                                 )}
+                                
+                                 
                                 <div className="mb-3">
                                     <label className="form-label fw-bold">Min Stay</label>
                                     <input id="allow" type="number" className="form-control" value={night} onChange={(e) => setNight(e.target.value)} />

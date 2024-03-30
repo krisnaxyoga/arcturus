@@ -160,6 +160,8 @@ class SurchargeController extends Controller
                 // $price = $hotel_room_surcharge->price; // Ambil harga sebagai decimal
                 // $formattedPrice = number_format($price, 0, ',', '.'); // Format harga tanpa desimal nol
 
+               
+
                 if ($HotelRoomBooking) {
                     $roomallow = $hotel_room_surcharge->room_allow - $htrb;
                 }else{
@@ -191,6 +193,8 @@ class SurchargeController extends Controller
                     'price' => $hotel_room_surcharge->recom_price,
                     'color' => $color,
                     'allow' => $roomallow,
+                    'roomavailable'=>$ContractPrice->room->room_allow,
+                    'roombooking'=>$htrb,
                     'night'=> $hotel_room_surcharge->night,
                     'nocheckin' => $hotel_room_surcharge->no_checkin,
                     'nocheckout' => $hotel_room_surcharge->no_checkout
@@ -206,6 +210,8 @@ class SurchargeController extends Controller
                     'date' => date('Y-m-d', strtotime($date)),
                     'price' => $ContractPrice->recom_price,
                     'allow' => $roomallow,
+                    'roomavailable'=>$ContractPrice->room->room_allow,
+                    'roombooking'=>$htrb,
                     'night' => 1,
                     'color' => $color,
                     'nocheckin' => 0,
