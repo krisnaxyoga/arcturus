@@ -361,6 +361,7 @@
                                                                                       // }
                                                                                       // $hotelroomid = $calendar->room_hotel_id;
                                                                                   }else{
+                                                                                    
                                                                                       //filter yang berfungsi untuk calendar rate
                                                                                       if($startDate < $checkoutDate && $endDate >= $checkinDate && $startDate == $endDate)
                                                                                       {
@@ -369,9 +370,11 @@
                                                                                           $totalDataCount++;
 
                                                                                           $status = $calendar->active;
+                                                                                          
                                                                                           $room_allowx = $calendar->room_allow;
+                                                                                          
                                                                                           $lang_of_stay = $calendar->night;
-                                                                                          if ($room_allowx == 0) {
+                                                                                          if ($room_allowx <= 0) {
                                                                                               $isSold = true;
                                                                                               $status = 2;
                                                                                           }
@@ -395,9 +398,11 @@
                                                                                   }
 
                                                                               } else {
-                                                                                  if ($calendar->room_hotel_id == $itemprice->room_id && $foundZero == false) {
-                                                                                      $status = $calendar->active;
+                                                                                $startDate = Carbon::parse($calendar->start_date);
+                                                                                  $endDate = Carbon::parse($calendar->end_date);
 
+                                                                                  if ($startDate < $checkoutDate && $endDate >= $checkinDate && $calendar->room_hotel_id == $itemprice->room_id && $foundZero == false) {
+                                                                                      $status = $calendar->active;
                                                                                       // Periksa apakah room_allow sama dengan 0 atau active sama dengan 0
                                                                                       if ($calendar->room_allow == 0 || $calendar->active == 0) {
                                                                                           $status = 0;
@@ -501,19 +506,18 @@
                                                                       // ========================================================= ROOM ALLOWMENT ====================================
                                                                       $totalRoomBooking = 0; // Inisialisasi totalRoomBooking
 
-                                                                      
                                                                       if ($status != 1 || $no_checkout != 0 || $no_checkin != 0) {
                                                                           $totalRoomBooking = $itemprice->room->room_allow;
+                                                                          
                                                                       }
                                                                       // if($no_checkout != 1) {
                                                                       //     $totalRoomBooking = $itemprice->room->room_allow;
                                                                       // }
-
                                                                       if ($HotelRoomBooking->count() != 0) {
                                                                           foreach ($HotelRoomBooking as $key => $value) {
                                                                               if ($value->room_id == $itemprice->room_id) {
                                                                                   $totalRoomBooking += $value->total_room;
-                                                                                  
+                                                                                    
                                                                               }
                                                                           }
                                                                       }
@@ -670,7 +674,6 @@
                                                                                   //}else if($room_allow >= 0 && $room_allow != $RoomAllowment){
                                                                                     //  $RoomAllowment = $room_allow;
                                                                                    //}
-
                                                                               // } else {
                                                                                   $RoomAllowment = $RoomAllowment;
                                                                               // }
