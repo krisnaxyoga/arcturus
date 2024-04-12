@@ -413,8 +413,8 @@ class HomeController extends Controller
                         $today = Carbon::now(); // Mengambil tanggal hari ini
                         $query->where(function ($q) use ($checkin2, $checkout2,$today) {
                             $q->where(function ($qq) use ($checkin2, $checkout2) {
-                                $qq->where('stayperiod_begin', '<=', $checkin2)
-                                    ->where('stayperiod_end', '>=', Carbon::parse($checkout2)->subDay());
+                                $qq->where('stayperiod_begin', '<=', $checkout2)
+                                    ->where('stayperiod_end', '>=', Carbon::parse($checkin2)->subDay());
                             })->Where(function ($qq) use ($checkin2, $checkout2,$today) {
                                 $qq->where('booking_begin', '<=', $today)
                                     ->where('booking_end', '>=', Carbon::parse($today)->subDay());

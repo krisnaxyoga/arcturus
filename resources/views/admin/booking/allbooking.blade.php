@@ -3,13 +3,13 @@
 @section('content')
 <section class="mt-3">
     <div class="container">
-        <h1>TRANSFER BANK</h1>
+        <h1>BOOKING TODAY!</h1>
           <!-- Content Row -->
           <div class="row">
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-header">
-                        TRANSFER BANK CONFIRMATION
+                        BOOKING CONFIRMATION
                     </div>
                     <div class="card-body">
                         @if (session()->has('message'))
