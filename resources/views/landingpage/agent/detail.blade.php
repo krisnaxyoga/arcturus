@@ -515,7 +515,7 @@
                                                                             
                                                                             if ($foundZero == true) {
                                                                                 $room_allow = 0;
-                                                                                
+                                                                                $isSold = true;
                                                                             }
 
                                                                             if($lang_of_stay > $totalNights){
