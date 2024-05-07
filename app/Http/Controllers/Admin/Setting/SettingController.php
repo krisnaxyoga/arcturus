@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Setting;
 use App\Models\Slider;
+use App\Models\User;
 use Illuminate\Support\Facades\File;
 use App\Models\Popup;
 
@@ -355,5 +356,26 @@ class SettingController extends Controller
         return redirect()
         ->route('dashboard.setting')
         ->with('message', 'Data deleted.');
+    }
+
+    public function updatepassword(Request $request){
+        $iduser = auth()->user()->id;
+
+        $validator = Validator::make($request->all(), [
+            'password' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator->errors())
+                ->withInput($request->all());
+        } else {
+                $data = User::find($iduser);
+                $data->password = Hash::make($request->password);
+                $data->update();
+
+        return redirect()->back()->with('message', 'Password Change success');
+        }
+
     }
 }
