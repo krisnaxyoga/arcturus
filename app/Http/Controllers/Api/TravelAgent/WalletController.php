@@ -50,99 +50,98 @@ class WalletController extends Controller
     public function pay($id)
     {
         try {
-            $transportbooking = OrderTransport::where('booking_id',$id)->first();
-
-            if($transportbooking){
+            // Mendapatkan detail pemesanan transportasi
+            $transportbooking = OrderTransport::where('booking_id', $id)->first();
+    
+            if ($transportbooking) {
                 $transportbooking->booking_status = 'paid';
                 $transportbooking->save();
                 $totaltranport = $transportbooking->total_price;
-            }else{
+            } else {
                 $totaltranport = 0;
             }
     
-    
-            $hotel_room_booking = HotelRoomBooking::where('booking_id',$id)->get();
+            // Mendapatkan detail pemesanan kamar hotel
+            $hotel_room_booking = HotelRoomBooking::where('booking_id', $id)->get();
             $saldo = auth()->user()->saldo;
             $totalprice = 0;
-            foreach($hotel_room_booking as $item){
+    
+            // Menghitung total harga kamar hotel
+            foreach ($hotel_room_booking as $item) {
                 $totalprice += $item->price;
             }
     
+            // Mendapatkan detail pemesanan
             $booking = Booking::find($id);
             $totalpayment = ($booking->night * $totalprice) + $totaltranport;
     
-            if($booking->price == $totalpayment){
-                $minsaldo = ($booking->price + $totaltranport);
-                $total_as_saldo = $saldo - ($booking->price + $totaltranport);
-            }else{
-                $total_as_saldo = $saldo - $totalpayment;
-                $minsaldo = $totalpayment;
-            }
-    
-            if($saldo >= $total_as_saldo){
-                $history = new HistoryWallet;
-                $history->saldo_master = $saldo;
-                $history->total_saldo = $total_as_saldo;
-                $history->saldo_add_minus = $minsaldo;
-                $history->user_id = auth()->user()->id;
-                $history->vendor_id = auth()->user()->vendor_id;
-                $history->type_transaction = 'PAYMENT-SALDO';
-                $history->status = 'success';
-                $history->save();
-    
-                $user = User::where('id',auth()->user()->id)->first();
-                $user->saldo = $total_as_saldo;
-                $user->save();
-    
-                $booking->booking_status = 'paid';
-                $booking->payment_method = 2;
-                $booking->is_see = 0;
-                $booking->save();
-    
-    
-                $hotelbook = HotelRoomBooking::where('booking_id',$id)->get();
-                $contract_id = HotelRoomBooking::where('booking_id',$id)->first();
-                $contract = ContractRate::where('id',$contract_id->contract_id)->first();
-                $agent = Vendor::where('user_id',$booking->user_id)->first();
-                
-                $vendor = Vendor::where('id',$booking->vendor_id)->first();
-                $affiliator = Vendor::where('affiliate',$vendor->affiliate)->where('type_vendor','agent')->first();
-    
-                $data = [
-                    'booking' => $booking, // $book merupakan instance dari model Booking yang sudah Anda dapatkan
-                    'contract' => $contract,
-                    'setting' => Setting::first(),
-                    'agent' => $agent,
-                    'hotelbook' => $hotelbook,
-                    'affiliator'=> $affiliator
-    
-                ];
-    
-    
-                if (env('APP_ENV') == 'production') {
-                    Mail::to($booking->vendor->email_reservation)->send(new BookingConfirmationHotel($data));
-                    Mail::to($booking->vendor->email)->send(new BookingConfirmationHotel($data));
-                    Mail::to($booking->users->email)->send(new BookingConfirmation($data));
-                }
-    
-                $message = 'payment success';
-                return response()->json([
-                    'message' => $message,
-                ], 200);
-    
-            }else{
+            // Memeriksa apakah saldo mencukupi
+            if ($saldo < $totalpayment) {
                 $message = 'you must top up';
                 return response()->json([
                     'message' => $message,
                 ], 400);
             }
+    
+            // Menghitung saldo akhir setelah pembayaran
+            $total_as_saldo = $saldo - $totalpayment;
+            $minsaldo = $totalpayment;
+    
+            // Menyimpan riwayat transaksi pembayaran
+            $history = new HistoryWallet;
+            $history->saldo_master = $saldo;
+            $history->total_saldo = $total_as_saldo;
+            $history->saldo_add_minus = $minsaldo;
+            $history->user_id = auth()->user()->id;
+            $history->vendor_id = auth()->user()->vendor_id;
+            $history->type_transaction = 'PAYMENT-SALDO';
+            $history->status = 'success';
+            $history->save();
+    
+            // Mengurangi saldo pengguna
+            $user = User::where('id', auth()->user()->id)->first();
+            $user->saldo = $total_as_saldo;
+            $user->save();
+    
+            // Menandai pemesanan sebagai 'paid'
+            $booking->booking_status = 'paid';
+            $booking->payment_method = 2;
+            $booking->is_see = 0;
+            $booking->save();
+    
+            // Mengirim email konfirmasi pemesanan
+            $hotelbook = HotelRoomBooking::where('booking_id', $id)->get();
+            $contract_id = HotelRoomBooking::where('booking_id', $id)->first();
+            $contract = ContractRate::where('id', $contract_id->contract_id)->first();
+            $agent = Vendor::where('user_id', $booking->user_id)->first();
+            $vendor = Vendor::where('id', $booking->vendor_id)->first();
+            $affiliator = Vendor::where('affiliate', $vendor->affiliate)->where('type_vendor', 'agent')->first();
+    
+            $data = [
+                'booking' => $booking, // $book merupakan instance dari model Booking yang sudah Anda dapatkan
+                'contract' => $contract,
+                'setting' => Setting::first(),
+                'agent' => $agent,
+                'hotelbook' => $hotelbook,
+                'affiliator' => $affiliator
+            ];
+    
+            if (env('APP_ENV') == 'production') {
+                Mail::to($booking->vendor->email_reservation)->send(new BookingConfirmationHotel($data));
+                Mail::to($booking->vendor->email)->send(new BookingConfirmationHotel($data));
+                Mail::to($booking->users->email)->send(new BookingConfirmation($data));
+            }
+    
+            $message = 'payment success';
+            return response()->json([
+                'message' => $message,
+            ], 200);
         } catch (\Exception $exception) {
             return response()->json([
                 'error' => 'Internal Server Error',
                 'message' => $exception->getMessage(),
             ], 500);
         }
-
     }
 
     public function store(Request $request)
