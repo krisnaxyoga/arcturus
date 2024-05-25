@@ -333,7 +333,7 @@ class MyProfileController extends Controller
         }
     }
 
-    public function loginproperty($id){
+    public function loginproperty(Request $request, $id){
         // Logout admin
         Auth::logout();
 
@@ -379,6 +379,10 @@ class MyProfileController extends Controller
         // return redirect('/vendordashboard');
         // Menyertakan variabel position
         Inertia::share('position', 'master');
+
+        if ($request->is_super_admin == 'true') {
+            Inertia::share('is_super_admin', 'true');
+        }
 
         // Redirect ke halaman hotel
         return Inertia::render('Vendor/Index',[
