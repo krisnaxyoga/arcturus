@@ -8,6 +8,7 @@ use App\Models\Vendor;
 use App\Models\User;
 use App\Models\AgentMarkupSetup;
 use App\Models\Booking;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Slider;
 use App\Models\RoomHotel;
@@ -102,7 +103,7 @@ class MyProfileController extends Controller
                 }
             }
 
-            
+
 
             $data->first_name = $request->firstname;
             $data->last_name = $request->lastname;
@@ -110,7 +111,7 @@ class MyProfileController extends Controller
             $data->profile_image = $logo;
             if ($data->title != $request->code) {
                 $user1 = User::where('title', $request->code)->first();
-            
+
                 if (!$user1) {
                     $data->position = 'master';
                 } else {
@@ -141,7 +142,7 @@ class MyProfileController extends Controller
             $member->description = $request->description;
             $member->type_property = $request->type_property;
             // $member->email = $request->email;
-            
+
             $member->marketcountry = explode(",",$request->distribute);
             $member->save();
 
@@ -221,7 +222,7 @@ class MyProfileController extends Controller
      public function destroybanner(string $id)
      {
         $data =  Slider::find($id);
-        if (File::exists(public_path($data->image))) 
+        if (File::exists(public_path($data->image)))
         {
             File::delete(public_path($data->image));
         }
@@ -333,57 +334,83 @@ class MyProfileController extends Controller
     }
 
     public function loginproperty($id){
-        if (Auth::check() && Auth::user()->role_id == 2) {
-            // Logout admin
-            Auth::logout();
+        $iduser = $id;
+        $vendor = Vendor::where('user_id',$iduser)->with('users')->first();
 
-            // Lakukan otentikasi sebagai akun hotel
-            Auth::loginUsingId($id);
-            $iduser = $id;
-            $vendor = Vendor::where('user_id',$iduser)->with('users')->first();
-            $totalincome = Booking::where('vendor_id',$vendor->id)->where('booking_status','paid')->sum('pricenomarkup');
-            $totalbooking = Booking::where('vendor_id',$vendor->id)->where('booking_status','paid')->count();
-            $bookingsuccess = Booking::where('vendor_id',$vendor->id)->where('booking_status','paid')->count();
-            $pendingpayment = Booking::where('vendor_id',$vendor->id)->where('booking_status','unpaid')->count();
-            // $booking = Booking::where('vendor_id',$vendor->id)->whereNotIn('booking_status', ['-', ''])->with('vendor','users')->orderBy('created_at', 'desc')->get();
-            // $booking = Booking::where('vendor_id',$vendor->id)->whereNotIn('booking_status', ['-', ''])->with('vendor','users')->orderBy('created_at', 'desc')->get();
-            // Mendapatkan tanggal hari ini
-            $today = now()->toDateString();
+        $url_redirect = '';
 
-            // Mengambil data booking berdasarkan vendor_id dan tanggal penciptaan (created_at) pada hari ini
-            $booking = Booking::where('vendor_id', $vendor->id)
-                ->where('created_at', '>=', $today . ' 00:00:00') // Dari awal hari ini
-                ->where('created_at', '<=', $today . ' 23:59:59') // Sampai akhir hari ini
-                ->whereNotIn('booking_status', ['-', '']) // Hapus status '-' dan kosong
-                ->with('vendor', 'users') // Memuat relasi vendor dan users
-                ->orderBy('created_at', 'desc') // Urutkan berdasarkan created_at dari yang terbaru
-                ->get();
-            $acyive = auth()->user()->is_active;
-            $roomhotel1 = Booking::where('vendor_id',$vendor->id)->where('booking_status','paid')->get();
-            $roomhotel = 0;
-            foreach($roomhotel1 as $item){
-                $roomhotel += $item->night * $item->total_room;
+        if (Auth::user()->role_id == 1) {
+            Inertia::share('is_super_admin', true);
+
+            if ($vendor->type_vendor == 'hotel') {
+                $url_redirect = route('redirect_admin', ['page' => 'hotel']);
             }
 
-            $widraw = WidrawVendor::where('vendor_id', $vendor->id)
+            if ($vendor->type_vendor == 'agent') {
+                $url_redirect = route('redirect_admin', ['page' => 'agent']);
+            }
+
+            Inertia::share('redirect_admin', $url_redirect);
+        }
+
+        if (Auth::user()->role_id == 2) {
+            Inertia::share('is_super_admin', false);
+            Inertia::share('redirect_admin', $url_redirect);
+        }
+
+        // Logout admin
+        Auth::logout();
+
+        // Lakukan otentikasi sebagai akun hotel
+        Auth::loginUsingId($id);
+
+        // Redirect ke halaman hotel
+        // return redirect('/vendordashboard');
+        // Menyertakan variabel position
+        Inertia::share('position', Auth::user()->position);
+
+        $totalincome = Booking::where('vendor_id',$vendor->id)->where('booking_status','paid')->sum('pricenomarkup');
+        $totalbooking = Booking::where('vendor_id',$vendor->id)->where('booking_status','paid')->count();
+        $bookingsuccess = Booking::where('vendor_id',$vendor->id)->where('booking_status','paid')->count();
+        $pendingpayment = Booking::where('vendor_id',$vendor->id)->where('booking_status','unpaid')->count();
+        // $booking = Booking::where('vendor_id',$vendor->id)->whereNotIn('booking_status', ['-', ''])->with('vendor','users')->orderBy('created_at', 'desc')->get();
+        // $booking = Booking::where('vendor_id',$vendor->id)->whereNotIn('booking_status', ['-', ''])->with('vendor','users')->orderBy('created_at', 'desc')->get();
+
+        // Mendapatkan tanggal hari ini
+        $today = now()->toDateString();
+
+        // Mengambil data booking berdasarkan vendor_id dan tanggal penciptaan (created_at) pada hari ini
+        $booking = Booking::where('vendor_id', $vendor->id)
+            ->where('created_at', '>=', $today . ' 00:00:00') // Dari awal hari ini
+            ->where('created_at', '<=', $today . ' 23:59:59') // Sampai akhir hari ini
+            ->whereNotIn('booking_status', ['-', '']) // Hapus status '-' dan kosong
+            ->with('vendor', 'users') // Memuat relasi vendor dan users
+            ->orderBy('created_at', 'desc') // Urutkan berdasarkan created_at dari yang terbaru
+            ->get();
+
+        $acyive = auth()->user()->is_active;
+
+        $roomhotel1 = Booking::where('vendor_id',$vendor->id)->where('booking_status','paid')->get();
+
+        $roomhotel = 0;
+        foreach($roomhotel1 as $item){
+            $roomhotel += $item->night * $item->total_room;
+        }
+
+        $widraw = WidrawVendor::where('vendor_id', $vendor->id)
             ->whereDate('created_at', '=', Carbon::today())
             ->get();
-            // Redirect ke halaman hotel
-            // return redirect('/vendordashboard');
-            // Menyertakan variabel position
-            Inertia::share('position', 'master');
 
-            // Redirect ke halaman hotel
-            return Inertia::render('Vendor/Index',[
-                'income'=>$totalincome,
-                'booking'=>$totalbooking,
-                'success'=>$bookingsuccess,
-                'pending'=>$pendingpayment,
-                'data'=>$booking,
-                'widraw'=>$widraw,
-                'totalroom' => $roomhotel,
-                'vendor' => $vendor,
-            ]);
-        }
+        // Redirect ke halaman hotel
+        return Inertia::render('Vendor/Index',[
+            'income'=>$totalincome,
+            'booking'=>$totalbooking,
+            'success'=>$bookingsuccess,
+            'pending'=>$pendingpayment,
+            'data'=>$booking,
+            'widraw'=>$widraw,
+            'totalroom' => $roomhotel,
+            'vendor' => $vendor,
+        ]);
     }
 }

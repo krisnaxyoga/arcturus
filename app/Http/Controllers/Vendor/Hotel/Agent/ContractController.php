@@ -190,7 +190,7 @@ class ContractController extends Controller
                 }
                 
                 if ($request->other_policy == null){
-                    $data->other_policy = "<li>Adjusting the duration or dates of your stay may result in a revised rate</li>";
+                    $data->other_policy = "";
                 }else{
                     $data->other_policy = $request->other_policy;
                 }

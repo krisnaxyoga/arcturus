@@ -46,7 +46,6 @@ export default function Index({ errors, session,contractrate, default_selected_h
     const [endDate, setEndDate] = useState('')
     const [price, setPrice] = useState(0)
     const [allow, setAllow] = useState('')
-    const [defaultallow, setDefaultAllow] = useState('')
     const [active, setActive] = useState(true)
     const [nocheckin, setNoCheckin] = useState(false)
     const [nocheckout, setNoCheckout] = useState(false)
@@ -67,7 +66,6 @@ export default function Index({ errors, session,contractrate, default_selected_h
         console.log(totalx,totalallow,roombooking)
         setTotalallow(totalx);
         setTotalallowBooked(totalallow);
-        setDefaultAllow(totalallow);
     }
 
     const handleMinAllowChange = (e) => {
@@ -115,7 +113,6 @@ export default function Index({ errors, session,contractrate, default_selected_h
         setEndDate(formattedDate);
         setPrice(arg.event.extendedProps.price);
         setAllow(arg.event.allow);
-        setDefaultAllow(arg.event.allow);
         setNight(arg.event.extendedProps.night);
         setAvailableroom(arg.event.extendedProps.roomavailable);
         setRoombooking(arg.event.extendedProps.roombooking);
@@ -141,7 +138,6 @@ export default function Index({ errors, session,contractrate, default_selected_h
         setPrice(0)
         setShowModal(false)
         setTotalallowBooked(0);
-        setTotalallow(0);
         setAddAllow(0);
         setMinAllow(0);
     }
@@ -221,7 +217,7 @@ export default function Index({ errors, session,contractrate, default_selected_h
 
     const handleStore = async (e) => {
         e.preventDefault()
-        const allow2 = totalroomallow > defaultallow ? totalroomallow : defaultallow;
+
         Inertia.post('/room/surcharge/store', {
             vendor_id: vendor.id,
             room_hotel_id: activeHotelRoom,
@@ -231,7 +227,7 @@ export default function Index({ errors, session,contractrate, default_selected_h
             active: active,
             nocheckin: nocheckin,
             nocheckout: nocheckout,
-            room_allow: allow2,
+            room_allow: totalroomallow,
             night : night
         }, {
             onSuccess: () => {
@@ -239,7 +235,6 @@ export default function Index({ errors, session,contractrate, default_selected_h
                 // handleNavContractSelect(activeContractRoom)
                 setAddAllow(0);
                 setMinAllow(0);
-                setDefaultAllow(0);
                 handleCloseModal()
              
             },

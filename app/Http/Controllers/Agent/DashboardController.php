@@ -8,6 +8,8 @@ use App\Models\Vendor;
 use App\Models\User;
 use App\Models\Booking;
 use App\Models\OrderTransport;
+use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
@@ -40,11 +42,11 @@ class DashboardController extends Controller
             ->with('vendor', 'users') // Memuat relasi vendor dan users
             ->orderBy('created_at', 'desc') // Urutkan berdasarkan created_at dari yang terbaru
             ->get();
-            
+
         $acyive = auth()->user()->is_active;
         $transport = OrderTransport::where('user_id',$iduser)->get();
         if($acyive == 1){
-            return inertia('Agent/Index',[
+            return Inertia::render('Agent/Index',[
                 'data' => $data,
                 'booking' => $totalbooking,
                 'success' => $bookingsuccess,
@@ -59,51 +61,22 @@ class DashboardController extends Controller
 
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function backdoor($user_id)
     {
-        //
-    }
+        $is_super_admin = false;
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        if (Auth::user()->role_id == 1) {
+            $is_super_admin = true;
+        }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        Inertia::share('is_super_admin', $is_super_admin);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+        // Logout admin
+        Auth::logout();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+        // Lakukan otentikasi sebagai akun hotel
+        Auth::loginUsingId($user_id);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return $this->index();
     }
 }

@@ -1,7 +1,7 @@
 //import React
 import React, { useState, useEffect } from 'react';
 //import Link
-import { Link } from '@inertiajs/inertia-react';
+import {Link, usePage} from '@inertiajs/inertia-react';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Button from 'react-bootstrap/Button';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
@@ -23,13 +23,17 @@ function Layout({ children, page, vendor }) {
         localStorage.clear();
         window.location.href = `/logout`;
     }
+
     // Mendapatkan nilai 'encryptedPosition' dari localStorage
     const encryptedPosition = localStorage.getItem('encryptedPosition');
+    // Mendapatkan nilai 'encryptedIsSuperAdmin' dari localStorage
+    const encryptedIsSuperAdmin = localStorage.getItem('encryptedIsSuperAdmin');
 
-    // Mendekripsi nilai jika 'encryptedPosition' ada di localStorage
+    // Mendekripsi nilai jika encrypted data ada di localStorage
     const position = decrypt(encryptedPosition);
-    // setPostionmaster(position);
+    const is_super_admin = decrypt(encryptedIsSuperAdmin);
 
+    // setPostionmaster(position);
     const handleShow = () => {
         setShow(!show);
     };
@@ -92,6 +96,16 @@ function Layout({ children, page, vendor }) {
                     <nav className="sidenav shadow-right sidenav-light">
                         <div className="sidenav-menu">
                             <div className="nav accordion" id="accordionSidenav">
+                                {(is_super_admin) && (
+                                    <>
+                                        <div className="sidenav-menu-heading">Super Admin</div>
+                                        <a href='/redirect-admin?page=hotel' className='nav-link'>
+                                            <div className="nav-link-icon"><i className="fa fa-home" aria-hidden="true"></i></div>
+                                            Admin Dashboard
+                                        </a>
+                                    </>
+                                )}
+
                                 <div className="sidenav-menu-heading">Main</div>
                                 <a href="/" className='nav-link'>
                                     <div className="nav-link-icon"><i className="fa fa-home" aria-hidden="true"></i></div>
@@ -124,7 +138,7 @@ function Layout({ children, page, vendor }) {
                                     <div className="nav-link-icon">  <i className="fas fa-fw fa-chart-area"></i></div>
                                     Booking Report
                                 </Link>
-                                {(vendor.users.position == 'master' || position == 'master') && (
+                                {(vendor.users.position === 'master' || position === 'master') && (
                                     <>
                                      <Link className={`nav-link ${page === '/vendor-profile/property' ? 'active' : ''}`} href="/vendor-profile/property">
                                         <div className="nav-link-icon"><i className="fa fa-building" aria-hidden="true"></i></div>

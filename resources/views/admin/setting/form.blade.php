@@ -368,7 +368,7 @@
                                 <div class="col-lg-6">
                                     <div class="card">
                                         <div class="card-body">
-                                            <form action="{{route('dashboard.setting.updatepassword')}}" method="post" enctype="multipart/form-data">
+                                            <form action="{{route('dashboard.setting.storeslider')}}" method="post" enctype="multipart/form-data">
                                                 @csrf
                                                 @method('POST')
                                                 <div class="form-group">
@@ -376,7 +376,7 @@
                                                         <div class="col-lg-12">
                                                              <div class="mb-3">
                                                                 <label for="">new password</label>
-                                                                <input type="text" class="form-control" name="password" placeholder="new password">
+                                                                <input type="text" class="form-control" name="title" placeholder="title">
                                                             </div>
                                                         </div>
                                                     </div>

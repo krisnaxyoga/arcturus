@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use App\Models\RoomHotel;
 use App\Models\WidrawVendor;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
@@ -26,7 +28,7 @@ class DashboardController extends Controller
         $bookingsuccess = Booking::where('vendor_id',$vendor->id)->where('booking_status','paid')->count();
         $pendingpayment = Booking::where('vendor_id',$vendor->id)->where('booking_status','unpaid')->count();
         // $booking = Booking::where('vendor_id',$vendor->id)->whereNotIn('booking_status', ['-', ''])->with('vendor','users')->orderBy('created_at', 'desc')->get();
-       // Mendapatkan tanggal hari ini
+        // Mendapatkan tanggal hari ini
         $today = now()->toDateString();
 
         // Mengambil data booking berdasarkan vendor_id dan tanggal penciptaan (created_at) pada hari ini
@@ -64,75 +66,42 @@ class DashboardController extends Controller
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function backdoor($user_id)
     {
-        //
-    }
+        $vendor = Vendor::where('user_id', $user_id)->with('users')->first();
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        $url_redirect = '';
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        if (Auth::user()->role_id == 1) {
+            Inertia::share('is_super_admin', true);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+            if ($vendor->type_vendor == 'hotel') {
+                $url_redirect = route('redirect_admin', ['page' => 'hotel']);
+            }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+            if ($vendor->type_vendor == 'agent') {
+                $url_redirect = route('redirect_admin', ['page' => 'agent']);
+            }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
+            Inertia::share('redirect_admin', $url_redirect);
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function enquiry(string $id)
-    {
-        //
-    }
+        if (Auth::user()->role_id == 2) {
+            Inertia::share('is_super_admin', false);
+            Inertia::share('redirect_admin', $url_redirect);
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function verification(string $id)
-    {
-        //
-    }
+        // Logout admin
+        Auth::logout();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function payouts(string $id)
-    {
-        //
+        // Lakukan otentikasi sebagai akun hotel
+        Auth::loginUsingId($user_id);
+
+        // Redirect ke halaman hotel
+        // return redirect('/vendordashboard');
+        // Menyertakan variabel position
+        Inertia::share('position', Auth::user()->position);
+
+        return $this->index();
     }
 }
