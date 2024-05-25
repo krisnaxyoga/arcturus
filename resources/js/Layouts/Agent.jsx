@@ -78,7 +78,7 @@ function Layout({ children, page, agent }) {
                             <nav className="sidenav shadow-right sidenav-light">
                                 <div className="sidenav-menu">
                                     <div className="nav accordion" id="accordionSidenav">
-                                        {(is_super_admin) && (
+                                        {(is_super_admin === 'true') && (
                                             <>
                                                 <div className="sidenav-menu-heading">Super Admin</div>
                                                 <a href='/redirect-admin?page=agent' className='nav-link'>

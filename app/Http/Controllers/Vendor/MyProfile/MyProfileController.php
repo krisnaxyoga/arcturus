@@ -334,40 +334,14 @@ class MyProfileController extends Controller
     }
 
     public function loginproperty($id){
-        $iduser = $id;
-        $vendor = Vendor::where('user_id',$iduser)->with('users')->first();
-
-        $url_redirect = '';
-
-        if (Auth::user()->role_id == 1) {
-            Inertia::share('is_super_admin', true);
-
-            if ($vendor->type_vendor == 'hotel') {
-                $url_redirect = route('redirect_admin', ['page' => 'hotel']);
-            }
-
-            if ($vendor->type_vendor == 'agent') {
-                $url_redirect = route('redirect_admin', ['page' => 'agent']);
-            }
-
-            Inertia::share('redirect_admin', $url_redirect);
-        }
-
-        if (Auth::user()->role_id == 2) {
-            Inertia::share('is_super_admin', false);
-            Inertia::share('redirect_admin', $url_redirect);
-        }
-
         // Logout admin
         Auth::logout();
 
         // Lakukan otentikasi sebagai akun hotel
         Auth::loginUsingId($id);
 
-        // Redirect ke halaman hotel
-        // return redirect('/vendordashboard');
-        // Menyertakan variabel position
-        Inertia::share('position', Auth::user()->position);
+        $iduser = $id;
+        $vendor = Vendor::where('user_id',$iduser)->with('users')->first();
 
         $totalincome = Booking::where('vendor_id',$vendor->id)->where('booking_status','paid')->sum('pricenomarkup');
         $totalbooking = Booking::where('vendor_id',$vendor->id)->where('booking_status','paid')->count();
@@ -388,7 +362,7 @@ class MyProfileController extends Controller
             ->orderBy('created_at', 'desc') // Urutkan berdasarkan created_at dari yang terbaru
             ->get();
 
-        $acyive = auth()->user()->is_active;
+        // $active = auth()->user()->is_active;
 
         $roomhotel1 = Booking::where('vendor_id',$vendor->id)->where('booking_status','paid')->get();
 
@@ -400,6 +374,11 @@ class MyProfileController extends Controller
         $widraw = WidrawVendor::where('vendor_id', $vendor->id)
             ->whereDate('created_at', '=', Carbon::today())
             ->get();
+
+        // Redirect ke halaman hotel
+        // return redirect('/vendordashboard');
+        // Menyertakan variabel position
+        Inertia::share('position', 'master');
 
         // Redirect ke halaman hotel
         return Inertia::render('Vendor/Index',[

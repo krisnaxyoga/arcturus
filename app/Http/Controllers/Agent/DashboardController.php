@@ -63,19 +63,13 @@ class DashboardController extends Controller
 
     public function backdoor($user_id)
     {
-        $is_super_admin = false;
-
-        if (Auth::user()->role_id == 1) {
-            $is_super_admin = true;
-        }
-
-        Inertia::share('is_super_admin', $is_super_admin);
-
         // Logout admin
         Auth::logout();
 
         // Lakukan otentikasi sebagai akun hotel
         Auth::loginUsingId($user_id);
+
+        Inertia::share('is_super_admin', 'true');
 
         return $this->index();
     }

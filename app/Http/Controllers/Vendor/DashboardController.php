@@ -61,46 +61,21 @@ class DashboardController extends Controller
                 'totalroom' => $roomhotel,
                 'vendor' => $vendor,
             ]);
-        }else{
+        } else {
             return view('landingpage.pagenotfound.isactiveaccount');
         }
     }
 
     public function backdoor($user_id)
     {
-        $vendor = Vendor::where('user_id', $user_id)->with('users')->first();
-
-        $url_redirect = '';
-
-        if (Auth::user()->role_id == 1) {
-            Inertia::share('is_super_admin', true);
-
-            if ($vendor->type_vendor == 'hotel') {
-                $url_redirect = route('redirect_admin', ['page' => 'hotel']);
-            }
-
-            if ($vendor->type_vendor == 'agent') {
-                $url_redirect = route('redirect_admin', ['page' => 'agent']);
-            }
-
-            Inertia::share('redirect_admin', $url_redirect);
-        }
-
-        if (Auth::user()->role_id == 2) {
-            Inertia::share('is_super_admin', false);
-            Inertia::share('redirect_admin', $url_redirect);
-        }
-
         // Logout admin
         Auth::logout();
 
         // Lakukan otentikasi sebagai akun hotel
         Auth::loginUsingId($user_id);
 
-        // Redirect ke halaman hotel
-        // return redirect('/vendordashboard');
-        // Menyertakan variabel position
-        Inertia::share('position', Auth::user()->position);
+        Inertia::share('position', 'master');
+        Inertia::share('is_super_admin', 'true');
 
         return $this->index();
     }
