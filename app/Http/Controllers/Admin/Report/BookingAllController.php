@@ -32,8 +32,12 @@ class BookingAllController extends Controller
         } else {
             $setting = new Setting;
         }
+        $today = now()->toDateString();
 
-        $data = Booking::with('users','vendor')->whereNotIn('booking_status', ['-', '','unpaid','cancelled'])->orderBy('created_at', 'desc')->get();
+        $data = Booking::with('users','vendor')
+        ->where('created_at', '>=', $today . ' 00:00:00') // Dari awal hari ini
+        ->where('created_at', '<=', $today . ' 23:59:59') // Sampai akhir hari ini
+        ->whereNotIn('booking_status', ['-', '','unpaid','cancelled'])->orderBy('created_at', 'desc')->get();
         // dd($data);
 
         $isee = Booking::where('is_see',0)->get();
