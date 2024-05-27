@@ -420,7 +420,7 @@ class HomeController extends Controller
                                     ->where('booking_end', '>=', Carbon::parse($today)->subDay());
                             });
                         });
-                    })
+                    })   
                     ->orderBy('recom_price', 'asc')
                     ->get();
             // }
