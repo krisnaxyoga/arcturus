@@ -176,6 +176,7 @@ Route::group(['middleware' => ['auth', 'checkrole:1']], function() {
 
     Route::post('/admin/storepopup/',[\App\Http\Controllers\Admin\Setting\SettingController::class,'storepopup'])->name('dashboard.setting.storepopup');
     Route::delete('/admin/destroypopup/{id}',[\App\Http\Controllers\Admin\Setting\SettingController::class,'destroypopup'])->name('dashboard.setting.destroypopup');
+    Route::post('/admin/settingpassword/',[\App\Http\Controllers\Admin\Setting\SettingController::class,'updatepassword'])->name('dashboard.setting.updatepassword');
     Route::get('/admin/editpopup/{id}',[\App\Http\Controllers\Admin\Setting\SettingController::class,'editpopup'])->name('dashboard.setting.editpopup');
 
     //payment admin to hotel
