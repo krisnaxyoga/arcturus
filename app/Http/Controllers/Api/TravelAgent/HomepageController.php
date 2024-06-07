@@ -656,8 +656,7 @@ class HomepageController extends Controller
              ], 200);
             } else{
                 return response()->json([
-                    'error' => 'Contract rate expired',
-                    'message' => $exception->getMessage(),
+                    'message' => 'Contract rate expired',
                 ], 404);
             }
 
