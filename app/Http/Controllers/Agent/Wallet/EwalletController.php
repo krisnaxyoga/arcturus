@@ -98,7 +98,7 @@ class EwalletController extends Controller
             $contract_id = HotelRoomBooking::where('booking_id',$id)->first();
             $contract = ContractRate::where('id',$contract_id->contract_id)->first();
             $agent = Vendor::where('user_id',$booking->user_id)->first();
-            
+
             $vendor = Vendor::where('id',$booking->vendor_id)->first();
             $affiliator = Vendor::where('affiliate',$vendor->affiliate)->where('type_vendor','agent')->first();
 
@@ -117,9 +117,9 @@ class EwalletController extends Controller
 
 
             if (env('APP_ENV') == 'production') {
-                Mail::to($booking->vendor->email_reservation)->send(new BookingConfirmationHotel($data));
-                Mail::to($booking->vendor->email)->send(new BookingConfirmationHotel($data));
-                Mail::to($booking->users->email)->send(new BookingConfirmation($data));
+                // Mail::to($booking->vendor->email_reservation)->send(new BookingConfirmationHotel($data));
+                // Mail::to($booking->vendor->email)->send(new BookingConfirmationHotel($data));
+                // Mail::to($booking->users->email)->send(new BookingConfirmation($data));
             }
 
             $message = 'payment success';

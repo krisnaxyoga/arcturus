@@ -1,9 +1,9 @@
-POST http://127.0.0.1:8007/api/login/transport 
+POST http://127.0.0.1:8007/api/login/transport
 Content-Type: application/json
 
 {
-    "email" : "krisnayogas@gmail.com",
-    "password" : "password123$$$"
+    "email" : "baliasiktour@gmail.com",
+    "password" : "password"
 }
 
 ###
@@ -27,11 +27,11 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vM
 ###
 POST http://127.0.0.1:8007/api/packagecar/store
 Content-Type: application/json
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYW5zcG9ydCIsImlhdCI6MTcwMjI2MDYwNiwiZXhwIjoxNzAyMjY0MjA2LCJuYmYiOjE3MDIyNjA2MDYsImp0aSI6InVGRUNwQTB5VmJFa1E2UkoiLCJzdWIiOiIxIiwicHJ2IjoiYTMxNWZhYjg1ODI2MjM5NGU1N2YyOWZhNzUyNTQ2NTRiZjQ4ZjQxMSJ9.5oLwUuiTCLaKAgA-Ahd7RCwGY7xQkeQ4GHzQGBnQIPs
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDcvYXBpL2xvZ2luL3RyYW5zcG9ydCIsImlhdCI6MTcxNTQwMDE3NCwiZXhwIjoxNzE1NDAzNzc0LCJuYmYiOjE3MTU0MDAxNzQsImp0aSI6ImtQbVgzcW12cTB0SUJmeFAiLCJzdWIiOiIxIiwicHJ2IjoiYTMxNWZhYjg1ODI2MjM5NGU1N2YyOWZhNzUyNTQ2NTRiZjQ4ZjQxMSJ9.huT9eNdF06J4mbCK5fytbZApo9ziFzNEodkKJBUig8w
 
 {
     "type_car" : "ferari",
-    "destination" : "seminyak", 
+    "destination" : "seminyak",
     "price" : 600000,
     "number_police" : "DK 3421 EF"
 }

@@ -350,6 +350,9 @@
                        @endphp
                        @if ($contprice->user_id == $item->user_id && $contprice->vendor_id == $item->vendor_id)
                            @php
+
+                            $adlut = $contprice->room->adults;
+
                            if($surchargepricetotal > 0){
                                $price = $advprice + $item->contractrate->vendors->system_markup + $surchargepricetotal;
                            }else{
