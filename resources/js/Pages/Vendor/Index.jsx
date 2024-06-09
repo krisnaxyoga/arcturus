@@ -18,53 +18,59 @@ import { Link, usePage } from '@inertiajs/inertia-react';
 import { Inertia } from '@inertiajs/inertia';
 
 export default function Index({ totalroom,income,vendor,success,pending,data,widraw }) {
-  const { url } = usePage();
-  function formatRupiah(amount) {
-      return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount).slice(0, -3);
-  }
-  const [currentPage, setCurrentPage] = useState(1)
-  const [postsPerPage, setPostsPerPage] = useState(10)
-  const [isLoading, setIsLoading] = useState(true);
+    const { url } = usePage();
 
-
-  useEffect(() => {
-      // Anda dapat menambahkan logika tambahan jika diperlukan
-      // Contoh: Memuat data dari server
-
-      // Misalnya, ini adalah simulasi pengambilan data yang memakan waktu
-      setTimeout(() => {
-          setIsLoading(false); // Langkah 2: Setel isLoading menjadi false setelah halaman selesai dimuat
-      }, 1000); // Menggunakan setTimeout untuk simulasi saja (2 detik).
-
-      // Jika Anda ingin melakukan pengambilan data dari server, Anda dapat melakukannya di sini dan kemudian mengatur isLoading menjadi false setelah data berhasil dimuat.
-  }, []); // Kosongkan array dependencies untuk menjalankan efek ini hanya sekali saat komponen dimuat.
-
-  const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = data.slice(indexOfFirstPost, indexOfLastPost);
-
-  const currentWidraw = widraw.slice(indexOfFirstPost, indexOfLastPost);
-
-  const paginate = pageNum => setCurrentPage(pageNum);
-
-  const nextPage = () => setCurrentPage(currentPage + 1);
-
-  const prevPage = () => setCurrentPage(currentPage - 1);
-
-  // Dapatkan nilai 'position' dari props
-  const { position } = usePage().props;
-
-  // Enkripsi dan simpan ke dalam localStorage hanya sekali
-  useEffect(() => {
-    // Hanya jalankan efek jika nilai position adalah 'master'
-    if (position == 'master') {
-        const encryptedPosition = encrypt(position);
-        localStorage.setItem('encryptedPosition', encryptedPosition);
+    function formatRupiah(amount) {
+        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount).slice(0, -3);
     }
-}, [position]);
-  // Sekarang, variabel 'position' dapat digunakan di dalam komponen React Anda
-  console.log('Position:', position);
-  
+
+    const [currentPage, setCurrentPage] = useState(1)
+    const [postsPerPage, setPostsPerPage] = useState(10)
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        // Anda dapat menambahkan logika tambahan jika diperlukan
+        // Contoh: Memuat data dari server
+
+        // Misalnya, ini adalah simulasi pengambilan data yang memakan waktu
+        setTimeout(() => {
+            setIsLoading(false); // Langkah 2: Setel isLoading menjadi false setelah halaman selesai dimuat
+        }, 1000); // Menggunakan setTimeout untuk simulasi saja (2 detik).
+
+        // Jika Anda ingin melakukan pengambilan data dari server, Anda dapat melakukannya di sini dan kemudian mengatur isLoading menjadi false setelah data berhasil dimuat.
+    }, []); // Kosongkan array dependencies untuk menjalankan efek ini hanya sekali saat komponen dimuat.
+
+    const indexOfLastPost = currentPage * postsPerPage;
+    const indexOfFirstPost = indexOfLastPost - postsPerPage;
+    const currentPosts = data.slice(indexOfFirstPost, indexOfLastPost);
+
+    const currentWidraw = widraw.slice(indexOfFirstPost, indexOfLastPost);
+
+    const paginate = pageNum => setCurrentPage(pageNum);
+
+    const nextPage = () => setCurrentPage(currentPage + 1);
+
+    const prevPage = () => setCurrentPage(currentPage - 1);
+
+    // Dapatkan nilai props dari share Inertia
+    const { is_super_admin, position } = usePage().props;
+
+    // Enkripsi dan simpan ke dalam localStorage hanya sekali
+    useEffect(() => {
+        // Hanya jalankan efek jika nilai position adalah 'master'
+        if (position === 'master') {
+            const encryptedPosition = encrypt(position);
+            localStorage.setItem('encryptedPosition', encryptedPosition);
+        }
+
+        const encryptedIsSuperAdmin = encrypt(is_super_admin);
+        localStorage.setItem('encryptedIsSuperAdmin', encryptedIsSuperAdmin);
+
+    }, [is_super_admin, position]);
+
+    // Sekarang, variabel 'position' dapat digunakan di dalam komponen React Anda
+    // console.log('Position:', position);
+
 
   return (
     <>
@@ -241,7 +247,7 @@ export default function Index({ totalroom,income,vendor,success,pending,data,wid
         </div> */}
                 </>
                 )}
-     
+
       </Layout>
     </>
   )

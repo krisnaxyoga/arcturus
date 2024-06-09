@@ -27,3 +27,6 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+api_travel_agentapp.rest
+package-lock.json
+yarn.lock

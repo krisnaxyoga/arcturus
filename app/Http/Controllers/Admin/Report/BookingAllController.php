@@ -32,6 +32,7 @@ class BookingAllController extends Controller
         } else {
             $setting = new Setting;
         }
+
         $today = now()->toDateString();
 
         $data = Booking::with('users','vendor')

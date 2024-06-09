@@ -12,25 +12,36 @@ import { Link, usePage } from '@inertiajs/inertia-react';
 import Carousel from 'react-bootstrap/Carousel';
 import { Inertia } from '@inertiajs/inertia';
 
+const encrypt = (value) => {
+    return btoa(value);
+};
+
 export default function Index({ totalroom, data,booking,success,pending,getbooking,transport }) {
   const { url } = usePage();
 
-  function formatRupiah(amount) {
-    return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount).slice(0, -3);
-}
-  const [currentPage, setCurrentPage] = useState(1)
-  const [postsPerPage, setPostsPerPage] = useState(10)
+    function formatRupiah(amount) {
+        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount).slice(0, -3);
+    }
 
-  const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = getbooking.slice(indexOfFirstPost, indexOfLastPost);
+    const [currentPage, setCurrentPage] = useState(1)
+    const [postsPerPage, setPostsPerPage] = useState(10)
 
-  const paginate = pageNum => setCurrentPage(pageNum);
+    const indexOfLastPost = currentPage * postsPerPage;
+    const indexOfFirstPost = indexOfLastPost - postsPerPage;
+    const currentPosts = getbooking.slice(indexOfFirstPost, indexOfLastPost);
 
-  const nextPage = () => setCurrentPage(currentPage + 1);
+    const paginate = pageNum => setCurrentPage(pageNum);
+    const nextPage = () => setCurrentPage(currentPage + 1);
+    const prevPage = () => setCurrentPage(currentPage - 1);
 
-  const prevPage = () => setCurrentPage(currentPage - 1);
+    // Dapatkan nilai props dari share Inertia
+    const { is_super_admin } = usePage().props;
 
+    // Enkripsi dan simpan ke dalam localStorage hanya sekali
+    useEffect(() => {
+        const encryptedIsSuperAdmin = encrypt(is_super_admin);
+        localStorage.setItem('encryptedIsSuperAdmin', encryptedIsSuperAdmin);
+    }, [is_super_admin]);
 
   return (
     <>

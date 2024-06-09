@@ -1,5 +1,7 @@
 @extends('layouts.admin')
+
 @section('title', 'Agent Data')
+
 @section('content')
 <section>
     <div class="container">
@@ -22,7 +24,7 @@
                                         <th>Company Name</th>
                                         <th>Phone</th>
                                         <th>Email</th>
-                                        <th>Action</th>
+                                        <th width="15%">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -31,25 +33,25 @@
                                         <td>{{ $item->vendor_name }}</td>
                                         <td>{{ $item->vendor_legal_name }}</td>
                                         <td>{{ $item->phone }}</td>
-                                        <td>{{ $item->email }}</td>     
+                                        <td>{{ $item->email }}</td>
                                         <td>
-                                            <a href="{{route('dashboard.loginhotel',$item->user_id)}}" class="btn btn-datatable btn-icon btn-transparent-dark mr-2">
+                                            <a href="{{ route('agent.backdoor',$item->user_id) }}" class="btn btn-datatable btn-icon btn-transparent-dark">
                                                 <i data-feather="key"></i>
-                                                </a>
+                                            </a>
+
                                             @if($item->is_active == 1)
-                                                <a href="{{route('dashboard.agent.unactive',$item->id)}}" class="btn btn-datatable btn-icon btn-transparent-dark mr-2"><i data-feather="x"></i></a>
-                                            
+                                                <a href="{{route('dashboard.agent.unactive',$item->id)}}" class="btn btn-datatable btn-icon btn-transparent-dark"><i data-feather="x"></i></a>
                                             @else
-                                                <a href="{{route('dashboard.agent.active',$item->id)}}" class="btn btn-datatable btn-icon btn-transparent-dark mr-2"><i data-feather="check"></i></a>
+                                                <a href="{{route('dashboard.agent.active',$item->id)}}" class="btn btn-datatable btn-icon btn-transparent-dark"><i data-feather="check"></i></a>
                                             @endif
-                                           
-                                            <a href="{{route('dashboard.agent.edit',$item->id)}}" class="btn btn-datatable btn-icon btn-transparent-dark mr-2"><i data-feather="edit"></i></a>
-                                        
+
+                                            <a href="{{route('dashboard.agent.edit',$item->id)}}" class="btn btn-datatable btn-icon btn-transparent-dark"><i data-feather="edit"></i></a>
+
                                             <form class="d-inline" action="{{route('dashboard.agent.delete',$item->id)}}" method="POST" onSubmit="return confirm('Apakah anda yakin akan menghapus data ini?');">
                                                 @csrf
                                                 @method('delete')
-    
-                                                <button type="submit" class="btn btn-datatable btn-icon btn-transparent-dark mr-2">
+
+                                                <button type="submit" class="btn btn-datatable btn-icon btn-transparent-dark">
                                                     <i data-feather="trash-2"></i>
                                                 </button>
                                             </form>

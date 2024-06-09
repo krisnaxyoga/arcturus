@@ -385,10 +385,8 @@
                                                                                     } else {
                                                                                         $startDate = Carbon::parse($calendar->start_date);
                                                                                         $endDate = Carbon::parse($calendar->end_date);
-
                                                                                         if ($startDate < $checkoutDate && $endDate >= $checkinDate && $calendar->room_hotel_id == $itemprice->room_id && $foundZero == false) {
                                                                                                 $status = $calendar->active;
-
                                                                                             // Periksa apakah room_allow sama dengan 0 atau active sama dengan 0
                                                                                             if ($calendar->room_allow == 0 || $calendar->active == 0) {
                                                                                                 $status = 0;

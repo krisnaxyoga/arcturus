@@ -25,8 +25,8 @@ class AgentController extends Controller
             $setting = new Setting;
         }
 
+        $data = Vendor::query()->where('type_vendor','agent')->get();
 
-        $data = Vendor::where('type_vendor','agent')->get();
         return view('admin.agent.index',compact('data','setting'));
     }
 
@@ -88,7 +88,7 @@ class AgentController extends Controller
             $agent->city = $request->city;
             $agent->save();
 
-            //get vendor by user_id 
+            //get vendor by user_id
             $vendor = Vendor::where('user_id',$data->id)->first();
             // update vendor_id on user table
             $user = User::find($vendor->user_id);;
@@ -137,7 +137,7 @@ class AgentController extends Controller
         $user->vendor_id = $model->id;
         $user->is_active = 0;
         $user->save();
-        
+
         $model->is_active = 0;
         $model->save();
 
@@ -169,11 +169,11 @@ class AgentController extends Controller
             $user->role_id = 3;
             $user->save();
 
-            
+
             $model->user_id = $user->id;
             $model->save();
        }else{
-        
+
             $user = User::find($model->user_id);
             $user->vendor_id = $model->id;
             $user->is_active = 1;
@@ -190,7 +190,7 @@ class AgentController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id) {
-        
+
         $country = get_country_lists();
         //dd($request);
         $validator =  Validator::make($request->all(), [
@@ -212,14 +212,14 @@ class AgentController extends Controller
         $vendor->state = $request->state;
         $vendor->city = $request->city;
         $vendor->update();
-        
+
         // update user
         $user = User::find($vendor->user_id);;
         $user->first_name = $request->firstname;
         $user->last_name = $request->lastname;
         $user->email = $request->email;
         $user->update();
-        
+
         return redirect()
             ->route('dashboard.agent.edit', ['id' => $id])
             ->with('message', 'Data Agent berhasil diupdate.');

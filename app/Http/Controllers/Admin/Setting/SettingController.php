@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Setting;
-use App\Models\Slider;
 use App\Models\User;
+use App\Models\Slider;
 use Illuminate\Support\Facades\File;
 use App\Models\Popup;
 
@@ -357,7 +357,7 @@ class SettingController extends Controller
         ->route('dashboard.setting')
         ->with('message', 'Data deleted.');
     }
-
+    
     public function updatepassword(Request $request){
         $iduser = auth()->user()->id;
 

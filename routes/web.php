@@ -85,6 +85,7 @@ Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']
 Route::group(['middleware' => ['auth', 'checkrole:1,2,3']], function() {
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/redirect', [RedircetController::class, 'cek']);
+    Route::get('/redirect-admin', [RedircetController::class, 'redirect_admin'])->name('redirect_admin');
 });
 
 
@@ -172,12 +173,12 @@ Route::group(['middleware' => ['auth', 'checkrole:1']], function() {
 
     Route::post('/admin/storeslider/',[\App\Http\Controllers\Admin\Setting\SettingController::class,'storeslider'])->name('dashboard.setting.storeslider');
     Route::delete('/admin/destroyslider/{id}',[\App\Http\Controllers\Admin\Setting\SettingController::class,'destroyslider'])->name('dashboard.setting.destroyslider');
-   
+
     Route::post('/admin/storepopup/',[\App\Http\Controllers\Admin\Setting\SettingController::class,'storepopup'])->name('dashboard.setting.storepopup');
     Route::delete('/admin/destroypopup/{id}',[\App\Http\Controllers\Admin\Setting\SettingController::class,'destroypopup'])->name('dashboard.setting.destroypopup');
-    Route::get('/admin/editpopup/{id}',[\App\Http\Controllers\Admin\Setting\SettingController::class,'editpopup'])->name('dashboard.setting.editpopup');
     Route::post('/admin/settingpassword/',[\App\Http\Controllers\Admin\Setting\SettingController::class,'updatepassword'])->name('dashboard.setting.updatepassword');
-   
+    Route::get('/admin/editpopup/{id}',[\App\Http\Controllers\Admin\Setting\SettingController::class,'editpopup'])->name('dashboard.setting.editpopup');
+
     //payment admin to hotel
     Route::get('/admin/paymenthotel', [\App\Http\Controllers\Admin\Hotel\PaymentController::class, 'index'])->name('dashboard.paymenttohotel.index');
     Route::get('/admin/paymenthotel/edit/{id}', [\App\Http\Controllers\Admin\Hotel\PaymentController::class, 'edit'])->name('dashboard.paymenttohotel.edit');
@@ -217,8 +218,9 @@ Route::group(['middleware' => ['auth', 'checkrole:1']], function() {
 });
 
 // untuk vendor
-Route::group(['middleware' => ['auth', 'checkrole:2']], function() {
+Route::group(['middleware' => ['auth', 'checkrole:1|2']], function() {
     Route::get('/vendordashboard', [\App\Http\Controllers\Vendor\DashboardController::class, 'index']);
+    Route::get('/vendordashboard/backdoor/{user_id}', [\App\Http\Controllers\Vendor\DashboardController::class, 'backdoor'])->name('vendor.backdoor');
 
     //booking history
     Route::get('/bookinghistory',[\App\Http\Controllers\Vendor\Booking\BookingHistoryController::class, 'index']);
@@ -249,7 +251,7 @@ Route::group(['middleware' => ['auth', 'checkrole:2']], function() {
     Route::get('/vendor-profile/property',[\App\Http\Controllers\Vendor\MyProfile\MyProfileController::class, 'property']);
     Route::get('/vendor-profile/propertycreate',[\App\Http\Controllers\Vendor\MyProfile\MyProfileController::class, 'propertycreate']);
     Route::post('/vendor-profile/propertystore',[\App\Http\Controllers\Vendor\MyProfile\MyProfileController::class, 'propertystore']);
-    Route::get('/vendor-profile/loginproperty/{id}',[\App\Http\Controllers\Vendor\MyProfile\MyProfileController::class, 'loginproperty']);
+    Route::get('/vendor-profile/loginproperty/{id}',[\App\Http\Controllers\Vendor\MyProfile\MyProfileController::class, 'loginproperty'])->name('vendor.my_profile.loginproperty');
 
     // room in hotel
     Route::get('/room/index',[\App\Http\Controllers\Vendor\Hotel\Room\IndexController::class, 'index'])->name('vendor.room');
@@ -342,14 +344,15 @@ Route::group(['middleware' => ['auth', 'checkrole:2']], function() {
     Route::post('/room/attribute/update/{id}',[\App\Http\Controllers\Vendor\Hotel\Room\AttributeController::class, 'update']);
     Route::get('/room/attribute/destroy/{id}',[\App\Http\Controllers\Vendor\Hotel\Room\AttributeController::class, 'destroy']);
 
-    // Extrabed 
+    // Extrabed
     Route::get('/room/extrabed',[App\Http\Controllers\Vendor\ExtraBed\IndexController::class,'index']);
 
 });
 
 // untuk agent
-Route::group(['middleware' => ['auth', 'checkrole:3']], function() {
+Route::group(['middleware' => ['auth', 'checkrole:1|3']], function() {
     Route::get('/agentdashboard', [\App\Http\Controllers\Agent\DashboardController::class, 'index']);
+    Route::get('/agentdashboard/backdoor/{user_id}',[\App\Http\Controllers\Agent\DashboardController::class, 'backdoor'])->name('agent.backdoor');
 
    //my profile
    Route::get('/agent-profile',[\App\Http\Controllers\Agent\MyProfile\MyProfileController::class, 'index'])->name('agent.myprofile');
