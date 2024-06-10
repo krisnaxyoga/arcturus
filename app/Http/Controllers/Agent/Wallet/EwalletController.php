@@ -65,6 +65,12 @@ class EwalletController extends Controller
         $booking = Booking::find($id);
         $totalpayment = ($booking->night * $totalprice) + $totaltranport;
 
+        // Memeriksa apakah saldo mencukupi
+        if ($saldo < $totalpayment) {
+            $message = 'you must top up';
+            return view('landingpage.hotel.confirsaldo',compact('message'));
+        }
+
         if($booking->price == $totalpayment){
             $minsaldo = ($booking->price + $totaltranport);
             $total_as_saldo = $saldo - ($booking->price + $totaltranport);
@@ -117,9 +123,9 @@ class EwalletController extends Controller
 
 
             if (env('APP_ENV') == 'production') {
-                // Mail::to($booking->vendor->email_reservation)->send(new BookingConfirmationHotel($data));
-                // Mail::to($booking->vendor->email)->send(new BookingConfirmationHotel($data));
-                // Mail::to($booking->users->email)->send(new BookingConfirmation($data));
+                Mail::to($booking->vendor->email_reservation)->send(new BookingConfirmationHotel($data));
+                Mail::to($booking->vendor->email)->send(new BookingConfirmationHotel($data));
+                Mail::to($booking->users->email)->send(new BookingConfirmation($data));
             }
 
             $message = 'payment success';
