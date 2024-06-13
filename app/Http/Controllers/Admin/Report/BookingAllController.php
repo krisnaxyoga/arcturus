@@ -11,6 +11,7 @@ use App\Models\PaymentGetwayTransaction;
 use App\Models\RoomHotel;
 use App\Models\Vendor;
 use App\Models\User;
+use App\Models\OrderTransport;
 use App\Models\ContractRate;
 use App\Models\HotelRoomBooking;
 use App\Mail\BookingConfirmation;
@@ -71,15 +72,19 @@ class BookingAllController extends Controller
             $vendor = Vendor::where('id',$booking->vendor_id)->first();
             $affiliator = Vendor::where('affiliate',$vendor->affiliate)->where('type_vendor','agent')->first();
 
+            $tranportbookings = OrderTransport::where('booking_id',$booking->id)->first();
+
             $data = [
                 'booking' => $booking, // $book merupakan instance dari model Booking yang sudah Anda dapatkan
                 'contract' => $contract,
                 'setting' => Setting::first(),
                 'agent' => $agent,
                 'hotelbook' => $hotelbook,
-                'affiliator'=> $affiliator
+                'affiliator'=> $affiliator,
+                'tranport'=> $tranportbookings
 
             ];
+
 
             // // Mail::to($booking->vendor->email_reservation)->send(new BookingConfirmationHotel($data));
             // Mail::to('yogakris.yk@gmail.com')->send(new BookingConfirmationHotel($data));
