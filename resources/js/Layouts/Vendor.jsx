@@ -110,7 +110,7 @@ function Layout({ children, page, vendor }) {
                                 {/* <a href="/" className='nav-link'>
                                     <div className="nav-link-icon"><i className="fa fa-home" aria-hidden="true"></i></div>
                                     Home
-                                </a>
+                                </a>*/}
                                 <Link className={`nav-link ${page === '/vendordashboard' ? 'active' : ''}`} href="/vendordashboard">
                                     <div className="nav-link-icon"><i className="fa fa-adjust" aria-hidden="true"></i></div>
                                     Dashboard
