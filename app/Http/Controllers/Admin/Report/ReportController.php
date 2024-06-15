@@ -137,6 +137,8 @@ class ReportController extends Controller
             });
         }
 
+        $data->orderByDesc('created_at');
+
         $data = $data->get();
 
         $hotels = Booking::where('booking_status', 'paid')
@@ -206,6 +208,8 @@ class ReportController extends Controller
             });
         }
 
+        $data->orderByDesc('created_at');
+
         $data = $data->get();
 
         return view('admin.report.pdf',compact('data','settings','startdate','enddate','startdate1','enddate1',));
@@ -266,6 +270,8 @@ class ReportController extends Controller
             });
         }
 
+        $data->orderByDesc('created_at');
+        
         $data = $data->get();
 
         return view('admin.report.pdf',compact('data','settings','startdate','enddate','startdate1','enddate1'));
