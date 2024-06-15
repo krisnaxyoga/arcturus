@@ -107,7 +107,7 @@ function Layout({ children, page, vendor }) {
                                 )}
 
                                 <div className="sidenav-menu-heading">Main</div>
-                                <a href="/" className='nav-link'>
+                                {/* <a href="/" className='nav-link'>
                                     <div className="nav-link-icon"><i className="fa fa-home" aria-hidden="true"></i></div>
                                     Home
                                 </a>
