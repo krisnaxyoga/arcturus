@@ -65,6 +65,12 @@ class EwalletController extends Controller
         $booking = Booking::find($id);
         $totalpayment = ($booking->night * $totalprice) + $totaltranport;
 
+        // Memeriksa apakah saldo mencukupi
+        if ($saldo < $totalpayment) {
+            $message = 'you must top up';
+            return view('landingpage.hotel.confirsaldo',compact('message'));
+        }
+
         if($booking->price == $totalpayment){
             $minsaldo = ($booking->price + $totaltranport);
             $total_as_saldo = $saldo - ($booking->price + $totaltranport);
@@ -98,7 +104,7 @@ class EwalletController extends Controller
             $contract_id = HotelRoomBooking::where('booking_id',$id)->first();
             $contract = ContractRate::where('id',$contract_id->contract_id)->first();
             $agent = Vendor::where('user_id',$booking->user_id)->first();
-            
+
             $vendor = Vendor::where('id',$booking->vendor_id)->first();
             $affiliator = Vendor::where('affiliate',$vendor->affiliate)->where('type_vendor','agent')->first();
 

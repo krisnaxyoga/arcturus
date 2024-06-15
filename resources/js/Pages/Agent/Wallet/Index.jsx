@@ -33,11 +33,11 @@ export default function Index({ props, session, agent,history,setting }) {
         const day = date.getDate();
         const month = date.getMonth() + 1; // Adding 1 because months are 0-based
         const year = date.getFullYear();
-    
+
         // Pad day and month with leading zeros if needed
         const formattedDay = day < 10 ? `0${day}` : day;
         const formattedMonth = month < 10 ? `0${month}` : month;
-    
+
         return `${formattedDay}/${formattedMonth}/${year}`;
     }
 
@@ -46,7 +46,7 @@ export default function Index({ props, session, agent,history,setting }) {
         // const inputValue = e.target.value;
         // // Periksa apakah input adalah angka
         // const isNumericInput = /^[0-9]*$/.test(inputValue);
-    
+
         // if (isNumericInput) {
         //   // Tambahkan 3 angka acak di belakang angka yang dimasukkan
         //   const randomDigits = Math.floor(Math.random() * 1000);
@@ -81,7 +81,7 @@ export default function Index({ props, session, agent,history,setting }) {
         const generateUniqueCode = () => {
                 const isValidInput = /^[1-9]\d{3,}$/.test(totaltopup);
 
-               
+
                 if (isValidInput) {
                   const randomDigits = Math.floor(Math.random() * 900)+100;
                   const formattedTotal = parseFloat(`${totaltopup}`)+parseFloat(`${randomDigits}`);
@@ -93,7 +93,7 @@ export default function Index({ props, session, agent,history,setting }) {
                     settotalamoutnt(true);
                 }
         };
-      
+
     useEffect(() => {
         // Anda dapat menambahkan logika tambahan jika diperlukan
         // Contoh: Memuat data dari server
@@ -122,7 +122,7 @@ export default function Index({ props, session, agent,history,setting }) {
           }, 2000);
         }
       }, [copied2]);
-  
+
     const handleCopy = () => {
       navigator.clipboard.writeText(text);
       setCopied(true);
@@ -159,7 +159,7 @@ export default function Index({ props, session, agent,history,setting }) {
             }
         }
     };
-    
+
 
     const storePost = async (e) => {
         e.preventDefault();
@@ -195,13 +195,13 @@ export default function Index({ props, session, agent,history,setting }) {
                     <div className="d-flex">
                         <span>
                         <img onerror="this.onerror=null; this.src='https://arcturus.my.id/logo/system/1695599539.png';" style={{width:'40px',margin:'5px'}} src={setting.logo_image} alt={setting.logo_image}/>
-                       
+
                         </span>
                         <span>
                             <h1 className='my-3'>Arcturus Pay</h1>
                         </span>
                     </div>
-                    
+
             <div className="row">
                 <div className="col-lg-6">
                     <div className="card mb-3">
@@ -210,9 +210,9 @@ export default function Index({ props, session, agent,history,setting }) {
                             <h3>
                                 Saldo
                             </h3>
-                            <span style={{fontSize:'18px',fontWeight:'700'}} className='badge badge-secondary mb-3'>{formatRupiah(agent.saldo ? agent.saldo : 0)}</span> 
+                            <span style={{fontSize:'18px',fontWeight:'700'}} className='badge badge-secondary mb-3'>{formatRupiah(agent.saldo ? agent.saldo : 0)}</span>
                             </div>
-                         
+
                         </div>
                         <div className="card-body">
                             <div className="row">
@@ -229,7 +229,7 @@ export default function Index({ props, session, agent,history,setting }) {
                             <div className="row">
                                 <div className="col-lg-6">
                                  <p style={{fontWeight:'700'}}> <img src="https://www.bca.co.id/-/media/Feature/Card/List-Card/Tentang-BCA/Brand-Assets/Logo-BCA/Logo-BCA_Biru.png"
-                                        style={{width:'50px'}} alt=""/>(PT Surya Langit Biru)</p> 
+                                        style={{width:'50px'}} alt=""/>(PT Surya Langit Biru)</p>
                                 </div>
                                 <div className="col-lg-6">
                                     <div className="d-flex mb-3">
@@ -283,7 +283,7 @@ export default function Index({ props, session, agent,history,setting }) {
                                                     <a href="#" className='btn btn-light' onClick={handleCopy2}><i className='fa fa-copy'></i></a>
                                                 </div>
                                                 </>
-                                                  
+
                                             )}
                                         </div>
                                         <div className="form-group mb-3">
@@ -293,13 +293,13 @@ export default function Index({ props, session, agent,history,setting }) {
                                             delay={{ show: 250, hide: 400 }}
                                             overlay={renderTooltip2}
                                             >
-                                            <input type="file" onChange={handleTransfer} className='form-control' required disabled={isButtonDisabledTopup}/> 
-                                            
+                                            <input type="file" onChange={handleTransfer} className='form-control' required disabled={isButtonDisabledTopup}/>
+
                                             </OverlayTrigger>
                                             <p className="text-danger" style={{fontWeight: '700', fontSize: '13px'}}>The image must be in
                                         PNG, JPG, or JPEG format, The image size cannot exceed 2MB.</p>
                                         </div>
-                                       
+
                                         <div className="form-group">
                                         {selectedImage && (
                                                                     <div className="mb-3">
@@ -344,7 +344,7 @@ export default function Index({ props, session, agent,history,setting }) {
                 <div className="col-lg-6">
                     <div className="card">
                         <div className="card-header">
-                        <h3>history</h3> 
+                        <h3>history</h3>
                         </div>
                         <div className="card-body">
                         {history.map((item, index) => (
@@ -355,7 +355,7 @@ export default function Index({ props, session, agent,history,setting }) {
                                             <p>Date : {formatDate(item.created_at)}</p>
                                             <span className={item.status == 'success' ? `badge badge-success` : `badge badge-warning`}>{item.status}</span>
                                             <p>{formatRupiah(item.saldo_master)}</p>
-                                                {item.type_transaction == 'PAYMENT-SALDO' && item.type_transaction == 'REFUND-SALDO' ? (
+                                                {item.type_transaction == 'PAYMENT-SALDO' || item.type_transaction == 'REFUND-SALDO' ? (
                                                     <>
                                                     <p style={{fontWeight:'700',color:'#eb5151'}}>- {formatRupiah(item.saldo_add_minus)}</p>
                                                     </>
@@ -364,7 +364,7 @@ export default function Index({ props, session, agent,history,setting }) {
                                                     <p style={{fontWeight:'700',color:'#32cf76'}}>+ {formatRupiah(item.saldo_add_minus)}</p>
                                                     </>
                                                 )}
-                                           
+
                                             <p>{formatRupiah(item.total_saldo)}</p>
                                             <p>{item.type_transaction}</p>
                                         </div>
@@ -379,7 +379,7 @@ export default function Index({ props, session, agent,history,setting }) {
         </div>
                 </>
             )}
-       
+
     </Layout>
     </>
   )

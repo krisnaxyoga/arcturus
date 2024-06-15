@@ -68,6 +68,8 @@ class ReportController extends Controller
             });
         }
 
+        $data->orderByDesc('created_at');
+        
         $data = $data->get();
 
         $hotels = Booking::where('booking_status', 'paid')
@@ -95,6 +97,7 @@ class ReportController extends Controller
         $startdate = '';
         $enddate = '';
         $hotel_select = '';
+
         // $data = HotelRoomBooking::whereHas('booking', function ($query) use ($startdate, $enddate) {
         //     $query->where('booking_status', '<>', '-')
         //           ->where('booking_status', '<>', '');
@@ -163,6 +166,7 @@ class ReportController extends Controller
         $startdate = '';
         $enddate = '';
         $hotel_select = '';
+
         // $data = HotelRoomBooking::whereHas('booking', function ($query) use ($startdate, $enddate) {
         //     $query->where('booking_status', '<>', '-')
         //           ->where('booking_status', '<>', '');
@@ -182,6 +186,7 @@ class ReportController extends Controller
         //     $query->where('vendor_name', $hotel_select);
         // })
         // ->get();
+
         $data = Booking::where('booking_status', '<>', '-')
         ->where('booking_status', '<>', '');
 

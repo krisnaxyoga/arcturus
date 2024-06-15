@@ -8,9 +8,19 @@ import Layout from "../../../Layouts/Vendor";
 import { Link, usePage } from "@inertiajs/inertia-react";
 import { Inertia } from "@inertiajs/inertia";
 
+const decrypt = (encryptedValue) => {
+    return atob(encryptedValue);
+};
+
 export default function Index({ props, vendor, data }) {
     const { url } = usePage();
-    console.log(data, "user");
+
+    // Mendapatkan nilai 'encryptedIsSuperAdmin' dari localStorage
+    const encryptedIsSuperAdmin = localStorage.getItem('encryptedIsSuperAdmin');
+
+    // Mendekripsi nilai jika encrypted data ada di localStorage
+    const is_super_admin = decrypt(encryptedIsSuperAdmin);
+
     return (
         <>
             <Layout page={url} vendor={vendor}>
@@ -37,7 +47,7 @@ export default function Index({ props, vendor, data }) {
                                                 <th>No</th>
                                                 <th>Hotel Name</th>
                                                 <th>email</th>
-                                               
+
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -55,7 +65,7 @@ export default function Index({ props, vendor, data }) {
                                                         <td>
                                                             <Link
                                                                 className="btn btn-datatable btn-icon btn-transparent-dark mr-2"
-                                                                href={`/vendor-profile/loginproperty/${item.id}`}
+                                                                href={`/vendor-profile/loginproperty/${item.id}?is_super_admin=${is_super_admin === 'true' ? 'true' : 'false'}`}
                                                             >
                                                                 <i className="fa fa-key"></i>
                                                             </Link>

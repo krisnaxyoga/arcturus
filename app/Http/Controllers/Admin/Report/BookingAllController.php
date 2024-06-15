@@ -33,8 +33,26 @@ class BookingAllController extends Controller
             $setting = new Setting;
         }
 
-        $data = Booking::with('users','vendor')->whereNotIn('booking_status', ['-', '','unpaid','cancelled'])->orderBy('created_at', 'desc')->get();
+        $today = now()->toDateString();
+
+        $data = Booking::with('users','vendor')
+        ->where('created_at', '>=', $today . ' 00:00:00') // Dari awal hari ini
+        ->where('created_at', '<=', $today . ' 23:59:59') // Sampai akhir hari ini
+        ->whereNotIn('booking_status', ['-', '','unpaid','cancelled'])->orderBy('created_at', 'desc')->get();
         // dd($data);
+
+         // Menghitung tanggal 7 hari yang lalu dari hari ini
+         $sevenDaysAgo = now()->subDays(7)->format('Y-m-d');
+        
+         // Menghitung tanggal hari ini
+         $todayx = now()->format('Y-m-d');
+         
+         $data7 = Booking::with('users', 'vendor')
+                     ->whereDate('created_at', '>=', $sevenDaysAgo) // Dari 7 hari yang lalu
+                     ->whereDate('created_at', '<=', $todayx) // Sampai hari ini
+                     ->whereNotIn('booking_status', ['-', '', 'unpaid', 'cancelled'])
+                     ->orderBy('created_at', 'desc')
+                     ->get();
 
         $isee = Booking::where('is_see',0)->get();
         foreach($isee as $show){
@@ -42,7 +60,7 @@ class BookingAllController extends Controller
             $show->save();
         }
 
-        return view('admin.booking.allbooking',compact('setting','data'));
+        return view('admin.booking.allbooking',compact('setting','data','data7'));
     }
 
     public function confirmation($id)

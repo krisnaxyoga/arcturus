@@ -47,6 +47,7 @@ class IndexController extends Controller
         $attr = AttributeRoom::where('user_id',1)->get();
         $roomtype = Roomtype::all();
         $vendor = Vendor::where('user_id',$id)->with('users')->first();
+
         return inertia('Vendor/MenageRoom/CreateRoom',[
             'attr' => $attr,
             'roomtype' => $roomtype,
@@ -122,7 +123,7 @@ class IndexController extends Controller
                 // $room->children = $request->child;
                 $room->children = 0;
                 // $room->infant = $request->infant;
-                
+
                 $room->infant = 0;
                 $room->extra_bed = $request->extra_bed;
                 // $room->baby_cot = $request->baby_cot;
@@ -232,7 +233,7 @@ class IndexController extends Controller
                     $feature = $room->feature_image;
                 }
                 $iduser = auth()->user()->id;
-                
+
                 $room->roomtype_id = 0;//$request->roomtypeid;
                 $room->title = $request->roomname;
                 // $room->video = $request->video;
@@ -286,12 +287,12 @@ class IndexController extends Controller
         $room = RoomHotel::find($id);
 
         if ($room) {
-            if (File::exists(public_path($room->feature_image))) 
+            if (File::exists(public_path($room->feature_image)))
             {
                 File::delete(public_path($room->feature_image));
             }
             foreach($room->gallery as $gallery){
-                if (File::exists(public_path($gallery))) 
+                if (File::exists(public_path($gallery)))
                 {
                     File::delete(public_path($gallery));
                 }

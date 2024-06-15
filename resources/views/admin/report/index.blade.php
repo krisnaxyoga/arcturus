@@ -22,10 +22,10 @@
                     <div class="card-header">
                         Stay
                     </div>
-                    <div class="card-body">
+                    <div class="card-body overflow-auto">
                         <div class="d-flex">
                             <form action="{{route('dashboard.report')}}" class="d-flex" method="get">
-                                <select name="hotel" id="" class="form-control mr-2">
+                                <select name="hotel" id="" class="form-control mr-2" style="width: auto">
                                     <option value="">-select hotel-</option>
                                     @foreach ($hotels as $itemhotel)
                                     <option value="{{$itemhotel->vendor_name}}" @if($hotel_select == $itemhotel->vendor_name) selected @endif>{{$itemhotel->vendor_name}}</option>                                        
@@ -54,10 +54,10 @@
                     <div class="card-header">
                        Made on
                     </div>
-                    <div class="card-body">
+                    <div class="card-body overflow-auto">
                         <div class="d-flex">
                             <form action="{{route('dashboard.reportmadeon')}}" class="d-flex" method="get">
-                                <select name="hotel" id="" class="form-control mr-2">
+                                <select name="hotel" id="" class="form-control mr-2" style="width: auto">
                                     <option value="">-select hotel-</option>
                                     @foreach ($hotels as $itemhotel)
                                     <option value="{{$itemhotel->vendor_name}}" @if($hotel_select1 == $itemhotel->vendor_name) selected @endif>{{$itemhotel->vendor_name}}</option>                                        
