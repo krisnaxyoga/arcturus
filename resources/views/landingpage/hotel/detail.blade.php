@@ -1044,71 +1044,65 @@
         }
 
         function calculateTotal() {
-            var roomQuantities = document.getElementsByClassName('room-quantity');
-            var totalRoomElement = document.getElementById('totalRoom');
-            var totalPriceElement = document.getElementById('totalPrice');
-            var totalPricenomarkupElement = document.getElementById('totalPricenomarkup');
-            var totalRoom = 0;
-            var totalPrice = 0;
-            var totalPricenomarkup = 0;
-            var totalNight = document.querySelector('input[name="totalnight"]');
+    var roomQuantities = document.getElementsByClassName('room-quantity');
+    var totalRoomElement = document.getElementById('totalRoom');
+    var totalPriceElement = document.getElementById('totalPrice');
+    var totalPricenomarkupElement = document.getElementById('totalPricenomarkup');
+    var totalRoom = 0;
+    var totalPrice = 0;
+    var totalPricenomarkup = 0;
+    var totalNight = document.querySelector('input[name="totalnight"]');
 
-            // Mengambil data yang dipilih dan menyimpannya ke dalam array
-            var selectedItems = [];
+    // Mengambil data yang dipilih dan menyimpannya ke dalam array
+    var selectedItems = [];
 
-            for (var i = 0; i < roomQuantities.length; i++) {
-                var quantity = parseInt(roomQuantities[i].value);
-                var price = parseInt(roomQuantities[i].options[roomQuantities[i].selectedIndex].dataset.price);
+    for (var i = 0; i < roomQuantities.length; i++) {
+        var quantity = Number(roomQuantities[i].value);
+        var price = Number(roomQuantities[i].options[roomQuantities[i].selectedIndex].dataset.price);
+        var pricenomarkup = Number(roomQuantities[i].options[roomQuantities[i].selectedIndex].dataset.pricenomarkup);
+        var roomId = Number(roomQuantities[i].options[roomQuantities[i].selectedIndex].dataset.roomid);
+        var contractId = Number(roomQuantities[i].options[roomQuantities[i].selectedIndex].dataset.contractid);
+        var contpricetId = Number(roomQuantities[i].options[roomQuantities[i].selectedIndex].dataset.contprice);
 
-                var pricenomarkup = parseInt(roomQuantities[i].options[roomQuantities[i].selectedIndex].dataset
-                    .pricenomarkup);
-                var roomId = parseInt(roomQuantities[i].options[roomQuantities[i].selectedIndex].dataset.roomid);
-                var contractId = parseInt(roomQuantities[i].options[roomQuantities[i].selectedIndex].dataset.contractid);
-                var contpricetId = parseInt(roomQuantities[i].options[roomQuantities[i].selectedIndex].dataset.contprice);
+        if (!isNaN(quantity) && !isNaN(price) && !isNaN(pricenomarkup)) {
+            totalPricenomarkup += pricenomarkup;
+            totalRoom += quantity;
+            totalPrice += price;
 
-                totalPricenomarkup += pricenomarkup;
-                totalRoom += quantity;
-                totalPrice += price;
-
-                // console.log("Room Quantity:", quantity);
-                // console.log("Price:", price);
-                // console.log("Pricenomarkup:", pricenomarkup);
-
-                if (quantity > 0) {
-                    selectedItems.push({
-                        roomId: roomId,
-                        price: price,
-                        pricenomarkup: pricenomarkup,
-                        quantity: quantity,
-                        contractid: contractId,
-                        contpriceid: contpricetId
-                    });
-                }
+            if (quantity > 0) {
+                selectedItems.push({
+                    roomId: roomId,
+                    price: price,
+                    pricenomarkup: pricenomarkup,
+                    quantity: quantity,
+                    contractid: contractId,
+                    contpriceid: contpricetId
+                });
             }
-
-            // Menyimpan data yang dipilih ke localStorage
-            var encryptionKey = 'KunciEnkripsiRahasia';
-            saveEncryptedDataToLocalStorage(selectedItems, encryptionKey);
-
-            // Mengambil dan mendekripsi data dari localStorage
-            var decryptedData = getDecryptedDataFromLocalStorage(encryptionKey);
-            // console.log(decryptedData);
-
-            // console.log(totalPrice, totalPricenomarkup, ">>>totalnomarkup");
-            totalRoomElement.textContent = totalRoom;
-            var priceintext = parseInt(totalPrice * totalNight.value);
-            totalPriceElement.textContent = priceintext.toLocaleString();
-            var totalRoomInput = document.querySelector('input[name="totalroom"]');
-            totalRoomInput.value = totalRoom;
-            var totalPriceInput = document.querySelector('input[name="totalprice"]');
-            totalPriceInput.value = totalPrice.toLocaleString();
-
-            // Perhitungan untuk totalPricenomarkupInput
-            var pricenomarkupintext = parseInt(totalPricenomarkup * totalNight.value);
-            totalPricenomarkupElement.textContent = pricenomarkupintext.toLocaleString();
-            var totalPricenomarkupInput = document.querySelector('input[name="totalpricenomarkup"]');
-            totalPricenomarkupInput.value = pricenomarkupintext.toLocaleString();
         }
+    }
+
+    // Menyimpan data yang dipilih ke localStorage
+    var encryptionKey = 'KunciEnkripsiRahasia';
+    saveEncryptedDataToLocalStorage(selectedItems, encryptionKey);
+
+    // Mengambil dan mendekripsi data dari localStorage
+    var decryptedData = getDecryptedDataFromLocalStorage(encryptionKey);
+
+    totalRoomElement.textContent = totalRoom;
+    var priceintext = totalPrice * Number(totalNight.value);
+    totalPriceElement.textContent = priceintext.toLocaleString();
+    var totalRoomInput = document.querySelector('input[name="totalroom"]');
+    totalRoomInput.value = totalRoom;
+    var totalPriceInput = document.querySelector('input[name="totalprice"]');
+    totalPriceInput.value = totalPrice.toLocaleString();
+
+    // Perhitungan untuk totalPricenomarkupInput
+    var pricenomarkupintext = totalPricenomarkup * Number(totalNight.value);
+    totalPricenomarkupElement.textContent = pricenomarkupintext.toLocaleString();
+    var totalPricenomarkupInput = document.querySelector('input[name="totalpricenomarkup"]');
+    totalPricenomarkupInput.value = pricenomarkupintext.toLocaleString();
+}
 
         //function untuk tanggal checkin
 
